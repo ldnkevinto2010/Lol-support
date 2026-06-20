@@ -6,12 +6,13 @@ import {
   ChatInputCommandInteraction,
   ButtonInteraction,
   ModalSubmitInteraction,
+  StringSelectMenuInteraction,
 } from "discord.js";
 import { logger } from "../lib/logger";
 import * as setupCmd from "./commands/setup";
 import * as ticketCmd from "./commands/ticket";
 import * as vouchCmd from "./commands/vouch";
-import { handleButton, handleModalSubmit } from "./interactions";
+import { handleButton, handleModalSubmit, handleSelectMenu } from "./interactions";
 import { UserMessageCount } from "./models/UserMessageCount";
 import { deployCommands } from "./deploy-commands";
 
@@ -56,8 +57,8 @@ export function createBotClient(): Client {
     }
   });
 
-  // Slash commands
   client.on(Events.InteractionCreate, async (interaction) => {
+    // Slash commands
     if (interaction.isChatInputCommand()) {
       const cmd = commands.get(interaction.commandName);
       if (!cmd) return;
@@ -75,6 +76,7 @@ export function createBotClient(): Client {
       return;
     }
 
+    // Buttons
     if (interaction.isButton()) {
       try {
         await handleButton(interaction as ButtonInteraction);
@@ -90,6 +92,23 @@ export function createBotClient(): Client {
       return;
     }
 
+    // String select menus
+    if (interaction.isStringSelectMenu()) {
+      try {
+        await handleSelectMenu(interaction as StringSelectMenuInteraction);
+      } catch (err) {
+        logger.error({ err, customId: (interaction as StringSelectMenuInteraction).customId }, "Select menu error");
+        const payload = { content: "❌ Something went wrong.", ephemeral: true };
+        if (interaction.replied || interaction.deferred) {
+          await interaction.followUp(payload).catch(() => {});
+        } else {
+          await interaction.reply(payload).catch(() => {});
+        }
+      }
+      return;
+    }
+
+    // Modals
     if (interaction.isModalSubmit()) {
       try {
         await handleModalSubmit(interaction as ModalSubmitInteraction);

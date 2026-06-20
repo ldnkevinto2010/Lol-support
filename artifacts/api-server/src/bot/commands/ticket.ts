@@ -164,23 +164,37 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
 
-    const title = interaction.options.getString("title") ?? "🎫 Open a Ticket";
+    const title = interaction.options.getString("title") ?? "🎫 Carry Requests";
     const description =
       interaction.options.getString("description") ??
-      "Click the button below to open a support ticket.\nOur team will assist you as soon as possible.";
+      "Welcome to our carry service!\n\nPlease note that we will only help you complete **5 runs for free** for each ticket you make.\nClick the button below to create a carry request ticket and get started!";
+
+    const games = config?.supportedGames ?? [];
 
     const embed = new EmbedBuilder()
       .setTitle(title)
       .setDescription(description)
       .setColor(0x5865f2)
-      .setFooter({ text: "One ticket per user • Be patient while waiting for a response" });
+      .setFooter({ text: "CARRY TICKETS" });
+
+    if (games.length > 0) {
+      embed.addFields({
+        name: "Supported Games:",
+        value: "━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+          games.map((g) => `• ${g}`).join("\n") +
+          "\n━━━━━━━━━━━━━━━━━━━━━━━━",
+      });
+    }
+
+    if (config?.panelImageUrl) {
+      embed.setImage(config.panelImageUrl);
+    }
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
         .setCustomId("ticket_open_panel")
-        .setLabel("Open Ticket")
-        .setStyle(ButtonStyle.Primary)
-        .setEmoji("🎫")
+        .setLabel("Create Ticket")
+        .setStyle(ButtonStyle.Success)
     );
 
     await interaction.reply({ content: "✅ Panel posted!", ephemeral: true });

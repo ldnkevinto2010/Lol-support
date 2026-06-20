@@ -8,6 +8,8 @@ export interface IGuildConfig extends Document {
   minMessagesRequired: number;
   supportRoleId: string | null;
   ticketCounter: number;
+  supportedGames: string[];
+  panelImageUrl: string | null;
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -18,6 +20,8 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   minMessagesRequired: { type: Number, default: 0 },
   supportRoleId: { type: String, default: null },
   ticketCounter: { type: Number, default: 0 },
+  supportedGames: { type: [String], default: [] },
+  panelImageUrl: { type: String, default: null },
 });
 
 export const GuildConfig = mongoose.model<IGuildConfig>("GuildConfig", GuildConfigSchema);

@@ -1,11 +1,14 @@
 import {
   ButtonInteraction,
   ModalSubmitInteraction,
+  StringSelectMenuInteraction,
   EmbedBuilder,
   TextChannel,
   ButtonBuilder,
   ButtonStyle,
   ActionRowBuilder,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
   ChannelType,
   OverwriteType,
   PermissionFlagsBits,
@@ -17,6 +20,7 @@ import {
 import { GuildConfig, IGuildConfig } from "./models/GuildConfig";
 import { Ticket } from "./models/Ticket";
 import { Vouch } from "./models/Vouch";
+import { UserMessageCount } from "./models/UserMessageCount";
 
 function starsDisplay(rating: number): string {
   return "⭐".repeat(rating) + "☆".repeat(5 - rating);
@@ -35,6 +39,61 @@ function ticketButtons(): ActionRowBuilder<ButtonBuilder> {
       .setStyle(ButtonStyle.Danger)
       .setEmoji("🔒"),
   );
+}
+
+function buildTicketModal(game: string): ModalBuilder {
+  const modal = new ModalBuilder()
+    .setCustomId(`ticket_open_modal_${encodeURIComponent(game)}`)
+    .setTitle("Open a Ticket");
+
+  const requestInput = new TextInputBuilder()
+    .setCustomId("ticket_request")
+    .setLabel("Request")
+    .setStyle(TextInputStyle.Paragraph)
+    .setPlaceholder("Describe what you need help with...")
+    .setRequired(true)
+    .setMaxLength(500);
+
+  const privateServerInput = new TextInputBuilder()
+    .setCustomId("ticket_private_server")
+    .setLabel("Do you have a Private Server? (Yes / No)")
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder("Yes or No")
+    .setRequired(true)
+    .setMaxLength(20);
+
+  modal.addComponents(
+    new ActionRowBuilder<TextInputBuilder>().addComponents(requestInput),
+    new ActionRowBuilder<TextInputBuilder>().addComponents(privateServerInput),
+  );
+
+  return modal;
+}
+
+async function checkTicketPrerequisites(
+  guildId: string,
+  userId: string,
+  config: IGuildConfig | null
+): Promise<string | null> {
+  if (!config?.ticketCategoryId) {
+    return "❌ Tickets are not configured yet. Ask an admin to run `/setup ticket-category`.";
+  }
+  if (config.minMessagesRequired > 0) {
+    const msgDoc = await UserMessageCount.findOne({ guildId, userId });
+    const count = msgDoc?.count ?? 0;
+    if (count < config.minMessagesRequired) {
+      return `❌ You need at least **${config.minMessagesRequired}** messages to open a ticket. You have **${count}**.`;
+    }
+  }
+  const existing = await Ticket.findOne({
+    guildId,
+    userId,
+    status: { $in: ["open", "claimed"] },
+  });
+  if (existing) {
+    return `❌ You already have an open ticket: <#${existing.channelId}>`;
+  }
+  return null;
 }
 
 async function sendVouchPrompt(
@@ -87,7 +146,7 @@ async function logTicketClose(
   await logChannel.send({ embeds: [logEmbed] });
 }
 
-// ─── Shared close logic (used by button + slash command) ───
+// ─── Shared close logic ───
 export async function handleTicketClose(
   interaction: ButtonInteraction | ChatInputCommandInteraction,
   config: IGuildConfig | null,
@@ -131,12 +190,10 @@ export async function handleTicketClose(
 
   await logTicketClose(config, interaction.guild!, ticket, interaction.user, reason);
 
-  // Prompt vouch if ticket was claimed by someone else
   if (ticket.claimedBy && ticket.claimedBy !== ticket.userId) {
     await sendVouchPrompt(interaction.channel as TextChannel, ticket.userId, ticket.claimedBy);
   }
 
-  // Lock user out after 10 s
   setTimeout(async () => {
     try {
       const ch = interaction.guild!.channels.cache.get(ticket.channelId) as TextChannel | undefined;
@@ -152,80 +209,73 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
 
   const config = await GuildConfig.findOne({ guildId });
 
-  // ─── Open Ticket panel button ───
+  // Panel "Create Ticket" button → show game select dropdown
   if (customId === "ticket_open_panel") {
-    if (!config?.ticketCategoryId) {
-      await interaction.reply({
-        content: "❌ Tickets are not configured yet. Ask an admin to run `/setup ticket-category`.",
-        ephemeral: true,
-      });
+    const error = await checkTicketPrerequisites(guildId, interaction.user.id, config);
+    if (error) {
+      await interaction.reply({ content: error, ephemeral: true });
       return;
     }
 
-    // Check message requirement
-    if (config.minMessagesRequired > 0) {
-      const { UserMessageCount } = await import("./models/UserMessageCount");
-      const msgDoc = await UserMessageCount.findOne({ guildId, userId: interaction.user.id });
-      const count = msgDoc?.count ?? 0;
-      if (count < config.minMessagesRequired) {
-        await interaction.reply({
-          content: `❌ You need at least **${config.minMessagesRequired}** messages to open a ticket. You have **${count}**.`,
-          ephemeral: true,
-        });
-        return;
-      }
+    const games = config?.supportedGames ?? [];
+
+    // If no games configured, go straight to modal with generic game field
+    if (games.length === 0) {
+      const modal = new ModalBuilder()
+        .setCustomId("ticket_open_modal_")
+        .setTitle("Open a Ticket");
+
+      const gameInput = new TextInputBuilder()
+        .setCustomId("ticket_game_fallback")
+        .setLabel("Game")
+        .setStyle(TextInputStyle.Short)
+        .setPlaceholder("e.g. Blox Fruits, UTD, AUT...")
+        .setRequired(true)
+        .setMaxLength(100);
+
+      const requestInput = new TextInputBuilder()
+        .setCustomId("ticket_request")
+        .setLabel("Request")
+        .setStyle(TextInputStyle.Paragraph)
+        .setPlaceholder("Describe what you need help with...")
+        .setRequired(true)
+        .setMaxLength(500);
+
+      const privateServerInput = new TextInputBuilder()
+        .setCustomId("ticket_private_server")
+        .setLabel("Do you have a Private Server? (Yes / No)")
+        .setStyle(TextInputStyle.Short)
+        .setPlaceholder("Yes or No")
+        .setRequired(true)
+        .setMaxLength(20);
+
+      modal.addComponents(
+        new ActionRowBuilder<TextInputBuilder>().addComponents(gameInput),
+        new ActionRowBuilder<TextInputBuilder>().addComponents(requestInput),
+        new ActionRowBuilder<TextInputBuilder>().addComponents(privateServerInput),
+      );
+
+      await interaction.showModal(modal);
+      return;
     }
 
-    // Check for existing open ticket
-    const existing = await Ticket.findOne({
-      guildId,
-      userId: interaction.user.id,
-      status: { $in: ["open", "claimed"] },
+    // Show game select dropdown
+    const select = new StringSelectMenuBuilder()
+      .setCustomId("ticket_game_select")
+      .setPlaceholder("Select the game your ticket is for...")
+      .addOptions(
+        games.slice(0, 25).map((g) =>
+          new StringSelectMenuOptionBuilder().setLabel(g).setValue(g)
+        )
+      );
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+
+    await interaction.reply({
+      content: "**Select the game your ticket is for:**",
+      components: [row],
+      ephemeral: true,
     });
-    if (existing) {
-      await interaction.reply({
-        content: `❌ You already have an open ticket: <#${existing.channelId}>`,
-        ephemeral: true,
-      });
-      return;
-    }
-
-    // Show ticket creation modal
-    const modal = new ModalBuilder()
-      .setCustomId("ticket_open_modal")
-      .setTitle("Open a Ticket");
-
-    const gameInput = new TextInputBuilder()
-      .setCustomId("ticket_game")
-      .setLabel("Game")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("e.g. Blox Fruits, UTD, AUT...")
-      .setRequired(true)
-      .setMaxLength(100);
-
-    const requestInput = new TextInputBuilder()
-      .setCustomId("ticket_request")
-      .setLabel("Request")
-      .setStyle(TextInputStyle.Paragraph)
-      .setPlaceholder("Describe what you need help with...")
-      .setRequired(true)
-      .setMaxLength(500);
-
-    const privateServerInput = new TextInputBuilder()
-      .setCustomId("ticket_private_server")
-      .setLabel("Do you have a Private Server? (Yes / No)")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("Yes or No")
-      .setRequired(true)
-      .setMaxLength(20);
-
-    modal.addComponents(
-      new ActionRowBuilder<TextInputBuilder>().addComponents(gameInput),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(requestInput),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(privateServerInput),
-    );
-
-    await interaction.showModal(modal);
     return;
   }
 
@@ -307,16 +357,37 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
   }
 }
 
+// ─── Select menu handler (game selection) ───
+export async function handleSelectMenu(interaction: StringSelectMenuInteraction): Promise<void> {
+  const { customId, guildId } = interaction;
+  if (!guildId) return;
+
+  if (customId === "ticket_game_select") {
+    const game = interaction.values[0]!;
+    const modal = buildTicketModal(game);
+    await interaction.showModal(modal);
+    return;
+  }
+}
+
 // ─── Modal handler ───
 export async function handleModalSubmit(interaction: ModalSubmitInteraction): Promise<void> {
   const { customId, guildId, guild } = interaction;
   if (!guildId || !guild) return;
 
   // ─── Ticket open modal ───
-  if (customId === "ticket_open_modal") {
-    const game = interaction.fields.getTextInputValue("ticket_game");
+  if (customId.startsWith("ticket_open_modal_")) {
+    const encodedGame = customId.replace("ticket_open_modal_", "");
     const request = interaction.fields.getTextInputValue("ticket_request");
     const privateServer = interaction.fields.getTextInputValue("ticket_private_server");
+
+    // Game comes from the dropdown (encoded in customId) or from fallback text field
+    let game: string;
+    if (encodedGame === "") {
+      game = interaction.fields.getTextInputValue("ticket_game_fallback");
+    } else {
+      game = decodeURIComponent(encodedGame);
+    }
 
     await interaction.deferReply({ ephemeral: true });
 
@@ -367,19 +438,15 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       });
     }
 
-    // Channel name: ticket-username (lowercase, no spaces)
     const safeName = interaction.user.username.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 20);
-    const channelName = `ticket-${safeName}`;
-
     const channel = await guild.channels.create({
-      name: channelName,
+      name: `ticket-${safeName}`,
       type: ChannelType.GuildText,
       parent: config.ticketCategoryId,
       topic: `ticket_user:${interaction.user.id} | game:${game}`,
       permissionOverwrites: overwrites,
     });
 
-    // Save ticket
     await Ticket.create({
       guildId,
       channelId: channel.id,
@@ -388,7 +455,6 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       topic: `${game} — ${request}`,
     });
 
-    // Build the styled embed matching the screenshot
     const embed = new EmbedBuilder()
       .setTitle("🎫 New Ticket Created")
       .setColor(0xed4245)
@@ -400,8 +466,6 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       )
       .setTimestamp();
 
-    const row = ticketButtons();
-
     const mentionContent = config.supportRoleId
       ? `<@&${config.supportRoleId}> ${interaction.user}`
       : `${interaction.user}`;
@@ -409,10 +473,9 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
     await channel.send({
       content: mentionContent,
       embeds: [embed],
-      components: [row],
+      components: [ticketButtons()],
     });
 
-    // Log ticket open
     if (config.ticketLogChannelId) {
       const logChannel = guild.channels.cache.get(config.ticketLogChannelId) as TextChannel | undefined;
       if (logChannel) {
@@ -453,7 +516,6 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
     await interaction.deferReply({ ephemeral: true });
 
     const ticket = await Ticket.findOne({ channelId: interaction.channelId });
-
     await Vouch.create({
       guildId,
       fromUserId: interaction.user.id,
