@@ -7,6 +7,9 @@ import {
   TextInputStyle,
   ActionRowBuilder,
   TextChannel,
+  EmbedBuilder,
+  ButtonBuilder,
+  ButtonStyle,
 } from "discord.js";
 import { GuildConfig } from "../models/GuildConfig";
 import { Ticket } from "../models/Ticket";
@@ -43,6 +46,25 @@ export const data = new SlashCommandBuilder()
       .setDescription("Add a user to this ticket")
       .addUserOption((opt) =>
         opt.setName("user").setDescription("User to add").setRequired(true)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("panel")
+      .setDescription("Post the ticket panel in this channel (admin only)")
+      .addStringOption((opt) =>
+        opt
+          .setName("title")
+          .setDescription("Panel embed title")
+          .setRequired(false)
+          .setMaxLength(100)
+      )
+      .addStringOption((opt) =>
+        opt
+          .setName("description")
+          .setDescription("Panel embed description")
+          .setRequired(false)
+          .setMaxLength(500)
       )
   );
 
@@ -131,6 +153,38 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     );
 
     await interaction.showModal(modal);
+    return;
+  }
+
+  // ─── /ticket panel ───
+  if (sub === "panel") {
+    const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
+    if (!isAdmin) {
+      await interaction.reply({ content: "❌ Only administrators can post the ticket panel.", ephemeral: true });
+      return;
+    }
+
+    const title = interaction.options.getString("title") ?? "🎫 Open a Ticket";
+    const description =
+      interaction.options.getString("description") ??
+      "Click the button below to open a support ticket.\nOur team will assist you as soon as possible.";
+
+    const embed = new EmbedBuilder()
+      .setTitle(title)
+      .setDescription(description)
+      .setColor(0x5865f2)
+      .setFooter({ text: "One ticket per user • Be patient while waiting for a response" });
+
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setCustomId("ticket_open_panel")
+        .setLabel("Open Ticket")
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji("🎫")
+    );
+
+    await interaction.reply({ content: "✅ Panel posted!", ephemeral: true });
+    await (interaction.channel as TextChannel).send({ embeds: [embed], components: [row] });
     return;
   }
 
