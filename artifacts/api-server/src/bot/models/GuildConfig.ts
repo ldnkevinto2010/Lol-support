@@ -22,6 +22,7 @@ export interface IGuildConfig extends Document {
   panelImageUrl: string | null;
   gameCategories: IGameCategory[];
   gameRoles: IGameRole[];
+  bypassRoles: string[];
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -34,14 +35,9 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   ticketCounter: { type: Number, default: 0 },
   supportedGames: { type: [String], default: [] },
   panelImageUrl: { type: String, default: null },
-  gameCategories: {
-    type: [{ game: String, categoryId: String }],
-    default: [],
-  },
-  gameRoles: {
-    type: [{ game: String, roleId: String }],
-    default: [],
-  },
+  gameCategories: { type: [{ game: String, categoryId: String }], default: [] },
+  gameRoles: { type: [{ game: String, roleId: String }], default: [] },
+  bypassRoles: { type: [String], default: [] },
 });
 
 export const GuildConfig = mongoose.model<IGuildConfig>("GuildConfig", GuildConfigSchema);

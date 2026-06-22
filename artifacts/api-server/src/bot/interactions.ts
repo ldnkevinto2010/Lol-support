@@ -84,12 +84,14 @@ function buildTicketModal(game: string): ModalBuilder {
 async function checkTicketPrerequisites(
   guildId: string,
   userId: string,
-  config: IGuildConfig | null
+  config: IGuildConfig | null,
+  memberRoleIds: string[] = []
 ): Promise<string | null> {
   if (!config?.ticketCategoryId) {
     return "❌ Tickets are not configured yet. Ask an admin to run `/setup ticket-category`.";
   }
-  if (config.minMessagesRequired > 0) {
+  const hasBypass = (config.bypassRoles ?? []).some((r) => memberRoleIds.includes(r));
+  if (!hasBypass && config.minMessagesRequired > 0) {
     const msgDoc = await UserMessageCount.findOne({ guildId, userId });
     const count = msgDoc?.count ?? 0;
     if (count < config.minMessagesRequired) {
@@ -286,7 +288,8 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
 
   // Panel "Create Ticket" button → show game select dropdown
   if (customId === "ticket_open_panel") {
-    const error = await checkTicketPrerequisites(guildId, interaction.user.id, config);
+    const memberRoles = (interaction.member as any)?.roles?.cache?.map((r: any) => r.id) ?? [];
+    const error = await checkTicketPrerequisites(guildId, interaction.user.id, config, memberRoles);
     if (error) {
       await interaction.reply({ content: error, ephemeral: true });
       return;
@@ -434,6 +437,24 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     const game = interaction.values[0]!;
     const modal = buildTicketModal(game);
     await interaction.showModal(modal);
+    return;
+  }
+
+  if (customId === "setup_remove_bypass_role") {
+    const roleId = interaction.values[0]!;
+    const config = await GuildConfig.findOne({ guildId });
+    if (!config) {
+      await interaction.reply({ content: "❌ No configuration found.", ephemeral: true });
+      return;
+    }
+    const before = config.bypassRoles.length;
+    config.bypassRoles = config.bypassRoles.filter((id) => id !== roleId);
+    if (config.bypassRoles.length === before) {
+      await interaction.reply({ content: "❌ That role wasn't in the bypass list.", ephemeral: true });
+      return;
+    }
+    await config.save();
+    await interaction.update({ content: `✅ Removed <@&${roleId}> from bypass roles.`, components: [] });
     return;
   }
 

@@ -90,6 +90,19 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("bypass-role")
+      .setDescription("Add or remove a role that bypasses the message requirement")
+      .addRoleOption((opt) =>
+        opt.setName("role").setDescription("The role to add/remove from bypass list").setRequired(true)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("bypass-roles")
+      .setDescription("View all bypass roles and remove any of them")
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("ping-role")
       .setDescription("Set the default role pinged when any ticket is created")
       .addRoleOption((opt) =>
@@ -202,6 +215,49 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       content: `✅ Supported games updated:\n${games.map((g) => `• ${g}`).join("\n")}`,
       ephemeral: true,
     });
+
+  } else if (sub === "bypass-role") {
+    const role = interaction.options.getRole("role", true);
+    const bypassRoles = config.bypassRoles ?? [];
+    const idx = bypassRoles.indexOf(role.id);
+    if (idx >= 0) {
+      config.bypassRoles.splice(idx, 1);
+      await config.save();
+      await interaction.reply({ content: `✅ **${role.name}** removed from bypass roles.`, ephemeral: true });
+    } else {
+      config.bypassRoles.push(role.id);
+      await config.save();
+      await interaction.reply({ content: `✅ **${role.name}** added — members with this role bypass the message requirement.`, ephemeral: true });
+    }
+
+  } else if (sub === "bypass-roles") {
+    const roles = config.bypassRoles ?? [];
+    if (roles.length === 0) {
+      await interaction.reply({ content: "No bypass roles set. Use `/setup bypass-role` to add one.", ephemeral: true });
+      return;
+    }
+    const lines = roles.map((id) => `• <@&${id}>`);
+    const embed = new EmbedBuilder()
+      .setTitle("Message Requirement Bypass Roles")
+      .setColor(0x5865f2)
+      .setDescription(lines.join("\n"))
+      .setFooter({ text: "Use the dropdown to remove a role" });
+
+    const select = new StringSelectMenuBuilder()
+      .setCustomId("setup_remove_bypass_role")
+      .setPlaceholder("Select a role to remove from bypass list...")
+      .addOptions(
+        roles.map((id) => {
+          const roleName = interaction.guild!.roles.cache.get(id)?.name ?? id;
+          return new StringSelectMenuOptionBuilder()
+            .setLabel(roleName)
+            .setValue(id)
+            .setDescription(`Remove ${roleName} from bypass list`);
+        })
+      );
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
   } else if (sub === "ping-role") {
     const role = interaction.options.getRole("role", true);
