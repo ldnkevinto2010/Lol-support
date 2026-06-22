@@ -90,6 +90,34 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("ping-role")
+      .setDescription("Set the default role pinged when any ticket is created")
+      .addRoleOption((opt) =>
+        opt.setName("role").setDescription("The role to ping").setRequired(true)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("game-role")
+      .setDescription("Map a game to a specific ping role when its tickets are created")
+      .addStringOption((opt) =>
+        opt
+          .setName("game")
+          .setDescription("Game name (must match your games list)")
+          .setRequired(true)
+          .setMaxLength(100)
+      )
+      .addRoleOption((opt) =>
+        opt.setName("role").setDescription("The role to ping for this game").setRequired(true)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("game-roles")
+      .setDescription("View all game → role mappings and remove any of them")
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("game-mappings")
       .setDescription("View all game → category mappings and remove any of them")
   )
@@ -174,6 +202,66 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       content: `✅ Supported games updated:\n${games.map((g) => `• ${g}`).join("\n")}`,
       ephemeral: true,
     });
+
+  } else if (sub === "ping-role") {
+    const role = interaction.options.getRole("role", true);
+    config.supportRoleId = role.id;
+    await config.save();
+    await interaction.reply({
+      content: `✅ Default ping role set to **${role.name}**. All tickets will ping this role unless a game-specific role is set.`,
+      ephemeral: true,
+    });
+
+  } else if (sub === "game-role") {
+    const gameName = interaction.options.getString("game", true).trim();
+    const role = interaction.options.getRole("role", true);
+    const existing = config.gameRoles?.findIndex(
+      (gr) => gr.game.toLowerCase() === gameName.toLowerCase()
+    ) ?? -1;
+    if (existing >= 0) {
+      config.gameRoles[existing]!.roleId = role.id;
+    } else {
+      config.gameRoles.push({ game: gameName, roleId: role.id });
+    }
+    await config.save();
+    await interaction.reply({
+      content: `✅ Tickets for **${gameName}** will now ping **${role.name}**.`,
+      ephemeral: true,
+    });
+
+  } else if (sub === "game-roles") {
+    const mappings = config.gameRoles ?? [];
+
+    if (mappings.length === 0) {
+      await interaction.reply({
+        content: "No game → role mappings set yet. Use `/setup game-role` to add one.",
+        ephemeral: true,
+      });
+      return;
+    }
+
+    const lines = mappings.map((gr) => `• **${gr.game}** → <@&${gr.roleId}>`);
+
+    const embed = new EmbedBuilder()
+      .setTitle("Game → Role Mappings")
+      .setColor(0x5865f2)
+      .setDescription(lines.join("\n"))
+      .setFooter({ text: "Use the dropdown below to remove a mapping" });
+
+    const select = new StringSelectMenuBuilder()
+      .setCustomId("setup_remove_game_role")
+      .setPlaceholder("Select a game to remove its role mapping...")
+      .addOptions(
+        mappings.map((gr) =>
+          new StringSelectMenuOptionBuilder()
+            .setLabel(gr.game)
+            .setValue(gr.game)
+            .setDescription(`Remove role mapping for ${gr.game}`)
+        )
+      );
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
   } else if (sub === "game-mappings") {
     const mappings = config.gameCategories ?? [];

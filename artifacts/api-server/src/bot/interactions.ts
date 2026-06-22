@@ -437,6 +437,29 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     return;
   }
 
+  if (customId === "setup_remove_game_role") {
+    const gameName = interaction.values[0]!;
+    const config = await GuildConfig.findOne({ guildId });
+    if (!config) {
+      await interaction.reply({ content: "❌ No configuration found.", ephemeral: true });
+      return;
+    }
+    const before = config.gameRoles.length;
+    config.gameRoles = config.gameRoles.filter(
+      (gr) => gr.game.toLowerCase() !== gameName.toLowerCase()
+    );
+    if (config.gameRoles.length === before) {
+      await interaction.reply({ content: `❌ No role mapping found for **${gameName}**.`, ephemeral: true });
+      return;
+    }
+    await config.save();
+    await interaction.update({
+      content: `✅ Removed the role mapping for **${gameName}**.`,
+      components: [],
+    });
+    return;
+  }
+
   if (customId === "setup_remove_game_mapping") {
     const gameName = interaction.values[0]!;
     const config = await GuildConfig.findOne({ guildId });
@@ -563,8 +586,13 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       )
       .setTimestamp();
 
-    const mentionContent = config.supportRoleId
-      ? `<@&${config.supportRoleId}> ${interaction.user}`
+    // Game-specific role takes priority over the default ping role
+    const gameRole = config.gameRoles?.find(
+      (gr) => gr.game.toLowerCase() === game.toLowerCase()
+    );
+    const pingRoleId = gameRole?.roleId ?? config.supportRoleId;
+    const mentionContent = pingRoleId
+      ? `<@&${pingRoleId}> ${interaction.user}`
       : `${interaction.user}`;
 
     await channel.send({
