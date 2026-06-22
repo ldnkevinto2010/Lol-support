@@ -79,7 +79,7 @@ export const data = new SlashCommandBuilder()
       .addStringOption((opt) =>
         opt
           .setName("list")
-          .setDescription("Comma-separated games, e.g: Blox Fruits (BF), UTD, AUT")
+          .setDescription("Comma-separated list of games")
           .setRequired(true)
           .setMaxLength(500)
       )
