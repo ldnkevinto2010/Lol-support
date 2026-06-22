@@ -12,6 +12,7 @@ import { logger } from "../lib/logger";
 import * as setupCmd from "./commands/setup";
 import * as ticketCmd from "./commands/ticket";
 import * as vouchCmd from "./commands/vouch";
+import * as helperProfileCmd from "./commands/helperprofile";
 import { handleButton, handleModalSubmit, handleSelectMenu } from "./interactions";
 import { UserMessageCount } from "./models/UserMessageCount";
 import { deployCommands } from "./deploy-commands";
@@ -20,6 +21,7 @@ const commands = new Map([
   ["setup", setupCmd],
   ["ticket", ticketCmd],
   ["vouch", vouchCmd],
+  ["helperprofile", helperProfileCmd],
 ]);
 
 export function createBotClient(): Client {
