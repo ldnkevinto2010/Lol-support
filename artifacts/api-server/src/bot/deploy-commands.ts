@@ -2,6 +2,7 @@ import { REST, Routes } from "discord.js";
 import * as setupCmd from "./commands/setup";
 import * as ticketCmd from "./commands/ticket";
 import * as vouchCmd from "./commands/vouch";
+import * as helperProfileCmd from "./commands/helperprofile";
 
 export async function deployCommands(guildIds: string[]): Promise<void> {
   const token = process.env["DISCORD_TOKEN"];
@@ -15,6 +16,7 @@ export async function deployCommands(guildIds: string[]): Promise<void> {
     setupCmd.data.toJSON(),
     ticketCmd.data.toJSON(),
     vouchCmd.data.toJSON(),
+    helperProfileCmd.data.toJSON(),
   ];
 
   const rest = new REST({ version: "10" }).setToken(token);
