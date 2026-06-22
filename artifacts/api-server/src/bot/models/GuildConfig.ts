@@ -1,5 +1,10 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+export interface IGameCategory {
+  game: string;
+  categoryId: string;
+}
+
 export interface IGuildConfig extends Document {
   guildId: string;
   ticketCategoryId: string | null;
@@ -10,6 +15,7 @@ export interface IGuildConfig extends Document {
   ticketCounter: number;
   supportedGames: string[];
   panelImageUrl: string | null;
+  gameCategories: IGameCategory[];
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -22,6 +28,10 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   ticketCounter: { type: Number, default: 0 },
   supportedGames: { type: [String], default: [] },
   panelImageUrl: { type: String, default: null },
+  gameCategories: {
+    type: [{ game: String, categoryId: String }],
+    default: [],
+  },
 });
 
 export const GuildConfig = mongoose.model<IGuildConfig>("GuildConfig", GuildConfigSchema);

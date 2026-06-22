@@ -466,11 +466,17 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       });
     }
 
+    // Resolve category: per-game mapping takes priority over the default
+    const gameCategory = config.gameCategories?.find(
+      (gc) => gc.game.toLowerCase() === game.toLowerCase()
+    );
+    const categoryId = gameCategory?.categoryId ?? config.ticketCategoryId;
+
     const safeName = interaction.user.username.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 20);
     const channel = await guild.channels.create({
       name: `ticket-${safeName}`,
       type: ChannelType.GuildText,
-      parent: config.ticketCategoryId,
+      parent: categoryId,
       topic: `ticket_user:${interaction.user.id} | game:${game}`,
       permissionOverwrites: overwrites,
     });

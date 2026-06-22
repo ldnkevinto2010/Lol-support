@@ -87,6 +87,25 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("game-category")
+      .setDescription("Map a game to a specific ticket category")
+      .addStringOption((opt) =>
+        opt
+          .setName("game")
+          .setDescription("Game name (must match exactly what's in your games list)")
+          .setRequired(true)
+          .setMaxLength(100)
+      )
+      .addChannelOption((opt) =>
+        opt
+          .setName("category")
+          .setDescription("The Discord category tickets for this game go into")
+          .addChannelTypes(ChannelType.GuildCategory)
+          .setRequired(true)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("view")
       .setDescription("View current CarryBot configuration")
   );
@@ -148,6 +167,23 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       ephemeral: true,
     });
 
+  } else if (sub === "game-category") {
+    const gameName = interaction.options.getString("game", true).trim();
+    const category = interaction.options.getChannel("category", true);
+    const existing = config.gameCategories?.findIndex(
+      (gc) => gc.game.toLowerCase() === gameName.toLowerCase()
+    ) ?? -1;
+    if (existing >= 0) {
+      config.gameCategories[existing]!.categoryId = category.id;
+    } else {
+      config.gameCategories.push({ game: gameName, categoryId: category.id });
+    }
+    await config.save();
+    await interaction.reply({
+      content: `✅ Tickets for **${gameName}** will now go into the **${category.name}** category.`,
+      ephemeral: true,
+    });
+
   } else if (sub === "panel-image") {
     const url = interaction.options.getString("url", true);
     config.panelImageUrl = url;
@@ -163,17 +199,24 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const minMsg = config.minMessagesRequired === 0 ? "Disabled" : `${config.minMessagesRequired} messages`;
     const games = config.supportedGames.length > 0 ? config.supportedGames.join(", ") : "None set";
 
+    const gameCategoryList = (config.gameCategories ?? []).length > 0
+      ? config.gameCategories.map((gc) => {
+          const ch = interaction.guild!.channels.cache.get(gc.categoryId);
+          return `• **${gc.game}** → ${ch?.name ?? gc.categoryId}`;
+        }).join("\n")
+      : "None set";
+
     const embed = new EmbedBuilder()
       .setTitle("CarryBot Configuration")
       .setColor(0x5865f2)
       .addFields(
-        { name: "Ticket Category", value: category, inline: true },
+        { name: "Default Ticket Category", value: category, inline: true },
         { name: "Log Channel", value: logCh, inline: true },
         { name: "Vouch Channel", value: vouchCh, inline: true },
-        { name: "Support Role", value: supportRole, inline: true },
         { name: "Min Messages Required", value: minMsg, inline: true },
         { name: "Panel Image", value: config.panelImageUrl ? "Set ✅" : "Not set", inline: true },
         { name: "Supported Games", value: games, inline: false },
+        { name: "Game → Category Mappings", value: gameCategoryList, inline: false },
       )
       .setTimestamp();
 
