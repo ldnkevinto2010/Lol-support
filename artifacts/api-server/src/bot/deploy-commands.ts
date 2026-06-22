@@ -19,6 +19,9 @@ export async function deployCommands(guildIds: string[]): Promise<void> {
 
   const rest = new REST({ version: "10" }).setToken(token);
 
+  // Clear any previously registered global commands to avoid duplicates
+  await rest.put(Routes.applicationCommands(clientId), { body: [] });
+
   // Register per-guild for instant propagation (no 1-hour global delay)
   await Promise.all(
     guildIds.map((guildId) =>
