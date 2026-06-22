@@ -36,8 +36,9 @@ export function createBotClient(): Client {
   client.once(Events.ClientReady, async (c) => {
     logger.info(`CarryBot online as ${c.user.tag}`);
     try {
-      await deployCommands();
-      logger.info("Slash commands registered globally");
+      const guildIds = c.guilds.cache.map((g) => g.id);
+      await deployCommands(guildIds);
+      logger.info({ count: guildIds.length }, "Slash commands registered (guild-specific)");
     } catch (err) {
       logger.error({ err }, "Failed to register slash commands");
     }
