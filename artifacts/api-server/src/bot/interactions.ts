@@ -223,9 +223,18 @@ export async function handleTicketClose(
   config: IGuildConfig | null,
   reason = "No reason provided"
 ): Promise<void> {
+  const safeReply = async (content: string) => {
+    const payload = { content, ephemeral: true };
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp(payload).catch(() => {});
+    } else {
+      await interaction.reply(payload).catch(() => {});
+    }
+  };
+
   const ticket = await Ticket.findOne({ channelId: interaction.channelId });
   if (!ticket || ticket.status === "closed") {
-    await interaction.reply({ content: "❌ This is not an active ticket channel.", ephemeral: true });
+    await safeReply("❌ This is not an active ticket channel.");
     return;
   }
 
@@ -236,7 +245,7 @@ export async function handleTicketClose(
   const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
 
   if (!isStaff && !isOwner && !isAdmin) {
-    await interaction.reply({ content: "❌ You don't have permission to close this ticket.", ephemeral: true });
+    await safeReply("❌ You don't have permission to close this ticket.");
     return;
   }
 
@@ -244,32 +253,26 @@ export async function handleTicketClose(
   ticket.closedAt = new Date();
   await ticket.save();
 
-  const closeEmbed = new EmbedBuilder()
-    .setTitle("🔒 Ticket Closed")
-    .setColor(0xed4245)
-    .addFields(
-      { name: "Closed By", value: `${interaction.user}`, inline: true },
-      { name: "Reason", value: reason, inline: true },
-    )
-    .setTimestamp();
-
-  if (interaction.deferred || interaction.replied) {
-    await interaction.followUp({ embeds: [closeEmbed] });
-  } else {
-    await interaction.reply({ embeds: [closeEmbed] });
-  }
-
   const ticketChannel = interaction.channel as TextChannel | undefined;
+
   await logTicketClose(config, interaction.guild!, ticket, interaction.user, reason, ticketChannel);
 
   if (ticket.claimedBy && ticket.claimedBy !== ticket.userId) {
     await sendVouchPrompt(interaction.channel as TextChannel, ticket.userId, ticket.claimedBy);
   }
 
+  // Ping the ticket owner so they see it's closing, then show countdown
+  if (ticketChannel) {
+    await ticketChannel.send({ content: `<@${ticket.userId}>` });
+    await ticketChannel.send({
+      content: `🔒 This ticket will be closed in **10 seconds**...`,
+    });
+  }
+
   setTimeout(async () => {
     try {
       const ch = interaction.guild!.channels.cache.get(ticket.channelId) as TextChannel | undefined;
-      if (ch) await ch.permissionOverwrites.edit(ticket.userId, { ViewChannel: false });
+      if (ch) await ch.delete("Ticket closed");
     } catch (_) {}
   }, 10000);
 }
@@ -314,7 +317,38 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
   }
 
   if (customId === "ticket_close") {
+    const ticket = await Ticket.findOne({ channelId: interaction.channelId });
+    if (!ticket || ticket.status === "closed") {
+      await interaction.reply({ content: "❌ This is not an active ticket channel.", ephemeral: true });
+      return;
+    }
+    const confirmRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setCustomId("ticket_close_confirm")
+        .setLabel("Close Ticket")
+        .setStyle(ButtonStyle.Danger)
+        .setEmoji("🔒"),
+      new ButtonBuilder()
+        .setCustomId("ticket_close_cancel")
+        .setLabel("Cancel")
+        .setStyle(ButtonStyle.Secondary)
+    );
+    await interaction.reply({
+      content: "Are you sure you want to close this ticket?",
+      components: [confirmRow],
+      ephemeral: true,
+    });
+    return;
+  }
+
+  if (customId === "ticket_close_confirm") {
+    await interaction.update({ content: "Closing ticket...", components: [] });
     await handleTicketClose(interaction, config);
+    return;
+  }
+
+  if (customId === "ticket_close_cancel") {
+    await interaction.update({ content: "❌ Cancelled.", components: [] });
     return;
   }
 
