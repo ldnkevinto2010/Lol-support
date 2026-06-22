@@ -546,6 +546,12 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       topic: `${game} — ${request}`,
     });
 
+    // Reset message count so user must re-earn messages before opening another ticket
+    await UserMessageCount.findOneAndUpdate(
+      { guildId, userId: interaction.user.id },
+      { $set: { count: 0 } }
+    );
+
     const embed = new EmbedBuilder()
       .setTitle("🎫 New Ticket Created")
       .setColor(0xed4245)
