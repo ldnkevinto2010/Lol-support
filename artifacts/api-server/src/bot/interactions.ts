@@ -22,6 +22,14 @@ import { Ticket } from "./models/Ticket";
 import { Vouch } from "./models/Vouch";
 import { UserMessageCount } from "./models/UserMessageCount";
 
+const DEFAULT_GAMES = [
+  "Universal Tower Defense",
+  "Sailor Piece",
+  "Anime Rangers X",
+  "Anime Apocalypse",
+  "Anime Squadron",
+];
+
 function starsDisplay(rating: number): string {
   return "⭐".repeat(rating) + "☆".repeat(5 - rating);
 }
@@ -217,47 +225,9 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       return;
     }
 
-    const games = config?.supportedGames ?? [];
-
-    // If no games configured, go straight to modal with generic game field
-    if (games.length === 0) {
-      const modal = new ModalBuilder()
-        .setCustomId("ticket_open_modal_")
-        .setTitle("Open a Ticket");
-
-      const gameInput = new TextInputBuilder()
-        .setCustomId("ticket_game_fallback")
-        .setLabel("Game")
-        .setStyle(TextInputStyle.Short)
-        .setPlaceholder("e.g. Blox Fruits, UTD, AUT...")
-        .setRequired(true)
-        .setMaxLength(100);
-
-      const requestInput = new TextInputBuilder()
-        .setCustomId("ticket_request")
-        .setLabel("Request")
-        .setStyle(TextInputStyle.Paragraph)
-        .setPlaceholder("Describe what you need help with...")
-        .setRequired(true)
-        .setMaxLength(500);
-
-      const privateServerInput = new TextInputBuilder()
-        .setCustomId("ticket_private_server")
-        .setLabel("Do you have a Private Server? (Yes / No)")
-        .setStyle(TextInputStyle.Short)
-        .setPlaceholder("Yes or No")
-        .setRequired(true)
-        .setMaxLength(20);
-
-      modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(gameInput),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(requestInput),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(privateServerInput),
-      );
-
-      await interaction.showModal(modal);
-      return;
-    }
+    const games = (config?.supportedGames?.length ?? 0) > 0
+      ? config!.supportedGames
+      : DEFAULT_GAMES;
 
     // Show game select dropdown
     const select = new StringSelectMenuBuilder()
@@ -381,13 +351,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
     const request = interaction.fields.getTextInputValue("ticket_request");
     const privateServer = interaction.fields.getTextInputValue("ticket_private_server");
 
-    // Game comes from the dropdown (encoded in customId) or from fallback text field
-    let game: string;
-    if (encodedGame === "") {
-      game = interaction.fields.getTextInputValue("ticket_game_fallback");
-    } else {
-      game = decodeURIComponent(encodedGame);
-    }
+    const game = encodedGame ? decodeURIComponent(encodedGame) : "Unknown";
 
     await interaction.deferReply({ ephemeral: true });
 
