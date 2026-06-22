@@ -240,9 +240,9 @@ export async function handleTicketClose(
     return;
   }
 
-  const isStaff = config?.supportRoleId
-    ? (interaction.member as any)?.roles?.cache?.has(config.supportRoleId)
-    : false;
+  const isStaff = (config?.staffRoles ?? []).some(
+    (id) => (interaction.member as any)?.roles?.cache?.has(id)
+  );
   const isOwner = ticket.userId === interaction.user.id;
   const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
 
@@ -366,9 +366,9 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       return;
     }
 
-    const isStaff = config?.supportRoleId
-      ? (interaction.member as any)?.roles?.cache?.has(config.supportRoleId)
-      : false;
+    const isStaff = (config?.staffRoles ?? []).some(
+      (id) => (interaction.member as any)?.roles?.cache?.has(id)
+    );
     const isAdmin = (interaction.member as any)?.permissions?.has(BigInt(8));
 
     if (!isStaff && !isAdmin) {
@@ -437,6 +437,24 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     const game = interaction.values[0]!;
     const modal = buildTicketModal(game);
     await interaction.showModal(modal);
+    return;
+  }
+
+  if (customId === "setup_remove_staff_role") {
+    const roleId = interaction.values[0]!;
+    const config = await GuildConfig.findOne({ guildId });
+    if (!config) {
+      await interaction.reply({ content: "❌ No configuration found.", ephemeral: true });
+      return;
+    }
+    const before = config.staffRoles.length;
+    config.staffRoles = config.staffRoles.filter((id) => id !== roleId);
+    if (config.staffRoles.length === before) {
+      await interaction.reply({ content: "❌ That role wasn't in the staff list.", ephemeral: true });
+      return;
+    }
+    await config.save();
+    await interaction.update({ content: `✅ Removed <@&${roleId}> from staff roles.`, components: [] });
     return;
   }
 
@@ -553,9 +571,9 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       },
     ];
 
-    if (config.supportRoleId) {
+    for (const staffRoleId of config.staffRoles ?? []) {
       overwrites.push({
-        id: config.supportRoleId,
+        id: staffRoleId,
         allow: [
           PermissionFlagsBits.ViewChannel,
           PermissionFlagsBits.SendMessages,

@@ -90,6 +90,19 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("staff-role")
+      .setDescription("Add or remove a staff role (staff can claim/close/transcript tickets)")
+      .addRoleOption((opt) =>
+        opt.setName("role").setDescription("The role to add/remove from staff").setRequired(true)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("staff-roles")
+      .setDescription("View all staff roles and remove any of them")
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("bypass-role")
       .setDescription("Add or remove a role that bypasses the message requirement")
       .addRoleOption((opt) =>
@@ -215,6 +228,49 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       content: `✅ Supported games updated:\n${games.map((g) => `• ${g}`).join("\n")}`,
       ephemeral: true,
     });
+
+  } else if (sub === "staff-role") {
+    const role = interaction.options.getRole("role", true);
+    const staffRoles = config.staffRoles ?? [];
+    const idx = staffRoles.indexOf(role.id);
+    if (idx >= 0) {
+      config.staffRoles.splice(idx, 1);
+      await config.save();
+      await interaction.reply({ content: `✅ **${role.name}** removed from staff roles.`, ephemeral: true });
+    } else {
+      config.staffRoles.push(role.id);
+      await config.save();
+      await interaction.reply({ content: `✅ **${role.name}** added as a staff role — members can now claim, close, and transcript tickets.`, ephemeral: true });
+    }
+
+  } else if (sub === "staff-roles") {
+    const roles = config.staffRoles ?? [];
+    if (roles.length === 0) {
+      await interaction.reply({ content: "No staff roles set. Use `/setup staff-role` to add one.", ephemeral: true });
+      return;
+    }
+    const lines = roles.map((id) => `• <@&${id}>`);
+    const embed = new EmbedBuilder()
+      .setTitle("Staff Roles")
+      .setColor(0xe67e22)
+      .setDescription(lines.join("\n"))
+      .setFooter({ text: "Use the dropdown to remove a role" });
+
+    const select = new StringSelectMenuBuilder()
+      .setCustomId("setup_remove_staff_role")
+      .setPlaceholder("Select a role to remove from staff...")
+      .addOptions(
+        roles.map((id) => {
+          const roleName = interaction.guild!.roles.cache.get(id)?.name ?? id;
+          return new StringSelectMenuOptionBuilder()
+            .setLabel(roleName)
+            .setValue(id)
+            .setDescription(`Remove ${roleName} from staff roles`);
+        })
+      );
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
   } else if (sub === "bypass-role") {
     const role = interaction.options.getRole("role", true);

@@ -163,9 +163,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   // ─── /ticket transcript ───
   if (sub === "transcript") {
-    const isStaff = config?.supportRoleId
-      ? (interaction.member as any)?.roles?.cache?.has(config.supportRoleId)
-      : false;
+    const isStaff = (config?.staffRoles ?? []).some(
+      (id) => (interaction.member as any)?.roles?.cache?.has(id)
+    );
     const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
 
     if (!isStaff && !isAdmin) {
@@ -256,9 +256,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
 
-    const isStaff = config?.supportRoleId
-      ? (interaction.member as any)?.roles?.cache?.has(config.supportRoleId)
-      : false;
+    const isStaff = (config?.staffRoles ?? []).some(
+      (id) => (interaction.member as any)?.roles?.cache?.has(id)
+    );
     const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
 
     if (!isStaff && !isAdmin) {
@@ -287,9 +287,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
 
-    const isStaff = config?.supportRoleId
-      ? (interaction.member as any)?.roles?.cache?.has(config.supportRoleId)
-      : false;
+    const isStaff = (config?.staffRoles ?? []).some(
+      (id) => (interaction.member as any)?.roles?.cache?.has(id)
+    );
     const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
     const isOwner = ticket.userId === interaction.user.id;
 
