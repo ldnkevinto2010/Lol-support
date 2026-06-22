@@ -33,9 +33,6 @@ const DEFAULT_GAMES = [
   "Anime Squadron",
 ];
 
-function starsDisplay(rating: number): string {
-  return "⭐".repeat(rating) + "☆".repeat(5 - rating);
-}
 
 function ticketButtons(): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -401,26 +398,16 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       .setCustomId(`vouch_modal_${targetUserId}`)
       .setTitle("Leave a Vouch");
 
-    const ratingInput = new TextInputBuilder()
-      .setCustomId("vouch_rating")
-      .setLabel("Rating (1–5 stars)")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("Enter a number from 1 to 5")
-      .setMinLength(1)
-      .setMaxLength(1)
-      .setRequired(true);
-
-    const commentInput = new TextInputBuilder()
-      .setCustomId("vouch_comment")
-      .setLabel("Comment (optional)")
+    const reasonInput = new TextInputBuilder()
+      .setCustomId("vouch_reason")
+      .setLabel("Reason (optional)")
       .setStyle(TextInputStyle.Paragraph)
       .setPlaceholder("Describe your experience...")
       .setRequired(false)
       .setMaxLength(500);
 
     modal.addComponents(
-      new ActionRowBuilder<TextInputBuilder>().addComponents(ratingInput),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(commentInput)
+      new ActionRowBuilder<TextInputBuilder>().addComponents(reasonInput)
     );
 
     await interaction.showModal(modal);
@@ -664,14 +651,8 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
   // ─── Vouch modal ───
   if (customId.startsWith("vouch_modal_")) {
     const targetUserId = customId.replace("vouch_modal_", "");
-    const ratingStr = interaction.fields.getTextInputValue("vouch_rating");
-    const comment = interaction.fields.getTextInputValue("vouch_comment") ?? "";
+    const reason = interaction.fields.getTextInputValue("vouch_reason") ?? "";
 
-    const rating = parseInt(ratingStr, 10);
-    if (isNaN(rating) || rating < 1 || rating > 5) {
-      await interaction.reply({ content: "❌ Rating must be a number between 1 and 5.", ephemeral: true });
-      return;
-    }
     if (targetUserId === interaction.user.id) {
       await interaction.reply({ content: "❌ You cannot vouch yourself.", ephemeral: true });
       return;
@@ -684,8 +665,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       guildId,
       fromUserId: interaction.user.id,
       toUserId: targetUserId,
-      rating,
-      comment,
+      reason,
       ticketId: ticket?._id?.toString() ?? null,
     });
 
@@ -694,8 +674,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       const vouchChannel = guild.channels.cache.get(config.vouchChannelId) as TextChannel | undefined;
       if (vouchChannel) {
         const targetUser = await interaction.client.users.fetch(targetUserId).catch(() => null);
-        const allVouches = await Vouch.find({ guildId, toUserId: targetUserId });
-        const avg = allVouches.reduce((sum, v) => sum + v.rating, 0) / allVouches.length;
+        const total = await Vouch.countDocuments({ guildId, toUserId: targetUserId });
 
         const embed = new EmbedBuilder()
           .setTitle("New Vouch")
@@ -703,20 +682,18 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
           .addFields(
             { name: "For", value: targetUser ? `${targetUser} (${targetUser.tag})` : `<@${targetUserId}>`, inline: true },
             { name: "From", value: `${interaction.user}`, inline: true },
-            { name: "Rating", value: starsDisplay(rating), inline: true },
-            { name: "Total Vouches", value: `${allVouches.length}`, inline: true },
-            { name: "Average Rating", value: `${avg.toFixed(2)} / 5.00`, inline: true },
+            { name: "Total Vouches", value: `${total}`, inline: true },
           )
           .setTimestamp();
 
-        if (comment) embed.addFields({ name: "Comment", value: comment });
+        if (reason) embed.addFields({ name: "Reason", value: reason });
         if (targetUser) embed.setThumbnail(targetUser.displayAvatarURL());
 
         await vouchChannel.send({ embeds: [embed] });
       }
     }
 
-    await interaction.editReply({ content: `✅ Thanks! Your vouch (${starsDisplay(rating)}) has been recorded.` });
+    await interaction.editReply({ content: `✅ Thanks! Your vouch has been recorded.` });
     return;
   }
 }

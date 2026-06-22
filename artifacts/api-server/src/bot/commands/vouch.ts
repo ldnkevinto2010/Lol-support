@@ -14,22 +14,14 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((sub) =>
     sub
       .setName("give")
-      .setDescription("Give a vouch to a user (must be used inside a ticket channel)")
+      .setDescription("Vouch a user (must be inside a ticket channel)")
       .addUserOption((opt) =>
-        opt.setName("user").setDescription("The user to vouch").setRequired(true)
-      )
-      .addIntegerOption((opt) =>
-        opt
-          .setName("rating")
-          .setDescription("Rating from 1 to 5 stars")
-          .setMinValue(1)
-          .setMaxValue(5)
-          .setRequired(true)
+        opt.setName("member").setDescription("The member to vouch").setRequired(true)
       )
       .addStringOption((opt) =>
         opt
-          .setName("comment")
-          .setDescription("Your review comment")
+          .setName("reason")
+          .setDescription("Reason for the vouch")
           .setRequired(false)
           .setMaxLength(500)
       )
@@ -39,7 +31,7 @@ export const data = new SlashCommandBuilder()
       .setName("add-bulk")
       .setDescription("[Staff] Add multiple vouches to a user at once")
       .addUserOption((opt) =>
-        opt.setName("user").setDescription("The user to vouch").setRequired(true)
+        opt.setName("member").setDescription("The member to vouch").setRequired(true)
       )
       .addIntegerOption((opt) =>
         opt
@@ -49,18 +41,10 @@ export const data = new SlashCommandBuilder()
           .setMaxValue(50)
           .setRequired(true)
       )
-      .addIntegerOption((opt) =>
-        opt
-          .setName("rating")
-          .setDescription("Rating from 1 to 5 stars")
-          .setMinValue(1)
-          .setMaxValue(5)
-          .setRequired(true)
-      )
       .addStringOption((opt) =>
         opt
-          .setName("comment")
-          .setDescription("Comment applied to each vouch")
+          .setName("reason")
+          .setDescription("Reason applied to each vouch")
           .setRequired(false)
           .setMaxLength(500)
       )
@@ -70,7 +54,7 @@ export const data = new SlashCommandBuilder()
       .setName("remove")
       .setDescription("[Staff] Remove the most recent vouches from a user")
       .addUserOption((opt) =>
-        opt.setName("user").setDescription("The user to remove vouches from").setRequired(true)
+        opt.setName("member").setDescription("The member to remove vouches from").setRequired(true)
       )
       .addIntegerOption((opt) =>
         opt
@@ -84,9 +68,9 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((sub) =>
     sub
       .setName("check")
-      .setDescription("Check a user's vouch count and average rating")
+      .setDescription("Check a user's vouch count")
       .addUserOption((opt) =>
-        opt.setName("user").setDescription("The user to check").setRequired(true)
+        opt.setName("member").setDescription("The member to check").setRequired(true)
       )
   )
   .addSubcommand((sub) =>
@@ -94,15 +78,14 @@ export const data = new SlashCommandBuilder()
       .setName("recent")
       .setDescription("See the most recent vouches for a user")
       .addUserOption((opt) =>
-        opt.setName("user").setDescription("The user to check").setRequired(true)
+        opt.setName("member").setDescription("The member to check").setRequired(true)
       )
   );
 
-function starsDisplay(rating: number): string {
-  return "⭐".repeat(rating) + "☆".repeat(5 - rating);
-}
-
-function isStaffMember(interaction: ChatInputCommandInteraction, config: Awaited<ReturnType<typeof GuildConfig.findOne>>): boolean {
+function isStaffMember(
+  interaction: ChatInputCommandInteraction,
+  config: Awaited<ReturnType<typeof GuildConfig.findOne>>
+): boolean {
   const isAdmin = (interaction.member as any)?.permissions?.has(BigInt(8));
   const hasStaffRole = (config?.staffRoles ?? []).some(
     (id) => (interaction.member as any)?.roles?.cache?.has(id)
@@ -114,16 +97,14 @@ async function postToVouchChannel(
   interaction: ChatInputCommandInteraction,
   config: Awaited<ReturnType<typeof GuildConfig.findOne>>,
   target: import("discord.js").User,
-  rating: number,
-  comment: string,
+  reason: string,
   count = 1
 ): Promise<void> {
   if (!config?.vouchChannelId || !interaction.guild) return;
   const vouchChannel = interaction.guild.channels.cache.get(config.vouchChannelId) as TextChannel | undefined;
   if (!vouchChannel) return;
 
-  const allVouches = await Vouch.find({ guildId: interaction.guildId!, toUserId: target.id });
-  const avg = allVouches.reduce((sum, v) => sum + v.rating, 0) / allVouches.length;
+  const total = await Vouch.countDocuments({ guildId: interaction.guildId!, toUserId: target.id });
 
   const embed = new EmbedBuilder()
     .setTitle(count > 1 ? `Bulk Vouch (+${count})` : "New Vouch")
@@ -132,13 +113,11 @@ async function postToVouchChannel(
     .addFields(
       { name: "For", value: `${target} (${target.tag})`, inline: true },
       { name: "From", value: `${interaction.user}`, inline: true },
-      { name: "Rating", value: starsDisplay(rating), inline: true },
-      { name: "Total Vouches", value: `${allVouches.length}`, inline: true },
-      { name: "Average Rating", value: `${avg.toFixed(2)} / 5.00`, inline: true },
+      { name: "Total Vouches", value: `${total}`, inline: true },
     )
     .setTimestamp();
 
-  if (comment) embed.addFields({ name: "Comment", value: comment });
+  if (reason) embed.addFields({ name: "Reason", value: reason });
   if (count > 1) embed.addFields({ name: "Vouches Added", value: `${count}`, inline: true });
 
   await vouchChannel.send({ embeds: [embed] });
@@ -155,9 +134,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   // ─── /vouch give ───
   if (sub === "give") {
-    const target = interaction.options.getUser("user", true);
-    const rating = interaction.options.getInteger("rating", true);
-    const comment = interaction.options.getString("comment") ?? "";
+    const target = interaction.options.getUser("member", true);
+    const reason = interaction.options.getString("reason") ?? "";
 
     if (target.id === interaction.user.id) {
       await interaction.reply({ content: "❌ You cannot vouch yourself.", ephemeral: true });
@@ -168,11 +146,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
 
-    // Normal members must use this inside a ticket channel; staff/admins can use it anywhere
     if (!isStaffMember(interaction, config)) {
-      const ticket = await Ticket.findOne({ channelId: interaction.channelId, status: { $in: ["open", "claimed"] } });
+      const ticket = await Ticket.findOne({
+        channelId: interaction.channelId,
+        status: { $in: ["open", "claimed"] },
+      });
       if (!ticket) {
-        await interaction.reply({ content: "❌ You can only use `/vouch give` inside an active ticket channel.", ephemeral: true });
+        await interaction.reply({
+          content: "❌ You can only use `/vouch give` inside an active ticket channel.",
+          ephemeral: true,
+        });
         return;
       }
     }
@@ -183,12 +166,11 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       guildId: interaction.guildId,
       fromUserId: interaction.user.id,
       toUserId: target.id,
-      rating,
-      comment,
+      reason,
     });
 
-    await postToVouchChannel(interaction, config, target, rating, comment);
-    await interaction.editReply({ content: `✅ You vouched ${target} with ${starsDisplay(rating)}.` });
+    await postToVouchChannel(interaction, config, target, reason);
+    await interaction.editReply({ content: `✅ Vouched ${target}${reason ? ` — "${reason}"` : ""}.` });
 
   // ─── /vouch add-bulk ───
   } else if (sub === "add-bulk") {
@@ -197,10 +179,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
 
-    const target = interaction.options.getUser("user", true);
+    const target = interaction.options.getUser("member", true);
     const count = interaction.options.getInteger("count", true);
-    const rating = interaction.options.getInteger("rating", true);
-    const comment = interaction.options.getString("comment") ?? "";
+    const reason = interaction.options.getString("reason") ?? "";
 
     if (target.id === interaction.user.id) {
       await interaction.reply({ content: "❌ You cannot vouch yourself.", ephemeral: true });
@@ -217,15 +198,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       guildId: interaction.guildId!,
       fromUserId: interaction.user.id,
       toUserId: target.id,
-      rating,
-      comment,
+      reason,
       ticketId: null,
       createdAt: new Date(),
     }));
     await Vouch.insertMany(docs);
 
-    await postToVouchChannel(interaction, config, target, rating, comment, count);
-    await interaction.editReply({ content: `✅ Added **${count}** vouch${count === 1 ? "" : "es"} (${starsDisplay(rating)}) for ${target}.` });
+    await postToVouchChannel(interaction, config, target, reason, count);
+    await interaction.editReply({
+      content: `✅ Added **${count}** vouch${count === 1 ? "" : "es"} for ${target}.`,
+    });
 
   // ─── /vouch remove ───
   } else if (sub === "remove") {
@@ -234,7 +216,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
 
-    const target = interaction.options.getUser("user", true);
+    const target = interaction.options.getUser("member", true);
     const count = interaction.options.getInteger("count") ?? 1;
 
     await interaction.deferReply({ ephemeral: true });
@@ -257,37 +239,27 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   // ─── /vouch check ───
   } else if (sub === "check") {
-    const target = interaction.options.getUser("user", true);
+    const target = interaction.options.getUser("member", true);
     await interaction.deferReply();
 
-    const vouches = await Vouch.find({ guildId: interaction.guildId, toUserId: target.id });
-    if (vouches.length === 0) {
+    const total = await Vouch.countDocuments({ guildId: interaction.guildId, toUserId: target.id });
+    if (total === 0) {
       await interaction.editReply({ content: `${target.tag} has no vouches yet.` });
       return;
     }
-
-    const avg = vouches.reduce((sum, v) => sum + v.rating, 0) / vouches.length;
-    const counts = [1, 2, 3, 4, 5].map((r) => vouches.filter((v) => v.rating === r).length);
 
     const embed = new EmbedBuilder()
       .setTitle(`Vouches for ${target.tag}`)
       .setThumbnail(target.displayAvatarURL())
       .setColor(0xfee75c)
-      .addFields(
-        { name: "Total Vouches", value: `${vouches.length}`, inline: true },
-        { name: "Average Rating", value: `${avg.toFixed(2)} / 5.00`, inline: true },
-        {
-          name: "Breakdown",
-          value: [5, 4, 3, 2, 1].map((r) => `${"⭐".repeat(r)} — ${counts[r - 1]}`).join("\n"),
-        },
-      )
+      .addFields({ name: "Total Vouches", value: `${total}`, inline: true })
       .setTimestamp();
 
     await interaction.editReply({ embeds: [embed] });
 
   // ─── /vouch recent ───
   } else if (sub === "recent") {
-    const target = interaction.options.getUser("user", true);
+    const target = interaction.options.getUser("member", true);
     await interaction.deferReply();
 
     const vouches = await Vouch.find({ guildId: interaction.guildId, toUserId: target.id })
@@ -310,8 +282,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       const from = fromUser ? fromUser.tag : `<@${v.fromUserId}>`;
       const ts = Math.floor(v.createdAt.getTime() / 1000);
       embed.addFields({
-        name: `${starsDisplay(v.rating)} — from ${from}`,
-        value: (v.comment || "_No comment_") + `\n<t:${ts}:R>`,
+        name: `From ${from}`,
+        value: (v.reason || "_No reason given_") + `\n<t:${ts}:R>`,
       });
     }
 
