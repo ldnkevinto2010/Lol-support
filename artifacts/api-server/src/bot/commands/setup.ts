@@ -5,6 +5,9 @@ import {
   ChannelType,
   TextChannel,
   EmbedBuilder,
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
 } from "discord.js";
 import { GuildConfig } from "../models/GuildConfig";
 
@@ -87,6 +90,11 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("game-mappings")
+      .setDescription("View all game → category mappings and remove any of them")
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("game-category")
       .setDescription("Map a game to a specific ticket category")
       .addStringOption((opt) =>
@@ -166,6 +174,44 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       content: `✅ Supported games updated:\n${games.map((g) => `• ${g}`).join("\n")}`,
       ephemeral: true,
     });
+
+  } else if (sub === "game-mappings") {
+    const mappings = config.gameCategories ?? [];
+
+    if (mappings.length === 0) {
+      await interaction.reply({
+        content: "No game → category mappings set yet. Use `/setup game-category` to add one.",
+        ephemeral: true,
+      });
+      return;
+    }
+
+    const lines = mappings.map((gc) => {
+      const ch = interaction.guild!.channels.cache.get(gc.categoryId);
+      return `• **${gc.game}** → ${ch ? `**${ch.name}**` : `\`${gc.categoryId}\``}`;
+    });
+
+    const embed = new EmbedBuilder()
+      .setTitle("Game → Category Mappings")
+      .setColor(0x5865f2)
+      .setDescription(lines.join("\n"))
+      .setFooter({ text: "Use the dropdown below to remove a mapping" });
+
+    const select = new StringSelectMenuBuilder()
+      .setCustomId("setup_remove_game_mapping")
+      .setPlaceholder("Select a game to remove its mapping...")
+      .addOptions(
+        mappings.map((gc) =>
+          new StringSelectMenuOptionBuilder()
+            .setLabel(gc.game)
+            .setValue(gc.game)
+            .setDescription(`Remove mapping for ${gc.game}`)
+        )
+      );
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+
+    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
   } else if (sub === "game-category") {
     const gameName = interaction.options.getString("game", true).trim();

@@ -402,6 +402,29 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     await interaction.showModal(modal);
     return;
   }
+
+  if (customId === "setup_remove_game_mapping") {
+    const gameName = interaction.values[0]!;
+    const config = await GuildConfig.findOne({ guildId });
+    if (!config) {
+      await interaction.reply({ content: "❌ No configuration found.", ephemeral: true });
+      return;
+    }
+    const before = config.gameCategories.length;
+    config.gameCategories = config.gameCategories.filter(
+      (gc) => gc.game.toLowerCase() !== gameName.toLowerCase()
+    );
+    if (config.gameCategories.length === before) {
+      await interaction.reply({ content: `❌ No mapping found for **${gameName}**.`, ephemeral: true });
+      return;
+    }
+    await config.save();
+    await interaction.update({
+      content: `✅ Removed the category mapping for **${gameName}**.`,
+      components: [],
+    });
+    return;
+  }
 }
 
 // ─── Modal handler ───
