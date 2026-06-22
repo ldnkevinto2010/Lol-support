@@ -50,6 +50,11 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("transcript")
+      .setDescription("Generate and send a transcript of this ticket (staff/admin only)")
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("panel")
       .setDescription("Post the ticket panel in this channel (admin only)")
       .addStringOption((opt) =>
@@ -153,6 +158,36 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     );
 
     await interaction.showModal(modal);
+    return;
+  }
+
+  // ─── /ticket transcript ───
+  if (sub === "transcript") {
+    const isStaff = config?.supportRoleId
+      ? (interaction.member as any)?.roles?.cache?.has(config.supportRoleId)
+      : false;
+    const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
+
+    if (!isStaff && !isAdmin) {
+      await interaction.reply({ content: "❌ Only support staff or admins can generate transcripts.", ephemeral: true });
+      return;
+    }
+
+    const ticket = await Ticket.findOne({ channelId: interaction.channelId });
+    if (!ticket) {
+      await interaction.reply({ content: "❌ This is not a ticket channel.", ephemeral: true });
+      return;
+    }
+
+    await interaction.deferReply({ ephemeral: true });
+
+    const { generateTranscript } = await import("../interactions");
+    const attachment = await generateTranscript(interaction.channel as TextChannel);
+
+    await interaction.editReply({
+      content: "📄 Here is the transcript for this ticket:",
+      files: [attachment],
+    });
     return;
   }
 

@@ -9,6 +9,7 @@ import {
   ActionRowBuilder,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
+  AttachmentBuilder,
   ChannelType,
   OverwriteType,
   PermissionFlagsBits,
@@ -16,6 +17,8 @@ import {
   ModalBuilder,
   TextInputBuilder,
   TextInputStyle,
+  Collection,
+  Message,
 } from "discord.js";
 import { GuildConfig, IGuildConfig } from "./models/GuildConfig";
 import { Ticket } from "./models/Ticket";
@@ -104,6 +107,55 @@ async function checkTicketPrerequisites(
   return null;
 }
 
+// ─── Transcript generator ───
+export async function generateTranscript(channel: TextChannel): Promise<AttachmentBuilder> {
+  const lines: string[] = [];
+  lines.push(`═══════════════════════════════════════════════════`);
+  lines.push(`  TICKET TRANSCRIPT — #${channel.name}`);
+  lines.push(`  Generated: ${new Date().toUTCString()}`);
+  lines.push(`═══════════════════════════════════════════════════`);
+  lines.push("");
+
+  let lastId: string | undefined;
+  const allMessages: Message[] = [];
+
+  // Paginate through all messages (100 per fetch)
+  while (true) {
+    const fetched: Collection<string, Message> = await channel.messages.fetch({
+      limit: 100,
+      ...(lastId ? { before: lastId } : {}),
+    });
+    if (fetched.size === 0) break;
+    allMessages.push(...fetched.values());
+    lastId = fetched.last()?.id;
+    if (fetched.size < 100) break;
+  }
+
+  // Oldest first
+  allMessages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
+
+  for (const msg of allMessages) {
+    const ts = msg.createdAt.toUTCString();
+    const tag = msg.author.tag;
+    const bot = msg.author.bot ? " [BOT]" : "";
+    const content = msg.content || (msg.embeds.length > 0 ? "[embed]" : "[no content]");
+    lines.push(`[${ts}] ${tag}${bot}: ${content}`);
+    if (msg.attachments.size > 0) {
+      for (const att of msg.attachments.values()) {
+        lines.push(`  📎 Attachment: ${att.url}`);
+      }
+    }
+  }
+
+  lines.push("");
+  lines.push(`═══════════════════════════════════════════════════`);
+  lines.push(`  END OF TRANSCRIPT — ${allMessages.length} messages`);
+  lines.push(`═══════════════════════════════════════════════════`);
+
+  const buffer = Buffer.from(lines.join("\n"), "utf-8");
+  return new AttachmentBuilder(buffer, { name: `transcript-${channel.name}.txt` });
+}
+
 async function sendVouchPrompt(
   channel: TextChannel,
   ticketUserId: string,
@@ -134,7 +186,8 @@ async function logTicketClose(
   guild: import("discord.js").Guild,
   ticket: InstanceType<typeof Ticket>,
   closedBy: import("discord.js").User,
-  reason: string
+  reason: string,
+  ticketChannel?: TextChannel
 ): Promise<void> {
   if (!guildConfig?.ticketLogChannelId) return;
   const logChannel = guild.channels.cache.get(guildConfig.ticketLogChannelId) as TextChannel | undefined;
@@ -144,14 +197,24 @@ async function logTicketClose(
     .setTitle("Ticket Closed")
     .setColor(0xed4245)
     .addFields(
-      { name: "Ticket", value: `#${String(ticket.ticketNumber).padStart(4, "0")} — <#${ticket.channelId}>`, inline: true },
+      { name: "Ticket", value: `#${String(ticket.ticketNumber).padStart(4, "0")} — #${ticketChannel?.name ?? ticket.channelId}`, inline: true },
       { name: "Opened By", value: `<@${ticket.userId}>`, inline: true },
       { name: "Closed By", value: `${closedBy}`, inline: true },
       { name: "Claimed By", value: ticket.claimedBy ? `<@${ticket.claimedBy}>` : "Unclaimed", inline: true },
       { name: "Reason", value: reason, inline: false },
     )
     .setTimestamp();
-  await logChannel.send({ embeds: [logEmbed] });
+
+  if (ticketChannel) {
+    try {
+      const attachment = await generateTranscript(ticketChannel);
+      await logChannel.send({ embeds: [logEmbed], files: [attachment] });
+    } catch {
+      await logChannel.send({ embeds: [logEmbed] });
+    }
+  } else {
+    await logChannel.send({ embeds: [logEmbed] });
+  }
 }
 
 // ─── Shared close logic ───
@@ -196,7 +259,8 @@ export async function handleTicketClose(
     await interaction.reply({ embeds: [closeEmbed] });
   }
 
-  await logTicketClose(config, interaction.guild!, ticket, interaction.user, reason);
+  const ticketChannel = interaction.channel as TextChannel | undefined;
+  await logTicketClose(config, interaction.guild!, ticket, interaction.user, reason, ticketChannel);
 
   if (ticket.claimedBy && ticket.claimedBy !== ticket.userId) {
     await sendVouchPrompt(interaction.channel as TextChannel, ticket.userId, ticket.claimedBy);
