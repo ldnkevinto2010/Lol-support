@@ -50,17 +50,6 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
-      .setName("support-role")
-      .setDescription("Set the support staff role")
-      .addRoleOption((opt) =>
-        opt
-          .setName("role")
-          .setDescription("The support role")
-          .setRequired(true)
-      )
-  )
-  .addSubcommand((sub) =>
-    sub
       .setName("min-messages")
       .setDescription("Set the minimum messages required to open a ticket (0 = no requirement)")
       .addIntegerOption((opt) =>
@@ -131,12 +120,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     config.vouchChannelId = channel.id;
     await config.save();
     await interaction.reply({ content: `✅ Vouch channel set to ${channel}.`, ephemeral: true });
-
-  } else if (sub === "support-role") {
-    const role = interaction.options.getRole("role", true);
-    config.supportRoleId = role.id;
-    await config.save();
-    await interaction.reply({ content: `✅ Support role set to **${role.name}**.`, ephemeral: true });
 
   } else if (sub === "min-messages") {
     const count = interaction.options.getInteger("count", true);
