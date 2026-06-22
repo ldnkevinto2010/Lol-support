@@ -67,7 +67,7 @@ function buildTicketModal(game: string): ModalBuilder {
 
   const privateServerInput = new TextInputBuilder()
     .setCustomId("ticket_private_server")
-    .setLabel("Do you have a Private Server? (Yes / No)")
+    .setLabel("Can you join a private server? (Yes / No)")
     .setStyle(TextInputStyle.Short)
     .setPlaceholder("Yes or No")
     .setRequired(true)
