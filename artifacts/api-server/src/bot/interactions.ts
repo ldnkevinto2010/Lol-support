@@ -461,7 +461,9 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
         id: helperRoleId,
         allow: [
           PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.SendMessages,
           PermissionFlagsBits.ReadMessageHistory,
+          PermissionFlagsBits.AttachFiles,
         ],
         type: OverwriteType.Role,
       });
@@ -718,13 +720,15 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       });
     }
 
-    // Helper roles can see open tickets but are locked out once claimed
+    // Helper roles can see and type in open tickets, locked out once claimed
     for (const helperRoleId of config.helperRoles ?? []) {
       overwrites.push({
         id: helperRoleId,
         allow: [
           PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.SendMessages,
           PermissionFlagsBits.ReadMessageHistory,
+          PermissionFlagsBits.AttachFiles,
         ],
         type: OverwriteType.Role,
       });
