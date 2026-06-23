@@ -2,9 +2,6 @@ import {
   ChatInputCommandInteraction,
   SlashCommandBuilder,
   PermissionFlagsBits,
-  ModalBuilder,
-  TextInputBuilder,
-  TextInputStyle,
   ActionRowBuilder,
   TextChannel,
   EmbedBuilder,
@@ -13,16 +10,10 @@ import {
 } from "discord.js";
 import { GuildConfig } from "../models/GuildConfig";
 import { Ticket } from "../models/Ticket";
-import { UserMessageCount } from "../models/UserMessageCount";
 
 export const data = new SlashCommandBuilder()
   .setName("ticket")
   .setDescription("Ticket system commands")
-  .addSubcommand((sub) =>
-    sub
-      .setName("open")
-      .setDescription("Open a new support ticket")
-  )
   .addSubcommand((sub) =>
     sub
       .setName("close")
@@ -76,85 +67,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   const sub = interaction.options.getSubcommand();
   const config = await GuildConfig.findOne({ guildId: interaction.guildId });
-
-  // ─── /ticket open — show modal ───
-  if (sub === "open") {
-    if (!config?.ticketCategoryId) {
-      await interaction.reply({
-        content: "❌ Tickets are not configured yet. Ask an admin to run `/setup ticket-category`.",
-        ephemeral: true,
-      });
-      return;
-    }
-
-    // Check message requirement
-    if (config.minMessagesRequired > 0) {
-      const msgCount = await UserMessageCount.findOne({
-        guildId: interaction.guildId,
-        userId: interaction.user.id,
-      });
-      const count = msgCount?.count ?? 0;
-      if (count < config.minMessagesRequired) {
-        await interaction.reply({
-          content: `❌ You need at least **${config.minMessagesRequired}** messages in this server to open a ticket. You currently have **${count}**.`,
-          ephemeral: true,
-        });
-        return;
-      }
-    }
-
-    // Check for existing open ticket
-    const existing = await Ticket.findOne({
-      guildId: interaction.guildId,
-      userId: interaction.user.id,
-      status: { $in: ["open", "claimed"] },
-    });
-    if (existing) {
-      await interaction.reply({
-        content: `❌ You already have an open ticket: <#${existing.channelId}>`,
-        ephemeral: true,
-      });
-      return;
-    }
-
-    // Show the ticket creation modal
-    const modal = new ModalBuilder()
-      .setCustomId("ticket_open_modal")
-      .setTitle("Open a Ticket");
-
-    const gameInput = new TextInputBuilder()
-      .setCustomId("ticket_game")
-      .setLabel("Game")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("e.g. Blox Fruits, UTD, AUT...")
-      .setRequired(true)
-      .setMaxLength(100);
-
-    const requestInput = new TextInputBuilder()
-      .setCustomId("ticket_request")
-      .setLabel("Request")
-      .setStyle(TextInputStyle.Paragraph)
-      .setPlaceholder("Describe what you need help with...")
-      .setRequired(true)
-      .setMaxLength(500);
-
-    const privateServerInput = new TextInputBuilder()
-      .setCustomId("ticket_private_server")
-      .setLabel("Do you have a Private Server? (Yes / No)")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("Yes or No")
-      .setRequired(true)
-      .setMaxLength(20);
-
-    modal.addComponents(
-      new ActionRowBuilder<TextInputBuilder>().addComponents(gameInput),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(requestInput),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(privateServerInput),
-    );
-
-    await interaction.showModal(modal);
-    return;
-  }
 
   // ─── /ticket transcript ───
   if (sub === "transcript") {
