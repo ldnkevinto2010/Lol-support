@@ -653,17 +653,39 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
     app.reviewedAt = new Date();
     await app.save();
 
-    // Give the applicant their roles
+    // Give the applicant their roles and DM them
     const appRoleEntry = (config?.applicationRoles ?? []).find(
       (ar) => ar.game.toLowerCase() === app.game.toLowerCase()
     );
+    const assignedRoleNames: string[] = [];
     if (appRoleEntry) {
       try {
         const member = await guild.members.fetch(app.userId);
-        await member.roles.add([appRoleEntry.gameRoleId, appRoleEntry.baseRoleId].filter(Boolean));
+        const roleIds = [appRoleEntry.gameRoleId, appRoleEntry.baseRoleId].filter(Boolean);
+        await member.roles.add(roleIds);
+        for (const id of roleIds) {
+          const roleName = guild.roles.cache.get(id)?.name;
+          if (roleName) assignedRoleNames.push(roleName);
+        }
       } catch {
         // Member may have left; continue anyway
       }
+    }
+
+    // DM the applicant
+    try {
+      const applicantUser = await interaction.client.users.fetch(app.userId);
+      const rolesLine = assignedRoleNames.length > 0
+        ? `**Roles Assigned**\n${assignedRoleNames.map((r) => `**${r}!**`).join("\n")}`
+        : "";
+      const dmEmbed = new EmbedBuilder()
+        .setColor(0x57f287)
+        .setDescription(
+          `✅ **Application Accepted!**\n\nCongratulations! Your **${app.game}** helper application has been **accepted**.\n\n${rolesLine}\n\nThank you for applying — welcome to the team!`
+        );
+      await applicantUser.send({ embeds: [dmEmbed] });
+    } catch {
+      // DMs may be closed; non-fatal
     }
 
     // Update the review embed
