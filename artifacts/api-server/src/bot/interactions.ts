@@ -43,6 +43,11 @@ function ticketButtons(): ActionRowBuilder<ButtonBuilder> {
       .setStyle(ButtonStyle.Primary)
       .setEmoji("✋"),
     new ButtonBuilder()
+      .setCustomId("ticket_unclaim")
+      .setLabel("Unclaim Ticket")
+      .setStyle(ButtonStyle.Secondary)
+      .setEmoji("🔓"),
+    new ButtonBuilder()
       .setCustomId("ticket_close")
       .setLabel("Close Ticket")
       .setStyle(ButtonStyle.Danger)
@@ -389,6 +394,83 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
     const embed = new EmbedBuilder()
       .setDescription(`✋ ${interaction.user} has claimed this ticket.\n🔒 This ticket is now private between ${interaction.user}, <@${ticket.userId}>, and staff.`)
       .setColor(0x5865f2);
+    await interaction.reply({ embeds: [embed] });
+    return;
+  }
+
+  if (customId === "ticket_unclaim") {
+    const ticket = await Ticket.findOne({ channelId: interaction.channelId });
+    if (!ticket || ticket.status === "closed") {
+      await interaction.reply({ content: "❌ This is not an active ticket channel.", ephemeral: true });
+      return;
+    }
+    if (!ticket.claimedBy) {
+      await interaction.reply({ content: "❌ This ticket hasn't been claimed.", ephemeral: true });
+      return;
+    }
+
+    const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
+      (id) => (interaction.member as any)?.roles?.cache?.has(id)
+    );
+    const isAdmin = (interaction.member as any)?.permissions?.has(BigInt(8));
+    const isClaimer = ticket.claimedBy === interaction.user.id;
+
+    if (!isStaff && !isAdmin && !isClaimer) {
+      await interaction.reply({ content: "❌ Only the claimer or staff can unclaim this ticket.", ephemeral: true });
+      return;
+    }
+
+    ticket.claimedBy = null;
+    ticket.status = "open";
+    await ticket.save();
+
+    // Restore original open-ticket permissions
+    const channel = interaction.channel as TextChannel;
+    const overwrites: OverwriteResolvable[] = [
+      {
+        id: guild.roles.everyone.id,
+        deny: [PermissionFlagsBits.ViewChannel],
+        type: OverwriteType.Role,
+      },
+      {
+        id: ticket.userId,
+        allow: [
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.SendMessages,
+          PermissionFlagsBits.ReadMessageHistory,
+          PermissionFlagsBits.AttachFiles,
+        ],
+        type: OverwriteType.Member,
+      },
+    ];
+    for (const staffRoleId of config?.staffRoles ?? []) {
+      overwrites.push({
+        id: staffRoleId,
+        allow: [
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.SendMessages,
+          PermissionFlagsBits.ReadMessageHistory,
+          PermissionFlagsBits.AttachFiles,
+          PermissionFlagsBits.ManageMessages,
+        ],
+        type: OverwriteType.Role,
+      });
+    }
+    for (const helperRoleId of config?.helperRoles ?? []) {
+      overwrites.push({
+        id: helperRoleId,
+        allow: [
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.ReadMessageHistory,
+        ],
+        type: OverwriteType.Role,
+      });
+    }
+    await channel.permissionOverwrites.set(overwrites);
+
+    const embed = new EmbedBuilder()
+      .setDescription(`🔓 ${interaction.user} unclaimed this ticket — it is now open to all staff again.`)
+      .setColor(0x99aab5);
     await interaction.reply({ embeds: [embed] });
     return;
   }
