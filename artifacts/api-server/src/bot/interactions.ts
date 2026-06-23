@@ -424,13 +424,23 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
     ticket.status = "open";
     await ticket.save();
 
-    // Restore original open-ticket permissions — staff and helpers only
+    // Restore original open-ticket permissions — creator + staff + helpers
     const channel = interaction.channel as TextChannel;
     const overwrites: OverwriteResolvable[] = [
       {
         id: guild.roles.everyone.id,
         deny: [PermissionFlagsBits.ViewChannel],
         type: OverwriteType.Role,
+      },
+      {
+        id: ticket.userId,
+        allow: [
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.SendMessages,
+          PermissionFlagsBits.ReadMessageHistory,
+          PermissionFlagsBits.AttachFiles,
+        ],
+        type: OverwriteType.Member,
       },
     ];
     for (const staffRoleId of config?.staffRoles ?? []) {
@@ -675,12 +685,22 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
     );
     const ticketNum = updatedConfig?.ticketCounter ?? 1;
 
-    // Permission overwrites — only staff and helpers can see tickets
+    // Permission overwrites — creator + staff + helpers can see tickets
     const overwrites: any[] = [
       {
         id: guild.roles.everyone.id,
         deny: [PermissionFlagsBits.ViewChannel],
         type: OverwriteType.Role,
+      },
+      {
+        id: interaction.user.id,
+        allow: [
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.SendMessages,
+          PermissionFlagsBits.ReadMessageHistory,
+          PermissionFlagsBits.AttachFiles,
+        ],
+        type: OverwriteType.Member,
       },
     ];
 
