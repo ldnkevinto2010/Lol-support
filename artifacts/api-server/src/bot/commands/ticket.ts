@@ -37,11 +37,6 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
-      .setName("claim")
-      .setDescription("Claim this ticket (staff only)")
-  )
-  .addSubcommand((sub) =>
-    sub
       .setName("add")
       .setDescription("Add a user to this ticket")
       .addUserOption((opt) =>
@@ -244,40 +239,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
 
-  // ─── /ticket claim ───
-  if (sub === "claim") {
-    const ticket = await Ticket.findOne({ channelId: interaction.channelId });
-    if (!ticket || ticket.status === "closed") {
-      await interaction.reply({ content: "❌ This is not an active ticket channel.", ephemeral: true });
-      return;
-    }
-    if (ticket.claimedBy) {
-      await interaction.reply({ content: `❌ This ticket is already claimed by <@${ticket.claimedBy}>.`, ephemeral: true });
-      return;
-    }
 
-    const isStaff = (config?.staffRoles ?? []).some(
-      (id) => (interaction.member as any)?.roles?.cache?.has(id)
-    );
-    const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
-
-    if (!isStaff && !isAdmin) {
-      await interaction.reply({ content: "❌ Only support staff can claim tickets.", ephemeral: true });
-      return;
-    }
-
-    ticket.claimedBy = interaction.user.id;
-    ticket.status = "claimed";
-    await ticket.save();
-
-    const { EmbedBuilder } = await import("discord.js");
-    const embed = new EmbedBuilder()
-      .setDescription(`✋ ${interaction.user} has claimed this ticket and will be assisting you.`)
-      .setColor(0x5865f2);
-
-    await interaction.reply({ embeds: [embed] });
-    return;
-  }
 
   // ─── /ticket add ───
   if (sub === "add") {

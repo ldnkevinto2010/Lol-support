@@ -37,11 +37,6 @@ const DEFAULT_GAMES = [
 function ticketButtons(): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId("ticket_claim")
-      .setLabel("Claim Ticket")
-      .setStyle(ButtonStyle.Primary)
-      .setEmoji("✋"),
-    new ButtonBuilder()
       .setCustomId("ticket_close")
       .setLabel("Close Ticket")
       .setStyle(ButtonStyle.Danger)
@@ -352,38 +347,7 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
     return;
   }
 
-  if (customId === "ticket_claim") {
-    const ticket = await Ticket.findOne({ channelId: interaction.channelId });
-    if (!ticket || ticket.status === "closed") {
-      await interaction.reply({ content: "❌ This ticket is not active.", ephemeral: true });
-      return;
-    }
-    if (ticket.claimedBy) {
-      await interaction.reply({ content: `❌ Already claimed by <@${ticket.claimedBy}>.`, ephemeral: true });
-      return;
-    }
 
-    const isStaff = (config?.staffRoles ?? []).some(
-      (id) => (interaction.member as any)?.roles?.cache?.has(id)
-    );
-    const isAdmin = (interaction.member as any)?.permissions?.has(BigInt(8));
-
-    if (!isStaff && !isAdmin) {
-      await interaction.reply({ content: "❌ Only support staff can claim tickets.", ephemeral: true });
-      return;
-    }
-
-    ticket.claimedBy = interaction.user.id;
-    ticket.status = "claimed";
-    await ticket.save();
-
-    const embed = new EmbedBuilder()
-      .setDescription(`✋ ${interaction.user} has claimed this ticket and will be assisting you.`)
-      .setColor(0x5865f2);
-
-    await interaction.reply({ embeds: [embed] });
-    return;
-  }
 
   if (customId.startsWith("vouch_start_")) {
     const targetUserId = customId.replace("vouch_start_", "");
