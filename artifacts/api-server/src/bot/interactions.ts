@@ -25,6 +25,53 @@ import { GuildConfig, IGuildConfig } from "./models/GuildConfig";
 import { Ticket } from "./models/Ticket";
 import { Vouch } from "./models/Vouch";
 import { UserMessageCount } from "./models/UserMessageCount";
+import { Application } from "./models/Application";
+
+function getAccountAgeDays(userId: string): number {
+  const DISCORD_EPOCH = 1420070400000n;
+  const ms = Number((BigInt(userId) >> 22n) + DISCORD_EPOCH);
+  return Math.floor((Date.now() - ms) / 86400000);
+}
+
+function buildApplicationEmbed(
+  applicantTag: string,
+  userId: string,
+  game: string,
+  accountAgeDays: number,
+  joinedAgoDays: number | null,
+  answers: string[]
+) {
+  const questions = [
+    "Can you solo most content in the game?",
+    "What can't you solo?",
+    "What level are you?",
+    "What's your team?",
+    "How many hours per day can you help?",
+  ];
+  const embed = new EmbedBuilder()
+    .setAuthor({ name: applicantTag })
+    .setTitle(`📋 ${game} Helper Application`)
+    .setColor(0xe91e8c)
+    .addFields(
+      { name: "User", value: `<@${userId}>`, inline: true },
+      { name: "Game", value: game, inline: true },
+      { name: "Account Age", value: `${accountAgeDays} days`, inline: true },
+      { name: "Joined Server", value: joinedAgoDays !== null ? `${joinedAgoDays} days ago` : "Unknown", inline: true },
+      { name: "User ID", value: userId, inline: true },
+      { name: "\u200b", value: "\u200b", inline: true },
+      { name: "— Answers —", value: "\u200b" },
+    )
+    .setFooter({ text: `Submitted • ${game}` })
+    .setTimestamp();
+
+  for (let i = 0; i < questions.length; i++) {
+    embed.addFields({
+      name: `Q${i + 1}. ${questions[i]}`,
+      value: answers[i] ?? "(no answer)",
+    });
+  }
+  return embed;
+}
 
 const DEFAULT_GAMES = [
   "Universal Tower Defense",
@@ -543,6 +590,129 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
     await interaction.showModal(modal);
     return;
   }
+
+  // ─── Application panel: Apply button ───
+  if (customId === "app_apply") {
+    const games = (config?.supportedGames?.length ?? 0) > 0
+      ? config!.supportedGames
+      : DEFAULT_GAMES;
+
+    const select = new StringSelectMenuBuilder()
+      .setCustomId("app_game_select")
+      .setPlaceholder("Select which helper role you want to apply for...")
+      .addOptions(
+        games.slice(0, 25).map((g) =>
+          new StringSelectMenuOptionBuilder().setLabel(g).setValue(g)
+        )
+      );
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+    await interaction.reply({ content: "**Select the game you want to be a helper for:**", components: [row], ephemeral: true });
+    return;
+  }
+
+  // ─── Application panel: Image guide button ───
+  if (customId === "app_img_guide") {
+    await interaction.reply({
+      content: [
+        "## How to send images in your application",
+        "Discord modals only support text — to include screenshots:",
+        "1. Upload your image to [Imgur](https://imgur.com) or [Discord](https://discord.com) and copy the **direct link**.",
+        "2. Paste the URL into the relevant answer field in your application.",
+        "Staff will be able to view the image by clicking the link.",
+      ].join("\n"),
+      ephemeral: true,
+    });
+    return;
+  }
+
+  // ─── Application: Accept ───
+  if (customId.startsWith("app_accept:")) {
+    const appId = customId.slice("app_accept:".length);
+    const app = await Application.findById(appId);
+    if (!app || app.guildId !== guildId) {
+      await interaction.reply({ content: "❌ Application not found.", ephemeral: true });
+      return;
+    }
+    if (app.status !== "pending") {
+      await interaction.reply({ content: `❌ This application has already been **${app.status}**.`, ephemeral: true });
+      return;
+    }
+
+    const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
+      (id) => (interaction.member as any)?.roles?.cache?.has(id)
+    );
+    const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
+    if (!isStaff && !isAdmin) {
+      await interaction.reply({ content: "❌ Only staff can accept applications.", ephemeral: true });
+      return;
+    }
+
+    app.status = "accepted";
+    app.reviewedBy = interaction.user.id;
+    app.reviewedAt = new Date();
+    await app.save();
+
+    // Give the applicant their roles
+    const appRoleEntry = (config?.applicationRoles ?? []).find(
+      (ar) => ar.game.toLowerCase() === app.game.toLowerCase()
+    );
+    if (appRoleEntry) {
+      try {
+        const member = await guild.members.fetch(app.userId);
+        await member.roles.add([appRoleEntry.gameRoleId, appRoleEntry.baseRoleId].filter(Boolean));
+      } catch {
+        // Member may have left; continue anyway
+      }
+    }
+
+    // Update the review embed
+    const oldEmbed = interaction.message.embeds[0];
+    if (oldEmbed) {
+      const updatedEmbed = EmbedBuilder.from(oldEmbed)
+        .addFields({ name: "✅ Accepted", value: `By ${interaction.user} • <t:${Math.floor(Date.now() / 1000)}:f>` });
+      await interaction.message.edit({ embeds: [updatedEmbed], components: [] });
+    }
+    await interaction.reply({ content: `✅ Accepted **${app.username}**'s **${app.game}** application.`, ephemeral: true });
+    return;
+  }
+
+  // ─── Application: Reject ───
+  if (customId.startsWith("app_reject:")) {
+    const appId = customId.slice("app_reject:".length);
+    const app = await Application.findById(appId);
+    if (!app || app.guildId !== guildId) {
+      await interaction.reply({ content: "❌ Application not found.", ephemeral: true });
+      return;
+    }
+    if (app.status !== "pending") {
+      await interaction.reply({ content: `❌ This application has already been **${app.status}**.`, ephemeral: true });
+      return;
+    }
+
+    const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
+      (id) => (interaction.member as any)?.roles?.cache?.has(id)
+    );
+    const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
+    if (!isStaff && !isAdmin) {
+      await interaction.reply({ content: "❌ Only staff can reject applications.", ephemeral: true });
+      return;
+    }
+
+    app.status = "rejected";
+    app.reviewedBy = interaction.user.id;
+    app.reviewedAt = new Date();
+    await app.save();
+
+    const oldEmbed = interaction.message.embeds[0];
+    if (oldEmbed) {
+      const updatedEmbed = EmbedBuilder.from(oldEmbed)
+        .addFields({ name: "❌ Rejected", value: `By ${interaction.user} • <t:${Math.floor(Date.now() / 1000)}:f>` });
+      await interaction.message.edit({ embeds: [updatedEmbed], components: [] });
+    }
+    await interaction.reply({ content: `✅ Rejected **${app.username}**'s **${app.game}** application.`, ephemeral: true });
+    return;
+  }
 }
 
 // ─── Select menu handler (game selection) ───
@@ -553,6 +723,65 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
   if (customId === "ticket_game_select") {
     const game = interaction.values[0]!;
     const modal = buildTicketModal(game);
+    await interaction.showModal(modal);
+    return;
+  }
+
+  // ─── Application: game selected → show application modal ───
+  if (customId === "app_game_select") {
+    const game = interaction.values[0]!;
+    const modal = new ModalBuilder()
+      .setCustomId(`helper_app:${game}`)
+      .setTitle(`${game} Helper Application`);
+
+    const q1 = new TextInputBuilder()
+      .setCustomId("app_q1")
+      .setLabel("Can you solo most content in the game?")
+      .setStyle(TextInputStyle.Paragraph)
+      .setPlaceholder("Yes / No and details")
+      .setRequired(true)
+      .setMaxLength(500);
+
+    const q2 = new TextInputBuilder()
+      .setCustomId("app_q2")
+      .setLabel("What can't you solo?")
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder("List any content you struggle with")
+      .setRequired(true)
+      .setMaxLength(300);
+
+    const q3 = new TextInputBuilder()
+      .setCustomId("app_q3")
+      .setLabel("What level are you?")
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder("e.g. Level 150")
+      .setRequired(true)
+      .setMaxLength(100);
+
+    const q4 = new TextInputBuilder()
+      .setCustomId("app_q4")
+      .setLabel("What's your team?")
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder("List your main units")
+      .setRequired(true)
+      .setMaxLength(300);
+
+    const q5 = new TextInputBuilder()
+      .setCustomId("app_q5")
+      .setLabel("How many hours per day can you help?")
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder("e.g. 3-5 hours")
+      .setRequired(true)
+      .setMaxLength(100);
+
+    modal.addComponents(
+      new ActionRowBuilder<TextInputBuilder>().addComponents(q1),
+      new ActionRowBuilder<TextInputBuilder>().addComponents(q2),
+      new ActionRowBuilder<TextInputBuilder>().addComponents(q3),
+      new ActionRowBuilder<TextInputBuilder>().addComponents(q4),
+      new ActionRowBuilder<TextInputBuilder>().addComponents(q5),
+    );
+
     await interaction.showModal(modal);
     return;
   }
@@ -856,6 +1085,84 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
     }
 
     await interaction.editReply({ content: `✅ Thanks! Your vouch has been recorded.` });
+    return;
+  }
+
+  // ─── Helper application modal submission ───
+  if (customId.startsWith("helper_app:")) {
+    const game = customId.slice("helper_app:".length);
+    const answers = [
+      interaction.fields.getTextInputValue("app_q1"),
+      interaction.fields.getTextInputValue("app_q2"),
+      interaction.fields.getTextInputValue("app_q3"),
+      interaction.fields.getTextInputValue("app_q4"),
+      interaction.fields.getTextInputValue("app_q5"),
+    ];
+
+    await interaction.deferReply({ ephemeral: true });
+
+    const config = await GuildConfig.findOne({ guildId });
+    if (!config?.applicationChannelId) {
+      await interaction.editReply({ content: "❌ Applications are not configured yet. Ask an admin to run `/setup application-channel`." });
+      return;
+    }
+
+    const reviewChannel = guild.channels.cache.get(config.applicationChannelId) as TextChannel | undefined;
+    if (!reviewChannel) {
+      await interaction.editReply({ content: "❌ The application review channel could not be found. Ask an admin to reconfigure it." });
+      return;
+    }
+
+    const accountAgeDays = getAccountAgeDays(interaction.user.id);
+    const joinedTimestamp = (interaction.member as any)?.joinedTimestamp as number | null;
+    const joinedAgoDays = joinedTimestamp ? Math.floor((Date.now() - joinedTimestamp) / 86400000) : null;
+
+    const app = await Application.create({
+      guildId,
+      userId: interaction.user.id,
+      username: interaction.user.tag,
+      game,
+      answers,
+      status: "pending",
+    });
+
+    const embed = buildApplicationEmbed(
+      `${interaction.user.displayName} (${interaction.user.username})`,
+      interaction.user.id,
+      game,
+      accountAgeDays,
+      joinedAgoDays,
+      answers
+    );
+
+    const appRoleEntry = (config.applicationRoles ?? []).find(
+      (ar) => ar.game.toLowerCase() === game.toLowerCase()
+    );
+    const notifyContent = appRoleEntry?.notifyRoleId
+      ? `<@&${appRoleEntry.notifyRoleId}> — new **${game}** helper application!`
+      : `New **${game}** helper application!`;
+
+    const acceptBtn = new ButtonBuilder()
+      .setCustomId(`app_accept:${app._id}`)
+      .setLabel("Accept")
+      .setStyle(ButtonStyle.Success)
+      .setEmoji("✅");
+
+    const rejectBtn = new ButtonBuilder()
+      .setCustomId(`app_reject:${app._id}`)
+      .setLabel("Reject")
+      .setStyle(ButtonStyle.Danger)
+      .setEmoji("❌");
+
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(acceptBtn, rejectBtn);
+
+    const reviewMsg = await reviewChannel.send({ content: notifyContent, embeds: [embed], components: [row] });
+
+    app.reviewChannelId = reviewChannel.id;
+    app.reviewMessageId = reviewMsg.id;
+    await app.save();
+
+    await interaction.editReply({ content: `✅ Your **${game}** helper application has been submitted! Staff will review it and notify you of the outcome.` });
     return;
   }
 }

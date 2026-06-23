@@ -4,6 +4,7 @@ import * as ticketCmd from "./commands/ticket";
 import * as vouchCmd from "./commands/vouch";
 import * as helperProfileCmd from "./commands/helperprofile";
 import * as leaderboardCmd from "./commands/leaderboard";
+import * as applicationPanelCmd from "./commands/application-panel";
 
 export async function deployCommands(guildIds: string[]): Promise<void> {
   const token = process.env["DISCORD_TOKEN"];
@@ -19,6 +20,7 @@ export async function deployCommands(guildIds: string[]): Promise<void> {
     vouchCmd.data.toJSON(),
     helperProfileCmd.data.toJSON(),
     leaderboardCmd.data.toJSON(),
+    applicationPanelCmd.data.toJSON(),
   ];
 
   const rest = new REST({ version: "10" }).setToken(token);

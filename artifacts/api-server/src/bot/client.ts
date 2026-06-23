@@ -14,6 +14,7 @@ import * as ticketCmd from "./commands/ticket";
 import * as vouchCmd from "./commands/vouch";
 import * as helperProfileCmd from "./commands/helperprofile";
 import * as leaderboardCmd from "./commands/leaderboard";
+import * as applicationPanelCmd from "./commands/application-panel";
 import { handleButton, handleModalSubmit, handleSelectMenu } from "./interactions";
 import { UserMessageCount } from "./models/UserMessageCount";
 import { deployCommands } from "./deploy-commands";
@@ -24,6 +25,7 @@ const commands = new Map<string, { data: unknown; execute: (i: ChatInputCommandI
   ["vouch", vouchCmd],
   ["helperprofile", helperProfileCmd],
   ["leaderboard", leaderboardCmd],
+  ["applicationpanel", applicationPanelCmd],
 ]);
 
 export function createBotClient(): Client {

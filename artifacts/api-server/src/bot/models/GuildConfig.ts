@@ -10,6 +10,13 @@ export interface IGameRole {
   roleId: string;
 }
 
+export interface IApplicationRole {
+  game: string;
+  gameRoleId: string;
+  baseRoleId: string;
+  notifyRoleId?: string;
+}
+
 export interface IGuildConfig extends Document {
   guildId: string;
   ticketCategoryId: string | null;
@@ -25,6 +32,9 @@ export interface IGuildConfig extends Document {
   bypassRoles: string[];
   staffRoles: string[];
   helperRoles: string[];
+  applicationChannelId: string | null;
+  applicationPanelImageUrl: string | null;
+  applicationRoles: IApplicationRole[];
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -42,6 +52,12 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   bypassRoles: { type: [String], default: [] },
   staffRoles: { type: [String], default: [] },
   helperRoles: { type: [String], default: [] },
+  applicationChannelId: { type: String, default: null },
+  applicationPanelImageUrl: { type: String, default: null },
+  applicationRoles: {
+    type: [{ game: String, gameRoleId: String, baseRoleId: String, notifyRoleId: String }],
+    default: [],
+  },
 });
 
 export const GuildConfig = mongoose.model<IGuildConfig>("GuildConfig", GuildConfigSchema);

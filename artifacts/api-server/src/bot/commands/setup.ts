@@ -181,6 +181,60 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("application-channel")
+      .setDescription("Set the channel where helper applications are sent for review")
+      .addChannelOption((opt) =>
+        opt
+          .setName("channel")
+          .setDescription("The review channel")
+          .addChannelTypes(ChannelType.GuildText)
+          .setRequired(true)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("application-image")
+      .setDescription("Set the banner image URL for the application panel")
+      .addStringOption((opt) =>
+        opt
+          .setName("url")
+          .setDescription("Direct image URL — leave blank to remove the current image")
+          .setRequired(false)
+          .setMaxLength(500)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("application-game-role")
+      .setDescription("Map a game to the roles given to accepted helpers (game role + base helper role)")
+      .addStringOption((opt) =>
+        opt
+          .setName("game")
+          .setDescription("Game name (must match your games list)")
+          .setRequired(true)
+          .setMaxLength(100)
+      )
+      .addRoleOption((opt) =>
+        opt
+          .setName("game-role")
+          .setDescription("Game-specific helper role (e.g. UTD Helper)")
+          .setRequired(true)
+      )
+      .addRoleOption((opt) =>
+        opt
+          .setName("base-role")
+          .setDescription("Base helper role given to all accepted helpers")
+          .setRequired(true)
+      )
+      .addRoleOption((opt) =>
+        opt
+          .setName("notify-role")
+          .setDescription("Role pinged in the review channel when this game gets an application")
+          .setRequired(false)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("view")
       .setDescription("View current CarryBot configuration")
   );
@@ -494,6 +548,48 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       ? `✅ Panel image set. Run \`/ticket panel\` to post an updated panel.`
       : `✅ Panel image cleared. Run \`/ticket panel\` to post an updated panel.`;
     await interaction.reply({ content: msg, ephemeral: true });
+
+  } else if (sub === "application-channel") {
+    const channel = interaction.options.getChannel("channel", true) as TextChannel;
+    config.applicationChannelId = channel.id;
+    await config.save();
+    await interaction.reply({ content: `✅ Application review channel set to ${channel}.`, ephemeral: true });
+
+  } else if (sub === "application-image") {
+    const url = interaction.options.getString("url");
+    config.applicationPanelImageUrl = url ?? null;
+    await config.save();
+    const msg = url
+      ? `✅ Application panel image set. Run \`/applicationpanel\` to post an updated panel.`
+      : `✅ Application panel image cleared.`;
+    await interaction.reply({ content: msg, ephemeral: true });
+
+  } else if (sub === "application-game-role") {
+    const gameName = interaction.options.getString("game", true).trim();
+    const gameRole = interaction.options.getRole("game-role", true);
+    const baseRole = interaction.options.getRole("base-role", true);
+    const notifyRole = interaction.options.getRole("notify-role");
+
+    if (!config.applicationRoles) config.applicationRoles = [];
+    const idx = config.applicationRoles.findIndex(
+      (ar) => ar.game.toLowerCase() === gameName.toLowerCase()
+    );
+    const entry = {
+      game: gameName,
+      gameRoleId: gameRole.id,
+      baseRoleId: baseRole.id,
+      notifyRoleId: notifyRole?.id,
+    };
+    if (idx >= 0) {
+      config.applicationRoles[idx] = entry;
+    } else {
+      config.applicationRoles.push(entry);
+    }
+    await config.save();
+    await interaction.reply({
+      content: `✅ **${gameName}** applications: accepted helpers get <@&${gameRole.id}> + <@&${baseRole.id}>${notifyRole ? `, ping <@&${notifyRole.id}>` : ""}.`,
+      ephemeral: true,
+    });
 
   } else if (sub === "view") {
     const guild = interaction.guild!;
