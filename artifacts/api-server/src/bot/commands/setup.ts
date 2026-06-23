@@ -247,11 +247,6 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
-      .setName("application-games")
-      .setDescription("View all application panel games and remove any of them")
-  )
-  .addSubcommand((sub) =>
-    sub
       .setName("view")
       .setDescription("View current CarryBot configuration")
   );
@@ -625,30 +620,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       await config.save();
       await interaction.reply({ content: `✅ **${name}** added to the application panel games.`, ephemeral: true });
     }
-
-  } else if (sub === "application-games") {
-    const games = config.applicationGames ?? [];
-    if (games.length === 0) {
-      await interaction.reply({ content: "No application games set. Use `/setup application-game` to add one.", ephemeral: true });
-      return;
-    }
-    const embed = new EmbedBuilder()
-      .setTitle("Application Panel Games")
-      .setColor(0xe91e8c)
-      .setDescription(games.map((g) => `• ${g}`).join("\n"))
-      .setFooter({ text: "Use the dropdown to remove a game" });
-
-    const select = new StringSelectMenuBuilder()
-      .setCustomId("setup_remove_application_game")
-      .setPlaceholder("Select a game to remove...")
-      .addOptions(
-        games.map((g) =>
-          new StringSelectMenuOptionBuilder().setLabel(g).setValue(g)
-        )
-      );
-
-    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
   } else if (sub === "view") {
     const guild = interaction.guild!;
