@@ -235,6 +235,25 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("application-cooldown")
+      .setDescription("Set how long a user must wait before re-applying for a specific game")
+      .addStringOption((opt) =>
+        opt
+          .setName("game")
+          .setDescription("Game name (must match your application games list)")
+          .setRequired(true)
+          .setMaxLength(100)
+      )
+      .addStringOption((opt) =>
+        opt
+          .setName("duration")
+          .setDescription("Cooldown duration e.g. 30m, 3h, 7d — leave blank to remove the cooldown")
+          .setRequired(false)
+          .setMaxLength(20)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("application-game")
       .setDescription("Add or remove a game from the application panel (toggles)")
       .addStringOption((opt) =>
@@ -600,6 +619,45 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await config.save();
     await interaction.reply({
       content: `✅ **${gameName}** applications: accepted helpers get <@&${gameRole.id}> + <@&${baseRole.id}>${notifyRole ? `, ping <@&${notifyRole.id}>` : ""}.`,
+      ephemeral: true,
+    });
+
+  } else if (sub === "application-cooldown") {
+    const gameName = interaction.options.getString("game", true).trim();
+    const durationStr = interaction.options.getString("duration");
+
+    if (!config.applicationRoles) config.applicationRoles = [];
+    let idx = config.applicationRoles.findIndex(
+      (ar) => ar.game.toLowerCase() === gameName.toLowerCase()
+    );
+
+    if (!durationStr) {
+      if (idx >= 0) {
+        config.applicationRoles[idx]!.cooldownMs = undefined;
+        await config.save();
+      }
+      await interaction.reply({ content: `✅ Cooldown removed for **${gameName}** applications.`, ephemeral: true });
+      return;
+    }
+
+    const match = durationStr.trim().match(/^(\d+(?:\.\d+)?)\s*(m|h|d)$/i);
+    if (!match) {
+      await interaction.reply({ content: "❌ Invalid duration format. Use `30m`, `3h`, or `7d`.", ephemeral: true });
+      return;
+    }
+    const val = parseFloat(match[1]!);
+    const unit = match[2]!.toLowerCase();
+    const ms = unit === "m" ? val * 60_000 : unit === "h" ? val * 3_600_000 : val * 86_400_000;
+
+    if (idx >= 0) {
+      config.applicationRoles[idx]!.cooldownMs = ms;
+    } else {
+      config.applicationRoles.push({ game: gameName, gameRoleId: "", baseRoleId: "", cooldownMs: ms });
+      idx = config.applicationRoles.length - 1;
+    }
+    await config.save();
+    await interaction.reply({
+      content: `✅ Users must now wait **${durationStr}** before re-applying for **${gameName}**.`,
       ephemeral: true,
     });
 

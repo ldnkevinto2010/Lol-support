@@ -15,6 +15,7 @@ export interface IApplicationRole {
   gameRoleId: string;
   baseRoleId: string;
   notifyRoleId?: string;
+  cooldownMs?: number;
 }
 
 export interface IGuildConfig extends Document {
@@ -56,7 +57,7 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   applicationChannelId: { type: String, default: null },
   applicationPanelImageUrl: { type: String, default: null },
   applicationRoles: {
-    type: [{ game: String, gameRoleId: String, baseRoleId: String, notifyRoleId: String }],
+    type: [{ game: String, gameRoleId: String, baseRoleId: String, notifyRoleId: String, cooldownMs: Number }],
     default: [],
   },
   applicationGames: { type: [String], default: [] },

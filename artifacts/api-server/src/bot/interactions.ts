@@ -1146,6 +1146,36 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       return;
     }
 
+    // Cooldown check
+    const cooldownEntry = (config.applicationRoles ?? []).find(
+      (ar) => ar.game.toLowerCase() === game.toLowerCase()
+    );
+    if (cooldownEntry?.cooldownMs) {
+      const lastApp = await Application.findOne({
+        guildId,
+        userId: interaction.user.id,
+        game: { $regex: new RegExp(`^${game.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
+      }).sort({ submittedAt: -1 });
+
+      if (lastApp) {
+        const elapsed = Date.now() - lastApp.submittedAt.getTime();
+        if (elapsed < cooldownEntry.cooldownMs!) {
+          const remaining = cooldownEntry.cooldownMs! - elapsed;
+          const days = Math.floor(remaining / 86_400_000);
+          const hours = Math.floor((remaining % 86_400_000) / 3_600_000);
+          const minutes = Math.floor((remaining % 3_600_000) / 60_000);
+          const parts: string[] = [];
+          if (days) parts.push(`${days}d`);
+          if (hours) parts.push(`${hours}h`);
+          if (minutes || parts.length === 0) parts.push(`${minutes}m`);
+          await interaction.editReply({
+            content: `❌ You need to wait **${parts.join(" ")}** before applying for **${game}** again.`,
+          });
+          return;
+        }
+      }
+    }
+
     const reviewChannel = guild.channels.cache.get(config.applicationChannelId) as TextChannel | undefined;
     if (!reviewChannel) {
       await interaction.editReply({ content: "❌ The application review channel could not be found. Ask an admin to reconfigure it." });
