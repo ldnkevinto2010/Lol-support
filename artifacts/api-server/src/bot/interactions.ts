@@ -379,6 +379,10 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       await interaction.reply({ content: `❌ Already claimed by <@${ticket.claimedBy}>.`, ephemeral: true });
       return;
     }
+    if (ticket.userId === interaction.user.id) {
+      await interaction.reply({ content: "❌ You cannot claim your own ticket.", ephemeral: true });
+      return;
+    }
 
     const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
       (id) => (interaction.member as any)?.roles?.cache?.has(id)
