@@ -726,6 +726,19 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
     app.reviewedAt = new Date();
     await app.save();
 
+    // DM the applicant
+    try {
+      const applicantUser = await interaction.client.users.fetch(app.userId);
+      const dmEmbed = new EmbedBuilder()
+        .setColor(0xed4245)
+        .setDescription(
+          `❌ **Application Rejected**\n\nWe're sorry, your **${app.game}** helper application has been **rejected**.\n\nThank you for applying — feel free to apply again in the future.`
+        );
+      await applicantUser.send({ embeds: [dmEmbed] });
+    } catch {
+      // DMs may be closed; non-fatal
+    }
+
     const oldEmbed = interaction.message.embeds[0];
     if (oldEmbed) {
       const updatedEmbed = EmbedBuilder.from(oldEmbed)
