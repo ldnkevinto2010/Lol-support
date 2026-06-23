@@ -35,8 +35,7 @@ const FIELDS = [
       "`/setup application-channel <channel>` — Set the channel where applications are sent for review\n> **Who:** Admins",
       "`/setup application-image <url>` — Set the banner image shown on the application panel\n> **Who:** Admins",
       "`/setup application-game <name>` — Add or remove a game from the application panel\n> **Who:** Admins",
-      "`/setup application-notify-role <game> <role>` — Set the role pinged when a specific game gets an application\n> **Who:** Admins",
-      "`/setup application-game-role <game> <game-role> <base-role> [notify-role]` — Map a game to the roles given to accepted helpers\n> **Who:** Admins",
+      "`/setup application-game-role <game> <game-role> <base-role> [notify-role]` — Map a game to the roles given to accepted helpers (also sets the ping role via the optional notify-role)\n> **Who:** Admins",
     ].join("\n\n"),
   },
 ];
