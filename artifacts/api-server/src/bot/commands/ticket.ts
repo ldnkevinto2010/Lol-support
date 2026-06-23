@@ -28,14 +28,6 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
-      .setName("add")
-      .setDescription("Add a user to this ticket")
-      .addUserOption((opt) =>
-        opt.setName("user").setDescription("User to add").setRequired(true)
-      )
-  )
-  .addSubcommand((sub) =>
-    sub
       .setName("transcript")
       .setDescription("Generate and send a transcript of this ticket (staff/admin only)")
   )
@@ -153,34 +145,4 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
 
 
-  // ─── /ticket add ───
-  if (sub === "add") {
-    const ticket = await Ticket.findOne({ channelId: interaction.channelId });
-    if (!ticket || ticket.status === "closed") {
-      await interaction.reply({ content: "❌ This is not an active ticket channel.", ephemeral: true });
-      return;
-    }
-
-    const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
-      (id) => (interaction.member as any)?.roles?.cache?.has(id)
-    );
-    const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
-    const isOwner = ticket.userId === interaction.user.id;
-
-    if (!isStaff && !isAdmin && !isOwner) {
-      await interaction.reply({ content: "❌ You don't have permission to add users to this ticket.", ephemeral: true });
-      return;
-    }
-
-    const user = interaction.options.getUser("user", true);
-    const channel = interaction.channel as TextChannel;
-    await channel.permissionOverwrites.edit(user.id, {
-      ViewChannel: true,
-      SendMessages: true,
-      ReadMessageHistory: true,
-    });
-
-    await interaction.reply({ content: `✅ Added ${user} to this ticket.` });
-    return;
-  }
 }

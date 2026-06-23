@@ -13,7 +13,6 @@ const FIELDS = [
     name: "🎫 Ticket Commands",
     value: [
       "`/ticket close [reason]` — Close the ticket and log it\n> **Who:** Ticket creator, Helpers, Staff, Admins",
-      "`/ticket add <user>` — Add a user to the ticket channel\n> **Who:** Helpers, Staff, Admins",
       "`/ticket transcript` — Generate a full chat transcript\n> **Who:** Staff, Admins only",
     ].join("\n\n"),
   },
