@@ -25,8 +25,8 @@ const FIELDS = [
   {
     name: "✅ Reviewing Applications",
     value: [
-      "**Accept** *(button on review embed)* — Accepts the application, gives the applicant their helper roles, and DMs them\n> **Who:** Staff, Helpers, Admins",
-      "**Reject** *(button on review embed)* — Rejects the application and DMs the applicant\n> **Who:** Staff, Helpers, Admins",
+      "**Accept** *(button on review embed)* — Accepts the application, gives the applicant their helper roles, and DMs them\n> **Who:** Staff, Admins",
+      "**Reject** *(button on review embed)* — Rejects the application and DMs the applicant\n> **Who:** Staff, Admins",
     ].join("\n\n"),
   },
   {

@@ -643,7 +643,7 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       return;
     }
 
-    const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
+    const isStaff = (config?.staffRoles ?? []).some(
       (id) => (interaction.member as any)?.roles?.cache?.has(id)
     );
     const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
@@ -716,7 +716,7 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       return;
     }
 
-    const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
+    const isStaff = (config?.staffRoles ?? []).some(
       (id) => (interaction.member as any)?.roles?.cache?.has(id)
     );
     const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
