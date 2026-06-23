@@ -238,7 +238,7 @@ export async function handleTicketClose(
     return;
   }
 
-  const isStaff = (config?.staffRoles ?? []).some(
+  const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
     (id) => (interaction.member as any)?.roles?.cache?.has(id)
   );
   const isOwner = ticket.userId === interaction.user.id;
@@ -328,12 +328,12 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       return;
     }
 
-    const isStaff = (config?.staffRoles ?? []).some(
+    const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
       (id) => (interaction.member as any)?.roles?.cache?.has(id)
     );
     const isAdmin = (interaction.member as any)?.permissions?.has(BigInt(8));
     if (!isStaff && !isAdmin) {
-      await interaction.reply({ content: "❌ Only support staff can claim tickets.", ephemeral: true });
+      await interaction.reply({ content: "❌ Only staff or helpers can claim tickets.", ephemeral: true });
       return;
     }
 

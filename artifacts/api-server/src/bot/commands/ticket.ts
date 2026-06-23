@@ -249,7 +249,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
 
-    const isStaff = (config?.staffRoles ?? []).some(
+    const isStaff = [...(config?.staffRoles ?? []), ...(config?.helperRoles ?? [])].some(
       (id) => (interaction.member as any)?.roles?.cache?.has(id)
     );
     const isAdmin = (interaction.member as any)?.permissions?.has(PermissionFlagsBits.Administrator);
