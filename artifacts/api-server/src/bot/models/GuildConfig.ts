@@ -24,6 +24,7 @@ export interface IGuildConfig extends Document {
   gameRoles: IGameRole[];
   bypassRoles: string[];
   staffRoles: string[];
+  helperRoles: string[];
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -40,6 +41,7 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   gameRoles: { type: [{ game: String, roleId: String }], default: [] },
   bypassRoles: { type: [String], default: [] },
   staffRoles: { type: [String], default: [] },
+  helperRoles: { type: [String], default: [] },
 });
 
 export const GuildConfig = mongoose.model<IGuildConfig>("GuildConfig", GuildConfigSchema);

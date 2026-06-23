@@ -473,6 +473,24 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     return;
   }
 
+  if (customId === "setup_remove_helper_role") {
+    const roleId = interaction.values[0]!;
+    const config = await GuildConfig.findOne({ guildId });
+    if (!config) {
+      await interaction.reply({ content: "❌ No configuration found.", ephemeral: true });
+      return;
+    }
+    const before = config.helperRoles.length;
+    config.helperRoles = config.helperRoles.filter((id) => id !== roleId);
+    if (config.helperRoles.length === before) {
+      await interaction.reply({ content: "❌ That role wasn't in the helper list.", ephemeral: true });
+      return;
+    }
+    await config.save();
+    await interaction.update({ content: `✅ Removed <@&${roleId}> from helper roles.`, components: [] });
+    return;
+  }
+
   if (customId === "setup_remove_staff_role") {
     const roleId = interaction.values[0]!;
     const config = await GuildConfig.findOne({ guildId });
@@ -613,6 +631,18 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
           PermissionFlagsBits.ReadMessageHistory,
           PermissionFlagsBits.AttachFiles,
           PermissionFlagsBits.ManageMessages,
+        ],
+        type: OverwriteType.Role,
+      });
+    }
+
+    // Helper roles can see open tickets but are locked out once claimed
+    for (const helperRoleId of config.helperRoles ?? []) {
+      overwrites.push({
+        id: helperRoleId,
+        allow: [
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.ReadMessageHistory,
         ],
         type: OverwriteType.Role,
       });

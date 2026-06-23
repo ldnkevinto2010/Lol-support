@@ -90,6 +90,19 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("helper-role")
+      .setDescription("Add or remove a helper role (can see open tickets, /helperprofile, /leaderboard)")
+      .addRoleOption((opt) =>
+        opt.setName("role").setDescription("The role to add/remove").setRequired(true)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("helper-roles")
+      .setDescription("View all helper roles and remove any of them")
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("staff-role")
       .setDescription("Add or remove a staff role (staff can claim/close/transcript tickets)")
       .addRoleOption((opt) =>
@@ -228,6 +241,49 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       content: `✅ Supported games updated:\n${games.map((g) => `• ${g}`).join("\n")}`,
       ephemeral: true,
     });
+
+  } else if (sub === "helper-role") {
+    const role = interaction.options.getRole("role", true);
+    const helperRoles = config.helperRoles ?? [];
+    const idx = helperRoles.indexOf(role.id);
+    if (idx >= 0) {
+      config.helperRoles.splice(idx, 1);
+      await config.save();
+      await interaction.reply({ content: `✅ **${role.name}** removed from helper roles.`, ephemeral: true });
+    } else {
+      config.helperRoles.push(role.id);
+      await config.save();
+      await interaction.reply({ content: `✅ **${role.name}** added as a helper role — members can see open tickets and use \`/helperprofile\` and \`/leaderboard\`.`, ephemeral: true });
+    }
+
+  } else if (sub === "helper-roles") {
+    const roles = config.helperRoles ?? [];
+    if (roles.length === 0) {
+      await interaction.reply({ content: "No helper roles set. Use `/setup helper-role` to add one.", ephemeral: true });
+      return;
+    }
+    const lines = roles.map((id) => `• <@&${id}>`);
+    const embed = new EmbedBuilder()
+      .setTitle("Helper Roles")
+      .setColor(0x57f287)
+      .setDescription(lines.join("\n"))
+      .setFooter({ text: "Use the dropdown to remove a role" });
+
+    const select = new StringSelectMenuBuilder()
+      .setCustomId("setup_remove_helper_role")
+      .setPlaceholder("Select a role to remove from helpers...")
+      .addOptions(
+        roles.map((id) => {
+          const roleName = interaction.guild!.roles.cache.get(id)?.name ?? id;
+          return new StringSelectMenuOptionBuilder()
+            .setLabel(roleName)
+            .setValue(id)
+            .setDescription(`Remove ${roleName} from helper roles`);
+        })
+      );
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 
   } else if (sub === "staff-role") {
     const role = interaction.options.getRole("role", true);
