@@ -83,8 +83,8 @@ export const data = new SlashCommandBuilder()
       .addStringOption((opt) =>
         opt
           .setName("url")
-          .setDescription("Direct image URL (must end in .png, .jpg, .gif, etc.)")
-          .setRequired(true)
+          .setDescription("Direct image URL — leave blank to remove the current image")
+          .setRequired(false)
           .setMaxLength(500)
       )
   )
@@ -431,10 +431,13 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
 
   } else if (sub === "panel-image") {
-    const url = interaction.options.getString("url", true);
-    config.panelImageUrl = url;
+    const url = interaction.options.getString("url");
+    config.panelImageUrl = url ?? null;
     await config.save();
-    await interaction.reply({ content: `✅ Panel image set. Run \`/ticket panel\` to post an updated panel.`, ephemeral: true });
+    const msg = url
+      ? `✅ Panel image set. Run \`/ticket panel\` to post an updated panel.`
+      : `✅ Panel image cleared. Run \`/ticket panel\` to post an updated panel.`;
+    await interaction.reply({ content: msg, ephemeral: true });
 
   } else if (sub === "view") {
     const guild = interaction.guild!;
