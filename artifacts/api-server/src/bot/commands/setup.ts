@@ -235,6 +235,24 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("application-notify-role")
+      .setDescription("Set the role pinged in the review channel when a specific game gets an application")
+      .addStringOption((opt) =>
+        opt
+          .setName("game")
+          .setDescription("Game name (must match your application games list)")
+          .setRequired(true)
+          .setMaxLength(100)
+      )
+      .addRoleOption((opt) =>
+        opt
+          .setName("role")
+          .setDescription("Role to ping — leave out to clear it")
+          .setRequired(false)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("application-game")
       .setDescription("Add or remove a game from the application panel (toggles)")
       .addStringOption((opt) =>
@@ -602,6 +620,37 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       content: `✅ **${gameName}** applications: accepted helpers get <@&${gameRole.id}> + <@&${baseRole.id}>${notifyRole ? `, ping <@&${notifyRole.id}>` : ""}.`,
       ephemeral: true,
     });
+
+  } else if (sub === "application-notify-role") {
+    const gameName = interaction.options.getString("game", true).trim();
+    const role = interaction.options.getRole("role");
+
+    if (!config.applicationRoles) config.applicationRoles = [];
+    const idx = config.applicationRoles.findIndex(
+      (ar) => ar.game.toLowerCase() === gameName.toLowerCase()
+    );
+
+    if (role) {
+      if (idx >= 0) {
+        config.applicationRoles[idx]!.notifyRoleId = role.id;
+      } else {
+        config.applicationRoles.push({ game: gameName, gameRoleId: "", baseRoleId: "", notifyRoleId: role.id });
+      }
+      await config.save();
+      await interaction.reply({
+        content: `✅ **${gameName}** applications will now ping <@&${role.id}>.`,
+        ephemeral: true,
+      });
+    } else {
+      if (idx >= 0) {
+        config.applicationRoles[idx]!.notifyRoleId = undefined;
+        await config.save();
+      }
+      await interaction.reply({
+        content: `✅ Notify role cleared for **${gameName}**.`,
+        ephemeral: true,
+      });
+    }
 
   } else if (sub === "application-game") {
     const name = interaction.options.getString("name", true).trim();
