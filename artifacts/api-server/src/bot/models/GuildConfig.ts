@@ -35,6 +35,7 @@ export interface IGuildConfig extends Document {
   applicationChannelId: string | null;
   applicationPanelImageUrl: string | null;
   applicationRoles: IApplicationRole[];
+  applicationGames: string[];
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -58,6 +59,7 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
     type: [{ game: String, gameRoleId: String, baseRoleId: String, notifyRoleId: String }],
     default: [],
   },
+  applicationGames: { type: [String], default: [] },
 });
 
 export const GuildConfig = mongoose.model<IGuildConfig>("GuildConfig", GuildConfigSchema);

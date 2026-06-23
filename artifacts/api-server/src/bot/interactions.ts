@@ -862,6 +862,24 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     return;
   }
 
+  if (customId === "setup_remove_application_game") {
+    const game = interaction.values[0]!;
+    const config = await GuildConfig.findOne({ guildId });
+    if (!config) {
+      await interaction.reply({ content: "❌ No configuration found.", ephemeral: true });
+      return;
+    }
+    const before = config.applicationGames?.length ?? 0;
+    config.applicationGames = (config.applicationGames ?? []).filter((g) => g.toLowerCase() !== game.toLowerCase());
+    if ((config.applicationGames?.length ?? 0) === before) {
+      await interaction.reply({ content: "❌ That game wasn't in the application list.", ephemeral: true });
+      return;
+    }
+    await config.save();
+    await interaction.update({ content: `✅ **${game}** removed from the application panel games.`, components: [] });
+    return;
+  }
+
   if (customId === "setup_remove_game_role") {
     const gameName = interaction.values[0]!;
     const config = await GuildConfig.findOne({ guildId });

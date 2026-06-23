@@ -30,7 +30,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
 
   const config = await GuildConfig.findOne({ guildId: interaction.guildId });
-  const games = config?.supportedGames ?? [];
+  const games = (config?.applicationGames?.length ?? 0) > 0
+    ? config!.applicationGames
+    : (config?.supportedGames ?? []);
   const imageUrl = config?.applicationPanelImageUrl ?? null;
 
   const sep = "═".repeat(28);
