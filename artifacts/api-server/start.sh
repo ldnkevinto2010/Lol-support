@@ -7,6 +7,4 @@ if [ -f /home/container/artifacts/api-server/.env ]; then
 fi
 
 cd /home/container/artifacts/api-server
-npm install
-node build.mjs
 node dist/index.mjs
