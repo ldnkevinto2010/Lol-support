@@ -1,0 +1,94 @@
+[Bot-Hosting Daemon]: Checking server disk space usage, this could take a few seconds...
+[Bot-Hosting Daemon]: Updating process configuration files...
+[Bot-Hosting Daemon]: Ensuring file permissions are set correctly, this could take a few seconds...
+container@pterodactyl~ Server marked as starting...
+[Bot-Hosting Daemon]: Pulling Docker container image, this could take a few minutes to complete...
+[Bot-Hosting Daemon]: Finished pulling Docker container image
+v20.20.2
+:/home/container$ if [[ -d .git ]] && [[ ${AUTO_UPDATE} == "1" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z "${START_BASH_FILE}" ]]; then bash ${START_BASH_FILE}; else /usr/local/bin/node /home/container/${BOT_JS_FILE}; fi;
+remote: Enumerating objects: 57, done.
+remote: Counting objects: 100% (57/57), done.
+remote: Compressing objects: 100% (26/26), done.
+remote: Total 51 (delta 25), reused 51 (delta 25), pack-reused 0 (from 0)
+Unpacking objects: 100% (51/51), 4.93 MiB | 1.56 MiB/s, done.
+From https://github.com/ldnkevinto2010/Lol-support
+   f0d5541..45365b9  main       -> origin/main
+Updating f0d5541..45365b9
+Fast-forward
+ .gitignore                                         |      1 +
+ artifacts/api-server/dist/index.mjs                | 176618 ++++++++++++++++++
+ artifacts/api-server/dist/index.mjs.map            |      7 +
+ artifacts/api-server/dist/pino-file.mjs            |   4350 +
+ artifacts/api-server/dist/pino-file.mjs.map        |      7 +
+ artifacts/api-server/dist/pino-pretty.mjs          |   3312 +
+ artifacts/api-server/dist/pino-pretty.mjs.map      |      7 +
+ artifacts/api-server/dist/pino-worker.mjs          |   4706 +
+ artifacts/api-server/dist/pino-worker.mjs.map      |      7 +
+ artifacts/api-server/dist/thread-stream-worker.mjs |    228 +
+ .../api-server/dist/thread-stream-worker.mjs.map   |      7 +
+ artifacts/api-server/start.sh                      |      2 -
+ ...-FBA3-468D-B972-BE34D4E75ABA}_1782343459345.png |    Bin 0 -> 147534 bytes
+ ...-B5AB-419C-AE09-06A92382590B}_1782341089920.png |    Bin 0 -> 277078 bytes
+ ...-1051-4FC9-8488-15E138D6B759}_1782342848362.png |    Bin 0 -> 26387 bytes
+ ...-31CD-4A3C-A7BE-581B3176BB6A}_1782341692565.png |    Bin 0 -> 93817 bytes
+ ...-0B52-451D-B045-109F6A247AA8}_1782343264661.png |    Bin 0 -> 140369 bytes
+ ...-F67D-4D86-8153-325E2B40FD69}_1782341158656.png |    Bin 0 -> 33628 bytes
+ ...-67FB-4FAF-926E-D70400CD3B4B}_1782341779786.png |    Bin 0 -> 98334 bytes
+ ...-4C5A-4427-878E-7EACE4B5E5F2}_1782342427182.png |    Bin 0 -> 57702 bytes
+ ...-3256-4945-86BE-1C45D291E723}_1782341976675.png |    Bin 0 -> 100662 bytes
+ 21 files changed, 189250 insertions(+), 2 deletions(-)
+ create mode 100644 artifacts/api-server/dist/index.mjs
+ create mode 100644 artifacts/api-server/dist/index.mjs.map
+ create mode 100644 artifacts/api-server/dist/pino-file.mjs
+ create mode 100644 artifacts/api-server/dist/pino-file.mjs.map
+ create mode 100644 artifacts/api-server/dist/pino-pretty.mjs
+ create mode 100644 artifacts/api-server/dist/pino-pretty.mjs.map
+ create mode 100644 artifacts/api-server/dist/pino-worker.mjs
+ create mode 100644 artifacts/api-server/dist/pino-worker.mjs.map
+ create mode 100644 artifacts/api-server/dist/thread-stream-worker.mjs
+ create mode 100644 artifacts/api-server/dist/thread-stream-worker.mjs.map
+ create mode 100644 attached_assets/{2094CA58-FBA3-468D-B972-BE34D4E75ABA}_1782343459345.png
+ create mode 100644 attached_assets/{49BD6EC9-B5AB-419C-AE09-06A92382590B}_1782341089920.png
+ create mode 100644 attached_assets/{5EE04B45-1051-4FC9-8488-15E138D6B759}_1782342848362.png
+ create mode 100644 attached_assets/{6249C7FA-31CD-4A3C-A7BE-581B3176BB6A}_1782341692565.png
+ create mode 100644 attached_assets/{8411C68E-0B52-451D-B045-109F6A247AA8}_1782343264661.png
+ create mode 100644 attached_assets/{C918E030-F67D-4D86-8153-325E2B40FD69}_1782341158656.png
+ create mode 100644 attached_assets/{DECFFFEE-67FB-4FAF-926E-D70400CD3B4B}_1782341779786.png
+ create mode 100644 attached_assets/{E9A73992-4C5A-4427-878E-7EACE4B5E5F2}_1782342427182.png
+ create mode 100644 attached_assets/{F2A4B249-3256-4945-86BE-1C45D291E723}_1782341976675.png
+npm warn Unknown user config "auto-install-peers". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown user config "strict-peer-dependencies". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> workspace@0.0.0 preinstall
+> sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+Use pnpm instead
+npm error code 1
+npm error path /home/container
+npm error command failed
+npm error command sh -c sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+npm error A complete log of this run can be found in: /home/container/.npm/_logs/2026-06-24T23_28_15_586Z-debug-0.log
+
+node:internal/event_target:1105
+  process.nextTick(() => { throw err; });
+                           ^
+Error: Cannot find module '/home/runner/workspace/artifacts/api-server/dist/thread-stream-worker.mjs'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Function._load (node:internal/modules/cjs/loader:1038:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at MessagePort.<anonymous> (node:internal/main/worker_thread:192:26)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:831:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+Emitted 'error' event on Worker instance at:
+    at [kOnErrorMessage] (node:internal/worker:333:10)
+    at [kOnMessage] (node:internal/worker:344:37)
+    at MessagePort.<anonymous> (node:internal/worker:233:57)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:831:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+    at [kOnExit] (node:internal/worker:310:5)
+    at Worker.<computed>.onexit (node:internal/worker:230:20) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+Node.js v20.20.2
+container@pterodactyl~ Server marked as offline...
+[Bot-Hosting Daemon]: Aborting automatic restart, crash detection is disabled for this instance.
