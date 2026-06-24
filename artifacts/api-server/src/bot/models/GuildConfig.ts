@@ -35,6 +35,7 @@ export interface IGuildConfig extends Document {
   helperRoles: string[];
   applicationChannelId: string | null;
   applicationImageGuideText: string | null;
+  dailyMessageGate: boolean;
   applicationPanelImageUrl: string | null;
   applicationRoles: IApplicationRole[];
   applicationGames: string[];
@@ -55,6 +56,7 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   bypassRoles: { type: [String], default: [] },
   staffRoles: { type: [String], default: [] },
   helperRoles: { type: [String], default: [] },
+  dailyMessageGate: { type: Boolean, default: false },
   applicationChannelId: { type: String, default: null },
   applicationPanelImageUrl: { type: String, default: null },
   applicationImageGuideText: { type: String, default: null },

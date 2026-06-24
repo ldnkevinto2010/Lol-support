@@ -144,8 +144,28 @@ async function checkTicketPrerequisites(
   if (!hasBypass && config.minMessagesRequired > 0) {
     const msgDoc = await UserMessageCount.findOne({ guildId, userId });
     const count = msgDoc?.count ?? 0;
-    if (count < config.minMessagesRequired) {
-      return `❌ You need at least **${config.minMessagesRequired}** messages to open a ticket. You have **${count}**.`;
+
+    let gateAlreadyPassedToday = false;
+    if (config.dailyMessageGate && msgDoc?.lastGatePassed) {
+      const lp = msgDoc.lastGatePassed;
+      const now = new Date();
+      gateAlreadyPassedToday =
+        lp.getUTCFullYear() === now.getUTCFullYear() &&
+        lp.getUTCMonth() === now.getUTCMonth() &&
+        lp.getUTCDate() === now.getUTCDate();
+    }
+
+    if (!gateAlreadyPassedToday) {
+      if (count < config.minMessagesRequired) {
+        return `❌ You need at least **${config.minMessagesRequired}** messages to open a ticket. You have **${count}**.`;
+      }
+      if (config.dailyMessageGate) {
+        await UserMessageCount.findOneAndUpdate(
+          { guildId, userId },
+          { $set: { lastGatePassed: new Date() } },
+          { upsert: true }
+        );
+      }
     }
   }
   const existing = await Ticket.findOne({

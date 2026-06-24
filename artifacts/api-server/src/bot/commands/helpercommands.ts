@@ -12,6 +12,7 @@ const FIELDS = [
   {
     name: "🎫 Ticket Commands",
     value: [
+      "`/setup daily-message-gate` — Toggle whether the message requirement is checked once per day or every ticket\n> **Who:** Admins",
       "`/ticket close [reason]` — Close the ticket and log it\n> **Who:** Ticket creator, Helpers, Staff, Admins",
       "`/ticket transcript` — Generate a full chat transcript\n> **Who:** Staff, Admins only",
     ].join("\n\n"),

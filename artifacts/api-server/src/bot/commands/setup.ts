@@ -238,6 +238,11 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("daily-message-gate")
+      .setDescription("Toggle daily message gate — users only need to meet the message requirement once per day")
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("application-image-guide")
       .setDescription("Set the text shown when users click 'How to send an image' on the application panel")
   )
@@ -627,6 +632,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await config.save();
     await interaction.reply({
       content: `✅ **${gameName}** applications: accepted helpers get <@&${gameRole.id}> + <@&${baseRole.id}>${notifyRole ? `, ping <@&${notifyRole.id}>` : ""}.`,
+      ephemeral: true,
+    });
+
+  } else if (sub === "daily-message-gate") {
+    config.dailyMessageGate = !config.dailyMessageGate;
+    await config.save();
+    await interaction.reply({
+      content: config.dailyMessageGate
+        ? "✅ Daily message gate **enabled** — users only need to pass the message requirement once per day."
+        : "✅ Daily message gate **disabled** — message requirement is checked every time.",
       ephemeral: true,
     });
 
