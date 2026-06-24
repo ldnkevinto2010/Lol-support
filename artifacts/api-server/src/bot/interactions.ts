@@ -929,6 +929,22 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
   const { customId, guildId, guild } = interaction;
   if (!guildId || !guild) return;
 
+  // ─── Setup: image guide modal ───
+  if (customId === "setup_img_guide_modal") {
+    const text = interaction.fields.getTextInputValue("guide_text").trim();
+    const config = await GuildConfig.findOneAndUpdate(
+      { guildId },
+      { $set: { applicationImageGuideText: text || null } },
+      { upsert: true, new: true }
+    );
+    void config;
+    await interaction.reply({
+      content: text ? "✅ Image guide text updated." : "✅ Image guide text reset to default.",
+      ephemeral: true,
+    });
+    return;
+  }
+
   // ─── Ticket open modal ───
   if (customId.startsWith("ticket_open_modal_")) {
     const encodedGame = customId.replace("ticket_open_modal_", "");

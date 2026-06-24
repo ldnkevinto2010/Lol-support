@@ -8,6 +8,9 @@ import {
   ActionRowBuilder,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
+  ModalBuilder,
+  TextInputBuilder,
+  TextInputStyle,
 } from "discord.js";
 import { GuildConfig } from "../models/GuildConfig";
 
@@ -237,13 +240,6 @@ export const data = new SlashCommandBuilder()
     sub
       .setName("application-image-guide")
       .setDescription("Set the text shown when users click 'How to send an image' on the application panel")
-      .addStringOption((opt) =>
-        opt
-          .setName("text")
-          .setDescription("The message to show — supports markdown and image/gif URLs. Leave blank to reset to default.")
-          .setRequired(false)
-          .setMaxLength(2000)
-      )
   )
   .addSubcommand((sub) =>
     sub
@@ -635,16 +631,23 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
 
   } else if (sub === "application-image-guide") {
-    const text = interaction.options.getString("text");
-    if (text) {
-      config.applicationImageGuideText = text;
-      await config.save();
-      await interaction.reply({ content: "✅ Image guide text updated.", ephemeral: true });
-    } else {
-      config.applicationImageGuideText = null;
-      await config.save();
-      await interaction.reply({ content: "✅ Image guide text reset to default.", ephemeral: true });
-    }
+    const current = config.applicationImageGuideText ?? "";
+    const modal = new ModalBuilder()
+      .setCustomId("setup_img_guide_modal")
+      .setTitle("Image Guide Text");
+
+    const textInput = new TextInputBuilder()
+      .setCustomId("guide_text")
+      .setLabel("Guide content (markdown + image/gif URLs ok)")
+      .setStyle(TextInputStyle.Paragraph)
+      .setPlaceholder("**How to send images**\nUpload to Discord DMs and paste the link here.\nhttps://i.imgur.com/example.gif")
+      .setRequired(false)
+      .setMaxLength(2000);
+
+    if (current) textInput.setValue(current);
+
+    modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(textInput));
+    await interaction.showModal(modal);
 
   } else if (sub === "application-cooldown") {
     const gameName = interaction.options.getString("game", true).trim();
