@@ -640,7 +640,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       .setCustomId("guide_text")
       .setLabel("Guide content (markdown + image/gif URLs ok)")
       .setStyle(TextInputStyle.Paragraph)
-      .setPlaceholder("**How to send images**\nUpload to Discord DMs and paste the link here.\nhttps://i.imgur.com/example.gif")
+      .setPlaceholder("Write your guide here. Paste a GIF URL on its own line to embed it.")
       .setRequired(false)
       .setMaxLength(2000);
 
