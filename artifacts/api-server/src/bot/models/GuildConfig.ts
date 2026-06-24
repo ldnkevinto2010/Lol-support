@@ -34,6 +34,7 @@ export interface IGuildConfig extends Document {
   staffRoles: string[];
   helperRoles: string[];
   applicationChannelId: string | null;
+  applicationImageGuideText: string | null;
   applicationPanelImageUrl: string | null;
   applicationRoles: IApplicationRole[];
   applicationGames: string[];
@@ -56,6 +57,7 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   helperRoles: { type: [String], default: [] },
   applicationChannelId: { type: String, default: null },
   applicationPanelImageUrl: { type: String, default: null },
+  applicationImageGuideText: { type: String, default: null },
   applicationRoles: {
     type: [{ game: String, gameRoleId: String, baseRoleId: String, notifyRoleId: String, cooldownMs: Number }],
     default: [],

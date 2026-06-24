@@ -617,16 +617,14 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
 
   // ─── Application panel: Image guide button ───
   if (customId === "app_img_guide") {
-    await interaction.reply({
-      content: [
-        "## How to send images in your application",
-        "Discord modals only support text — to include screenshots:",
-        "1. Upload your image to [Imgur](https://imgur.com) or [Discord](https://discord.com) and copy the **direct link**.",
-        "2. Paste the URL into the relevant answer field in your application.",
-        "Staff will be able to view the image by clicking the link.",
-      ].join("\n"),
-      ephemeral: true,
-    });
+    const guideText = config?.applicationImageGuideText ?? [
+      "## How to send images in your application",
+      "Discord modals only support text — to include screenshots:",
+      "1. Upload your image to [Imgur](https://imgur.com) or [Discord](https://discord.com) and copy the **direct link**.",
+      "2. Paste the URL into the relevant answer field in your application.",
+      "Staff will be able to view the image by clicking the link.",
+    ].join("\n");
+    await interaction.reply({ content: guideText, ephemeral: true });
     return;
   }
 

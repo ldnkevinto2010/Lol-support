@@ -37,6 +37,7 @@ const FIELDS = [
       "`/setup application-game <name>` — Add or remove a game from the application panel\n> **Who:** Admins",
       "`/setup application-game-role <game> <game-role> <base-role> [notify-role]` — Map a game to the roles given to accepted helpers (also sets the ping role via the optional notify-role)\n> **Who:** Admins",
       "`/setup application-cooldown <game> [duration]` — Set how long users must wait before re-applying for a game (e.g. `3h`, `7d`) — omit duration to remove the cooldown\n> **Who:** Admins",
+      "`/setup application-image-guide [text]` — Set the message shown when users click 'How to send an image' (supports markdown and gif/image URLs) — omit to reset to default\n> **Who:** Admins",
     ].join("\n\n"),
   },
 ];
