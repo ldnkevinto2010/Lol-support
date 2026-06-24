@@ -345,8 +345,8 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       return;
     }
 
-    const games = (config?.supportedGames?.length ?? 0) > 0
-      ? config!.supportedGames
+    const games = config?.applicationGames?.length
+      ? config.applicationGames
       : DEFAULT_GAMES;
 
     // Show game select dropdown
@@ -597,8 +597,8 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
 
   // ─── Application panel: Apply button ───
   if (customId === "app_apply") {
-    const games = (config?.supportedGames?.length ?? 0) > 0
-      ? config!.supportedGames
+    const games = config?.applicationGames?.length
+      ? config.applicationGames
       : DEFAULT_GAMES;
 
     const select = new StringSelectMenuBuilder()
