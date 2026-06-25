@@ -1,0 +1,27 @@
+container@pterodactyl~ Server marked as stopping...
+container@pterodactyl~ Server marked as offline...
+[Bot-Hosting Daemon]: Checking server disk space usage, this could take a few seconds...
+[Bot-Hosting Daemon]: Updating process configuration files...
+[Bot-Hosting Daemon]: Ensuring file permissions are set correctly, this could take a few seconds...
+container@pterodactyl~ Server marked as starting...
+[Bot-Hosting Daemon]: Pulling Docker container image, this could take a few minutes to complete...
+[Bot-Hosting Daemon]: Finished pulling Docker container image
+v20.20.2
+:/home/container$ if [[ -d .git ]] && [[ ${AUTO_UPDATE} == "1" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z "${START_BASH_FILE}" ]]; then bash ${START_BASH_FILE}; else /usr/local/bin/node /home/container/${BOT_JS_FILE}; fi;
+Already up to date.
+container@pterodactyl~ Server marked as running...
+npm warn Unknown user config "auto-install-peers". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown user config "strict-peer-dependencies". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> workspace@0.0.0 preinstall
+> sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+Use pnpm instead
+npm error code 1
+npm error path /home/container
+npm error command failed
+npm error command sh -c sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+npm error A complete log of this run can be found in: /home/container/.npm/_logs/2026-06-25T00_40_45_492Z-debug-0.log
+{"level":30,"time":1782348051291,"pid":38,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","port":3000,"msg":"Server listening"}
+{"level":30,"time":1782348052565,"pid":38,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"Connected to MongoDB"}
+{"level":30,"time":1782348053867,"pid":38,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"CarryBot online as Lol Support Listeria#3863"}
+{"level":50,"time":1782348054046,"pid":38,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","err":{"type":"DiscordAPIError","message":"Invalid Form Body\napplication_id[NUMBER_TYPE_COERCE]: Value \"DISCORD_CLIENT_ID=1517885776279371926\" is not snowflake.","stack":"DiscordAPIError[50035]: Invalid Form Body\napplication_id[NUMBER_TYPE_COERCE]: Value \"DISCORD_CLIENT_ID=1517885776279371926\" is not snowflake.\n    at handleErrors (file:///home/container/artifacts/api-server/dist/index.mjs:122877:17)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async SequentialHandler.runRequest (file:///home/container/artifacts/api-server/dist/index.mjs:123274:27)\n    at async SequentialHandler.queueRequest (file:///home/container/artifacts/api-server/dist/index.mjs:123105:18)\n    at async _REST.request (file:///home/container/artifacts/api-server/dist/index.mjs:123441:26)\n    at async deployCommands (file:///home/container/artifacts/api-server/dist/index.mjs:175488:3)\n    at async Client.<anonymous> (file:///home/container/artifacts/api-server/dist/index.mjs:175521:7)","requestBody":{"json":[]},"rawError":{"type":"Object","message":"Invalid Form Body","stack":"","code":50035,"errors":{"application_id":{"_errors":[{"code":"NUMBER_TYPE_COERCE","message":"Value \"DISCORD_CLIENT_ID=1517885776279371926\" is not snowflake."}]}}},"code":50035,"status":400,"method":"PUT","url":"https://discord.com/api/v10/applications/DISCORD_CLIENT_ID%3D1517885776279371926/commands"},"msg":"Failed to register slash commands"}
