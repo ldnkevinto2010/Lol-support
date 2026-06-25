@@ -1,0 +1,62 @@
+container@pterodactyl~ Server marked as stopping...
+container@pterodactyl~ Server marked as offline...
+[Bot-Hosting Daemon]: Checking server disk space usage, this could take a few seconds...
+[Bot-Hosting Daemon]: Updating process configuration files...
+[Bot-Hosting Daemon]: Ensuring file permissions are set correctly, this could take a few seconds...
+container@pterodactyl~ Server marked as starting...
+[Bot-Hosting Daemon]: Pulling Docker container image, this could take a few minutes to complete...
+[Bot-Hosting Daemon]: Finished pulling Docker container image
+v20.20.2
+:/home/container$ if [[ -d .git ]] && [[ ${AUTO_UPDATE} == "1" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z "${START_BASH_FILE}" ]]; then bash ${START_BASH_FILE}; else /usr/local/bin/node /home/container/${BOT_JS_FILE}; fi;
+remote: Enumerating objects: 60, done.
+remote: Counting objects: 100% (60/60), done.
+remote: Compressing objects: 100% (24/24), done.
+remote: Total 55 (delta 31), reused 55 (delta 31), pack-reused 0 (from 0)
+Unpacking objects: 100% (55/55), 768.86 KiB | 2.42 MiB/s, done.
+From https://github.com/ldnkevinto2010/Lol-support
+   b0a734e..6317c73  main       -> origin/main
+Updating b0a734e..6317c73
+Fast-forward
+ artifacts/api-server/start.sh                      |   5 ----
+ ...ng-process-configuration-file_1782344007262.txt |  33 +++++++++++++++++++++
+ ...er-marked-as-stopping-contain_1782344886012.txt |  25 ++++++++++++++++
+ ...er-marked-as-stopping-contain_1782346132191.txt |  26 ++++++++++++++++
+ ...er-marked-as-stopping-contain_1782346586198.txt |  26 ++++++++++++++++
+ ...-84BA-4E3B-ABB4-0732A017D859}_1782346745987.png | Bin 0 -> 160383 bytes
+ ...-AC41-4A78-82B2-8F1A022B5ED6}_1782345462559.png | Bin 0 -> 110594 bytes
+ ...-2DE5-43CD-BCCD-82AE913A9C58}_1782345489543.png | Bin 0 -> 110938 bytes
+ ...-AF89-442A-B9F7-F20D5E9BCC0E}_1782347736007.png | Bin 0 -> 11725 bytes
+ ...-667A-4FA2-BD0B-974E416B5C9D}_1782344687284.png | Bin 0 -> 64694 bytes
+ ...-3E3D-4B4E-99B1-16BBB70E4DAF}_1782345286051.png | Bin 0 -> 100002 bytes
+ ...-D6F8-4501-BFC4-E8BFBC9FE187}_1782344250982.png | Bin 0 -> 99082 bytes
+ ...-AE98-4738-A733-C34C569695AD}_1782346661103.png | Bin 0 -> 110352 bytes
+ ...-F1F9-45FB-8952-B2A0FCC6AB4F}_1782345026644.png | Bin 0 -> 101592 bytes
+ 14 files changed, 110 insertions(+), 5 deletions(-)
+ create mode 100644 attached_assets/Pasted--Bot-Hosting-Daemon-Updating-process-configuration-file_1782344007262.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1782344886012.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1782346132191.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1782346586198.txt
+ create mode 100644 attached_assets/{043566D2-84BA-4E3B-ABB4-0732A017D859}_1782346745987.png
+ create mode 100644 attached_assets/{0899F276-AC41-4A78-82B2-8F1A022B5ED6}_1782345462559.png
+ create mode 100644 attached_assets/{37E4A440-2DE5-43CD-BCCD-82AE913A9C58}_1782345489543.png
+ create mode 100644 attached_assets/{456F30BC-AF89-442A-B9F7-F20D5E9BCC0E}_1782347736007.png
+ create mode 100644 attached_assets/{688116F9-667A-4FA2-BD0B-974E416B5C9D}_1782344687284.png
+ create mode 100644 attached_assets/{7918C87E-3E3D-4B4E-99B1-16BBB70E4DAF}_1782345286051.png
+ create mode 100644 attached_assets/{903C78B1-D6F8-4501-BFC4-E8BFBC9FE187}_1782344250982.png
+ create mode 100644 attached_assets/{F38F21EB-AE98-4738-A733-C34C569695AD}_1782346661103.png
+ create mode 100644 attached_assets/{FFEB896E-F1F9-45FB-8952-B2A0FCC6AB4F}_1782345026644.png
+npm warn Unknown user config "auto-install-peers". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown user config "strict-peer-dependencies". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> workspace@0.0.0 preinstall
+> sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+Use pnpm instead
+npm error code 1
+npm error path /home/container
+npm error command failed
+npm error command sh -c sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+npm error A complete log of this run can be found in: /home/container/.npm/_logs/2026-06-25T00_36_41_119Z-debug-0.log
+{"level":30,"time":1782347807005,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","port":3000,"msg":"Server listening"}
+{"level":30,"time":1782347808264,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"Connected to MongoDB"}
+{"level":30,"time":1782347809502,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"CarryBot online as Lol Support Listeria#3863"}
+{"level":50,"time":1782347809682,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","err":{"type":"DiscordAPIError","message":"Unknown Application","stack":"DiscordAPIError[10002]: Unknown Application\n    at handleErrors (file:///home/container/artifacts/api-server/dist/index.mjs:122877:17)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async SequentialHandler.runRequest (file:///home/container/artifacts/api-server/dist/index.mjs:123274:27)\n    at async SequentialHandler.queueRequest (file:///home/container/artifacts/api-server/dist/index.mjs:123105:18)\n    at async _REST.request (file:///home/container/artifacts/api-server/dist/index.mjs:123441:26)\n    at async deployCommands (file:///home/container/artifacts/api-server/dist/index.mjs:175488:3)\n    at async Client.<anonymous> (file:///home/container/artifacts/api-server/dist/index.mjs:175521:7)","requestBody":{"json":[]},"rawError":{"type":"Object","message":"Unknown Application","stack":"","code":10002},"code":10002,"status":404,"method":"PUT","url":"https://discord.com/api/v10/applications/1317885776279371926/commands"},"msg":"Failed to register slash commands"}
