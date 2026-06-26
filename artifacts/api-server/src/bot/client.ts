@@ -54,6 +54,15 @@ export function createBotClient(): Client {
     }
   });
 
+  client.on(Events.GuildCreate, async (guild) => {
+    logger.info({ guildId: guild.id, guildName: guild.name }, "Joined new guild — registering commands");
+    try {
+      await deployCommands([guild.id]);
+    } catch (err) {
+      logger.error({ err, guildId: guild.id }, "Failed to register commands for new guild");
+    }
+  });
+
   // Track message counts
   client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.guildId) return;
