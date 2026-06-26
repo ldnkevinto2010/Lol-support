@@ -1,0 +1,48 @@
+container@pterodactyl~ Server marked as stopping...
+container@pterodactyl~ Server marked as offline...
+[Bot-Hosting Daemon]: Checking server disk space usage, this could take a few seconds...
+[Bot-Hosting Daemon]: Updating process configuration files...
+[Bot-Hosting Daemon]: Ensuring file permissions are set correctly, this could take a few seconds...
+container@pterodactyl~ Server marked as starting...
+[Bot-Hosting Daemon]: Pulling Docker container image, this could take a few minutes to complete...
+[Bot-Hosting Daemon]: Finished pulling Docker container image
+v20.20.2
+:/home/container$ if [[ -d .git ]] && [[ ${AUTO_UPDATE} == "1" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z "${START_BASH_FILE}" ]]; then bash ${START_BASH_FILE}; else /usr/local/bin/node /home/container/${BOT_JS_FILE}; fi;
+remote: Enumerating objects: 36, done.
+remote: Counting objects: 100% (36/36), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 26 (delta 20), reused 26 (delta 20), pack-reused 0 (from 0)
+Unpacking objects: 100% (26/26), 6.86 KiB | 3.00 KiB/s, done.
+From https://github.com/ldnkevinto2010/Lol-support
+   6317c73..1b032fb  main       -> origin/main
+Updating 6317c73..1b032fb
+Fast-forward
+ artifacts/api-server/dist/index.mjs                |  8 +++
+ artifacts/api-server/dist/index.mjs.map            |  4 +-
+ artifacts/api-server/src/bot/client.ts             |  9 ++++
+ ...er-marked-as-offline-Bot-Host_1782348232390.txt | 26 +++++++++
+ ...er-marked-as-stopping-contain_1782347921145.txt | 62 ++++++++++++++++++++++
+ ...er-marked-as-stopping-contain_1782347936048.txt | 62 ++++++++++++++++++++++
+ ...er-marked-as-stopping-contain_1782348074215.txt | 27 ++++++++++
+ ...er-marked-as-stopping-contain_1782348303030.txt | 27 ++++++++++
+ 8 files changed, 223 insertions(+), 2 deletions(-)
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-offline-Bot-Host_1782348232390.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1782347921145.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1782347936048.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1782348074215.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1782348303030.txt
+npm warn Unknown user config "auto-install-peers". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown user config "strict-peer-dependencies". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> workspace@0.0.0 preinstall
+> sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+Use pnpm instead
+npm error code 1
+npm error path /home/container
+npm error command failed
+npm error command sh -c sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+npm error A complete log of this run can be found in: /home/container/.npm/_logs/2026-06-26T23_18_29_379Z-debug-0.log
+{"level":30,"time":1782515914874,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","port":3000,"msg":"Server listening"}
+{"level":30,"time":1782515916082,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"Connected to MongoDB"}
+{"level":30,"time":1782515917176,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"CarryBot online as Lol Support Listeria#3863"}
+{"level":30,"time":1782515917613,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","count":1,"msg":"Slash commands registered (guild-specific)"}
