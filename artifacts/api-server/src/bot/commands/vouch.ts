@@ -138,18 +138,17 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
 
-    if (!isStaffMember(interaction, config)) {
-      const ticket = await Ticket.findOne({
-        channelId: interaction.channelId,
-        status: { $in: ["open", "claimed"] },
+    const ticket = await Ticket.findOne({
+      channelId: interaction.channelId,
+      status: { $in: ["open", "claimed"] },
+    });
+
+    if (!isStaffMember(interaction, config) && !ticket) {
+      await interaction.reply({
+        content: "❌ You can only use `/vouch give` inside an active ticket channel.",
+        ephemeral: true,
       });
-      if (!ticket) {
-        await interaction.reply({
-          content: "❌ You can only use `/vouch give` inside an active ticket channel.",
-          ephemeral: true,
-        });
-        return;
-      }
+      return;
     }
 
     await interaction.deferReply({ ephemeral: true });
@@ -163,6 +162,22 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
     await postToVouchChannel(interaction, config, target, reason);
     await interaction.editReply({ content: `✅ Vouched ${target}${reason ? ` — "${reason}"` : ""}.` });
+
+    if (ticket && interaction.channel) {
+      ticket.status = "closed";
+      ticket.closedAt = new Date();
+      await ticket.save();
+      const ticketChannel = interaction.channel as TextChannel;
+      await ticketChannel.send({
+        content: `✅ Vouch submitted! This ticket will close in **10 seconds**...`,
+      });
+      setTimeout(async () => {
+        try {
+          const ch = interaction.guild!.channels.cache.get(ticket.channelId) as TextChannel | undefined;
+          if (ch) await ch.delete("Ticket closed after vouch");
+        } catch (_) {}
+      }, 10000);
+    }
 
   // ─── /vouch add-bulk ───
   } else if (sub === "add-bulk") {
