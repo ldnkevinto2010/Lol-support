@@ -72,14 +72,6 @@ export const data = new SlashCommandBuilder()
       .addUserOption((opt) =>
         opt.setName("member").setDescription("The member to check").setRequired(true)
       )
-  )
-  .addSubcommand((sub) =>
-    sub
-      .setName("recent")
-      .setDescription("See the most recent vouches for a user")
-      .addUserOption((opt) =>
-        opt.setName("member").setDescription("The member to check").setRequired(true)
-      )
   );
 
 function isStaffMember(
@@ -257,36 +249,5 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
     await interaction.editReply({ embeds: [embed] });
 
-  // ─── /vouch recent ───
-  } else if (sub === "recent") {
-    const target = interaction.options.getUser("member", true);
-    await interaction.deferReply();
-
-    const vouches = await Vouch.find({ guildId: interaction.guildId, toUserId: target.id })
-      .sort({ createdAt: -1 })
-      .limit(5);
-
-    if (vouches.length === 0) {
-      await interaction.editReply({ content: `${target.tag} has no vouches yet.` });
-      return;
-    }
-
-    const embed = new EmbedBuilder()
-      .setTitle(`Recent Vouches for ${target.tag}`)
-      .setThumbnail(target.displayAvatarURL())
-      .setColor(0xfee75c)
-      .setTimestamp();
-
-    for (const v of vouches) {
-      const fromUser = await interaction.client.users.fetch(v.fromUserId).catch(() => null);
-      const from = fromUser ? fromUser.tag : `<@${v.fromUserId}>`;
-      const ts = Math.floor(v.createdAt.getTime() / 1000);
-      embed.addFields({
-        name: `From ${from}`,
-        value: (v.reason || "_No reason given_") + `\n<t:${ts}:R>`,
-      });
-    }
-
-    await interaction.editReply({ embeds: [embed] });
   }
 }
