@@ -172,11 +172,6 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
-      .setName("game-mappings")
-      .setDescription("View all game → category mappings and remove any of them")
-  )
-  .addSubcommand((sub) =>
-    sub
       .setName("game-category")
       .setDescription("Map a game to a specific ticket category")
       .addStringOption((opt) =>
