@@ -16,13 +16,16 @@ app.listen(port, (err) => {
   logger.info({ port }, "Server listening");
 });
 
-// Start MongoDB + Discord bot
-(async () => {
-  try {
-    await connectDB();
-    await startBot();
-  } catch (err) {
-    logger.error({ err }, "Failed to start bot — check MONGODB_URI network access and DISCORD_TOKEN");
-    // Don't exit — keep the HTTP server running so the workflow stays alive
-  }
-})();
+// Start MongoDB + Discord bot (only in production — set NODE_ENV=production on bothosting)
+if (process.env.NODE_ENV === "production") {
+  (async () => {
+    try {
+      await connectDB();
+      await startBot();
+    } catch (err) {
+      logger.error({ err }, "Failed to start bot — check MONGODB_URI network access and DISCORD_TOKEN");
+    }
+  })();
+} else {
+  logger.info("Skipping Discord bot in development mode (NODE_ENV != production)");
+}
