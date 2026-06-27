@@ -787,9 +787,11 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
   // ─── Application: game selected → show application modal ───
   if (customId === "app_game_select") {
     const game = interaction.values[0]!;
+    const rawTitle = `${game} Application`;
+    const title = rawTitle.length > 45 ? rawTitle.slice(0, 42) + "..." : rawTitle;
     const modal = new ModalBuilder()
       .setCustomId(`helper_app:${game}`)
-      .setTitle(`${game} Helper Application`);
+      .setTitle(title);
 
     const q1 = new TextInputBuilder()
       .setCustomId("app_q1")
