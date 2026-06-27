@@ -29,7 +29,6 @@ const FIELDS = [
     value: [
       "`/vouch give <user> [comment]` — Give a vouch to a user\n> **Who:** Everyone (non-staff must be in a ticket channel)",
       "`/vouch check <user>` — View total vouches and breakdown\n> **Who:** Everyone",
-      "`/vouch recent <user>` — See the 5 most recent vouches\n> **Who:** Everyone",
       "`/vouch add-bulk <user> <count>` — Add multiple vouches at once\n> **Who:** Staff, Admins",
       "`/vouch remove <user>` — Remove a vouch from a user\n> **Who:** Staff, Admins",
     ].join("\n\n"),
@@ -55,6 +54,7 @@ const FIELDS = [
       "`/setup game-role <game> <role>` — Set the ping role for a specific game's tickets\n> **Who:** Admins",
       "`/setup ping-role <role>` — Set the default role pinged on any new ticket\n> **Who:** Admins",
       "`/setup panel-image <url>` — Set the banner image on the ticket panel\n> **Who:** Admins",
+      "`/setup ticket-image <url>` — Set the banner image shown inside new ticket channels\n> **Who:** Admins",
     ].join("\n\n"),
   },
 ];
