@@ -1024,8 +1024,14 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       });
     }
 
-    // Helper roles can see and type in open tickets, locked out once claimed
-    for (const helperRoleId of config.helperRoles ?? []) {
+    // Only the game-specific role can see the ticket (falls back to all helper roles if no mapping)
+    const gameRoleEntry = (config.gameRoles ?? []).find(
+      (gr) => gr.game.toLowerCase() === game.toLowerCase()
+    );
+    const helperRoleIds = gameRoleEntry
+      ? [gameRoleEntry.roleId]
+      : (config.helperRoles ?? []);
+    for (const helperRoleId of helperRoleIds) {
       overwrites.push({
         id: helperRoleId,
         allow: [
