@@ -81,6 +81,18 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub
+      .setName("ticket-image")
+      .setDescription("Set the banner image shown inside new ticket channels")
+      .addStringOption((opt) =>
+        opt
+          .setName("url")
+          .setDescription("Direct image URL — leave blank to remove")
+          .setRequired(false)
+          .setMaxLength(500)
+      )
+  )
+  .addSubcommand((sub) =>
+    sub
       .setName("panel-image")
       .setDescription("Set the banner image URL shown in the ticket panel")
       .addStringOption((opt) =>
@@ -581,6 +593,15 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await config.save();
     await interaction.reply({
       content: `✅ Tickets for **${gameName}** will now go into the **${category.name}** category.`,
+      ephemeral: true,
+    });
+
+  } else if (sub === "ticket-image") {
+    const url = interaction.options.getString("url");
+    config.ticketImageUrl = url ?? null;
+    await config.save();
+    await interaction.reply({
+      content: url ? `✅ Ticket image set — new tickets will show the banner.` : `✅ Ticket image cleared.`,
       ephemeral: true,
     });
 

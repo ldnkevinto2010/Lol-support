@@ -1083,6 +1083,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
         { name: "Private Servers", value: privateServer, inline: false },
       )
       .setTimestamp();
+    if (config.ticketImageUrl) embed.setImage(config.ticketImageUrl);
 
     // Game-specific role takes priority over the default ping role
     const gameRole = config.gameRoles?.find(
