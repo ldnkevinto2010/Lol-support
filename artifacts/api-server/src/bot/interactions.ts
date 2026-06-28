@@ -135,7 +135,8 @@ async function checkTicketPrerequisites(
   guildId: string,
   userId: string,
   config: IGuildConfig | null,
-  memberRoleIds: string[] = []
+  memberRoleIds: string[] = [],
+  guild?: import("discord.js").Guild
 ): Promise<string | null> {
   if (!config?.ticketCategoryId) {
     return "❌ Tickets are not configured yet. Ask an admin to run `/setup ticket-category`.";
@@ -174,6 +175,13 @@ async function checkTicketPrerequisites(
     status: { $in: ["open", "claimed"] },
   });
   if (existing) {
+    // Auto-close stale tickets whose channel was deleted outside of the bot
+    if (guild && !guild.channels.cache.has(existing.channelId)) {
+      existing.status = "closed";
+      existing.closedAt = new Date();
+      await existing.save();
+      return null;
+    }
     return `❌ You already have an open ticket: <#${existing.channelId}>`;
   }
   return null;
@@ -359,7 +367,7 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
   // Panel "Create Ticket" button → show game select dropdown
   if (customId === "ticket_open_panel") {
     const memberRoles = (interaction.member as any)?.roles?.cache?.map((r: any) => r.id) ?? [];
-    const error = await checkTicketPrerequisites(guildId, interaction.user.id, config, memberRoles);
+    const error = await checkTicketPrerequisites(guildId, interaction.user.id, config, memberRoles, guild);
     if (error) {
       await interaction.reply({ content: error, ephemeral: true });
       return;
