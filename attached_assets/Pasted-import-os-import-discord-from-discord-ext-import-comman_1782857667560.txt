@@ -1,0 +1,101 @@
+import os
+import discord
+from discord.ext import commands
+from discord import app_commands
+
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+TOKEN = os.getenv("DISCORD_TOKEN", "").strip()
+
+CATEGORY_ID = 1520123441242701904
+STAFF_ROLE_ID = 1520124262386761749
+
+
+# ---------------- TICKET EMBED ----------------
+
+def build_ticket_embed(user, data):
+    embed = discord.Embed(
+        title="🎨 New Graphic Design Ticket",
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(
+        name="👤 User",
+        value=user.mention,
+        inline=False
+    )
+
+    embed.add_field(
+        name="🎨 Design Type",
+        value=data["design"],
+        inline=False
+    )
+
+    embed.add_field(
+        name="📝 Description",
+        value=data["description"],
+        inline=False
+    )
+
+    embed.add_field(
+        name="✨ Style",
+        value=data["style"],
+        inline=False
+    )
+
+    embed.add_field(
+        name="🌈 Colors",
+        value=data["colors"],
+        inline=False
+    )
+
+    embed.add_field(
+        name="📐 Dimensions",
+        value=data["size"],
+        inline=False
+    )
+
+    embed.add_field(
+        name="⏰ Deadline",
+        value=data["deadline"],
+        inline=False
+    )
+
+    embed.set_footer(text="A designer will assist you shortly.")
+
+    return embed
+
+
+# ---------------- MODAL ----------------
+
+class TicketModal(discord.ui.Modal, title="🎫 Create Ticket"):
+
+    design = discord.ui.TextInput(
+        label="Design Type",
+        placeholder="Logo, Banner, Server Assets..."
+    )
+
+    description = discord.ui.TextInput(
+        label="Description",
+        style=discord.TextStyle.paragraph,
+        placeholder="Explain what you want..."
+    )
+
+    style = discord.ui.TextInput(
+        label="Style",
+        placeholder="Anime, Clean, Gaming, Dark..."
+    )
+
+    colors = discord.ui.TextInput(
+        label="Preferred Colors",
+        required=False
+    )
+
+    size = discord.ui.TextInput(
+        label="Dimensions",
+        required=False
+... (263 lines left)
