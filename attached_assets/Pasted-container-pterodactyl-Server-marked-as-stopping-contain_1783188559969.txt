@@ -1,0 +1,52 @@
+container@pterodactyl~ Server marked as stopping...
+container@pterodactyl~ Server marked as offline...
+[Bot-Hosting Daemon]: Checking server disk space usage, this could take a few seconds...
+[Bot-Hosting Daemon]: Updating process configuration files...
+[Bot-Hosting Daemon]: Ensuring file permissions are set correctly, this could take a few seconds...
+container@pterodactyl~ Server marked as starting...
+[Bot-Hosting Daemon]: Pulling Docker container image, this could take a few minutes to complete...
+[Bot-Hosting Daemon]: Finished pulling Docker container image
+v20.20.2
+:/home/container$ if [[ -d .git ]] && [[ ${AUTO_UPDATE} == "1" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z "${START_BASH_FILE}" ]]; then bash ${START_BASH_FILE}; else /usr/local/bin/node /home/container/${BOT_JS_FILE}; fi;
+remote: Enumerating objects: 22, done.
+remote: Counting objects: 100% (22/22), done.
+remote: Compressing objects: 100% (7/7), done.
+remote: Total 22 (delta 15), reused 22 (delta 15), pack-reused 0 (from 0)
+Unpacking objects: 100% (22/22), 112.11 KiB | 39.00 KiB/s, done.
+From https://github.com/ldnkevinto2010/Lol-support
+   b239dac..6adab6a  main       -> origin/main
+Updating b239dac..6adab6a
+Fast-forward
+ artifacts/api-server/dist/index.mjs                | 5708 ++++++++++----------
+ artifacts/api-server/dist/index.mjs.map            |    8 +-
+ artifacts/api-server/src/bot/client.ts             |    2 +
+ .../api-server/src/bot/commands/appquestions.ts    |  141 +
+ artifacts/api-server/src/bot/deploy-commands.ts    |    2 +
+ artifacts/api-server/src/bot/interactions.ts       |   90 +-
+ artifacts/api-server/src/bot/models/GuildConfig.ts |   19 +
+ ...rom-discord-ext-import-comman_1782857667560.txt |  101 +
+ ...-2D2F-4DE0-8DEF-6976E1FAFEA1}_1783188216555.png |  Bin 0 -> 60373 bytes
+ 9 files changed, 3220 insertions(+), 2851 deletions(-)
+ create mode 100644 artifacts/api-server/src/bot/commands/appquestions.ts
+ create mode 100644 attached_assets/Pasted-import-os-import-discord-from-discord-ext-import-comman_1782857667560.txt
+ create mode 100644 attached_assets/{BB09ABF0-2D2F-4DE0-8DEF-6976E1FAFEA1}_1783188216555.png
+npm warn Unknown user config "auto-install-peers". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown user config "strict-peer-dependencies". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> workspace@0.0.0 preinstall
+> sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+Use pnpm instead
+npm error code 1
+npm error path /home/container
+npm error command failed
+npm error command sh -c sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+npm notice
+npm notice New minor version of npm available! 11.17.0 -> 11.18.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.18.0
+npm notice To update run: npm install -g npm@11.18.0
+npm notice
+npm error A complete log of this run can be found in: /home/container/.npm/_logs/2026-07-04T18_08_45_723Z-debug-0.log
+{"level":30,"time":1783188533596,"pid":40,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","port":3000,"msg":"Server listening"}
+{"level":30,"time":1783188535045,"pid":40,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"Connected to MongoDB"}
+{"level":30,"time":1783188536394,"pid":40,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"CarryBot online as Lol Support Listeria#3863"}
+{"level":30,"time":1783188537257,"pid":40,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","count":2,"msg":"Slash commands registered (guild-specific)"}
