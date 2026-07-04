@@ -175455,7 +175455,10 @@ var FIELDS = [
       "`/setup game-role <game> <role>` \u2014 Set the ping role for a specific game's tickets\n> **Who:** Admins",
       "`/setup ping-role <role>` \u2014 Set the default role pinged on any new ticket\n> **Who:** Admins",
       "`/setup panel-image <url>` \u2014 Set the banner image on the ticket panel\n> **Who:** Admins",
-      "`/setup ticket-image <url>` \u2014 Set the banner image shown inside new ticket channels\n> **Who:** Admins"
+      "`/setup ticket-image <url>` \u2014 Set the banner image shown inside new ticket channels\n> **Who:** Admins",
+      "`/ticketrole set <role> [min-messages] [cooldown]` \u2014 Set per-role message requirement and cooldown for tickets\n> **Who:** Admins",
+      "`/ticketrole remove <role>` \u2014 Remove a role's custom ticket config\n> **Who:** Admins",
+      "`/ticketrole view` \u2014 View all role-specific ticket requirements\n> **Who:** Admins"
     ].join("\n\n")
   }
 ];
@@ -175504,7 +175507,10 @@ var FIELDS2 = [
       "`/setup application-game <name>` \u2014 Add or remove a game from the application panel\n> **Who:** Admins",
       "`/setup application-game-role <game> <game-role> <base-role> [notify-role]` \u2014 Map a game to the roles given to accepted helpers (also sets the ping role via the optional notify-role)\n> **Who:** Admins",
       "`/setup application-cooldown <game> [duration]` \u2014 Set how long users must wait before re-applying for a game (e.g. `3h`, `7d`) \u2014 omit duration to remove the cooldown\n> **Who:** Admins",
-      "`/setup application-image-guide [text]` \u2014 Set the message shown when users click 'How to send an image' (supports markdown and gif/image URLs) \u2014 omit to reset to default\n> **Who:** Admins"
+      "`/setup application-image-guide [text]` \u2014 Set the message shown when users click 'How to send an image' (supports markdown and gif/image URLs) \u2014 omit to reset to default\n> **Who:** Admins",
+      "`/appquestions set <game> <slot> <label> [placeholder]` \u2014 Set a custom question for a game's application modal\n> **Who:** Admins",
+      "`/appquestions view <game>` \u2014 View current questions for a game\n> **Who:** Admins",
+      "`/appquestions clear <game>` \u2014 Reset a game's questions back to defaults\n> **Who:** Admins"
     ].join("\n\n")
   }
 ];
