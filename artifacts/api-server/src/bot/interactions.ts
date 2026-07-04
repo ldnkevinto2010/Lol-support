@@ -33,21 +33,24 @@ function getAccountAgeDays(userId: string): number {
   return Math.floor((Date.now() - ms) / 86400000);
 }
 
+const DEFAULT_APP_QUESTIONS = [
+  { label: "Can you solo most content in the game?", placeholder: "Yes / No and details", style: "paragraph" as const },
+  { label: "What can't you solo?", placeholder: "List any content you struggle with", style: "short" as const },
+  { label: "What level are you?", placeholder: "e.g. Level 150", style: "short" as const },
+  { label: "What's your team?", placeholder: "List your main units", style: "short" as const },
+  { label: "How many hours per day can you help?", placeholder: "e.g. 3-5 hours", style: "short" as const },
+];
+
 function buildApplicationEmbed(
   applicantTag: string,
   userId: string,
   game: string,
   accountAgeDays: number,
   joinedAgoDays: number | null,
-  answers: string[]
+  answers: string[],
+  questionLabels?: string[]
 ) {
-  const questions = [
-    "Can you solo most content in the game?",
-    "What can't you solo?",
-    "What level are you?",
-    "What's your team?",
-    "How many hours per day can you help?",
-  ];
+  const questions = questionLabels ?? DEFAULT_APP_QUESTIONS.map((q) => q.label);
   const embed = new EmbedBuilder()
     .setAuthor({ name: applicantTag })
     .setTitle(`📋 ${game} Helper Application`)
@@ -801,52 +804,25 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
       .setCustomId(`helper_app:${game}`)
       .setTitle(title);
 
-    const q1 = new TextInputBuilder()
-      .setCustomId("app_q1")
-      .setLabel("Can you solo most content in the game?")
-      .setStyle(TextInputStyle.Paragraph)
-      .setPlaceholder("Yes / No and details")
-      .setRequired(true)
-      .setMaxLength(500);
+    const appConfig = await GuildConfig.findOne({ guildId });
+    const customEntry = (appConfig?.applicationQuestions ?? []).find(
+      (aq) => aq.game.toLowerCase() === game.toLowerCase()
+    );
+    const questions = customEntry?.questions?.length ? customEntry.questions : DEFAULT_APP_QUESTIONS;
 
-    const q2 = new TextInputBuilder()
-      .setCustomId("app_q2")
-      .setLabel("What can't you solo?")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("List any content you struggle with")
-      .setRequired(true)
-      .setMaxLength(300);
-
-    const q3 = new TextInputBuilder()
-      .setCustomId("app_q3")
-      .setLabel("What level are you?")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("e.g. Level 150")
-      .setRequired(true)
-      .setMaxLength(100);
-
-    const q4 = new TextInputBuilder()
-      .setCustomId("app_q4")
-      .setLabel("What's your team?")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("List your main units")
-      .setRequired(true)
-      .setMaxLength(300);
-
-    const q5 = new TextInputBuilder()
-      .setCustomId("app_q5")
-      .setLabel("How many hours per day can you help?")
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder("e.g. 3-5 hours")
-      .setRequired(true)
-      .setMaxLength(100);
-
+    const maxLengths = [500, 300, 100, 300, 100];
     modal.addComponents(
-      new ActionRowBuilder<TextInputBuilder>().addComponents(q1),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(q2),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(q3),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(q4),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(q5),
+      ...questions.map((q, i) =>
+        new ActionRowBuilder<TextInputBuilder>().addComponents(
+          new TextInputBuilder()
+            .setCustomId(`app_q${i + 1}`)
+            .setLabel(q.label)
+            .setStyle(q.style === "paragraph" ? TextInputStyle.Paragraph : TextInputStyle.Short)
+            .setPlaceholder(q.placeholder || " ")
+            .setRequired(true)
+            .setMaxLength(maxLengths[i] ?? 300)
+        )
+      )
     );
 
     await interaction.showModal(modal);
@@ -1246,13 +1222,21 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       status: "pending",
     });
 
+    const customQEntry = (config.applicationQuestions ?? []).find(
+      (aq) => aq.game.toLowerCase() === game.toLowerCase()
+    );
+    const questionLabels = customQEntry?.questions?.length
+      ? customQEntry.questions.map((q) => q.label)
+      : undefined;
+
     const embed = buildApplicationEmbed(
       `${interaction.user.displayName} (${interaction.user.username})`,
       interaction.user.id,
       game,
       accountAgeDays,
       joinedAgoDays,
-      answers
+      answers,
+      questionLabels
     );
 
     const appRoleEntry = (config.applicationRoles ?? []).find(

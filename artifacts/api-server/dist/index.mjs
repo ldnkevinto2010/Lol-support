@@ -20336,8 +20336,8 @@ var require_dist = __commonJS({
     }
     function compile(path2, options = {}) {
       const { encode = encodeURIComponent, delimiter = DEFAULT_DELIMITER } = options;
-      const data9 = typeof path2 === "object" ? path2 : parse(path2, options);
-      const fn = tokensToFunction(data9.tokens, delimiter, encode);
+      const data10 = typeof path2 === "object" ? path2 : parse(path2, options);
+      const fn = tokensToFunction(data10.tokens, delimiter, encode);
       return function path3(params = {}) {
         const missing = [];
         const path4 = fn(params, missing);
@@ -20349,10 +20349,10 @@ var require_dist = __commonJS({
     }
     function tokensToFunction(tokens, delimiter, encode) {
       const encoders = tokens.map((token) => tokenToFunction(token, delimiter, encode));
-      return (data9, missing) => {
+      return (data10, missing) => {
         let result = "";
         for (const encoder of encoders) {
-          result += encoder(data9, missing);
+          result += encoder(data10, missing);
         }
         return result;
       };
@@ -20362,9 +20362,9 @@ var require_dist = __commonJS({
         return () => token.value;
       if (token.type === "group") {
         const fn = tokensToFunction(token.tokens, delimiter, encode);
-        return (data9, missing) => {
+        return (data10, missing) => {
           const len = missing.length;
-          const value = fn(data9, missing);
+          const value = fn(data10, missing);
           if (missing.length === len)
             return value;
           missing.length = len;
@@ -20373,8 +20373,8 @@ var require_dist = __commonJS({
       }
       const encodeValue = encode || NOOP_VALUE;
       if (token.type === "wildcard" && encode !== false) {
-        return (data9, missing) => {
-          const value = data9[token.name];
+        return (data10, missing) => {
+          const value = data10[token.name];
           if (value == null) {
             missing.push(token.name);
             return "";
@@ -20394,8 +20394,8 @@ var require_dist = __commonJS({
           return result;
         };
       }
-      return (data9, missing) => {
-        const value = data9[token.name];
+      return (data10, missing) => {
+        const value = data10[token.name];
         if (value == null) {
           missing.push(token.name);
           return "";
@@ -20443,14 +20443,14 @@ var require_dist = __commonJS({
             process2(p);
           return;
         }
-        const data9 = typeof path3 === "object" ? path3 : parse(path3, options);
-        flatten(data9.tokens, 0, [], (tokens) => {
+        const data10 = typeof path3 === "object" ? path3 : parse(path3, options);
+        flatten(data10.tokens, 0, [], (tokens) => {
           if (combinations >= 256) {
-            throw new PathError("Too many path combinations", data9.originalPath);
+            throw new PathError("Too many path combinations", data10.originalPath);
           }
           if (combinations > 0)
             source += "|";
-          source += toRegExpSource(tokens, delimiter, keys, data9.originalPath);
+          source += toRegExpSource(tokens, delimiter, keys, data10.originalPath);
           combinations++;
         });
       }
@@ -20569,8 +20569,8 @@ var require_dist = __commonJS({
       }
       return value;
     }
-    function stringify(data9) {
-      return stringifyTokens(data9.tokens, 0);
+    function stringify(data10) {
+      return stringifyTokens(data10.tokens, 0);
     }
     function stringifyName(name, next) {
       if (!ID.test(name))
@@ -25679,22 +25679,22 @@ var require_sonic_boom = __commonJS({
       }
       return Buffer.concat(bufs, len);
     }
-    function write(data9) {
+    function write(data10) {
       if (this.destroyed) {
         throw new Error("SonicBoom destroyed");
       }
-      data9 = "" + data9;
-      const dataLen = Buffer.byteLength(data9);
+      data10 = "" + data10;
+      const dataLen = Buffer.byteLength(data10);
       const len = this._len + dataLen;
       const bufs = this._bufs;
       if (this.maxLength && len > this.maxLength) {
-        this.emit("drop", data9);
+        this.emit("drop", data10);
         return this._len < this._hwm;
       }
       if (bufs.length === 0 || Buffer.byteLength(bufs[bufs.length - 1]) + dataLen > this.maxWrite) {
-        bufs.push(data9);
+        bufs.push(data10);
       } else {
-        bufs[bufs.length - 1] += data9;
+        bufs[bufs.length - 1] += data10;
       }
       this._len = len;
       if (!this._writing && this._len >= this.minLength) {
@@ -25702,23 +25702,23 @@ var require_sonic_boom = __commonJS({
       }
       return this._len < this._hwm;
     }
-    function writeBuffer(data9) {
+    function writeBuffer(data10) {
       if (this.destroyed) {
         throw new Error("SonicBoom destroyed");
       }
-      const len = this._len + data9.length;
+      const len = this._len + data10.length;
       const bufs = this._bufs;
       const lens = this._lens;
       if (this.maxLength && len > this.maxLength) {
-        this.emit("drop", data9);
+        this.emit("drop", data10);
         return this._len < this._hwm;
       }
-      if (bufs.length === 0 || lens[lens.length - 1] + data9.length > this.maxWrite) {
-        bufs.push([data9]);
-        lens.push(data9.length);
+      if (bufs.length === 0 || lens[lens.length - 1] + data10.length > this.maxWrite) {
+        bufs.push([data10]);
+        lens.push(data10.length);
       } else {
-        bufs[bufs.length - 1].push(data9);
-        lens[lens.length - 1] += data9.length;
+        bufs[bufs.length - 1].push(data10);
+        lens[lens.length - 1] += data10.length;
       }
       this._len = len;
       if (!this._writing && this._len >= this.minLength) {
@@ -26430,7 +26430,7 @@ var require_thread_stream = __commonJS({
           this.worker.postMessage(message, transferList);
         });
       }
-      write(data9) {
+      write(data10) {
         if (this[kImpl].destroyed) {
           error(this, new Error("the worker has exited"));
           return false;
@@ -26439,7 +26439,7 @@ var require_thread_stream = __commonJS({
           error(this, new Error("the worker is ending"));
           return false;
         }
-        if (this[kImpl].flushing && this[kImpl].buf.length + data9.length >= MAX_STRING) {
+        if (this[kImpl].flushing && this[kImpl].buf.length + data10.length >= MAX_STRING) {
           try {
             writeSync(this);
             this[kImpl].flushing = true;
@@ -26448,7 +26448,7 @@ var require_thread_stream = __commonJS({
             return false;
           }
         }
-        this[kImpl].buf += data9;
+        this[kImpl].buf += data10;
         if (this[kImpl].sync) {
           try {
             writeSync(this);
@@ -26561,10 +26561,10 @@ var require_thread_stream = __commonJS({
         });
       }
     }
-    function write(stream, data9, cb) {
+    function write(stream, data10, cb) {
       const current = Atomics.load(stream[kImpl].state, WRITE_INDEX);
-      const length = Buffer.byteLength(data9);
-      stream[kImpl].data.write(data9, current);
+      const length = Buffer.byteLength(data10);
+      stream[kImpl].data.write(data10, current);
       Atomics.store(stream[kImpl].state, WRITE_INDEX, current + length);
       Atomics.notify(stream[kImpl].state, WRITE_INDEX);
       cb();
@@ -26914,8 +26914,8 @@ var require_tools = __commonJS({
       const formatters = this[formattersSym];
       const messageKey = this[messageKeySym];
       const errorKey = this[errorKeySym];
-      let data9 = this[lsCacheSym][num] + time;
-      data9 = data9 + chindings;
+      let data10 = this[lsCacheSym][num] + time;
+      data10 = data10 + chindings;
       let value;
       if (formatters.log) {
         obj = formatters.log(obj);
@@ -26980,14 +26980,14 @@ var require_tools = __commonJS({
         }
       }
       if (this[nestedKeySym] && propStr) {
-        return data9 + this[nestedKeyStrSym] + propStr.slice(1) + "}" + msgStr + end;
+        return data10 + this[nestedKeyStrSym] + propStr.slice(1) + "}" + msgStr + end;
       } else {
-        return data9 + propStr + msgStr + end;
+        return data10 + propStr + msgStr + end;
       }
     }
     function asChindings(instance, bindings) {
       let value;
-      let data9 = instance[chindingsSym];
+      let data10 = instance[chindingsSym];
       const stringify2 = instance[stringifySym];
       const stringifySafe = instance[stringifySafeSym];
       const stringifiers = instance[stringifiersSym];
@@ -27002,10 +27002,10 @@ var require_tools = __commonJS({
           value = serializers[key] ? serializers[key](value) : value;
           value = (stringifiers[key] || wildcardStringifier || stringify2)(value, stringifySafe);
           if (value === void 0) continue;
-          data9 += ',"' + key + '":' + value;
+          data10 += ',"' + key + '":' + value;
         }
       }
-      return data9;
+      return data10;
     }
     function hasBeenTampered(stream) {
       return stream.write !== stream.constructor.prototype.write;
@@ -28221,7 +28221,7 @@ var require_multistream = __commonJS({
       }
       streamsArray = null;
       return res;
-      function write(data9) {
+      function write(data10) {
         let dest;
         const level = this.lastLevel;
         const { streams } = this;
@@ -28242,7 +28242,7 @@ var require_multistream = __commonJS({
               stream.lastObj = lastObj;
               stream.lastLogger = lastLogger;
             }
-            stream.write(data9);
+            stream.write(data10);
             if (opts.dedupe) {
               recordedLevel = dest.level;
             }
@@ -29556,26 +29556,26 @@ var require_bson = __commonJS({
       }
       static fromExtendedJSON(doc, options) {
         options = options || {};
-        let data9;
+        let data10;
         let type;
         if ("$binary" in doc) {
           if (options.legacy && typeof doc.$binary === "string" && "$type" in doc) {
             type = doc.$type ? parseInt(doc.$type, 16) : 0;
-            data9 = ByteUtils.fromBase64(doc.$binary);
+            data10 = ByteUtils.fromBase64(doc.$binary);
           } else {
             if (typeof doc.$binary !== "string") {
               type = doc.$binary.subType ? parseInt(doc.$binary.subType, 16) : 0;
-              data9 = ByteUtils.fromBase64(doc.$binary.base64);
+              data10 = ByteUtils.fromBase64(doc.$binary.base64);
             }
           }
         } else if ("$uuid" in doc) {
           type = 4;
-          data9 = UUID.bytesFromString(doc.$uuid);
+          data10 = UUID.bytesFromString(doc.$uuid);
         }
-        if (!data9) {
+        if (!data10) {
           throw new BSONError(`Unexpected Binary Extended JSON format ${JSON.stringify(doc)}`);
         }
-        return type === BSON_BINARY_SUBTYPE_UUID_NEW ? new UUID(data9) : new _Binary(data9, type);
+        return type === BSON_BINARY_SUBTYPE_UUID_NEW ? new UUID(data10) : new _Binary(data10, type);
       }
       inspect(depth, options, inspect) {
         inspect ??= defaultInspect;
@@ -32421,7 +32421,7 @@ var require_bson = __commonJS({
       const numberOfWrittenBytes = ByteUtils.encodeUTF8Into(buffer2, key, index);
       index = index + numberOfWrittenBytes;
       buffer2[index++] = 0;
-      const data9 = value.buffer;
+      const data10 = value.buffer;
       let size = value.position;
       if (value.sub_type === Binary.SUBTYPE_BYTE_ARRAY)
         size = size + 4;
@@ -32436,9 +32436,9 @@ var require_bson = __commonJS({
       }
       if (size <= 16) {
         for (let i = 0; i < size; i++)
-          buffer2[index + i] = data9[i];
+          buffer2[index + i] = data10[i];
       } else {
-        buffer2.set(data9, index);
+        buffer2.set(data10, index);
       }
       index = index + value.position;
       return index;
@@ -33126,9 +33126,9 @@ var require_bson = __commonJS({
       const ignoreUndefined = typeof options.ignoreUndefined === "boolean" ? options.ignoreUndefined : true;
       return internalCalculateObjectSize(object, serializeFunctions, ignoreUndefined);
     }
-    function deserializeStream(data9, startIndex, numberOfDocuments, documents, docStartIndex, options) {
+    function deserializeStream(data10, startIndex, numberOfDocuments, documents, docStartIndex, options) {
       const internalOptions = Object.assign({ allowObjectSmallerThanBufferSize: true, index: 0 }, options);
-      const bufferData = ByteUtils.toLocalBufferType(data9);
+      const bufferData = ByteUtils.toLocalBufferType(data10);
       let index = startIndex;
       for (let i = 0; i < numberOfDocuments; i++) {
         const size = NumberUtils.getInt32LE(bufferData, index);
@@ -35696,7 +35696,7 @@ var require_utils4 = __commonJS({
     async function once(ee, name, options) {
       options?.signal?.throwIfAborted();
       const { promise, resolve, reject } = promiseWithResolvers();
-      const onEvent = (data9) => resolve(data9);
+      const onEvent = (data10) => resolve(data10);
       const onError = (error) => reject(error);
       const abortListener = addAbortListener(options?.signal, function() {
         reject(this.reason);
@@ -50059,8 +50059,8 @@ var require_compression = __commonJS({
         agreedCompressor: description.agreedCompressor ?? "none",
         zlibCompressionLevel: description.zlibCompressionLevel ?? 0
       });
-      const data9 = await finalCommand.toBin();
-      return bson_1.ByteUtils.concat(data9);
+      const data10 = await finalCommand.toBin();
+      return bson_1.ByteUtils.concat(data10);
     }
     async function decompressResponse(message) {
       const messageHeader = {
@@ -50709,8 +50709,8 @@ var require_state_machine = __commonJS({
             destroySockets();
             rejectOnTlsSocketError(this.reason);
           });
-          socket.once("error", (err) => rejectOnTlsSocketError(onerror(err))).once("close", () => rejectOnTlsSocketError(onclose())).on("data", (data9) => {
-            buffer.append(data9);
+          socket.once("error", (err) => rejectOnTlsSocketError(onerror(err))).once("close", () => rejectOnTlsSocketError(onclose())).on("data", (data10) => {
+            buffer.append(data10);
             while (request.bytesNeeded > 0 && buffer.length) {
               const bytesNeeded = Math.min(request.bytesNeeded, buffer.length);
               request.addResponse(buffer.read(bytesNeeded));
@@ -56281,8 +56281,8 @@ var require_aws4 = __commonJS({
     exports2.aws4Sign = aws4Sign;
     var bson_1 = require_bson2();
     var getHexSha256 = async (str) => {
-      const data9 = stringToBuffer(str);
-      const hashBuffer = await crypto.subtle.digest("SHA-256", data9);
+      const data10 = stringToBuffer(str);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data10);
       const hashHex = bson_1.ByteUtils.toHex(new Uint8Array(hashBuffer));
       return hashHex;
     };
@@ -56303,9 +56303,9 @@ var require_aws4 = __commonJS({
       return value.toString().trim().replace(/\s+/g, " ");
     };
     function stringToBuffer(str) {
-      const data9 = new Uint8Array(bson_1.ByteUtils.utf8ByteLength(str));
-      bson_1.ByteUtils.encodeUTF8Into(data9, str, 0);
-      return data9;
+      const data10 = new Uint8Array(bson_1.ByteUtils.utf8ByteLength(str));
+      bson_1.ByteUtils.encodeUTF8Into(data10, str, 0);
+      return data10;
     }
     async function aws4Sign(options, credentials) {
       const date = options.date;
@@ -57378,12 +57378,12 @@ var require_memory_code_points = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.createMemoryCodePoints = createMemoryCodePoints;
     var sparse_bitfield_1 = __importDefault2(require_sparse_bitfield());
-    function createMemoryCodePoints(data9) {
+    function createMemoryCodePoints(data10) {
       let offset = 0;
       function read() {
-        const size = data9.readUInt32BE(offset);
+        const size = data10.readUInt32BE(offset);
         offset += 4;
-        const codepoints = data9.slice(offset, offset + size);
+        const codepoints = data10.slice(offset, offset + size);
         offset += size;
         return (0, sparse_bitfield_1.default)({ buffer: codepoints });
       }
@@ -57641,12 +57641,12 @@ var require_scram = __commonJS({
       sha256: 32,
       sha1: 20
     };
-    async function HI(data9, salt, iterations, cryptoMethod) {
-      const key = [data9, bson_1.ByteUtils.toBase64(salt), iterations].join("_");
+    async function HI(data10, salt, iterations, cryptoMethod) {
+      const key = [data10, bson_1.ByteUtils.toBase64(salt), iterations].join("_");
       if (_hiCache[key] != null) {
         return _hiCache[key];
       }
-      const keyMaterial = await crypto.subtle.importKey("raw", new TextEncoder().encode(data9), { name: "PBKDF2" }, false, ["deriveBits"]);
+      const keyMaterial = await crypto.subtle.importKey("raw", new TextEncoder().encode(data10), { name: "PBKDF2" }, false, ["deriveBits"]);
       const params = {
         name: "PBKDF2",
         salt,
@@ -60592,12 +60592,12 @@ var require_upload = __commonJS({
       stream.state.errored = true;
       queueMicrotask(() => callback(error));
     }
-    function createChunkDoc(filesId, n, data9) {
+    function createChunkDoc(filesId, n, data10) {
       return {
         _id: new bson_1.ObjectId(),
         files_id: filesId,
         n,
-        data: data9
+        data: data10
       };
     }
     async function checkChunksIndex(stream) {
@@ -62133,11 +62133,11 @@ var require_changeStream = __commonJS({
                 this.closed = true;
               });
               driverChangeStreamEvents.forEach((ev) => {
-                this.driverChangeStream.on(ev, (data9) => {
-                  if (data9?.fullDocument != null && this.options?.hydrate) {
-                    data9.fullDocument = this.options.model.hydrate(data9.fullDocument);
+                this.driverChangeStream.on(ev, (data10) => {
+                  if (data10?.fullDocument != null && this.options?.hydrate) {
+                    data10.fullDocument = this.options.model.hydrate(data10.fullDocument);
                   }
-                  this.emit(ev, data9);
+                  this.emit(ev, data10);
                 });
               });
             },
@@ -62151,11 +62151,11 @@ var require_changeStream = __commonJS({
           this.closed = true;
         });
         driverChangeStreamEvents.forEach((ev) => {
-          this.driverChangeStream.on(ev, (data9) => {
-            if (data9?.fullDocument != null && this.options?.hydrate) {
-              data9.fullDocument = this.options.model.hydrate(data9.fullDocument);
+          this.driverChangeStream.on(ev, (data10) => {
+            if (data10?.fullDocument != null && this.options?.hydrate) {
+              data10.fullDocument = this.options.model.hydrate(data10.fullDocument);
             }
-            this.emit(ev, data9);
+            this.emit(ev, data10);
           });
         });
       }
@@ -62183,14 +62183,14 @@ var require_changeStream = __commonJS({
         if (this.options?.hydrate) {
           if (cb != null) {
             const originalCb = cb;
-            cb = (err, data9) => {
+            cb = (err, data10) => {
               if (err != null) {
                 return originalCb(err);
               }
-              if (data9.fullDocument != null) {
-                data9.fullDocument = this.options.model.hydrate(data9.fullDocument);
+              if (data10.fullDocument != null) {
+                data10.fullDocument = this.options.model.hydrate(data10.fullDocument);
               }
-              return originalCb(null, data9);
+              return originalCb(null, data10);
             };
           }
           let maybePromise;
@@ -62208,11 +62208,11 @@ var require_changeStream = __commonJS({
             );
           }
           if (typeof maybePromise?.then === "function") {
-            maybePromise = maybePromise.then((data9) => {
-              if (data9.fullDocument != null) {
-                data9.fullDocument = this.options.model.hydrate(data9.fullDocument);
+            maybePromise = maybePromise.then((data10) => {
+              if (data10.fullDocument != null) {
+                data10.fullDocument = this.options.model.hydrate(data10.fullDocument);
               }
-              return data9;
+              return data10;
             });
           }
           return maybePromise;
@@ -69906,11 +69906,11 @@ var require_document2 = __commonJS({
       if (pathsToSave != null) {
         dirty = [];
         unsavedDirty = [];
-        for (const data9 of allDirty) {
-          if (isInPathsToSave(data9.path, pathsToSaveSet, pathsToSave)) {
-            dirty.push(data9);
+        for (const data10 of allDirty) {
+          if (isInPathsToSave(data10.path, pathsToSaveSet, pathsToSave)) {
+            dirty.push(data10);
           } else {
-            unsavedDirty.push(data9);
+            unsavedDirty.push(data10);
           }
         }
       }
@@ -69953,52 +69953,52 @@ var require_document2 = __commonJS({
         where._id = where._id.toObject({ transform: false, depopulate: true });
       }
       for (; d < len; ++d) {
-        const data9 = dirty[d];
-        let value = data9.value;
-        const match = checkDivergentArray(this, data9.path, value);
+        const data10 = dirty[d];
+        let value = data10.value;
+        const match = checkDivergentArray(this, data10.path, value);
         if (match) {
           divergent.push(match);
           continue;
         }
-        const pop = this.$populated(data9.path, true);
+        const pop = this.$populated(data10.path, true);
         if (!pop && this.$__.selected) {
-          const pathSplit = data9.path.split(".");
+          const pathSplit = data10.path.split(".");
           const top = pathSplit[0];
           if (this.$__.selected[top] && this.$__.selected[top].$elemMatch) {
             if (pathSplit.length > 1 && pathSplit[1] == 0 && typeof where[top] === "undefined") {
               where[top] = this.$__.selected[top];
               pathSplit[1] = "$";
-              data9.path = pathSplit.join(".");
+              data10.path = pathSplit.join(".");
             } else {
-              divergent.push(data9.path);
+              divergent.push(data10.path);
               continue;
             }
           }
         }
-        if (this.$isDefault(data9.path) && this.$__.selected) {
-          if (data9.path.indexOf(".") === -1 && isPathExcluded(this.$__.selected, data9.path)) {
+        if (this.$isDefault(data10.path) && this.$__.selected) {
+          if (data10.path.indexOf(".") === -1 && isPathExcluded(this.$__.selected, data10.path)) {
             continue;
           }
-          const pathsToCheck = parentPaths(data9.path);
+          const pathsToCheck = parentPaths(data10.path);
           if (pathsToCheck.find((path2) => isPathExcluded(this.$__.isSelected, path2))) {
             continue;
           }
         }
         if (divergent.length) continue;
         if (value === void 0) {
-          operand(this, where, delta, data9, 1, "$unset");
+          operand(this, where, delta, data10, 1, "$unset");
         } else if (value === null) {
-          operand(this, where, delta, data9, null);
+          operand(this, where, delta, data10, null);
         } else if (typeof value.getAtomics === "function") {
-          handleAtomics(this, where, delta, data9, value);
+          handleAtomics(this, where, delta, data10, value);
         } else if (value[MongooseBuffer.pathSymbol] && Buffer.isBuffer(value)) {
           value = value.toObject();
-          operand(this, where, delta, data9, value);
+          operand(this, where, delta, data10, value);
         } else {
-          if (this.$__.primitiveAtomics?.[data9.path] != null) {
-            const val = this.$__.primitiveAtomics[data9.path];
+          if (this.$__.primitiveAtomics?.[data10.path] != null) {
+            const val = this.$__.primitiveAtomics[data10.path];
             const op = firstKey(val);
-            operand(this, where, delta, data9, val[op], op);
+            operand(this, where, delta, data10, val[op], op);
           } else {
             value = clone(value, {
               depopulate: true,
@@ -70008,7 +70008,7 @@ var require_document2 = __commonJS({
               omitUndefined: true,
               _isNested: true
             });
-            operand(this, where, delta, data9, value);
+            operand(this, where, delta, data10, value);
           }
         }
       }
@@ -70049,12 +70049,12 @@ var require_document2 = __commonJS({
         }
       }
     }
-    function operand(self2, where, delta, data9, val, op) {
+    function operand(self2, where, delta, data10, val, op) {
       op || (op = "$set");
       if (!delta[op]) delta[op] = {};
-      delta[op][data9.path] = val;
+      delta[op][data10.path] = val;
       if (self2.$__schema.options.versionKey === false) return;
-      if (shouldSkipVersioning(self2, data9.path)) return;
+      if (shouldSkipVersioning(self2, data10.path)) return;
       if (VERSION_ALL === (VERSION_ALL & self2.$__.version)) return;
       if (self2.$__schema.options.optimisticConcurrency === true || Array.isArray(self2.$__schema.options.optimisticConcurrency) || Array.isArray(self2.$__schema.options.optimisticConcurrency?.exclude)) {
         return;
@@ -70073,7 +70073,7 @@ var require_document2 = __commonJS({
           return;
       }
       if (op === "$push" || op === "$addToSet" || op === "$pullAll" || op === "$pull") {
-        if (/\.\d+\.|\.\d+$/.test(data9.path)) {
+        if (/\.\d+\.|\.\d+$/.test(data10.path)) {
           self2.$__.version = VERSION_ALL;
         } else {
           self2.$__.version |= VERSION_INC;
@@ -70082,19 +70082,19 @@ var require_document2 = __commonJS({
         self2.$__.version = VERSION_ALL;
       } else if (Array.isArray(val)) {
         self2.$__.version = VERSION_ALL;
-      } else if (/\.\d+\.|\.\d+$/.test(data9.path)) {
+      } else if (/\.\d+\.|\.\d+$/.test(data10.path)) {
         self2.$__.version |= VERSION_WHERE;
       }
     }
-    function handleAtomics(self2, where, delta, data9, value) {
-      if (delta.$set?.[data9.path]) {
+    function handleAtomics(self2, where, delta, data10, value) {
+      if (delta.$set?.[data10.path]) {
         return;
       }
       if (typeof value.getAtomics === "function") {
         value.getAtomics().forEach(function(atomic) {
           const op2 = atomic[0];
           const val2 = atomic[1];
-          operand(self2, where, delta, data9, val2, op2);
+          operand(self2, where, delta, data10, val2, op2);
         });
         return;
       }
@@ -70102,7 +70102,7 @@ var require_document2 = __commonJS({
         value.$__getAtomics().forEach(function(atomic) {
           const op2 = atomic[0];
           const val2 = atomic[1];
-          operand(self2, where, delta, data9, val2, op2);
+          operand(self2, where, delta, data10, val2, op2);
         });
         return;
       }
@@ -70117,7 +70117,7 @@ var require_document2 = __commonJS({
         } else if (value.valueOf) {
           value = value.valueOf();
         }
-        return operand(self2, where, delta, data9, value);
+        return operand(self2, where, delta, data10, value);
       }
       function iter(mem) {
         return utils.isMongooseObject(mem) ? mem.toObject({ depopulate: 1, _isNested: true }) : mem;
@@ -70135,7 +70135,7 @@ var require_document2 = __commonJS({
         if (op === "$addToSet") {
           val = { $each: val };
         }
-        operand(self2, where, delta, data9, val, op);
+        operand(self2, where, delta, data10, val, op);
       }
     }
     function shouldSkipVersioning(self2, path2) {
@@ -82104,9 +82104,9 @@ var require_connection3 = __commonJS({
         }
       });
       if (options.monitorCommands) {
-        client.on("commandStarted", (data9) => conn.emit("commandStarted", data9));
-        client.on("commandFailed", (data9) => conn.emit("commandFailed", data9));
-        client.on("commandSucceeded", (data9) => conn.emit("commandSucceeded", data9));
+        client.on("commandStarted", (data10) => conn.emit("commandStarted", data10));
+        client.on("commandFailed", (data10) => conn.emit("commandFailed", data10));
+        client.on("commandSucceeded", (data10) => conn.emit("commandSucceeded", data10));
       }
       conn.onOpen();
       for (const i in conn.collections) {
@@ -90160,7 +90160,7 @@ var require_getModelsMapForPopulate = __commonJS({
         let modelNamesInOrder = null;
         if (schema?.instance === "Embedded") {
           if (schema.options.ref) {
-            const data10 = {
+            const data11 = {
               localField: options.path + "._id",
               foreignField: "_id",
               justOne: true
@@ -90168,7 +90168,7 @@ var require_getModelsMapForPopulate = __commonJS({
             const res = _getModelNames(doc, schema, modelNameFromQuery, model);
             const unpopulatedValue = mpath.get(options.path, doc);
             const id2 = mpath.get("_id", unpopulatedValue);
-            addModelNamesToMap(model, map, available, res.modelNames, options, data10, id2, doc, schemaOptions, unpopulatedValue);
+            addModelNamesToMap(model, map, available, res.modelNames, options, data11, id2, doc, schemaOptions, unpopulatedValue);
           }
           continue;
         }
@@ -90220,7 +90220,7 @@ var require_getModelsMapForPopulate = __commonJS({
             continue;
           }
         }
-        const data9 = {};
+        const data10 = {};
         const localField = options.path;
         const foreignField = "_id";
         if ("justOne" in options && options.justOne !== void 0) {
@@ -90233,10 +90233,10 @@ var require_getModelsMapForPopulate = __commonJS({
         if (!modelNames) {
           continue;
         }
-        data9.isVirtual = false;
-        data9.justOne = justOne;
-        data9.localField = localField;
-        data9.foreignField = foreignField;
+        data10.isVirtual = false;
+        data10.justOne = justOne;
+        data10.localField = localField;
+        data10.foreignField = foreignField;
         const ret = _getLocalFieldValues(doc, localField, model, options, null, schema);
         const id = String(utils.getValue(foreignField, doc));
         options._docs[id] = Array.isArray(ret) ? ret.slice() : ret;
@@ -90246,16 +90246,16 @@ var require_getModelsMapForPopulate = __commonJS({
           match = match.call(doc, doc);
         }
         throwOn$where(match);
-        data9.match = match;
-        data9.hasMatchFunction = hasMatchFunction;
-        data9.isRefPath = isRefPath;
-        data9.modelNamesInOrder = modelNamesInOrder;
+        data10.match = match;
+        data10.hasMatchFunction = hasMatchFunction;
+        data10.isRefPath = isRefPath;
+        data10.modelNamesInOrder = modelNamesInOrder;
         if (isRefPath) {
           const normalizedRefPathForDiscriminators = typeof normalizedRefPath === "string" ? normalizedRefPath.replace(numericPathSegmentRE, "") : normalizedRefPath;
           const embeddedDiscriminatorModelNames = _findRefPathForDiscriminators(
             doc,
             modelSchema,
-            data9,
+            data10,
             options,
             normalizedRefPathForDiscriminators,
             ret
@@ -90263,7 +90263,7 @@ var require_getModelsMapForPopulate = __commonJS({
           modelNames = embeddedDiscriminatorModelNames || modelNames;
         }
         try {
-          addModelNamesToMap(model, map, available, modelNames, options, data9, ret, doc, schemaOptions);
+          addModelNamesToMap(model, map, available, modelNames, options, data10, ret, doc, schemaOptions);
         } catch (err) {
           return err;
         }
@@ -90450,7 +90450,7 @@ var require_getModelsMapForPopulate = __commonJS({
       const virtual = _virtualRes.virtual;
       for (const doc of docs) {
         let modelNames = null;
-        const data9 = {};
+        const data10 = {};
         let localField;
         const virtualPrefix = _virtualRes.nestedSchemaPath ? _virtualRes.nestedSchemaPath + "." : "";
         if (typeof options.localField === "string") {
@@ -90462,7 +90462,7 @@ var require_getModelsMapForPopulate = __commonJS({
         } else {
           localField = virtualPrefix + virtual.options.localField;
         }
-        data9.count = virtual.options.count;
+        data10.count = virtual.options.count;
         if (virtual.options.skip != null && !Object.hasOwn(options, "skip")) {
           options.skip = virtual.options.skip;
         }
@@ -90482,7 +90482,7 @@ var require_getModelsMapForPopulate = __commonJS({
         if (typeof foreignField === "function") {
           foreignField = foreignField.call(doc, doc);
         }
-        data9.isRefPath = false;
+        data10.isRefPath = false;
         let justOne = null;
         if ("justOne" in options && options.justOne !== void 0) {
           justOne = options.justOne;
@@ -90495,18 +90495,18 @@ var require_getModelsMapForPopulate = __commonJS({
         }
         if (virtual.options.refPath) {
           justOne = !!virtual.options.justOne;
-          data9.isRefPath = true;
+          data10.isRefPath = true;
         } else if (virtual.options.ref) {
           justOne = !!virtual.options.justOne;
         }
-        data9.isVirtual = true;
-        data9.virtual = virtual;
-        data9.justOne = justOne;
-        const baseMatch = get(data9, "virtual.options.match", null) || get(data9, "virtual.options.options.match", null);
+        data10.isVirtual = true;
+        data10.virtual = virtual;
+        data10.justOne = justOne;
+        const baseMatch = get(data10, "virtual.options.match", null) || get(data10, "virtual.options.options.match", null);
         let match = get(options, "match", null) || baseMatch;
         let hasMatchFunction = typeof match === "function";
         if (hasMatchFunction) {
-          match = match.call(doc, doc, data9.virtual);
+          match = match.call(doc, doc, data10.virtual);
         }
         if (Array.isArray(localField) && Array.isArray(foreignField) && localField.length === foreignField.length) {
           match = Object.assign({}, match);
@@ -90517,21 +90517,21 @@ var require_getModelsMapForPopulate = __commonJS({
           localField = localField[0];
           foreignField = foreignField[0];
         }
-        data9.localField = localField;
-        data9.foreignField = foreignField;
-        data9.match = match;
-        data9.hasMatchFunction = hasMatchFunction;
+        data10.localField = localField;
+        data10.foreignField = foreignField;
+        data10.match = match;
+        data10.hasMatchFunction = hasMatchFunction;
         throwOn$where(match);
         const ret = _getLocalFieldValues(doc, localField, model, options, virtual);
         try {
-          addModelNamesToMap(model, map, available, modelNames, options, data9, ret, doc);
+          addModelNamesToMap(model, map, available, modelNames, options, data10, ret, doc);
         } catch (err) {
           return err;
         }
       }
       return map;
     }
-    function addModelNamesToMap(model, map, available, modelNames, options, data9, ret, doc, schemaOptions, unpopulatedValue) {
+    function addModelNamesToMap(model, map, available, modelNames, options, data10, ret, doc, schemaOptions, unpopulatedValue) {
       const connection = options.connection ?? model.db;
       unpopulatedValue = unpopulatedValue === void 0 ? ret : unpopulatedValue;
       if (Array.isArray(unpopulatedValue)) {
@@ -90564,16 +90564,16 @@ var require_getModelsMapForPopulate = __commonJS({
           }
         }
         let ids = ret;
-        const modelNamesForRefPath = data9.modelNamesInOrder || modelNames;
-        if (data9.isRefPath && Array.isArray(ret) && ret.length === modelNamesForRefPath.length) {
+        const modelNamesForRefPath = data10.modelNamesInOrder || modelNames;
+        if (data10.isRefPath && Array.isArray(ret) && ret.length === modelNamesForRefPath.length) {
           ids = matchIdsToRefPaths(ret, modelNamesForRefPath, modelName);
         }
         if (!available[modelName]) {
           const currentOptions = {
             model: Model
           };
-          if (data9.isVirtual && get(data9.virtual, "options.options")) {
-            currentOptions.options = clone(data9.virtual.options.options);
+          if (data10.isVirtual && get(data10.virtual, "options.options")) {
+            currentOptions.options = clone(data10.virtual.options.options);
           } else if (schemaOptions != null) {
             currentOptions.options = Object.assign({}, schemaOptions);
           }
@@ -90583,31 +90583,31 @@ var require_getModelsMapForPopulate = __commonJS({
           available[modelName] = {
             model: Model,
             options: currentOptions,
-            match: data9.hasMatchFunction ? [data9.match] : data9.match,
+            match: data10.hasMatchFunction ? [data10.match] : data10.match,
             docs: [doc],
             ids: [ids],
             allIds: [ret],
             unpopulatedValues: [unpopulatedValue],
-            localField: /* @__PURE__ */ new Set([data9.localField]),
-            foreignField: /* @__PURE__ */ new Set([data9.foreignField]),
-            justOne: data9.justOne,
-            isVirtual: data9.isVirtual,
-            virtual: data9.virtual,
-            count: data9.count,
-            isRefPath: !!data9.isRefPath,
+            localField: /* @__PURE__ */ new Set([data10.localField]),
+            foreignField: /* @__PURE__ */ new Set([data10.foreignField]),
+            justOne: data10.justOne,
+            isVirtual: data10.isVirtual,
+            virtual: data10.virtual,
+            count: data10.count,
+            isRefPath: !!data10.isRefPath,
             [populateModelSymbol]: Model
           };
           map.push(available[modelName]);
         } else {
-          available[modelName].localField.add(data9.localField);
-          available[modelName].foreignField.add(data9.foreignField);
+          available[modelName].localField.add(data10.localField);
+          available[modelName].foreignField.add(data10.foreignField);
           available[modelName].docs.push(doc);
           available[modelName].ids.push(ids);
           available[modelName].allIds.push(ret);
           available[modelName].unpopulatedValues.push(unpopulatedValue);
-          available[modelName].isRefPath = available[modelName].isRefPath || !!data9.isRefPath;
-          if (data9.hasMatchFunction) {
-            available[modelName].match.push(data9.match);
+          available[modelName].isRefPath = available[modelName].isRefPath || !!data10.isRefPath;
+          if (data10.hasMatchFunction) {
+            available[modelName].match.push(data10.match);
           }
         }
       }
@@ -90686,8 +90686,8 @@ var require_getModelsMapForPopulate = __commonJS({
       }
       return val;
     }
-    function _findRefPathForDiscriminators(doc, modelSchema, data9, options, normalizedRefPath, ret) {
-      if (!data9.isRefPath || normalizedRefPath == null) {
+    function _findRefPathForDiscriminators(doc, modelSchema, data10, options, normalizedRefPath, ret) {
+      if (!data10.isRefPath || normalizedRefPath == null) {
         return;
       }
       const pieces = normalizedRefPath.split(".");
@@ -90711,7 +90711,7 @@ var require_getModelsMapForPopulate = __commonJS({
             }
             const _path = discriminatorSchema.path(remnant);
             if (_path == null || _path.options.refPath == null) {
-              const docValue = utils.getValue(data9.localField.substring(cur.length + 1), subdoc);
+              const docValue = utils.getValue(data10.localField.substring(cur.length + 1), subdoc);
               ret.forEach((v, i2) => {
                 if (v === docValue) {
                   ret[i2] = SkipPopulateValue(v);
@@ -94462,9 +94462,9 @@ var require_dist3 = __commonJS({
     }
     __name(isEquatable, "isEquatable");
     var GatewayRateLimitError = class _GatewayRateLimitError extends Error {
-      constructor(data9, payload) {
-        super(`Request with opcode ${data9.opcode} was rate limited. Retry after ${data9.retry_after} seconds.`);
-        this.data = data9;
+      constructor(data10, payload) {
+        super(`Request with opcode ${data10.opcode} was rate limited. Retry after ${data10.retry_after} seconds.`);
+        this.data = data10;
         this.payload = payload;
       }
       static {
@@ -95318,11 +95318,11 @@ var require_errors3 = __commonJS({
     };
     var kHTTPParserError = /* @__PURE__ */ Symbol.for("undici.error.UND_ERR_HTTP_PARSER");
     var HTTPParserError = class extends Error {
-      constructor(message, code, data9) {
+      constructor(message, code, data10) {
         super(message);
         this.name = "HTTPParserError";
         this.code = code ? `HPE_${code}` : void 0;
-        this.data = data9 ? data9.toString() : void 0;
+        this.data = data10 ? data10.toString() : void 0;
       }
       static [Symbol.hasInstance](instance) {
         return instance && instance[kHTTPParserError] === true;
@@ -95344,13 +95344,13 @@ var require_errors3 = __commonJS({
     };
     var kRequestRetryError = /* @__PURE__ */ Symbol.for("undici.error.UND_ERR_REQ_RETRY");
     var RequestRetryError = class extends UndiciError {
-      constructor(message, code, { headers, data: data9 }) {
+      constructor(message, code, { headers, data: data10 }) {
         super(message);
         this.name = "RequestRetryError";
         this.message = message || "Request retry error";
         this.code = "UND_ERR_REQ_RETRY";
         this.statusCode = code;
-        this.data = data9;
+        this.data = data10;
         this.headers = headers;
       }
       static [Symbol.hasInstance](instance) {
@@ -95360,13 +95360,13 @@ var require_errors3 = __commonJS({
     };
     var kResponseError = /* @__PURE__ */ Symbol.for("undici.error.UND_ERR_RESPONSE");
     var ResponseError = class extends UndiciError {
-      constructor(message, code, { headers, data: data9 }) {
+      constructor(message, code, { headers, data: data10 }) {
         super(message);
         this.name = "ResponseError";
         this.message = message || "Response error";
         this.code = "UND_ERR_RESPONSE";
         this.statusCode = code;
-        this.data = data9;
+        this.data = data10;
         this.headers = headers;
       }
       static [Symbol.hasInstance](instance) {
@@ -96811,8 +96811,8 @@ var require_dispatcher_base = __commonJS({
       close(callback) {
         if (callback === void 0) {
           return new Promise((resolve, reject) => {
-            this.close((err, data9) => {
-              return err ? reject(err) : resolve(data9);
+            this.close((err, data10) => {
+              return err ? reject(err) : resolve(data10);
             });
           });
         }
@@ -96851,11 +96851,11 @@ var require_dispatcher_base = __commonJS({
         }
         if (callback === void 0) {
           return new Promise((resolve, reject) => {
-            this.destroy(err, (err2, data9) => {
+            this.destroy(err, (err2, data10) => {
               return err2 ? (
                 /* istanbul ignore next: should never error */
                 reject(err2)
-              ) : resolve(data9);
+              ) : resolve(data10);
             });
           });
         }
@@ -98140,13 +98140,13 @@ var require_data_url = __commonJS({
       }
       return mimeType;
     }
-    function forgivingBase64(data9) {
-      data9 = data9.replace(ASCII_WHITESPACE_REPLACE_REGEX, "");
-      let dataLength = data9.length;
+    function forgivingBase64(data10) {
+      data10 = data10.replace(ASCII_WHITESPACE_REPLACE_REGEX, "");
+      let dataLength = data10.length;
       if (dataLength % 4 === 0) {
-        if (data9.charCodeAt(dataLength - 1) === 61) {
+        if (data10.charCodeAt(dataLength - 1) === 61) {
           --dataLength;
-          if (data9.charCodeAt(dataLength - 1) === 61) {
+          if (data10.charCodeAt(dataLength - 1) === 61) {
             --dataLength;
           }
         }
@@ -98154,10 +98154,10 @@ var require_data_url = __commonJS({
       if (dataLength % 4 === 1) {
         return "failure";
       }
-      if (/[^+/0-9A-Za-z]/.test(data9.length === dataLength ? data9 : data9.substring(0, dataLength))) {
+      if (/[^+/0-9A-Za-z]/.test(data10.length === dataLength ? data10 : data10.substring(0, dataLength))) {
         return "failure";
       }
-      const buffer = Buffer.from(data9, "base64");
+      const buffer = Buffer.from(data10, "base64");
       return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     }
     function collectAnHTTPQuotedString(input, position, extractValue) {
@@ -99335,26 +99335,26 @@ var require_util2 = __commonJS({
       return protocol === "http:" || protocol === "https:";
     }
     function simpleRangeHeaderValue(value, allowWhitespace) {
-      const data9 = value;
-      if (!data9.startsWith("bytes")) {
+      const data10 = value;
+      if (!data10.startsWith("bytes")) {
         return "failure";
       }
       const position = { position: 5 };
       if (allowWhitespace) {
         collectASequenceOfCodePoints(
           (char) => char === "	" || char === " ",
-          data9,
+          data10,
           position
         );
       }
-      if (data9.charCodeAt(position.position) !== 61) {
+      if (data10.charCodeAt(position.position) !== 61) {
         return "failure";
       }
       position.position++;
       if (allowWhitespace) {
         collectASequenceOfCodePoints(
           (char) => char === "	" || char === " ",
-          data9,
+          data10,
           position
         );
       }
@@ -99363,25 +99363,25 @@ var require_util2 = __commonJS({
           const code = char.charCodeAt(0);
           return code >= 48 && code <= 57;
         },
-        data9,
+        data10,
         position
       );
       const rangeStartValue = rangeStart.length ? Number(rangeStart) : null;
       if (allowWhitespace) {
         collectASequenceOfCodePoints(
           (char) => char === "	" || char === " ",
-          data9,
+          data10,
           position
         );
       }
-      if (data9.charCodeAt(position.position) !== 45) {
+      if (data10.charCodeAt(position.position) !== 45) {
         return "failure";
       }
       position.position++;
       if (allowWhitespace) {
         collectASequenceOfCodePoints(
           (char) => char === "	" || char === " ",
-          data9,
+          data10,
           position
         );
       }
@@ -99390,11 +99390,11 @@ var require_util2 = __commonJS({
           const code = char.charCodeAt(0);
           return code >= 48 && code <= 57;
         },
-        data9,
+        data10,
         position
       );
       const rangeEndValue = rangeEnd.length ? Number(rangeEnd) : null;
-      if (position.position < data9.length) {
+      if (position.position < data10.length) {
         return "failure";
       }
       if (rangeEndValue === null && rangeStartValue === null) {
@@ -100340,9 +100340,9 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       throwIfAborted(object[kState]);
       const promise = createDeferredPromise();
       const errorSteps = (error) => promise.reject(error);
-      const successSteps = (data9) => {
+      const successSteps = (data10) => {
         try {
-          promise.resolve(convertBytesToJSValue(data9));
+          promise.resolve(convertBytesToJSValue(data10));
         } catch (e) {
           errorSteps(e);
         }
@@ -100575,25 +100575,25 @@ var require_client_h1 = __commonJS({
           this.execute(chunk);
         }
       }
-      execute(data9) {
+      execute(data10) {
         assert(this.ptr != null);
         assert(currentParser == null);
         assert(!this.paused);
         const { socket, llhttp } = this;
-        if (data9.length > currentBufferSize) {
+        if (data10.length > currentBufferSize) {
           if (currentBufferPtr) {
             llhttp.free(currentBufferPtr);
           }
-          currentBufferSize = Math.ceil(data9.length / 4096) * 4096;
+          currentBufferSize = Math.ceil(data10.length / 4096) * 4096;
           currentBufferPtr = llhttp.malloc(currentBufferSize);
         }
-        new Uint8Array(llhttp.memory.buffer, currentBufferPtr, currentBufferSize).set(data9);
+        new Uint8Array(llhttp.memory.buffer, currentBufferPtr, currentBufferSize).set(data10);
         try {
           let ret;
           try {
-            currentBufferRef = data9;
+            currentBufferRef = data10;
             currentParser = this;
-            ret = llhttp.llhttp_execute(this.ptr, currentBufferPtr, data9.length);
+            ret = llhttp.llhttp_execute(this.ptr, currentBufferPtr, data10.length);
           } catch (err) {
             throw err;
           } finally {
@@ -100602,10 +100602,10 @@ var require_client_h1 = __commonJS({
           }
           const offset = llhttp.llhttp_get_error_pos(this.ptr) - currentBufferPtr;
           if (ret === constants.ERROR.PAUSED_UPGRADE) {
-            this.onUpgrade(data9.slice(offset));
+            this.onUpgrade(data10.slice(offset));
           } else if (ret === constants.ERROR.PAUSED) {
             this.paused = true;
-            socket.unshift(data9.slice(offset));
+            socket.unshift(data10.slice(offset));
           } else if (ret !== constants.ERROR.OK) {
             const ptr = llhttp.llhttp_get_error_reason(this.ptr);
             let message = "";
@@ -100613,7 +100613,7 @@ var require_client_h1 = __commonJS({
               const len = new Uint8Array(llhttp.memory.buffer, ptr).indexOf(0);
               message = "Response does not match the HTTP/1.1 protocol (" + Buffer.from(llhttp.memory.buffer, ptr, len).toString() + ")";
             }
-            throw new HTTPParserError(message, constants.ERROR[ret], data9.slice(offset));
+            throw new HTTPParserError(message, constants.ERROR[ret], data10.slice(offset));
           }
         } catch (err) {
           util2.destroy(socket, err);
@@ -102642,8 +102642,8 @@ var require_fixed_queue = __commonJS({
       isFull() {
         return (this.top + 1 & kMask) === this.bottom;
       }
-      push(data9) {
-        this.list[this.top] = data9;
+      push(data10) {
+        this.list[this.top] = data10;
         this.top = this.top + 1 & kMask;
       }
       shift() {
@@ -102662,11 +102662,11 @@ var require_fixed_queue = __commonJS({
       isEmpty() {
         return this.head.isEmpty();
       }
-      push(data9) {
+      push(data10) {
         if (this.head.isFull()) {
           this.head = this.head.next = new FixedCircularBuffer();
         }
-        this.head.push(data9);
+        this.head.push(data10);
       }
       shift() {
         const tail = this.tail;
@@ -103248,14 +103248,14 @@ var require_proxy_agent = __commonJS({
       }
       [kDispatch](opts, handler) {
         const onHeaders = handler.onHeaders;
-        handler.onHeaders = function(statusCode, data9, resume) {
+        handler.onHeaders = function(statusCode, data10, resume) {
           if (statusCode === 407) {
             if (typeof handler.onError === "function") {
               handler.onError(new InvalidArgumentError("Proxy Authentication Required (407)"));
             }
             return;
           }
-          if (onHeaders) onHeaders.call(this, statusCode, data9, resume);
+          if (onHeaders) onHeaders.call(this, statusCode, data10, resume);
         };
         const {
           origin,
@@ -104411,8 +104411,8 @@ var require_api_request = __commonJS({
     function request(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          request.call(this, opts, (err, data9) => {
-            return err ? reject(err) : resolve(data9);
+          request.call(this, opts, (err, data10) => {
+            return err ? reject(err) : resolve(data10);
           });
         });
       }
@@ -104636,8 +104636,8 @@ var require_api_stream = __commonJS({
     function stream(opts, factory, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          stream.call(this, opts, factory, (err, data9) => {
-            return err ? reject(err) : resolve(data9);
+          stream.call(this, opts, factory, (err, data10) => {
+            return err ? reject(err) : resolve(data10);
           });
         });
       }
@@ -104923,8 +104923,8 @@ var require_api_upgrade = __commonJS({
     function upgrade(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          upgrade.call(this, opts, (err, data9) => {
-            return err ? reject(err) : resolve(data9);
+          upgrade.call(this, opts, (err, data10) => {
+            return err ? reject(err) : resolve(data10);
           });
         });
       }
@@ -105017,8 +105017,8 @@ var require_api_connect = __commonJS({
     function connect(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          connect.call(this, opts, (err, data9) => {
-            return err ? reject(err) : resolve(data9);
+          connect.call(this, opts, (err, data10) => {
+            return err ? reject(err) : resolve(data10);
           });
         });
       }
@@ -105202,17 +105202,17 @@ var require_mock_utils = __commonJS({
       const headersMatch = matchHeaders(mockDispatch2, headers);
       return pathMatch && methodMatch && bodyMatch && headersMatch;
     }
-    function getResponseData(data9) {
-      if (Buffer.isBuffer(data9)) {
-        return data9;
-      } else if (data9 instanceof Uint8Array) {
-        return data9;
-      } else if (data9 instanceof ArrayBuffer) {
-        return data9;
-      } else if (typeof data9 === "object") {
-        return JSON.stringify(data9);
+    function getResponseData(data10) {
+      if (Buffer.isBuffer(data10)) {
+        return data10;
+      } else if (data10 instanceof Uint8Array) {
+        return data10;
+      } else if (data10 instanceof ArrayBuffer) {
+        return data10;
+      } else if (typeof data10 === "object") {
+        return JSON.stringify(data10);
       } else {
-        return data9.toString();
+        return data10.toString();
       }
     }
     function getMockDispatch(mockDispatches, key) {
@@ -105237,9 +105237,9 @@ var require_mock_utils = __commonJS({
       }
       return matchedMockDispatches[0];
     }
-    function addMockDispatch(mockDispatches, key, data9) {
+    function addMockDispatch(mockDispatches, key, data10) {
       const baseData = { timesInvoked: 0, times: 1, persist: false, consumed: false };
-      const replyData = typeof data9 === "function" ? { callback: data9 } : { ...data9 };
+      const replyData = typeof data10 === "function" ? { callback: data10 } : { ...data10 };
       const newMockDispatch = { ...baseData, ...key, pending: true, data: { error: null, ...replyData } };
       mockDispatches.push(newMockDispatch);
       return newMockDispatch;
@@ -105265,12 +105265,12 @@ var require_mock_utils = __commonJS({
         query
       };
     }
-    function generateKeyValues(data9) {
-      const keys = Object.keys(data9);
+    function generateKeyValues(data10) {
+      const keys = Object.keys(data10);
       const result = [];
       for (let i = 0; i < keys.length; ++i) {
         const key = keys[i];
-        const value = data9[key];
+        const value = data10[key];
         const name = Buffer.from(`${key}`);
         if (Array.isArray(value)) {
           for (let j = 0; j < value.length; ++j) {
@@ -105287,8 +105287,8 @@ var require_mock_utils = __commonJS({
     }
     async function getResponse(body) {
       const buffers = [];
-      for await (const data9 of body) {
-        buffers.push(data9);
+      for await (const data10 of body) {
+        buffers.push(data10);
       }
       return Buffer.concat(buffers).toString("utf8");
     }
@@ -105299,7 +105299,7 @@ var require_mock_utils = __commonJS({
       if (mockDispatch2.data.callback) {
         mockDispatch2.data = { ...mockDispatch2.data, ...mockDispatch2.data.callback(opts) };
       }
-      const { data: { statusCode, data: data9, headers, trailers, error }, delay, persist } = mockDispatch2;
+      const { data: { statusCode, data: data10, headers, trailers, error }, delay, persist } = mockDispatch2;
       const { timesInvoked, times } = mockDispatch2;
       mockDispatch2.consumed = !persist && timesInvoked >= times;
       mockDispatch2.pending = timesInvoked < times;
@@ -105315,7 +105315,7 @@ var require_mock_utils = __commonJS({
       } else {
         handleReply(this[kDispatches]);
       }
-      function handleReply(mockDispatches, _data = data9) {
+      function handleReply(mockDispatches, _data = data10) {
         const optsHeaders = Array.isArray(opts.headers) ? buildHeadersFromArray(opts.headers) : opts.headers;
         const body = typeof _data === "function" ? _data({ ...opts, headers: optsHeaders }) : _data;
         if (isPromise(body)) {
@@ -105473,12 +105473,12 @@ var require_mock_interceptor = __commonJS({
         this[kDefaultTrailers] = {};
         this[kContentLength] = false;
       }
-      createMockScopeDispatchData({ statusCode, data: data9, responseOptions }) {
-        const responseData = getResponseData(data9);
+      createMockScopeDispatchData({ statusCode, data: data10, responseOptions }) {
+        const responseData = getResponseData(data10);
         const contentLength = this[kContentLength] ? { "content-length": responseData.length } : {};
         const headers = { ...this[kDefaultHeaders], ...contentLength, ...responseOptions.headers };
         const trailers = { ...this[kDefaultTrailers], ...responseOptions.trailers };
-        return { statusCode, data: data9, headers, trailers };
+        return { statusCode, data: data10, headers, trailers };
       }
       validateReplyParameters(replyParameters) {
         if (typeof replyParameters.statusCode === "undefined") {
@@ -106858,13 +106858,13 @@ var require_response2 = __commonJS({
         return responseObject;
       }
       // https://fetch.spec.whatwg.org/#dom-response-json
-      static json(data9, init = {}) {
+      static json(data10, init = {}) {
         webidl.argumentLengthCheck(arguments, 1, "Response.json");
         if (init !== null) {
           init = webidl.converters.ResponseInit(init);
         }
         const bytes = textEncoder.encode(
-          serializeJavascriptValueToJSONString(data9)
+          serializeJavascriptValueToJSONString(data10)
         );
         const body = extractBody(bytes);
         const responseObject = fromInnerResponse(makeResponse({}), "response");
@@ -111030,13 +111030,13 @@ var require_events2 = __commonJS({
         }
         return this.#eventInit.ports;
       }
-      initMessageEvent(type, bubbles = false, cancelable = false, data9 = null, origin = "", lastEventId = "", source = null, ports = []) {
+      initMessageEvent(type, bubbles = false, cancelable = false, data10 = null, origin = "", lastEventId = "", source = null, ports = []) {
         webidl.brandCheck(this, _MessageEvent);
         webidl.argumentLengthCheck(arguments, 1, "MessageEvent.initMessageEvent");
         return new _MessageEvent(type, {
           bubbles,
           cancelable,
-          data: data9,
+          data: data10,
           origin,
           lastEventId,
           source,
@@ -111348,23 +111348,23 @@ var require_util7 = __commonJS({
       const event = eventFactory(e, eventInitDict);
       target.dispatchEvent(event);
     }
-    function websocketMessageReceived(ws, type, data9) {
+    function websocketMessageReceived(ws, type, data10) {
       if (ws[kReadyState] !== states.OPEN) {
         return;
       }
       let dataForEvent;
       if (type === opcodes.TEXT) {
         try {
-          dataForEvent = utf8Decode(data9);
+          dataForEvent = utf8Decode(data10);
         } catch {
           failWebsocketConnection(ws, "Received invalid UTF-8 in text frame.");
           return;
         }
       } else if (type === opcodes.BINARY) {
         if (ws[kBinaryType] === "blob") {
-          dataForEvent = new Blob([data9]);
+          dataForEvent = new Blob([data10]);
         } else {
-          dataForEvent = toArrayBuffer(data9);
+          dataForEvent = toArrayBuffer(data10);
         }
       }
       fireEvent("message", ws, createFastMessageEvent, {
@@ -111529,8 +111529,8 @@ var require_frame = __commonJS({
       /**
        * @param {Buffer|undefined} data
        */
-      constructor(data9) {
-        this.frameData = data9;
+      constructor(data10) {
+        this.frameData = data10;
       }
       createFrame(opcode) {
         const frameData = this.frameData;
@@ -111806,11 +111806,11 @@ var require_permessage_deflate = __commonJS({
           }
           this.#inflate[kBuffer] = [];
           this.#inflate[kLength] = 0;
-          this.#inflate.on("data", (data9) => {
+          this.#inflate.on("data", (data10) => {
             if (this.#aborted) {
               return;
             }
-            this.#inflate[kLength] += data9.length;
+            this.#inflate[kLength] += data10.length;
             if (this.#inflate[kLength] > kDefaultMaxDecompressedSize) {
               this.#aborted = true;
               this.#inflate.removeAllListeners();
@@ -111823,7 +111823,7 @@ var require_permessage_deflate = __commonJS({
               }
               return;
             }
-            this.#inflate[kBuffer].push(data9);
+            this.#inflate[kBuffer].push(data10);
           });
           this.#inflate.on("error", (err) => {
             this.#inflate = null;
@@ -112014,12 +112014,12 @@ var require_receiver = __commonJS({
                 }
                 this.#state = parserStates.INFO;
               } else {
-                this.#extensions.get("permessage-deflate").decompress(body, this.#info.fin, (error, data9) => {
+                this.#extensions.get("permessage-deflate").decompress(body, this.#info.fin, (error, data10) => {
                   if (error) {
                     failWebsocketConnection(this.ws, error.message);
                     return;
                   }
-                  this.#fragments.push(data9);
+                  this.#fragments.push(data10);
                   if (!this.#info.fin) {
                     this.#state = parserStates.INFO;
                     this.#loop = true;
@@ -112074,16 +112074,16 @@ var require_receiver = __commonJS({
         this.#byteOffset -= n;
         return buffer;
       }
-      parseCloseBody(data9) {
-        assert(data9.length !== 1);
+      parseCloseBody(data10) {
+        assert(data10.length !== 1);
         let code;
-        if (data9.length >= 2) {
-          code = data9.readUInt16BE(0);
+        if (data10.length >= 2) {
+          code = data10.readUInt16BE(0);
         }
         if (code !== void 0 && !isValidStatusCode(code)) {
           return { code: 1002, reason: "Invalid status code", error: true };
         }
-        let reason = data9.subarray(2);
+        let reason = data10.subarray(2);
         if (reason[0] === 239 && reason[1] === 187 && reason[2] === 191) {
           reason = reason.subarray(3);
         }
@@ -112224,18 +112224,18 @@ var require_sender = __commonJS({
         this.#running = false;
       }
     };
-    function createFrame(data9, hint) {
-      return new WebsocketFrameSend(toBuffer(data9, hint)).createFrame(hint === sendHints.string ? opcodes.TEXT : opcodes.BINARY);
+    function createFrame(data10, hint) {
+      return new WebsocketFrameSend(toBuffer(data10, hint)).createFrame(hint === sendHints.string ? opcodes.TEXT : opcodes.BINARY);
     }
-    function toBuffer(data9, hint) {
+    function toBuffer(data10, hint) {
       switch (hint) {
         case sendHints.string:
-          return Buffer.from(data9);
+          return Buffer.from(data10);
         case sendHints.arrayBuffer:
         case sendHints.blob:
-          return new FastBuffer(data9);
+          return new FastBuffer(data10);
         case sendHints.typedArray:
-          return new FastBuffer(data9.buffer, data9.byteOffset, data9.byteLength);
+          return new FastBuffer(data10.buffer, data10.byteOffset, data10.byteLength);
       }
     }
     module2.exports = { SendQueue };
@@ -112376,37 +112376,37 @@ var require_websocket = __commonJS({
        * @see https://websockets.spec.whatwg.org/#dom-websocket-send
        * @param {NodeJS.TypedArray|ArrayBuffer|Blob|string} data
        */
-      send(data9) {
+      send(data10) {
         webidl.brandCheck(this, _WebSocket);
         const prefix = "WebSocket.send";
         webidl.argumentLengthCheck(arguments, 1, prefix);
-        data9 = webidl.converters.WebSocketSendData(data9, prefix, "data");
+        data10 = webidl.converters.WebSocketSendData(data10, prefix, "data");
         if (isConnecting(this)) {
           throw new DOMException("Sent before connected.", "InvalidStateError");
         }
         if (!isEstablished(this) || isClosing(this)) {
           return;
         }
-        if (typeof data9 === "string") {
-          const length = Buffer.byteLength(data9);
+        if (typeof data10 === "string") {
+          const length = Buffer.byteLength(data10);
           this.#bufferedAmount += length;
-          this.#sendQueue.add(data9, () => {
+          this.#sendQueue.add(data10, () => {
             this.#bufferedAmount -= length;
           }, sendHints.string);
-        } else if (types.isArrayBuffer(data9)) {
-          this.#bufferedAmount += data9.byteLength;
-          this.#sendQueue.add(data9, () => {
-            this.#bufferedAmount -= data9.byteLength;
+        } else if (types.isArrayBuffer(data10)) {
+          this.#bufferedAmount += data10.byteLength;
+          this.#sendQueue.add(data10, () => {
+            this.#bufferedAmount -= data10.byteLength;
           }, sendHints.arrayBuffer);
-        } else if (ArrayBuffer.isView(data9)) {
-          this.#bufferedAmount += data9.byteLength;
-          this.#sendQueue.add(data9, () => {
-            this.#bufferedAmount -= data9.byteLength;
+        } else if (ArrayBuffer.isView(data10)) {
+          this.#bufferedAmount += data10.byteLength;
+          this.#sendQueue.add(data10, () => {
+            this.#bufferedAmount -= data10.byteLength;
           }, sendHints.typedArray);
-        } else if (isBlobLike(data9)) {
-          this.#bufferedAmount += data9.size;
-          this.#sendQueue.add(data9, () => {
-            this.#bufferedAmount -= data9.size;
+        } else if (isBlobLike(data10)) {
+          this.#bufferedAmount += data10.size;
+          this.#sendQueue.add(data10, () => {
+            this.#bufferedAmount -= data10.size;
           }, sendHints.blob);
         }
       }
@@ -122873,8 +122873,8 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           if (status === 401 && requestData.auth) {
             manager.setToken(null);
           }
-          const data9 = await parseResponse(res);
-          throw new DiscordAPIError(data9, "code" in data9 ? data9.code : data9.error, status, method, url, requestData);
+          const data10 = await parseResponse(res);
+          throw new DiscordAPIError(data10, "code" in data10 ? data10.code : data10.error, status, method, url, requestData);
         }
         return res;
       }
@@ -123763,7 +123763,7 @@ var require_Messages = __commonJS({
       [DjsErrorCodes.ApplicationCommandPermissionsTokenMissing]: "Editing application command permissions requires an OAuth2 bearer token, but none was provided.",
       [DjsErrorCodes.WSCloseRequested]: "WebSocket closed due to user request.",
       [DjsErrorCodes.WSConnectionExists]: "There is already an existing WebSocket connection.",
-      [DjsErrorCodes.WSNotOpen]: (data9 = "data") => `WebSocket not open to send ${data9}`,
+      [DjsErrorCodes.WSNotOpen]: (data10 = "data") => `WebSocket not open to send ${data10}`,
       [DjsErrorCodes.ManagerDestroyed]: "Manager was destroyed.",
       [DjsErrorCodes.BitFieldInvalid]: (bit) => `Invalid bitfield flag or number: ${bit}.`,
       [DjsErrorCodes.ShardingInvalid]: "Invalid shard settings were provided.",
@@ -125008,60 +125008,60 @@ var require_Attachment = __commonJS({
     var AttachmentFlagsBitField = require_AttachmentFlagsBitField();
     var { basename, flatten } = require_Util();
     var Attachment = class {
-      constructor(data9) {
-        this.attachment = data9.url;
-        this.name = data9.filename;
-        this._patch(data9);
+      constructor(data10) {
+        this.attachment = data10.url;
+        this.name = data10.filename;
+        this._patch(data10);
       }
-      _patch(data9) {
-        this.id = data9.id;
-        if ("size" in data9) {
-          this.size = data9.size;
+      _patch(data10) {
+        this.id = data10.id;
+        if ("size" in data10) {
+          this.size = data10.size;
         }
-        if ("url" in data9) {
-          this.url = data9.url;
+        if ("url" in data10) {
+          this.url = data10.url;
         }
-        if ("proxy_url" in data9) {
-          this.proxyURL = data9.proxy_url;
+        if ("proxy_url" in data10) {
+          this.proxyURL = data10.proxy_url;
         }
-        if ("height" in data9) {
-          this.height = data9.height;
+        if ("height" in data10) {
+          this.height = data10.height;
         } else {
           this.height ??= null;
         }
-        if ("width" in data9) {
-          this.width = data9.width;
+        if ("width" in data10) {
+          this.width = data10.width;
         } else {
           this.width ??= null;
         }
-        if ("content_type" in data9) {
-          this.contentType = data9.content_type;
+        if ("content_type" in data10) {
+          this.contentType = data10.content_type;
         } else {
           this.contentType ??= null;
         }
-        if ("description" in data9) {
-          this.description = data9.description;
+        if ("description" in data10) {
+          this.description = data10.description;
         } else {
           this.description ??= null;
         }
-        this.ephemeral = data9.ephemeral ?? false;
-        if ("duration_secs" in data9) {
-          this.duration = data9.duration_secs;
+        this.ephemeral = data10.ephemeral ?? false;
+        if ("duration_secs" in data10) {
+          this.duration = data10.duration_secs;
         } else {
           this.duration ??= null;
         }
-        if ("waveform" in data9) {
-          this.waveform = data9.waveform;
+        if ("waveform" in data10) {
+          this.waveform = data10.waveform;
         } else {
           this.waveform ??= null;
         }
-        if ("flags" in data9) {
-          this.flags = new AttachmentFlagsBitField(data9.flags).freeze();
+        if ("flags" in data10) {
+          this.flags = new AttachmentFlagsBitField(data10.flags).freeze();
         } else {
           this.flags ??= new AttachmentFlagsBitField().freeze();
         }
-        if ("title" in data9) {
-          this.title = data9.title;
+        if ("title" in data10) {
+          this.title = data10.title;
         } else {
           this.title ??= null;
         }
@@ -125734,12 +125734,12 @@ var require_Base = __commonJS({
       _clone() {
         return Object.assign(Object.create(this), this);
       }
-      _patch(data9) {
-        return data9;
+      _patch(data10) {
+        return data10;
       }
-      _update(data9) {
+      _update(data10) {
         const clone = this._clone();
-        this._patch(data9);
+        this._patch(data10);
         return clone;
       }
       toJSON(...props) {
@@ -125877,18 +125877,18 @@ var require_BaseChannel = __commonJS({
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
     var { ThreadChannelTypes } = require_Constants();
     var BaseChannel = class extends Base {
-      constructor(client, data9, immediatePatch = true) {
+      constructor(client, data10, immediatePatch = true) {
         super(client);
-        this.type = data9.type;
-        if (data9 && immediatePatch) this._patch(data9);
+        this.type = data10.type;
+        if (data10 && immediatePatch) this._patch(data10);
       }
-      _patch(data9) {
-        if ("flags" in data9) {
-          this.flags = new ChannelFlagsBitField(data9.flags).freeze();
+      _patch(data10) {
+        if ("flags" in data10) {
+          this.flags = new ChannelFlagsBitField(data10.flags).freeze();
         } else {
           this.flags ??= new ChannelFlagsBitField().freeze();
         }
-        this.id = data9.id;
+        this.id = data10.id;
       }
       /**
        * The timestamp the channel was created at
@@ -126102,18 +126102,18 @@ var require_CachedManager = __commonJS({
       get cache() {
         return this._cache;
       }
-      _add(data9, cache = true, { id, extras = [] } = {}) {
-        const existing = this.cache.get(id ?? data9.id);
+      _add(data10, cache = true, { id, extras = [] } = {}) {
+        const existing = this.cache.get(id ?? data10.id);
         if (existing) {
           if (cache) {
-            existing._patch(data9);
+            existing._patch(data10);
             return existing;
           }
           const clone = existing._clone();
-          clone._patch(data9);
+          clone._patch(data10);
           return clone;
         }
-        const entry = this.holds ? new this.holds(this.client, data9, ...extras) : data9;
+        const entry = this.holds ? new this.holds(this.client, data10, ...extras) : data10;
         if (cache) this.cache.set(id ?? entry.id, entry);
         return entry;
       }
@@ -126242,68 +126242,68 @@ var require_Role = __commonJS({
     var PermissionsBitField2 = require_PermissionsBitField();
     var RoleFlagsBitField = require_RoleFlagsBitField();
     var Role = class extends Base {
-      constructor(client, data9, guild) {
+      constructor(client, data10, guild) {
         super(client);
         this.guild = guild;
         this.icon = null;
         this.unicodeEmoji = null;
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        this.id = data9.id;
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        this.id = data10.id;
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("color" in data9) {
-          this.color = data9.color;
+        if ("color" in data10) {
+          this.color = data10.color;
         }
-        if ("colors" in data9) {
+        if ("colors" in data10) {
           this.colors = {
-            primaryColor: data9.colors.primary_color,
-            secondaryColor: data9.colors.secondary_color,
-            tertiaryColor: data9.colors.tertiary_color
+            primaryColor: data10.colors.primary_color,
+            secondaryColor: data10.colors.secondary_color,
+            tertiaryColor: data10.colors.tertiary_color
           };
         }
-        if ("hoist" in data9) {
-          this.hoist = data9.hoist;
+        if ("hoist" in data10) {
+          this.hoist = data10.hoist;
         }
-        if ("position" in data9) {
-          this.rawPosition = data9.position;
+        if ("position" in data10) {
+          this.rawPosition = data10.position;
         }
-        if ("permissions" in data9) {
-          this.permissions = new PermissionsBitField2(BigInt(data9.permissions)).freeze();
+        if ("permissions" in data10) {
+          this.permissions = new PermissionsBitField2(BigInt(data10.permissions)).freeze();
         }
-        if ("managed" in data9) {
-          this.managed = data9.managed;
+        if ("managed" in data10) {
+          this.managed = data10.managed;
         }
-        if ("mentionable" in data9) {
-          this.mentionable = data9.mentionable;
+        if ("mentionable" in data10) {
+          this.mentionable = data10.mentionable;
         }
-        if ("icon" in data9) this.icon = data9.icon;
-        if ("unicode_emoji" in data9) this.unicodeEmoji = data9.unicode_emoji;
-        if ("flags" in data9) {
-          this.flags = new RoleFlagsBitField(data9.flags).freeze();
+        if ("icon" in data10) this.icon = data10.icon;
+        if ("unicode_emoji" in data10) this.unicodeEmoji = data10.unicode_emoji;
+        if ("flags" in data10) {
+          this.flags = new RoleFlagsBitField(data10.flags).freeze();
         } else {
           this.flags ??= new RoleFlagsBitField().freeze();
         }
-        this.tags = data9.tags ? {} : null;
-        if (data9.tags) {
-          if ("bot_id" in data9.tags) {
-            this.tags.botId = data9.tags.bot_id;
+        this.tags = data10.tags ? {} : null;
+        if (data10.tags) {
+          if ("bot_id" in data10.tags) {
+            this.tags.botId = data10.tags.bot_id;
           }
-          if ("integration_id" in data9.tags) {
-            this.tags.integrationId = data9.tags.integration_id;
+          if ("integration_id" in data10.tags) {
+            this.tags.integrationId = data10.tags.integration_id;
           }
-          if ("premium_subscriber" in data9.tags) {
+          if ("premium_subscriber" in data10.tags) {
             this.tags.premiumSubscriberRole = true;
           }
-          if ("subscription_listing_id" in data9.tags) {
-            this.tags.subscriptionListingId = data9.tags.subscription_listing_id;
+          if ("subscription_listing_id" in data10.tags) {
+            this.tags.subscriptionListingId = data10.tags.subscription_listing_id;
           }
-          if ("available_for_purchase" in data9.tags) {
+          if ("available_for_purchase" in data10.tags) {
             this.tags.availableForPurchase = true;
           }
-          if ("guild_connections" in data9.tags) {
+          if ("guild_connections" in data10.tags) {
             this.tags.guildConnections = true;
           }
         }
@@ -126622,21 +126622,21 @@ var require_PermissionOverwrites = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var PermissionsBitField2 = require_PermissionsBitField();
     var PermissionOverwrites = class extends Base {
-      constructor(client, data9, channel) {
+      constructor(client, data10, channel) {
         super(client);
         Object.defineProperty(this, "channel", { value: channel });
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        this.id = data9.id;
-        if ("type" in data9) {
-          this.type = data9.type;
+      _patch(data10) {
+        this.id = data10.id;
+        if ("type" in data10) {
+          this.type = data10.type;
         }
-        if ("deny" in data9) {
-          this.deny = new PermissionsBitField2(BigInt(data9.deny)).freeze();
+        if ("deny" in data10) {
+          this.deny = new PermissionsBitField2(BigInt(data10.deny)).freeze();
         }
-        if ("allow" in data9) {
-          this.allow = new PermissionsBitField2(BigInt(data9.allow)).freeze();
+        if ("allow" in data10) {
+          this.allow = new PermissionsBitField2(BigInt(data10.allow)).freeze();
         }
       }
       /**
@@ -126801,8 +126801,8 @@ var require_PermissionOverwriteManager = __commonJS({
        * @type {Collection<Snowflake, PermissionOverwrites>}
        * @name PermissionOverwriteManager#cache
        */
-      _add(data9, cache) {
-        return super._add(data9, cache, { extras: [this.channel] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { extras: [this.channel] });
       }
       /**
        * Replaces the permission overwrites in this channel.
@@ -126927,32 +126927,32 @@ var require_GuildChannel = __commonJS({
     var PermissionsBitField2 = require_PermissionsBitField();
     var { getSortableGroupTypes } = require_Util();
     var GuildChannel = class extends BaseChannel {
-      constructor(guild, data9, client, immediatePatch = true) {
-        super(client, data9, false);
+      constructor(guild, data10, client, immediatePatch = true) {
+        super(client, data10, false);
         this.guild = guild;
-        this.guildId = guild?.id ?? data9.guild_id;
+        this.guildId = guild?.id ?? data10.guild_id;
         this.permissionOverwrites = new PermissionOverwriteManager(this);
-        if (data9 && immediatePatch) this._patch(data9);
+        if (data10 && immediatePatch) this._patch(data10);
       }
-      _patch(data9) {
-        super._patch(data9);
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        super._patch(data10);
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("position" in data9) {
-          this.rawPosition = data9.position;
+        if ("position" in data10) {
+          this.rawPosition = data10.position;
         }
-        if ("guild_id" in data9) {
-          this.guildId = data9.guild_id;
+        if ("guild_id" in data10) {
+          this.guildId = data10.guild_id;
         }
-        if ("parent_id" in data9) {
-          this.parentId = data9.parent_id;
+        if ("parent_id" in data10) {
+          this.parentId = data10.parent_id;
         } else {
           this.parentId ??= null;
         }
-        if ("permission_overwrites" in data9) {
+        if ("permission_overwrites" in data10) {
           this.permissionOverwrites.cache.clear();
-          for (const overwrite of data9.permission_overwrites) {
+          for (const overwrite of data10.permission_overwrites) {
             this.permissionOverwrites._add(overwrite);
           }
         }
@@ -127294,14 +127294,14 @@ var require_SKU = __commonJS({
     var Base = require_Base();
     var { SKUFlagsBitField } = require_SKUFlagsBitField();
     var SKU = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.id = data9.id;
-        this.type = data9.type;
-        this.applicationId = data9.application_id;
-        this.name = data9.name;
-        this.slug = data9.slug;
-        this.flags = new SKUFlagsBitField(data9.flags).freeze();
+        this.id = data10.id;
+        this.type = data10.type;
+        this.applicationId = data10.application_id;
+        this.name = data10.name;
+        this.slug = data10.slug;
+        this.flags = new SKUFlagsBitField(data10.flags).freeze();
       }
     };
     exports2.SKU = SKU;
@@ -127416,10 +127416,10 @@ var require_Util = __commonJS({
       }
       return array.indexOf(element);
     }
-    function verifyString(data9, error = Error, errorMessage = `Expected a string, got ${data9} instead.`, allowEmpty = true) {
-      if (typeof data9 !== "string") throw new error(errorMessage);
-      if (!allowEmpty && data9.length === 0) throw new error(errorMessage);
-      return data9;
+    function verifyString(data10, error = Error, errorMessage = `Expected a string, got ${data10} instead.`, allowEmpty = true) {
+      if (typeof data10 !== "string") throw new error(errorMessage);
+      if (!allowEmpty && data10.length === 0) throw new error(errorMessage);
+      return data10;
     }
     function resolveColor(color) {
       let resolvedColor;
@@ -127645,12 +127645,12 @@ var require_Transformers = __commonJS({
         by_month_day: recurrenceRule.byMonthDay
       };
     }
-    function _transformAPIIncidentsData(data9) {
+    function _transformAPIIncidentsData(data10) {
       return {
-        invitesDisabledUntil: data9.invites_disabled_until ? new Date(data9.invites_disabled_until) : null,
-        dmsDisabledUntil: data9.dms_disabled_until ? new Date(data9.dms_disabled_until) : null,
-        dmSpamDetectedAt: data9.dm_spam_detected_at ? new Date(data9.dm_spam_detected_at) : null,
-        raidDetectedAt: data9.raid_detected_at ? new Date(data9.raid_detected_at) : null
+        invitesDisabledUntil: data10.invites_disabled_until ? new Date(data10.invites_disabled_until) : null,
+        dmsDisabledUntil: data10.dms_disabled_until ? new Date(data10.dms_disabled_until) : null,
+        dmSpamDetectedAt: data10.dm_spam_detected_at ? new Date(data10.dm_spam_detected_at) : null,
+        raidDetectedAt: data10.raid_detected_at ? new Date(data10.raid_detected_at) : null
       };
     }
     function _transformCollectibles(collectibles) {
@@ -128727,77 +128727,77 @@ var require_GuildScheduledEvent = __commonJS({
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var GuildScheduledEvent = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.id = data9.id;
-        this.guildId = data9.guild_id;
-        this._patch(data9);
+        this.id = data10.id;
+        this.guildId = data10.guild_id;
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("channel_id" in data9) {
-          this.channelId = data9.channel_id;
+      _patch(data10) {
+        if ("channel_id" in data10) {
+          this.channelId = data10.channel_id;
         } else {
           this.channelId ??= null;
         }
-        if ("creator_id" in data9) {
-          this.creatorId = data9.creator_id;
+        if ("creator_id" in data10) {
+          this.creatorId = data10.creator_id;
         } else {
           this.creatorId ??= null;
         }
-        if ("name" in data9) {
-          this.name = data9.name;
+        if ("name" in data10) {
+          this.name = data10.name;
         } else {
           this.name ??= null;
         }
-        if ("description" in data9) {
-          this.description = data9.description;
+        if ("description" in data10) {
+          this.description = data10.description;
         } else {
           this.description ??= null;
         }
-        if ("scheduled_start_time" in data9) {
-          this.scheduledStartTimestamp = Date.parse(data9.scheduled_start_time);
+        if ("scheduled_start_time" in data10) {
+          this.scheduledStartTimestamp = Date.parse(data10.scheduled_start_time);
         } else {
           this.scheduledStartTimestamp ??= null;
         }
-        if ("scheduled_end_time" in data9) {
-          this.scheduledEndTimestamp = data9.scheduled_end_time ? Date.parse(data9.scheduled_end_time) : null;
+        if ("scheduled_end_time" in data10) {
+          this.scheduledEndTimestamp = data10.scheduled_end_time ? Date.parse(data10.scheduled_end_time) : null;
         } else {
           this.scheduledEndTimestamp ??= null;
         }
-        if ("privacy_level" in data9) {
-          this.privacyLevel = data9.privacy_level;
+        if ("privacy_level" in data10) {
+          this.privacyLevel = data10.privacy_level;
         } else {
           this.privacyLevel ??= null;
         }
-        if ("status" in data9) {
-          this.status = data9.status;
+        if ("status" in data10) {
+          this.status = data10.status;
         } else {
           this.status ??= null;
         }
-        if ("entity_type" in data9) {
-          this.entityType = data9.entity_type;
+        if ("entity_type" in data10) {
+          this.entityType = data10.entity_type;
         } else {
           this.entityType ??= null;
         }
-        if ("entity_id" in data9) {
-          this.entityId = data9.entity_id;
+        if ("entity_id" in data10) {
+          this.entityId = data10.entity_id;
         } else {
           this.entityId ??= null;
         }
-        if ("user_count" in data9) {
-          this.userCount = data9.user_count;
+        if ("user_count" in data10) {
+          this.userCount = data10.user_count;
         } else {
           this.userCount ??= null;
         }
-        if ("creator" in data9) {
-          this.creator = this.client.users._add(data9.creator);
+        if ("creator" in data10) {
+          this.creator = this.client.users._add(data10.creator);
         } else {
           this.creator ??= this.client.users.resolve(this.creatorId);
         }
-        if ("entity_metadata" in data9) {
-          if (data9.entity_metadata) {
+        if ("entity_metadata" in data10) {
+          if (data10.entity_metadata) {
             this.entityMetadata = {
-              location: data9.entity_metadata.location ?? this.entityMetadata?.location ?? null
+              location: data10.entity_metadata.location ?? this.entityMetadata?.location ?? null
             };
           } else {
             this.entityMetadata = null;
@@ -128805,29 +128805,29 @@ var require_GuildScheduledEvent = __commonJS({
         } else {
           this.entityMetadata ??= null;
         }
-        if ("image" in data9) {
-          this.image = data9.image;
+        if ("image" in data10) {
+          this.image = data10.image;
         } else {
           this.image ??= null;
         }
-        if ("recurrence_rule" in data9) {
-          this.recurrenceRule = data9.recurrence_rule && {
-            startTimestamp: Date.parse(data9.recurrence_rule.start),
+        if ("recurrence_rule" in data10) {
+          this.recurrenceRule = data10.recurrence_rule && {
+            startTimestamp: Date.parse(data10.recurrence_rule.start),
             get startAt() {
               return new Date(this.startTimestamp);
             },
-            endTimestamp: data9.recurrence_rule.end && Date.parse(data9.recurrence_rule.end),
+            endTimestamp: data10.recurrence_rule.end && Date.parse(data10.recurrence_rule.end),
             get endAt() {
               return this.endTimestamp && new Date(this.endTimestamp);
             },
-            frequency: data9.recurrence_rule.frequency,
-            interval: data9.recurrence_rule.interval,
-            byWeekday: data9.recurrence_rule.by_weekday,
-            byNWeekday: data9.recurrence_rule.by_n_weekday,
-            byMonth: data9.recurrence_rule.by_month,
-            byMonthDay: data9.recurrence_rule.by_month_day,
-            byYearDay: data9.recurrence_rule.by_year_day,
-            count: data9.recurrence_rule.count
+            frequency: data10.recurrence_rule.frequency,
+            interval: data10.recurrence_rule.interval,
+            byWeekday: data10.recurrence_rule.by_weekday,
+            byNWeekday: data10.recurrence_rule.by_n_weekday,
+            byMonth: data10.recurrence_rule.by_month,
+            byMonthDay: data10.recurrence_rule.by_month_day,
+            byYearDay: data10.recurrence_rule.by_year_day,
+            count: data10.recurrence_rule.count
           };
         } else {
           this.recurrenceRule ??= null;
@@ -129108,49 +129108,49 @@ var require_Application = __commonJS({
     var { DiscordSnowflake } = require_cjs3();
     var Base = require_Base();
     var Application2 = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        this.id = data9.id;
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        this.id = data10.id;
+        if ("name" in data10) {
+          this.name = data10.name;
         } else {
           this.name ??= null;
         }
-        if ("description" in data9) {
-          this.description = data9.description;
+        if ("description" in data10) {
+          this.description = data10.description;
         } else {
           this.description ??= null;
         }
-        if ("icon" in data9) {
-          this.icon = data9.icon;
+        if ("icon" in data10) {
+          this.icon = data10.icon;
         } else {
           this.icon ??= null;
         }
-        if ("terms_of_service_url" in data9) {
-          this.termsOfServiceURL = data9.terms_of_service_url;
+        if ("terms_of_service_url" in data10) {
+          this.termsOfServiceURL = data10.terms_of_service_url;
         } else {
           this.termsOfServiceURL ??= null;
         }
-        if ("privacy_policy_url" in data9) {
-          this.privacyPolicyURL = data9.privacy_policy_url;
+        if ("privacy_policy_url" in data10) {
+          this.privacyPolicyURL = data10.privacy_policy_url;
         } else {
           this.privacyPolicyURL ??= null;
         }
-        if ("rpc_origins" in data9) {
-          this.rpcOrigins = data9.rpc_origins;
+        if ("rpc_origins" in data10) {
+          this.rpcOrigins = data10.rpc_origins;
         } else {
           this.rpcOrigins ??= [];
         }
-        if ("cover_image" in data9) {
-          this.cover = data9.cover_image;
+        if ("cover_image" in data10) {
+          this.cover = data10.cover_image;
         } else {
           this.cover ??= null;
         }
-        if ("verify_key" in data9) {
-          this.verifyKey = data9.verify_key;
+        if ("verify_key" in data10) {
+          this.verifyKey = data10.verify_key;
         } else {
           this.verifyKey ??= null;
         }
@@ -129212,40 +129212,40 @@ var require_IntegrationApplication = __commonJS({
     "use strict";
     var Application2 = require_Application();
     var IntegrationApplication = class extends Application2 {
-      _patch(data9) {
-        super._patch(data9);
-        if ("bot" in data9) {
-          this.bot = this.client.users._add(data9.bot);
+      _patch(data10) {
+        super._patch(data10);
+        if ("bot" in data10) {
+          this.bot = this.client.users._add(data10.bot);
         } else {
           this.bot ??= null;
         }
-        if ("terms_of_service_url" in data9) {
-          this.termsOfServiceURL = data9.terms_of_service_url;
+        if ("terms_of_service_url" in data10) {
+          this.termsOfServiceURL = data10.terms_of_service_url;
         } else {
           this.termsOfServiceURL ??= null;
         }
-        if ("privacy_policy_url" in data9) {
-          this.privacyPolicyURL = data9.privacy_policy_url;
+        if ("privacy_policy_url" in data10) {
+          this.privacyPolicyURL = data10.privacy_policy_url;
         } else {
           this.privacyPolicyURL ??= null;
         }
-        if ("rpc_origins" in data9) {
-          this.rpcOrigins = data9.rpc_origins;
+        if ("rpc_origins" in data10) {
+          this.rpcOrigins = data10.rpc_origins;
         } else {
           this.rpcOrigins ??= [];
         }
-        if ("hook" in data9) {
-          this.hook = data9.hook;
+        if ("hook" in data10) {
+          this.hook = data10.hook;
         } else {
           this.hook ??= null;
         }
-        if ("cover_image" in data9) {
-          this.cover = data9.cover_image;
+        if ("cover_image" in data10) {
+          this.cover = data10.cover_image;
         } else {
           this.cover ??= null;
         }
-        if ("verify_key" in data9) {
-          this.verifyKey = data9.verify_key;
+        if ("verify_key" in data10) {
+          this.verifyKey = data10.verify_key;
         } else {
           this.verifyKey ??= null;
         }
@@ -129262,25 +129262,25 @@ var require_InviteStageInstance = __commonJS({
     var { Collection: Collection3 } = require_dist8();
     var Base = require_Base();
     var InviteStageInstance = class extends Base {
-      constructor(client, data9, channelId, guildId) {
+      constructor(client, data10, channelId, guildId) {
         super(client);
         this.channelId = channelId;
         this.guildId = guildId;
         this.members = new Collection3();
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("topic" in data9) {
-          this.topic = data9.topic;
+      _patch(data10) {
+        if ("topic" in data10) {
+          this.topic = data10.topic;
         }
-        if ("participant_count" in data9) {
-          this.participantCount = data9.participant_count;
+        if ("participant_count" in data10) {
+          this.participantCount = data10.participant_count;
         }
-        if ("speaker_count" in data9) {
-          this.speakerCount = data9.speaker_count;
+        if ("speaker_count" in data10) {
+          this.speakerCount = data10.speaker_count;
         }
         this.members.clear();
-        for (const rawMember of data9.members) {
+        for (const rawMember of data10.members) {
           const member = this.guild.members._add(rawMember);
           this.members.set(member.id, member);
         }
@@ -129334,12 +129334,12 @@ var require_BaseGuild = __commonJS({
     var { Routes: Routes3, GuildFeature } = require_v106();
     var Base = require_Base();
     var BaseGuild = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.id = data9.id;
-        this.name = data9.name;
-        this.icon = data9.icon;
-        this.features = data9.features;
+        this.id = data10.id;
+        this.name = data10.name;
+        this.icon = data10.icon;
+        this.features = data10.features;
       }
       /**
        * The timestamp this guild was created at
@@ -129394,10 +129394,10 @@ var require_BaseGuild = __commonJS({
        * @returns {Promise<Guild>}
        */
       async fetch() {
-        const data9 = await this.client.rest.get(Routes3.guild(this.id), {
+        const data10 = await this.client.rest.get(Routes3.guild(this.id), {
           query: makeURLSearchParams2({ with_counts: true })
         });
-        return this.client.guilds._add(data9);
+        return this.client.guilds._add(data10);
       }
       /**
        * When concatenated with a string, this automatically returns the guild's name instead of the Guild object.
@@ -129417,32 +129417,32 @@ var require_AnonymousGuild = __commonJS({
     "use strict";
     var BaseGuild = require_BaseGuild();
     var AnonymousGuild = class extends BaseGuild {
-      constructor(client, data9, immediatePatch = true) {
-        super(client, data9);
-        if (immediatePatch) this._patch(data9);
+      constructor(client, data10, immediatePatch = true) {
+        super(client, data10);
+        if (immediatePatch) this._patch(data10);
       }
-      _patch(data9) {
-        if ("features" in data9) this.features = data9.features;
-        if ("splash" in data9) {
-          this.splash = data9.splash;
+      _patch(data10) {
+        if ("features" in data10) this.features = data10.features;
+        if ("splash" in data10) {
+          this.splash = data10.splash;
         }
-        if ("banner" in data9) {
-          this.banner = data9.banner;
+        if ("banner" in data10) {
+          this.banner = data10.banner;
         }
-        if ("description" in data9) {
-          this.description = data9.description;
+        if ("description" in data10) {
+          this.description = data10.description;
         }
-        if ("verification_level" in data9) {
-          this.verificationLevel = data9.verification_level;
+        if ("verification_level" in data10) {
+          this.verificationLevel = data10.verification_level;
         }
-        if ("vanity_url_code" in data9) {
-          this.vanityURLCode = data9.vanity_url_code;
+        if ("vanity_url_code" in data10) {
+          this.vanityURLCode = data10.vanity_url_code;
         }
-        if ("nsfw_level" in data9) {
-          this.nsfwLevel = data9.nsfw_level;
+        if ("nsfw_level" in data10) {
+          this.nsfwLevel = data10.nsfw_level;
         }
-        if ("premium_subscription_count" in data9) {
-          this.premiumSubscriptionCount = data9.premium_subscription_count;
+        if ("premium_subscription_count" in data10) {
+          this.premiumSubscriptionCount = data10.premium_subscription_count;
         } else {
           this.premiumSubscriptionCount ??= null;
         }
@@ -129475,15 +129475,15 @@ var require_WelcomeChannel = __commonJS({
     var Base = require_Base();
     var { Emoji } = require_Emoji();
     var WelcomeChannel = class extends Base {
-      constructor(guild, data9) {
+      constructor(guild, data10) {
         super(guild.client);
         this.guild = guild;
-        this.description = data9.description;
+        this.description = data10.description;
         this._emoji = {
-          name: data9.emoji_name,
-          id: data9.emoji_id
+          name: data10.emoji_name,
+          id: data10.emoji_id
         };
-        this.channelId = data9.channel_id;
+        this.channelId = data10.channel_id;
       }
       /**
        * The channel of this welcome channel
@@ -129513,12 +129513,12 @@ var require_WelcomeScreen = __commonJS({
     var Base = require_Base();
     var WelcomeChannel = require_WelcomeChannel();
     var WelcomeScreen = class extends Base {
-      constructor(guild, data9) {
+      constructor(guild, data10) {
         super(guild.client);
         this.guild = guild;
-        this.description = data9.description ?? null;
+        this.description = data10.description ?? null;
         this.welcomeChannels = new Collection3();
-        for (const channel of data9.welcome_channels) {
+        for (const channel of data10.welcome_channels) {
           const welcomeChannel = new WelcomeChannel(this.guild, channel);
           this.welcomeChannels.set(welcomeChannel.channelId, welcomeChannel);
         }
@@ -129542,9 +129542,9 @@ var require_InviteGuild = __commonJS({
     var AnonymousGuild = require_AnonymousGuild();
     var WelcomeScreen = require_WelcomeScreen();
     var InviteGuild = class extends AnonymousGuild {
-      constructor(client, data9) {
-        super(client, data9);
-        this.welcomeScreen = data9.welcome_screen !== void 0 ? new WelcomeScreen(this, data9.welcome_screen) : null;
+      constructor(client, data10) {
+        super(client, data10);
+        this.welcomeScreen = data10.welcome_screen !== void 0 ? new WelcomeScreen(this, data10.welcome_screen) : null;
       }
     };
     module2.exports = InviteGuild;
@@ -129570,103 +129570,103 @@ var require_Invite = __commonJS({
        * @memberof Invite
        */
       static InvitesPattern = /discord(?:(?:app)?\.com\/invite|\.gg(?:\/invite)?)\/(?<code>[\w-]{2,255})/i;
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.type = data9.type;
-        this._patch(data9);
+        this.type = data10.type;
+        this._patch(data10);
       }
-      _patch(data9) {
+      _patch(data10) {
         const InviteGuild = require_InviteGuild();
         this.guild ??= null;
-        if (data9.guild) {
-          this.guild = this.client.guilds.cache.get(data9.guild.id) ?? new InviteGuild(this.client, data9.guild);
+        if (data10.guild) {
+          this.guild = this.client.guilds.cache.get(data10.guild.id) ?? new InviteGuild(this.client, data10.guild);
         }
-        if ("code" in data9) {
-          this.code = data9.code;
+        if ("code" in data10) {
+          this.code = data10.code;
         }
-        if ("approximate_presence_count" in data9) {
-          this.presenceCount = data9.approximate_presence_count;
+        if ("approximate_presence_count" in data10) {
+          this.presenceCount = data10.approximate_presence_count;
         } else {
           this.presenceCount ??= null;
         }
-        if ("approximate_member_count" in data9) {
-          this.memberCount = data9.approximate_member_count;
+        if ("approximate_member_count" in data10) {
+          this.memberCount = data10.approximate_member_count;
         } else {
           this.memberCount ??= null;
         }
-        if ("temporary" in data9) {
-          this.temporary = data9.temporary ?? null;
+        if ("temporary" in data10) {
+          this.temporary = data10.temporary ?? null;
         } else {
           this.temporary ??= null;
         }
-        if ("max_age" in data9) {
-          this.maxAge = data9.max_age;
+        if ("max_age" in data10) {
+          this.maxAge = data10.max_age;
         } else {
           this.maxAge ??= null;
         }
-        if ("uses" in data9) {
-          this.uses = data9.uses;
+        if ("uses" in data10) {
+          this.uses = data10.uses;
         } else {
           this.uses ??= null;
         }
-        if ("max_uses" in data9) {
-          this.maxUses = data9.max_uses;
+        if ("max_uses" in data10) {
+          this.maxUses = data10.max_uses;
         } else {
           this.maxUses ??= null;
         }
-        if ("inviter_id" in data9) {
-          this.inviterId = data9.inviter_id;
+        if ("inviter_id" in data10) {
+          this.inviterId = data10.inviter_id;
         } else {
           this.inviterId ??= null;
         }
-        if ("inviter" in data9) {
-          this.client.users._add(data9.inviter);
-          this.inviterId = data9.inviter.id;
+        if ("inviter" in data10) {
+          this.client.users._add(data10.inviter);
+          this.inviterId = data10.inviter.id;
         }
-        if ("target_user" in data9) {
-          this.targetUser = this.client.users._add(data9.target_user);
+        if ("target_user" in data10) {
+          this.targetUser = this.client.users._add(data10.target_user);
         } else {
           this.targetUser ??= null;
         }
-        if ("target_application" in data9) {
-          this.targetApplication = new IntegrationApplication(this.client, data9.target_application);
+        if ("target_application" in data10) {
+          this.targetApplication = new IntegrationApplication(this.client, data10.target_application);
         } else {
           this.targetApplication ??= null;
         }
-        if ("target_type" in data9) {
-          this.targetType = data9.target_type;
+        if ("target_type" in data10) {
+          this.targetType = data10.target_type;
         } else {
           this.targetType ??= null;
         }
-        if ("channel_id" in data9) {
-          this.channelId = data9.channel_id;
+        if ("channel_id" in data10) {
+          this.channelId = data10.channel_id;
         }
-        if ("channel" in data9) {
-          this.channel = this.client.channels._add(data9.channel, this.guild, { cache: false }) ?? this.client.channels.resolve(this.channelId);
-          this.channelId ??= data9.channel.id;
+        if ("channel" in data10) {
+          this.channel = this.client.channels._add(data10.channel, this.guild, { cache: false }) ?? this.client.channels.resolve(this.channelId);
+          this.channelId ??= data10.channel.id;
         }
-        if ("created_at" in data9) {
-          this.createdTimestamp = Date.parse(data9.created_at);
+        if ("created_at" in data10) {
+          this.createdTimestamp = Date.parse(data10.created_at);
         } else {
           this.createdTimestamp ??= null;
         }
-        if ("expires_at" in data9) {
-          this._expiresTimestamp = data9.expires_at && Date.parse(data9.expires_at);
+        if ("expires_at" in data10) {
+          this._expiresTimestamp = data10.expires_at && Date.parse(data10.expires_at);
         } else {
           this._expiresTimestamp ??= null;
         }
-        if ("stage_instance" in data9) {
-          this.stageInstance = new InviteStageInstance(this.client, data9.stage_instance, this.channel.id, this.guild.id);
+        if ("stage_instance" in data10) {
+          this.stageInstance = new InviteStageInstance(this.client, data10.stage_instance, this.channel.id, this.guild.id);
         } else {
           this.stageInstance ??= null;
         }
-        if ("guild_scheduled_event" in data9) {
-          this.guildScheduledEvent = new GuildScheduledEvent(this.client, data9.guild_scheduled_event);
+        if ("guild_scheduled_event" in data10) {
+          this.guildScheduledEvent = new GuildScheduledEvent(this.client, data10.guild_scheduled_event);
         } else {
           this.guildScheduledEvent ??= null;
         }
-        if ("flags" in data9) {
-          this.flags = new InviteFlagsBitField(data9.flags).freeze();
+        if ("flags" in data10) {
+          this.flags = new InviteFlagsBitField(data10.flags).freeze();
         } else {
           this.flags ??= new InviteFlagsBitField().freeze();
         }
@@ -129780,42 +129780,42 @@ var require_GuildTemplate = __commonJS({
        * @memberof GuildTemplate
        */
       static GuildTemplatesPattern = /discord(?:app)?\.(?:com\/template|new)\/(?<code>[\w-]{2,255})/i;
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("code" in data9) {
-          this.code = data9.code;
+      _patch(data10) {
+        if ("code" in data10) {
+          this.code = data10.code;
         }
-        if ("name" in data9) {
-          this.name = data9.name;
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("description" in data9) {
-          this.description = data9.description;
+        if ("description" in data10) {
+          this.description = data10.description;
         }
-        if ("usage_count" in data9) {
-          this.usageCount = data9.usage_count;
+        if ("usage_count" in data10) {
+          this.usageCount = data10.usage_count;
         }
-        if ("creator_id" in data9) {
-          this.creatorId = data9.creator_id;
+        if ("creator_id" in data10) {
+          this.creatorId = data10.creator_id;
         }
-        if ("creator" in data9) {
-          this.creator = this.client.users._add(data9.creator);
+        if ("creator" in data10) {
+          this.creator = this.client.users._add(data10.creator);
         }
-        if ("created_at" in data9) {
-          this.createdTimestamp = Date.parse(data9.created_at);
+        if ("created_at" in data10) {
+          this.createdTimestamp = Date.parse(data10.created_at);
         }
-        if ("updated_at" in data9) {
-          this.updatedTimestamp = Date.parse(data9.updated_at);
+        if ("updated_at" in data10) {
+          this.updatedTimestamp = Date.parse(data10.updated_at);
         }
-        if ("source_guild_id" in data9) {
-          this.guildId = data9.source_guild_id;
+        if ("source_guild_id" in data10) {
+          this.guildId = data10.source_guild_id;
         }
-        if ("serialized_source_guild" in data9) {
-          this.serializedGuild = data9.serialized_source_guild;
+        if ("serialized_source_guild" in data10) {
+          this.serializedGuild = data10.serialized_source_guild;
         }
-        this.unSynced = "is_dirty" in data9 ? Boolean(data9.is_dirty) : null;
+        this.unSynced = "is_dirty" in data10 ? Boolean(data10.is_dirty) : null;
         return this;
       }
       /**
@@ -129828,13 +129828,13 @@ var require_GuildTemplate = __commonJS({
        */
       async createGuild(name, icon) {
         const { client } = this;
-        const data9 = await client.rest.post(Routes3.template(this.code), {
+        const data10 = await client.rest.post(Routes3.template(this.code), {
           body: {
             name,
             icon: await resolveImage(icon)
           }
         });
-        if (client.guilds.cache.has(data9.id)) return client.guilds.cache.get(data9.id);
+        if (client.guilds.cache.has(data10.id)) return client.guilds.cache.get(data10.id);
         return new Promise((resolve) => {
           const resolveGuild = (guild) => {
             client.off(Events3.GuildCreate, handleGuild);
@@ -129842,14 +129842,14 @@ var require_GuildTemplate = __commonJS({
             resolve(guild);
           };
           const handleGuild = (guild) => {
-            if (guild.id === data9.id) {
+            if (guild.id === data10.id) {
               clearTimeout2(timeout);
               resolveGuild(guild);
             }
           };
           client.incrementMaxListeners();
           client.on(Events3.GuildCreate, handleGuild);
-          const timeout = setTimeout2(() => resolveGuild(client.guilds._add(data9)), 1e4).unref();
+          const timeout = setTimeout2(() => resolveGuild(client.guilds._add(data10)), 1e4).unref();
         });
       }
       /**
@@ -129864,10 +129864,10 @@ var require_GuildTemplate = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async edit({ name, description } = {}) {
-        const data9 = await this.client.rest.patch(Routes3.guildTemplate(this.guildId, this.code), {
+        const data10 = await this.client.rest.patch(Routes3.guildTemplate(this.guildId, this.code), {
           body: { name, description }
         });
-        return this._patch(data9);
+        return this._patch(data10);
       }
       /**
        * Deletes this template.
@@ -129882,8 +129882,8 @@ var require_GuildTemplate = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async sync() {
-        const data9 = await this.client.rest.put(Routes3.guildTemplate(this.guildId, this.code));
-        return this._patch(data9);
+        const data10 = await this.client.rest.put(Routes3.guildTemplate(this.guildId, this.code));
+        return this._patch(data10);
       }
       /**
        * The time when this template was created at
@@ -129942,21 +129942,21 @@ var require_DataResolver = __commonJS({
     var { fetch: fetch2 } = require_undici();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var Invite2 = require_Invite();
-    function resolveCode(data9, regex) {
-      return regex.exec(data9)?.[1] ?? data9;
+    function resolveCode(data10, regex) {
+      return regex.exec(data10)?.[1] ?? data10;
     }
-    function resolveInviteCode2(data9) {
-      return resolveCode(data9, Invite2.InvitesPattern);
+    function resolveInviteCode2(data10) {
+      return resolveCode(data10, Invite2.InvitesPattern);
     }
-    function resolveGuildTemplateCode2(data9) {
+    function resolveGuildTemplateCode2(data10) {
       const GuildTemplate2 = require_GuildTemplate();
-      return resolveCode(data9, GuildTemplate2.GuildTemplatesPattern);
+      return resolveCode(data10, GuildTemplate2.GuildTemplatesPattern);
     }
     async function resolveFile(resource) {
       if (Buffer2.isBuffer(resource)) return { data: resource };
       if (typeof resource[Symbol.asyncIterator] === "function") {
         const buffers = [];
-        for await (const data9 of resource) buffers.push(Buffer2.from(data9));
+        for await (const data10 of resource) buffers.push(Buffer2.from(data10));
         return { data: Buffer2.concat(buffers) };
       }
       if (typeof resource === "string") {
@@ -129971,9 +129971,9 @@ var require_DataResolver = __commonJS({
       }
       throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
     }
-    function resolveBase64(data9, contentType = "image/jpg") {
-      if (Buffer2.isBuffer(data9)) return `data:${contentType};base64,${data9.toString("base64")}`;
-      return data9;
+    function resolveBase64(data10, contentType = "image/jpg") {
+      if (Buffer2.isBuffer(data10)) return `data:${contentType};base64,${data10.toString("base64")}`;
+      return data10;
     }
     async function resolveImage(image) {
       if (!image) return null;
@@ -130017,28 +130017,28 @@ var require_BaseInteraction = __commonJS({
     var { SelectMenuTypes } = require_Constants();
     var PermissionsBitField2 = require_PermissionsBitField();
     var BaseInteraction = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.type = data9.type;
-        this.id = data9.id;
-        Object.defineProperty(this, "token", { value: data9.token });
-        this.applicationId = data9.application_id;
-        this.channelId = data9.channel?.id ?? null;
-        this.guildId = data9.guild_id ?? null;
-        this.user = this.client.users._add(data9.user ?? data9.member.user);
-        this.member = data9.member ? this.guild?.members._add(data9.member) ?? data9.member : null;
-        this.version = data9.version;
-        this.appPermissions = new PermissionsBitField2(data9.app_permissions).freeze();
-        this.memberPermissions = data9.member?.permissions ? new PermissionsBitField2(data9.member.permissions).freeze() : null;
-        this.locale = data9.locale;
-        this.guildLocale = data9.guild_locale ?? null;
-        this.entitlements = data9.entitlements.reduce(
+        this.type = data10.type;
+        this.id = data10.id;
+        Object.defineProperty(this, "token", { value: data10.token });
+        this.applicationId = data10.application_id;
+        this.channelId = data10.channel?.id ?? null;
+        this.guildId = data10.guild_id ?? null;
+        this.user = this.client.users._add(data10.user ?? data10.member.user);
+        this.member = data10.member ? this.guild?.members._add(data10.member) ?? data10.member : null;
+        this.version = data10.version;
+        this.appPermissions = new PermissionsBitField2(data10.app_permissions).freeze();
+        this.memberPermissions = data10.member?.permissions ? new PermissionsBitField2(data10.member.permissions).freeze() : null;
+        this.locale = data10.locale;
+        this.guildLocale = data10.guild_locale ?? null;
+        this.entitlements = data10.entitlements.reduce(
           (coll, entitlement) => coll.set(entitlement.id, this.client.application.entitlements._add(entitlement)),
           new Collection3()
         );
-        this.authorizingIntegrationOwners = data9.authorizing_integration_owners;
-        this.context = data9.context ?? null;
-        this.attachmentSizeLimit = data9.attachment_size_limit;
+        this.authorizingIntegrationOwners = data10.authorizing_integration_owners;
+        this.context = data10.context ?? null;
+        this.attachmentSizeLimit = data10.attachment_size_limit;
       }
       /**
        * The timestamp the interaction was created at
@@ -130234,13 +130234,13 @@ var require_ApplicationRoleConnectionMetadata = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/ApplicationRoleConnectionMetadata.js"(exports2) {
     "use strict";
     var ApplicationRoleConnectionMetadata = class {
-      constructor(data9) {
-        this.name = data9.name;
-        this.nameLocalizations = data9.name_localizations ?? null;
-        this.description = data9.description;
-        this.descriptionLocalizations = data9.description_localizations ?? null;
-        this.key = data9.key;
-        this.type = data9.type;
+      constructor(data10) {
+        this.name = data10.name;
+        this.nameLocalizations = data10.name_localizations ?? null;
+        this.description = data10.description;
+        this.descriptionLocalizations = data10.description_localizations ?? null;
+        this.key = data10.key;
+        this.type = data10.type;
       }
     };
     exports2.ApplicationRoleConnectionMetadata = ApplicationRoleConnectionMetadata;
@@ -130253,25 +130253,25 @@ var require_TeamMember = __commonJS({
     "use strict";
     var Base = require_Base();
     var TeamMember = class extends Base {
-      constructor(team, data9) {
+      constructor(team, data10) {
         super(team.client);
         this.team = team;
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("permissions" in data9) {
-          this.permissions = data9.permissions;
+      _patch(data10) {
+        if ("permissions" in data10) {
+          this.permissions = data10.permissions;
         } else {
           this.permissions ??= [];
         }
-        if ("membership_state" in data9) {
-          this.membershipState = data9.membership_state;
+        if ("membership_state" in data10) {
+          this.membershipState = data10.membership_state;
         }
-        if ("user" in data9) {
-          this.user = this.client.users._add(data9.user);
+        if ("user" in data10) {
+          this.user = this.client.users._add(data10.user);
         }
-        if ("role" in data9) {
-          this.role = data9.role;
+        if ("role" in data10) {
+          this.role = data10.role;
         }
       }
       /**
@@ -130307,27 +130307,27 @@ var require_Team = __commonJS({
     var Base = require_Base();
     var TeamMember = require_TeamMember();
     var Team = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        this.id = data9.id;
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        this.id = data10.id;
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("icon" in data9) {
-          this.icon = data9.icon;
+        if ("icon" in data10) {
+          this.icon = data10.icon;
         } else {
           this.icon ??= null;
         }
-        if ("owner_user_id" in data9) {
-          this.ownerId = data9.owner_user_id;
+        if ("owner_user_id" in data10) {
+          this.ownerId = data10.owner_user_id;
         } else {
           this.ownerId ??= null;
         }
         this.members = new Collection3();
-        for (const memberData of data9.members) {
+        for (const memberData of data10.members) {
           const member = new TeamMember(this, memberData);
           this.members.set(member.id, member);
         }
@@ -130456,11 +130456,11 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
       async fetch({ guild, command } = {}) {
         const { guildId, commandId } = this._validateOptions(guild, command);
         if (commandId) {
-          const data10 = await this.client.rest.get(this.permissionsPath(guildId, commandId));
-          return data10.permissions;
+          const data11 = await this.client.rest.get(this.permissionsPath(guildId, commandId));
+          return data11.permissions;
         }
-        const data9 = await this.client.rest.get(this.permissionsPath(guildId));
-        return data9.reduce((coll, perm) => coll.set(perm.id, perm.permissions), new Collection3());
+        const data10 = await this.client.rest.get(this.permissionsPath(guildId));
+        return data10.reduce((coll, perm) => coll.set(perm.id, perm.permissions), new Collection3());
       }
       /**
        * Options used to set permissions for one or more Application Commands in a guild
@@ -130520,12 +130520,12 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
         if (!commandId) {
           commandId = this.client.user.id;
         }
-        const data9 = await this.client.rest.put(this.permissionsPath(guildId, commandId), {
+        const data10 = await this.client.rest.put(this.permissionsPath(guildId, commandId), {
           body: { permissions },
           auth: false,
           headers: { Authorization: `Bearer ${token}` }
         });
-        return data9.permissions;
+        return data10.permissions;
       }
       /**
        * Add permissions to a command.
@@ -130797,76 +130797,76 @@ var require_ApplicationCommand = __commonJS({
     var ApplicationCommandPermissionsManager = require_ApplicationCommandPermissionsManager();
     var PermissionsBitField2 = require_PermissionsBitField();
     var ApplicationCommand = class extends Base {
-      constructor(client, data9, guild, guildId) {
+      constructor(client, data10, guild, guildId) {
         super(client);
-        this.id = data9.id;
-        this.applicationId = data9.application_id;
+        this.id = data10.id;
+        this.applicationId = data10.application_id;
         this.guild = guild ?? null;
         this.guildId = guild?.id ?? guildId ?? null;
         this.permissions = new ApplicationCommandPermissionsManager(this);
-        this.type = data9.type;
-        this.nsfw = data9.nsfw ?? false;
-        this._patch(data9);
+        this.type = data10.type;
+        this.nsfw = data10.nsfw ?? false;
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("name_localizations" in data9) {
-          this.nameLocalizations = data9.name_localizations;
+        if ("name_localizations" in data10) {
+          this.nameLocalizations = data10.name_localizations;
         } else {
           this.nameLocalizations ??= null;
         }
-        if ("name_localized" in data9) {
-          this.nameLocalized = data9.name_localized;
+        if ("name_localized" in data10) {
+          this.nameLocalized = data10.name_localized;
         } else {
           this.nameLocalized ??= null;
         }
-        if ("description" in data9) {
-          this.description = data9.description;
+        if ("description" in data10) {
+          this.description = data10.description;
         }
-        if ("description_localizations" in data9) {
-          this.descriptionLocalizations = data9.description_localizations;
+        if ("description_localizations" in data10) {
+          this.descriptionLocalizations = data10.description_localizations;
         } else {
           this.descriptionLocalizations ??= null;
         }
-        if ("description_localized" in data9) {
-          this.descriptionLocalized = data9.description_localized;
+        if ("description_localized" in data10) {
+          this.descriptionLocalized = data10.description_localized;
         } else {
           this.descriptionLocalized ??= null;
         }
-        if ("options" in data9) {
-          this.options = data9.options.map((option) => this.constructor.transformOption(option, true));
+        if ("options" in data10) {
+          this.options = data10.options.map((option) => this.constructor.transformOption(option, true));
         } else {
           this.options ??= [];
         }
-        if ("default_member_permissions" in data9) {
-          this.defaultMemberPermissions = data9.default_member_permissions ? new PermissionsBitField2(BigInt(data9.default_member_permissions)).freeze() : null;
+        if ("default_member_permissions" in data10) {
+          this.defaultMemberPermissions = data10.default_member_permissions ? new PermissionsBitField2(BigInt(data10.default_member_permissions)).freeze() : null;
         } else {
           this.defaultMemberPermissions ??= null;
         }
-        if ("dm_permission" in data9) {
-          this.dmPermission = data9.dm_permission;
+        if ("dm_permission" in data10) {
+          this.dmPermission = data10.dm_permission;
         } else {
           this.dmPermission ??= null;
         }
-        if ("integration_types" in data9) {
-          this.integrationTypes = data9.integration_types;
+        if ("integration_types" in data10) {
+          this.integrationTypes = data10.integration_types;
         } else {
           this.integrationTypes ??= null;
         }
-        if ("contexts" in data9) {
-          this.contexts = data9.contexts;
+        if ("contexts" in data10) {
+          this.contexts = data10.contexts;
         } else {
           this.contexts ??= null;
         }
-        if ("handler" in data9) {
-          this.handler = data9.handler;
+        if ("handler" in data10) {
+          this.handler = data10.handler;
         } else {
           this.handler ??= null;
         }
-        if ("version" in data9) {
-          this.version = data9.version;
+        if ("version" in data10) {
+          this.version = data10.version;
         }
       }
       /**
@@ -130961,8 +130961,8 @@ var require_ApplicationCommand = __commonJS({
        *   .then(console.log)
        *   .catch(console.error);
        */
-      edit(data9) {
-        return this.manager.edit(this, data9, this.guildId);
+      edit(data10) {
+        return this.manager.edit(this, data10, this.guildId);
       }
       /**
        * Edits the name of this ApplicationCommand
@@ -131252,8 +131252,8 @@ var require_ApplicationCommandManager = __commonJS({
        * @type {Collection<Snowflake, ApplicationCommand>}
        * @name ApplicationCommandManager#cache
        */
-      _add(data9, cache, guildId) {
-        return super._add(data9, cache, { extras: [this.guild, guildId] });
+      _add(data10, cache, guildId) {
+        return super._add(data10, cache, { extras: [this.guild, guildId] });
       }
       /**
        * The APIRouter path to the commands
@@ -131325,13 +131325,13 @@ var require_ApplicationCommandManager = __commonJS({
           const command = await this.client.rest.get(this.commandPath({ id, guildId }));
           return this._add(command, cache);
         }
-        const data9 = await this.client.rest.get(this.commandPath({ guildId }), {
+        const data10 = await this.client.rest.get(this.commandPath({ guildId }), {
           headers: {
             "X-Discord-Locale": locale
           },
           query: makeURLSearchParams2({ with_localizations: withLocalizations })
         });
-        return data9.reduce((coll, command) => coll.set(command.id, this._add(command, cache, guildId)), new Collection3());
+        return data10.reduce((coll, command) => coll.set(command.id, this._add(command, cache, guildId)), new Collection3());
       }
       /**
        * Creates an application command.
@@ -131349,10 +131349,10 @@ var require_ApplicationCommandManager = __commonJS({
        *   .catch(console.error);
        */
       async create(command, guildId) {
-        const data9 = await this.client.rest.post(this.commandPath({ guildId }), {
+        const data10 = await this.client.rest.post(this.commandPath({ guildId }), {
           body: this.constructor.transformCommand(command)
         });
-        return this._add(data9, true, guildId);
+        return this._add(data10, true, guildId);
       }
       /**
        * Sets all the commands for this application or guild.
@@ -131377,10 +131377,10 @@ var require_ApplicationCommandManager = __commonJS({
        *   .catch(console.error);
        */
       async set(commands2, guildId) {
-        const data9 = await this.client.rest.put(this.commandPath({ guildId }), {
+        const data10 = await this.client.rest.put(this.commandPath({ guildId }), {
           body: commands2.map((command) => this.constructor.transformCommand(command))
         });
-        return data9.reduce(
+        return data10.reduce(
           (collection, command) => collection.set(command.id, this._add(command, true, guildId)),
           new Collection3()
         );
@@ -131400,11 +131400,11 @@ var require_ApplicationCommandManager = __commonJS({
        *   .then(console.log)
        *   .catch(console.error);
        */
-      async edit(command, data9, guildId) {
+      async edit(command, data10, guildId) {
         const id = this.resolveId(command);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "command", "ApplicationCommandResolvable");
         const patched = await this.client.rest.patch(this.commandPath({ id, guildId }), {
-          body: this.constructor.transformCommand(data9)
+          body: this.constructor.transformCommand(data10)
         });
         return this._add(patched, true, guildId);
       }
@@ -131469,24 +131469,24 @@ var require_ApplicationEmoji = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var ApplicationEmoji = class _ApplicationEmoji extends Emoji {
-      constructor(client, data9, application) {
-        super(client, data9);
+      constructor(client, data10, application) {
+        super(client, data10);
         this.application = application;
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("name" in data9) this.name = data9.name;
-        if (data9.user) {
-          this.author = this.client.users._add(data9.user);
+      _patch(data10) {
+        if ("name" in data10) this.name = data10.name;
+        if (data10.user) {
+          this.author = this.client.users._add(data10.user);
         }
-        if ("managed" in data9) {
-          this.managed = data9.managed;
+        if ("managed" in data10) {
+          this.managed = data10.managed;
         }
-        if ("require_colons" in data9) {
-          this.requiresColons = data9.require_colons;
+        if ("require_colons" in data10) {
+          this.requiresColons = data10.require_colons;
         }
-        if ("available" in data9) {
-          this.available = data9.available;
+        if ("available" in data10) {
+          this.available = data10.available;
         }
       }
       /**
@@ -131561,8 +131561,8 @@ var require_ApplicationEmojiManager = __commonJS({
         super(application.client, ApplicationEmoji, iterable);
         this.application = application;
       }
-      _add(data9, cache) {
-        return super._add(data9, cache, { extras: [this.application] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { extras: [this.application] });
       }
       /**
        * Options used for creating an emoji of the application
@@ -131617,9 +131617,9 @@ var require_ApplicationEmojiManager = __commonJS({
           const emoji = await this.client.rest.get(Routes3.applicationEmoji(this.application.id, id));
           return this._add(emoji, cache);
         }
-        const { items: data9 } = await this.client.rest.get(Routes3.applicationEmojis(this.application.id));
+        const { items: data10 } = await this.client.rest.get(Routes3.applicationEmojis(this.application.id));
         const emojis = new Collection3();
-        for (const emoji of data9) emojis.set(emoji.id, this._add(emoji, cache));
+        for (const emoji of data10) emojis.set(emoji.id, this._add(emoji, cache));
         return emojis;
       }
       /**
@@ -131661,8 +131661,8 @@ var require_ApplicationEmojiManager = __commonJS({
       async fetchAuthor(emoji) {
         const id = this.resolveId(emoji);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "emoji", "EmojiResolvable", true);
-        const data9 = await this.client.rest.get(Routes3.applicationEmoji(this.application.id, id));
-        return this._add(data9).author;
+        const data10 = await this.client.rest.get(Routes3.applicationEmoji(this.application.id, id));
+        return this._add(data10).author;
       }
     };
     module2.exports = ApplicationEmojiManager;
@@ -131675,44 +131675,44 @@ var require_Entitlement = __commonJS({
     "use strict";
     var Base = require_Base();
     var Entitlement = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.id = data9.id;
-        this._patch(data9);
+        this.id = data10.id;
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("sku_id" in data9) {
-          this.skuId = data9.sku_id;
+      _patch(data10) {
+        if ("sku_id" in data10) {
+          this.skuId = data10.sku_id;
         }
-        if ("user_id" in data9) {
-          this.userId = data9.user_id;
+        if ("user_id" in data10) {
+          this.userId = data10.user_id;
         }
-        if ("guild_id" in data9) {
-          this.guildId = data9.guild_id;
+        if ("guild_id" in data10) {
+          this.guildId = data10.guild_id;
         } else {
           this.guildId ??= null;
         }
-        if ("application_id" in data9) {
-          this.applicationId = data9.application_id;
+        if ("application_id" in data10) {
+          this.applicationId = data10.application_id;
         }
-        if ("type" in data9) {
-          this.type = data9.type;
+        if ("type" in data10) {
+          this.type = data10.type;
         }
-        if ("deleted" in data9) {
-          this.deleted = data9.deleted;
+        if ("deleted" in data10) {
+          this.deleted = data10.deleted;
         }
-        if ("starts_at" in data9) {
-          this.startsTimestamp = data9.starts_at ? Date.parse(data9.starts_at) : null;
+        if ("starts_at" in data10) {
+          this.startsTimestamp = data10.starts_at ? Date.parse(data10.starts_at) : null;
         } else {
           this.startsTimestamp ??= null;
         }
-        if ("ends_at" in data9) {
-          this.endsTimestamp = data9.ends_at ? Date.parse(data9.ends_at) : null;
+        if ("ends_at" in data10) {
+          this.endsTimestamp = data10.ends_at ? Date.parse(data10.ends_at) : null;
         } else {
           this.endsTimestamp ??= null;
         }
-        if ("consumed" in data9) {
-          this.consumed = data9.consumed;
+        if ("consumed" in data10) {
+          this.consumed = data10.consumed;
         } else {
           this.consumed ??= false;
         }
@@ -131860,8 +131860,8 @@ var require_EntitlementManager = __commonJS({
             return existing;
           }
         }
-        const data9 = await this.client.rest.get(Routes3.entitlement(this.client.application.id, entitlement));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.entitlement(this.client.application.id, entitlement));
+        return this._add(data10, cache);
       }
       async _fetchMany({ limit, guild, user, skus, excludeEnded, excludeDeleted, cache, before, after } = {}) {
         const query = makeURLSearchParams2({
@@ -131944,28 +131944,28 @@ var require_Subscription = __commonJS({
     "use strict";
     var Base = require_Base();
     var Subscription = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.id = data9.id;
-        this.userId = data9.user_id;
-        this._patch(data9);
+        this.id = data10.id;
+        this.userId = data10.user_id;
+        this._patch(data10);
       }
-      _patch(data9) {
-        this.skuIds = data9.sku_ids;
-        this.entitlementIds = data9.entitlement_ids;
-        this.currentPeriodStartTimestamp = Date.parse(data9.current_period_start);
-        this.currentPeriodEndTimestamp = Date.parse(data9.current_period_end);
-        this.status = data9.status;
-        if ("renewal_sku_ids" in data9) {
-          this.renewalSkuIds = data9.renewal_sku_ids;
+      _patch(data10) {
+        this.skuIds = data10.sku_ids;
+        this.entitlementIds = data10.entitlement_ids;
+        this.currentPeriodStartTimestamp = Date.parse(data10.current_period_start);
+        this.currentPeriodEndTimestamp = Date.parse(data10.current_period_end);
+        this.status = data10.status;
+        if ("renewal_sku_ids" in data10) {
+          this.renewalSkuIds = data10.renewal_sku_ids;
         }
-        if ("canceled_at" in data9) {
-          this.canceledTimestamp = data9.canceled_at ? Date.parse(data9.canceled_at) : null;
+        if ("canceled_at" in data10) {
+          this.canceledTimestamp = data10.canceled_at ? Date.parse(data10.canceled_at) : null;
         } else {
           this.canceledTimestamp ??= null;
         }
-        if ("country" in data9) {
-          this.country = data9.country;
+        if ("country" in data10) {
+          this.country = data10.country;
         } else {
           this.country ??= null;
         }
@@ -132103,27 +132103,27 @@ var require_ClientApplication = __commonJS({
     var { resolveImage } = require_DataResolver();
     var PermissionsBitField2 = require_PermissionsBitField();
     var ClientApplication = class extends Application2 {
-      constructor(client, data9) {
-        super(client, data9);
+      constructor(client, data10) {
+        super(client, data10);
         this.commands = new ApplicationCommandManager(this.client);
         this.emojis = new ApplicationEmojiManager(this);
         this.entitlements = new EntitlementManager(this.client);
         this.subscriptions = new SubscriptionManager(this.client);
       }
-      _patch(data9) {
-        super._patch(data9);
-        this.tags = data9.tags ?? [];
-        if ("install_params" in data9) {
+      _patch(data10) {
+        super._patch(data10);
+        this.tags = data10.tags ?? [];
+        if ("install_params" in data10) {
           this.installParams = {
-            scopes: data9.install_params.scopes,
-            permissions: new PermissionsBitField2(data9.install_params.permissions).freeze()
+            scopes: data10.install_params.scopes,
+            permissions: new PermissionsBitField2(data10.install_params.permissions).freeze()
           };
         } else {
           this.installParams ??= null;
         }
-        if ("integration_types_config" in data9) {
+        if ("integration_types_config" in data10) {
           this.integrationTypesConfig = Object.fromEntries(
-            Object.entries(data9.integration_types_config).map(([key, config]) => {
+            Object.entries(data10.integration_types_config).map(([key, config]) => {
               let oauth2InstallParams = null;
               if (config.oauth2_install_params) {
                 oauth2InstallParams = {
@@ -132140,75 +132140,75 @@ var require_ClientApplication = __commonJS({
         } else {
           this.integrationTypesConfig ??= null;
         }
-        if ("custom_install_url" in data9) {
-          this.customInstallURL = data9.custom_install_url;
+        if ("custom_install_url" in data10) {
+          this.customInstallURL = data10.custom_install_url;
         } else {
           this.customInstallURL = null;
         }
-        if ("flags" in data9) {
-          this.flags = new ApplicationFlagsBitField(data9.flags).freeze();
+        if ("flags" in data10) {
+          this.flags = new ApplicationFlagsBitField(data10.flags).freeze();
         }
-        if ("approximate_guild_count" in data9) {
-          this.approximateGuildCount = data9.approximate_guild_count;
+        if ("approximate_guild_count" in data10) {
+          this.approximateGuildCount = data10.approximate_guild_count;
         } else {
           this.approximateGuildCount ??= null;
         }
-        if ("approximate_user_install_count" in data9) {
-          this.approximateUserInstallCount = data9.approximate_user_install_count;
+        if ("approximate_user_install_count" in data10) {
+          this.approximateUserInstallCount = data10.approximate_user_install_count;
         } else {
           this.approximateUserInstallCount ??= null;
         }
-        if ("approximate_user_authorization_count" in data9) {
-          this.approximateUserAuthorizationCount = data9.approximate_user_authorization_count;
+        if ("approximate_user_authorization_count" in data10) {
+          this.approximateUserAuthorizationCount = data10.approximate_user_authorization_count;
         } else {
           this.approximateUserAuthorizationCount ??= null;
         }
-        if ("guild_id" in data9) {
-          this.guildId = data9.guild_id;
+        if ("guild_id" in data10) {
+          this.guildId = data10.guild_id;
         } else {
           this.guildId ??= null;
         }
-        if ("bot_require_code_grant" in data9) {
-          this.botRequireCodeGrant = data9.bot_require_code_grant;
+        if ("bot_require_code_grant" in data10) {
+          this.botRequireCodeGrant = data10.bot_require_code_grant;
         } else {
           this.botRequireCodeGrant ??= null;
         }
-        if ("bot" in data9) {
-          this.bot = this.client.users._add(data9.bot);
+        if ("bot" in data10) {
+          this.bot = this.client.users._add(data10.bot);
         } else {
           this.bot ??= null;
         }
-        if ("bot_public" in data9) {
-          this.botPublic = data9.bot_public;
+        if ("bot_public" in data10) {
+          this.botPublic = data10.bot_public;
         } else {
           this.botPublic ??= null;
         }
-        if ("interactions_endpoint_url" in data9) {
-          this.interactionsEndpointURL = data9.interactions_endpoint_url;
+        if ("interactions_endpoint_url" in data10) {
+          this.interactionsEndpointURL = data10.interactions_endpoint_url;
         } else {
           this.interactionsEndpointURL ??= null;
         }
-        if ("role_connections_verification_url" in data9) {
-          this.roleConnectionsVerificationURL = data9.role_connections_verification_url;
+        if ("role_connections_verification_url" in data10) {
+          this.roleConnectionsVerificationURL = data10.role_connections_verification_url;
         } else {
           this.roleConnectionsVerificationURL ??= null;
         }
-        if ("event_webhooks_url" in data9) {
-          this.eventWebhooksURL = data9.event_webhooks_url;
+        if ("event_webhooks_url" in data10) {
+          this.eventWebhooksURL = data10.event_webhooks_url;
         } else {
           this.eventWebhooksURL ??= null;
         }
-        if ("event_webhooks_status" in data9) {
-          this.eventWebhooksStatus = data9.event_webhooks_status;
+        if ("event_webhooks_status" in data10) {
+          this.eventWebhooksStatus = data10.event_webhooks_status;
         } else {
           this.eventWebhooksStatus ??= null;
         }
-        if ("event_webhooks_types" in data9) {
-          this.eventWebhooksTypes = data9.event_webhooks_types;
+        if ("event_webhooks_types" in data10) {
+          this.eventWebhooksTypes = data10.event_webhooks_types;
         } else {
           this.eventWebhooksTypes ??= null;
         }
-        this.owner = data9.team ? new Team(this.client, data9.team) : data9.owner ? this.client.users._add(data9.owner) : this.owner ?? null;
+        this.owner = data10.team ? new Team(this.client, data10.team) : data10.owner ? this.client.users._add(data10.owner) : this.owner ?? null;
       }
       /**
        * The guild associated with this application.
@@ -132263,7 +132263,7 @@ var require_ClientApplication = __commonJS({
         eventWebhooksTypes,
         tags
       } = {}) {
-        const data9 = await this.client.rest.patch(Routes3.currentApplication(), {
+        const data10 = await this.client.rest.patch(Routes3.currentApplication(), {
           body: {
             custom_install_url: customInstallURL,
             description,
@@ -132279,7 +132279,7 @@ var require_ClientApplication = __commonJS({
             tags
           }
         });
-        this._patch(data9);
+        this._patch(data10);
         return this;
       }
       /**
@@ -132287,8 +132287,8 @@ var require_ClientApplication = __commonJS({
        * @returns {Promise<ClientApplication>}
        */
       async fetch() {
-        const data9 = await this.client.rest.get(Routes3.currentApplication());
-        this._patch(data9);
+        const data10 = await this.client.rest.get(Routes3.currentApplication());
+        this._patch(data10);
         return this;
       }
       /**
@@ -132297,7 +132297,7 @@ var require_ClientApplication = __commonJS({
        */
       async fetchRoleConnectionMetadataRecords() {
         const metadata = await this.client.rest.get(Routes3.applicationRoleConnectionMetadata(this.client.user.id));
-        return metadata.map((data9) => new ApplicationRoleConnectionMetadata(data9));
+        return metadata.map((data10) => new ApplicationRoleConnectionMetadata(data10));
       }
       /**
        * Data for creating or editing an application role connection metadata.
@@ -132325,7 +132325,7 @@ var require_ClientApplication = __commonJS({
             description_localizations: record.descriptionLocalizations
           }))
         });
-        return newRecords.map((data9) => new ApplicationRoleConnectionMetadata(data9));
+        return newRecords.map((data10) => new ApplicationRoleConnectionMetadata(data10));
       }
       /**
        * Gets this application's SKUs
@@ -132647,12 +132647,12 @@ var require_hashGet = __commonJS({
     var objectProto = Object.prototype;
     var hasOwnProperty = objectProto.hasOwnProperty;
     function hashGet(key) {
-      var data9 = this.__data__;
+      var data10 = this.__data__;
       if (nativeCreate) {
-        var result = data9[key];
+        var result = data10[key];
         return result === HASH_UNDEFINED ? void 0 : result;
       }
-      return hasOwnProperty.call(data9, key) ? data9[key] : void 0;
+      return hasOwnProperty.call(data10, key) ? data10[key] : void 0;
     }
     module2.exports = hashGet;
   }
@@ -132665,8 +132665,8 @@ var require_hashHas = __commonJS({
     var objectProto = Object.prototype;
     var hasOwnProperty = objectProto.hasOwnProperty;
     function hashHas(key) {
-      var data9 = this.__data__;
-      return nativeCreate ? data9[key] !== void 0 : hasOwnProperty.call(data9, key);
+      var data10 = this.__data__;
+      return nativeCreate ? data10[key] !== void 0 : hasOwnProperty.call(data10, key);
     }
     module2.exports = hashHas;
   }
@@ -132678,9 +132678,9 @@ var require_hashSet = __commonJS({
     var nativeCreate = require_nativeCreate();
     var HASH_UNDEFINED = "__lodash_hash_undefined__";
     function hashSet(key, value) {
-      var data9 = this.__data__;
+      var data10 = this.__data__;
       this.size += this.has(key) ? 0 : 1;
-      data9[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED : value;
+      data10[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED : value;
       return this;
     }
     module2.exports = hashSet;
@@ -132757,15 +132757,15 @@ var require_listCacheDelete = __commonJS({
     var arrayProto = Array.prototype;
     var splice = arrayProto.splice;
     function listCacheDelete(key) {
-      var data9 = this.__data__, index = assocIndexOf(data9, key);
+      var data10 = this.__data__, index = assocIndexOf(data10, key);
       if (index < 0) {
         return false;
       }
-      var lastIndex = data9.length - 1;
+      var lastIndex = data10.length - 1;
       if (index == lastIndex) {
-        data9.pop();
+        data10.pop();
       } else {
-        splice.call(data9, index, 1);
+        splice.call(data10, index, 1);
       }
       --this.size;
       return true;
@@ -132779,8 +132779,8 @@ var require_listCacheGet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_listCacheGet.js"(exports2, module2) {
     var assocIndexOf = require_assocIndexOf();
     function listCacheGet(key) {
-      var data9 = this.__data__, index = assocIndexOf(data9, key);
-      return index < 0 ? void 0 : data9[index][1];
+      var data10 = this.__data__, index = assocIndexOf(data10, key);
+      return index < 0 ? void 0 : data10[index][1];
     }
     module2.exports = listCacheGet;
   }
@@ -132802,12 +132802,12 @@ var require_listCacheSet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_listCacheSet.js"(exports2, module2) {
     var assocIndexOf = require_assocIndexOf();
     function listCacheSet(key, value) {
-      var data9 = this.__data__, index = assocIndexOf(data9, key);
+      var data10 = this.__data__, index = assocIndexOf(data10, key);
       if (index < 0) {
         ++this.size;
-        data9.push([key, value]);
+        data10.push([key, value]);
       } else {
-        data9[index][1] = value;
+        data10[index][1] = value;
       }
       return this;
     }
@@ -132884,8 +132884,8 @@ var require_getMapData = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_getMapData.js"(exports2, module2) {
     var isKeyable = require_isKeyable();
     function getMapData(map, key) {
-      var data9 = map.__data__;
-      return isKeyable(key) ? data9[typeof key == "string" ? "string" : "hash"] : data9.map;
+      var data10 = map.__data__;
+      return isKeyable(key) ? data10[typeof key == "string" ? "string" : "hash"] : data10.map;
     }
     module2.exports = getMapData;
   }
@@ -132931,9 +132931,9 @@ var require_mapCacheSet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_mapCacheSet.js"(exports2, module2) {
     var getMapData = require_getMapData();
     function mapCacheSet(key, value) {
-      var data9 = getMapData(this, key), size = data9.size;
-      data9.set(key, value);
-      this.size += data9.size == size ? 0 : 1;
+      var data10 = getMapData(this, key), size = data10.size;
+      data10.set(key, value);
+      this.size += data10.size == size ? 0 : 1;
       return this;
     }
     module2.exports = mapCacheSet;
@@ -136999,7 +136999,7 @@ var require_dist10 = __commonJS({
       ContextMenuCommandAssertions: () => Assertions_exports11,
       ContextMenuCommandBuilder: () => ContextMenuCommandBuilder,
       EmbedAssertions: () => Assertions_exports,
-      EmbedBuilder: () => EmbedBuilder10,
+      EmbedBuilder: () => EmbedBuilder11,
       FileBuilder: () => FileBuilder,
       FileUploadAssertions: () => Assertions_exports4,
       FileUploadBuilder: () => FileUploadBuilder,
@@ -137025,7 +137025,7 @@ var require_dist10 = __commonJS({
       SlashCommandAssertions: () => Assertions_exports10,
       SlashCommandAttachmentOption: () => SlashCommandAttachmentOption,
       SlashCommandBooleanOption: () => SlashCommandBooleanOption,
-      SlashCommandBuilder: () => SlashCommandBuilder9,
+      SlashCommandBuilder: () => SlashCommandBuilder10,
       SlashCommandChannelOption: () => SlashCommandChannelOption,
       SlashCommandIntegerOption: () => SlashCommandIntegerOption,
       SlashCommandMentionableOption: () => SlashCommandMentionableOption,
@@ -137128,7 +137128,7 @@ var require_dist10 = __commonJS({
       return arr;
     }
     __name(normalizeArray, "normalizeArray");
-    var EmbedBuilder10 = class {
+    var EmbedBuilder11 = class {
       static {
         __name(this, "EmbedBuilder");
       }
@@ -137141,9 +137141,9 @@ var require_dist10 = __commonJS({
        *
        * @param data - The API data to create this embed with
        */
-      constructor(data9 = {}) {
-        this.data = { ...data9 };
-        if (data9.timestamp) this.data.timestamp = new Date(data9.timestamp).toISOString();
+      constructor(data10 = {}) {
+        this.data = { ...data10 };
+        if (data10.timestamp) this.data.timestamp = new Date(data10.timestamp).toISOString();
       }
       /**
        * Appends fields to the embed.
@@ -137389,8 +137389,8 @@ var require_dist10 = __commonJS({
        * 	.setLabel('woah');
        * ```
        */
-      constructor(data9 = {}) {
-        this.data = data9;
+      constructor(data10 = {}) {
+        this.data = data10;
       }
       static {
         __name(this, "StringSelectMenuOptionBuilder");
@@ -137530,8 +137530,8 @@ var require_dist10 = __commonJS({
        *
        * @param data - The data to construct a component out of
        */
-      constructor(data9) {
-        this.data = data9;
+      constructor(data10) {
+        this.data = data10;
       }
       /**
        * Sets the id (not the custom id) for this component.
@@ -137584,8 +137584,8 @@ var require_dist10 = __commonJS({
        * 	.setCustomId('another cool button');
        * ```
        */
-      constructor(data9) {
-        super({ type: import_v102.ComponentType.Button, ...data9 });
+      constructor(data10) {
+        super({ type: import_v102.ComponentType.Button, ...data10 });
       }
       /**
        * Sets the style of this button.
@@ -137704,29 +137704,29 @@ var require_dist10 = __commonJS({
       min_values: import_shapeshift3.s.number().int().greaterThanOrEqual(0).lessThanOrEqual(10).optional(),
       max_values: import_shapeshift3.s.number().int().greaterThanOrEqual(1).lessThanOrEqual(10).optional(),
       required: import_shapeshift3.s.boolean().optional()
-    }).reshape((data9) => {
-      if (data9.min_values !== void 0 && data9.max_values !== void 0 && data9.min_values > data9.max_values) {
+    }).reshape((data10) => {
+      if (data10.min_values !== void 0 && data10.max_values !== void 0 && data10.min_values > data10.max_values) {
         return import_shapeshift3.Result.err(new RangeError("min_values cannot be greater than max_values"));
       }
-      if (data9.max_values !== void 0 && data9.max_values > data9.options.length) {
+      if (data10.max_values !== void 0 && data10.max_values > data10.options.length) {
         return import_shapeshift3.Result.err(new RangeError("max_values cannot be greater than the number of options"));
       }
-      if (data9.min_values !== void 0 && data9.min_values > data9.options.length) {
+      if (data10.min_values !== void 0 && data10.min_values > data10.options.length) {
         return import_shapeshift3.Result.err(new RangeError("min_values cannot be greater than the number of options"));
       }
-      if (data9.required === true && data9.min_values === 0) {
+      if (data10.required === true && data10.min_values === 0) {
         return import_shapeshift3.Result.err(new RangeError("If required is true, min_values must be at least 1"));
       }
-      const defaultCount = data9.options.filter((option) => option.default === true).length;
-      if (data9.max_values !== void 0 && defaultCount > data9.max_values) {
+      const defaultCount = data10.options.filter((option) => option.default === true).length;
+      if (data10.max_values !== void 0 && defaultCount > data10.max_values) {
         return import_shapeshift3.Result.err(new RangeError("The number of default options cannot be greater than max_values"));
       }
-      const values = data9.options.map((option) => option.value);
+      const values = data10.options.map((option) => option.value);
       const uniqueValues = new Set(values);
       if (uniqueValues.size !== values.length) {
         return import_shapeshift3.Result.err(new RangeError("Each option in a checkbox group must have a unique value"));
       }
-      return import_shapeshift3.Result.ok(data9);
+      return import_shapeshift3.Result.ok(data10);
     }).setValidationEnabled(isValidationEnabled);
     var radioGroupOptionPredicate = checkboxGroupOptionPredicate;
     var radioGroupPredicate = import_shapeshift3.s.object({
@@ -137735,17 +137735,17 @@ var require_dist10 = __commonJS({
       id: idValidator.optional(),
       options: import_shapeshift3.s.array(radioGroupOptionPredicate).lengthGreaterThanOrEqual(2).lengthLessThanOrEqual(10),
       required: import_shapeshift3.s.boolean().optional()
-    }).reshape((data9) => {
-      const defaultCount = data9.options.filter((option) => option.default === true).length;
+    }).reshape((data10) => {
+      const defaultCount = data10.options.filter((option) => option.default === true).length;
       if (defaultCount > 1) {
         return import_shapeshift3.Result.err(new RangeError("There can be at most one default option in a radio group"));
       }
-      const values = data9.options.map((option) => option.value);
+      const values = data10.options.map((option) => option.value);
       const uniqueValues = new Set(values);
       if (uniqueValues.size !== values.length) {
         return import_shapeshift3.Result.err(new RangeError("Each option in a radio group must have a unique value"));
       }
-      return import_shapeshift3.Result.ok(data9);
+      return import_shapeshift3.Result.ok(data10);
     }).setValidationEnabled(isValidationEnabled);
     var CheckboxBuilder = class extends ComponentBuilder {
       static {
@@ -137771,8 +137771,8 @@ var require_dist10 = __commonJS({
        * 	.setDefault(true);
        * ```
        */
-      constructor(data9) {
-        super({ type: import_v104.ComponentType.Checkbox, ...data9 });
+      constructor(data10) {
+        super({ type: import_v104.ComponentType.Checkbox, ...data10 });
       }
       /**
        * Sets the custom id of this checkbox.
@@ -137824,8 +137824,8 @@ var require_dist10 = __commonJS({
        * 	.setValue('option_2');
        * ```
        */
-      constructor(data9 = {}) {
-        this.data = data9;
+      constructor(data10 = {}) {
+        this.data = data10;
       }
       static {
         __name(this, "CheckboxGroupOptionBuilder");
@@ -137912,8 +137912,8 @@ var require_dist10 = __commonJS({
        * 	.setMaxValues(2);
        * ```
        */
-      constructor(data9) {
-        const { options, ...initData } = data9 ?? {};
+      constructor(data10) {
+        const { options, ...initData } = data10 ?? {};
         super({ ...initData, type: import_v105.ComponentType.CheckboxGroup });
         this.options = options?.map((option) => new CheckboxGroupOptionBuilder(option)) ?? [];
       }
@@ -138009,12 +138009,12 @@ var require_dist10 = __commonJS({
        * {@inheritDoc ComponentBuilder.toJSON}
        */
       toJSON() {
-        const data9 = {
+        const data10 = {
           ...this.data,
           options: this.options.map((option) => option.toJSON())
         };
-        checkboxGroupPredicate.parse(data9);
-        return data9;
+        checkboxGroupPredicate.parse(data10);
+        return data10;
       }
     };
     var import_v106 = require_v106();
@@ -138039,8 +138039,8 @@ var require_dist10 = __commonJS({
        * 	.setValue('option_2');
        * ```
        */
-      constructor(data9 = {}) {
-        this.data = data9;
+      constructor(data10 = {}) {
+        this.data = data10;
       }
       static {
         __name(this, "RadioGroupOptionBuilder");
@@ -138125,8 +138125,8 @@ var require_dist10 = __commonJS({
        * 	])
        * ```
        */
-      constructor(data9) {
-        const { options, ...initData } = data9 ?? {};
+      constructor(data10) {
+        const { options, ...initData } = data10 ?? {};
         super({ ...initData, type: import_v106.ComponentType.RadioGroup });
         this.options = options?.map((option) => new RadioGroupOptionBuilder(option)) ?? [];
       }
@@ -138204,12 +138204,12 @@ var require_dist10 = __commonJS({
        * {@inheritDoc ComponentBuilder.toJSON}
        */
       toJSON() {
-        const data9 = {
+        const data10 = {
           ...this.data,
           options: this.options.map((option) => option.toJSON())
         };
-        radioGroupPredicate.parse(data9);
-        return data9;
+        radioGroupPredicate.parse(data10);
+        return data10;
       }
     };
     var import_v108 = require_v106();
@@ -138254,8 +138254,8 @@ var require_dist10 = __commonJS({
        * }).setRequired();
        * ```
        */
-      constructor(data9 = {}) {
-        super({ type: import_v108.ComponentType.FileUpload, ...data9 });
+      constructor(data10 = {}) {
+        super({ type: import_v108.ComponentType.FileUpload, ...data10 });
       }
       /**
        * Sets the custom id for this file upload.
@@ -138450,8 +138450,8 @@ var require_dist10 = __commonJS({
        * 	.setMinValues(2);
        * ```
        */
-      constructor(data9) {
-        super({ ...data9, type: import_v1010.ComponentType.ChannelSelect });
+      constructor(data10) {
+        super({ ...data10, type: import_v1010.ComponentType.ChannelSelect });
       }
       /**
        * Adds channel types to this select menu.
@@ -138543,8 +138543,8 @@ var require_dist10 = __commonJS({
        * 	.setMinValues(1);
        * ```
        */
-      constructor(data9) {
-        super({ ...data9, type: import_v1011.ComponentType.MentionableSelect });
+      constructor(data10) {
+        super({ ...data10, type: import_v1011.ComponentType.MentionableSelect });
       }
       /**
        * Adds default roles to this auto populated select menu.
@@ -138631,8 +138631,8 @@ var require_dist10 = __commonJS({
        * 	.setMinValues(1);
        * ```
        */
-      constructor(data9) {
-        super({ ...data9, type: import_v1012.ComponentType.RoleSelect });
+      constructor(data10) {
+        super({ ...data10, type: import_v1012.ComponentType.RoleSelect });
       }
       /**
        * Adds default roles to this auto populated select menu.
@@ -138766,8 +138766,8 @@ var require_dist10 = __commonJS({
        * 	});
        * ```
        */
-      constructor(data9) {
-        const { options, ...initData } = data9 ?? {};
+      constructor(data10) {
+        const { options, ...initData } = data10 ?? {};
         super({ ...initData, type: import_v1014.ComponentType.StringSelect });
         this.options = options?.map((option) => new StringSelectMenuOptionBuilder3(option)) ?? [];
       }
@@ -138873,8 +138873,8 @@ var require_dist10 = __commonJS({
        * 	.setMinValues(1);
        * ```
        */
-      constructor(data9) {
-        super({ ...data9, type: import_v1015.ComponentType.UserSelect });
+      constructor(data10) {
+        super({ ...data10, type: import_v1015.ComponentType.UserSelect });
       }
       /**
        * Adds default users to this auto populated select menu.
@@ -138938,8 +138938,8 @@ var require_dist10 = __commonJS({
        * 	.setStyle(TextInputStyle.Paragraph);
        * ```
        */
-      constructor(data9) {
-        super({ type: import_v1016.ComponentType.TextInput, ...data9 });
+      constructor(data10) {
+        super({ type: import_v1016.ComponentType.TextInput, ...data10 });
       }
       /**
        * Sets the custom id for this text input.
@@ -139086,9 +139086,9 @@ var require_dist10 = __commonJS({
        * }).setLabel('new text');
        * ```
        */
-      constructor(data9 = {}) {
+      constructor(data10 = {}) {
         super({ type: import_v1018.ComponentType.Label });
-        const { component, ...rest } = data9;
+        const { component, ...rest } = data10;
         this.data = {
           ...rest,
           component: component ? createComponentBuilder(component) : void 0,
@@ -139215,13 +139215,13 @@ var require_dist10 = __commonJS({
        */
       toJSON() {
         const { component, ...rest } = this.data;
-        const data9 = {
+        const data10 = {
           ...rest,
           // The label predicate validates the component.
           component: component?.toJSON()
         };
-        labelPredicate.parse(data9);
-        return data9;
+        labelPredicate.parse(data10);
+        return data10;
       }
     };
     var import_v1024 = require_v106();
@@ -139271,11 +139271,11 @@ var require_dist10 = __commonJS({
        * 	.setDescription('alt text');
        * ```
        */
-      constructor(data9 = {}) {
+      constructor(data10 = {}) {
         super({
           type: import_v1019.ComponentType.Thumbnail,
-          ...data9,
-          media: data9.media ? { url: data9.media.url } : void 0
+          ...data10,
+          media: data10.media ? { url: data10.media.url } : void 0
         });
       }
       /**
@@ -139374,8 +139374,8 @@ var require_dist10 = __commonJS({
        * 	.setSpoiler(false);
        * ```
        */
-      constructor(data9 = {}) {
-        super({ type: import_v1021.ComponentType.File, ...data9, file: data9.file ? { url: data9.file.url } : void 0 });
+      constructor(data10 = {}) {
+        super({ type: import_v1021.ComponentType.File, ...data10, file: data10.file ? { url: data10.file.url } : void 0 });
       }
       /**
        * Sets the spoiler status of this file.
@@ -139429,10 +139429,10 @@ var require_dist10 = __commonJS({
        * 	.setDivider(false);
        * ```
        */
-      constructor(data9 = {}) {
+      constructor(data10 = {}) {
         super({
           type: import_v1022.ComponentType.Separator,
-          ...data9
+          ...data10
         });
       }
       /**
@@ -139492,10 +139492,10 @@ var require_dist10 = __commonJS({
        * 	.setContent('new text');
        * ```
        */
-      constructor(data9 = {}) {
+      constructor(data10 = {}) {
         super({
           type: import_v1023.ComponentType.TextDisplay,
-          ...data9
+          ...data10
         });
       }
       /**
@@ -139554,8 +139554,8 @@ var require_dist10 = __commonJS({
        *  .addSectionComponents(section);
        * ```
        */
-      constructor({ components, ...data9 } = {}) {
-        super({ type: import_v1024.ComponentType.Container, ...data9 });
+      constructor({ components, ...data10 } = {}) {
+        super({ type: import_v1024.ComponentType.Container, ...data10 });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
       }
       /**
@@ -139710,8 +139710,8 @@ var require_dist10 = __commonJS({
        * 	.setDescription("alt text");
        * ```
        */
-      constructor(data9 = {}) {
-        this.data = data9;
+      constructor(data10 = {}) {
+        this.data = data10;
       }
       /**
        * Sets the description of this media gallery item.
@@ -139801,8 +139801,8 @@ var require_dist10 = __commonJS({
        * 	.addItems(item2, item3);
        * ```
        */
-      constructor({ items, ...data9 } = {}) {
-        super({ type: import_v1025.ComponentType.MediaGallery, ...data9 });
+      constructor({ items, ...data10 } = {}) {
+        super({ type: import_v1025.ComponentType.MediaGallery, ...data10 });
         this.items = items?.map((item) => new MediaGalleryItemBuilder(item)) ?? [];
       }
       /**
@@ -139898,8 +139898,8 @@ var require_dist10 = __commonJS({
        * 	.setPrimaryButtonAccessory(button);
        * ```
        */
-      constructor({ components, accessory, ...data9 } = {}) {
-        super({ type: import_v1026.ComponentType.Section, ...data9 });
+      constructor({ components, accessory, ...data10 } = {}) {
+        super({ type: import_v1026.ComponentType.Section, ...data10 });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
         this.accessory = accessory ? createComponentBuilder(accessory) : void 0;
       }
@@ -139967,53 +139967,53 @@ var require_dist10 = __commonJS({
         };
       }
     };
-    function createComponentBuilder(data9) {
-      if (data9 instanceof ComponentBuilder) {
-        return data9;
+    function createComponentBuilder(data10) {
+      if (data10 instanceof ComponentBuilder) {
+        return data10;
       }
-      switch (data9.type) {
+      switch (data10.type) {
         case import_v1027.ComponentType.ActionRow:
-          return new ActionRowBuilder5(data9);
+          return new ActionRowBuilder5(data10);
         case import_v1027.ComponentType.Button:
-          return new ButtonBuilder4(data9);
+          return new ButtonBuilder4(data10);
         case import_v1027.ComponentType.StringSelect:
-          return new StringSelectMenuBuilder3(data9);
+          return new StringSelectMenuBuilder3(data10);
         case import_v1027.ComponentType.TextInput:
-          return new TextInputBuilder3(data9);
+          return new TextInputBuilder3(data10);
         case import_v1027.ComponentType.UserSelect:
-          return new UserSelectMenuBuilder(data9);
+          return new UserSelectMenuBuilder(data10);
         case import_v1027.ComponentType.RoleSelect:
-          return new RoleSelectMenuBuilder(data9);
+          return new RoleSelectMenuBuilder(data10);
         case import_v1027.ComponentType.MentionableSelect:
-          return new MentionableSelectMenuBuilder(data9);
+          return new MentionableSelectMenuBuilder(data10);
         case import_v1027.ComponentType.ChannelSelect:
-          return new ChannelSelectMenuBuilder(data9);
+          return new ChannelSelectMenuBuilder(data10);
         case import_v1027.ComponentType.File:
-          return new FileBuilder(data9);
+          return new FileBuilder(data10);
         case import_v1027.ComponentType.Container:
-          return new ContainerBuilder(data9);
+          return new ContainerBuilder(data10);
         case import_v1027.ComponentType.Section:
-          return new SectionBuilder(data9);
+          return new SectionBuilder(data10);
         case import_v1027.ComponentType.Separator:
-          return new SeparatorBuilder(data9);
+          return new SeparatorBuilder(data10);
         case import_v1027.ComponentType.TextDisplay:
-          return new TextDisplayBuilder(data9);
+          return new TextDisplayBuilder(data10);
         case import_v1027.ComponentType.Thumbnail:
-          return new ThumbnailBuilder(data9);
+          return new ThumbnailBuilder(data10);
         case import_v1027.ComponentType.MediaGallery:
-          return new MediaGalleryBuilder(data9);
+          return new MediaGalleryBuilder(data10);
         case import_v1027.ComponentType.Label:
-          return new LabelBuilder(data9);
+          return new LabelBuilder(data10);
         case import_v1027.ComponentType.FileUpload:
-          return new FileUploadBuilder(data9);
+          return new FileUploadBuilder(data10);
         case import_v1027.ComponentType.Checkbox:
-          return new CheckboxBuilder(data9);
+          return new CheckboxBuilder(data10);
         case import_v1027.ComponentType.CheckboxGroup:
-          return new CheckboxGroupBuilder(data9);
+          return new CheckboxGroupBuilder(data10);
         case import_v1027.ComponentType.RadioGroup:
-          return new RadioGroupBuilder(data9);
+          return new RadioGroupBuilder(data10);
         default:
-          throw new Error(`Cannot properly serialize component type: ${data9.type}`);
+          throw new Error(`Cannot properly serialize component type: ${data10.type}`);
       }
     }
     __name(createComponentBuilder, "createComponentBuilder");
@@ -140073,8 +140073,8 @@ var require_dist10 = __commonJS({
        * 	.addComponents(button2, button3);
        * ```
        */
-      constructor({ components, ...data9 } = {}) {
-        super({ type: import_v1028.ComponentType.ActionRow, ...data9 });
+      constructor({ components, ...data10 } = {}) {
+        super({ type: import_v1028.ComponentType.ActionRow, ...data10 });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
       }
       /**
@@ -140138,8 +140138,8 @@ var require_dist10 = __commonJS({
        *
        * @param data - The API data to create this modal with
        */
-      constructor({ components, ...data9 } = {}) {
-        this.data = { ...data9 };
+      constructor({ components, ...data10 } = {}) {
+        this.data = { ...data10 };
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
       }
       /**
@@ -141241,7 +141241,7 @@ var require_dist10 = __commonJS({
         return this;
       }
     };
-    var SlashCommandBuilder9 = class {
+    var SlashCommandBuilder10 = class {
       /**
        * The name of this command.
        */
@@ -141294,10 +141294,10 @@ var require_dist10 = __commonJS({
        */
       nsfw = void 0;
     };
-    __name(SlashCommandBuilder9, "SlashCommandBuilder");
-    SlashCommandBuilder9 = __decorateClass([
+    __name(SlashCommandBuilder10, "SlashCommandBuilder");
+    SlashCommandBuilder10 = __decorateClass([
       (0, import_ts_mixer6.mix)(SharedSlashCommandOptions, SharedNameAndDescription, SharedSlashCommandSubcommands, SharedSlashCommand)
-    ], SlashCommandBuilder9);
+    ], SlashCommandBuilder10);
     var Assertions_exports11 = {};
     __export2(Assertions_exports11, {
       contextsPredicate: () => contextsPredicate2,
@@ -141520,8 +141520,8 @@ var require_dist10 = __commonJS({
         return { ...this };
       }
     };
-    function embedLength(data9) {
-      return (data9.title?.length ?? 0) + (data9.description?.length ?? 0) + (data9.fields?.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0) ?? 0) + (data9.footer?.text.length ?? 0) + (data9.author?.name.length ?? 0);
+    function embedLength(data10) {
+      return (data10.title?.length ?? 0) + (data10.description?.length ?? 0) + (data10.fields?.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0) ?? 0) + (data10.footer?.text.length ?? 0) + (data10.author?.name.length ?? 0);
     }
     __name(embedLength, "embedLength");
     var version = "1.14.1";
@@ -141535,8 +141535,8 @@ var require_Embed = __commonJS({
     var { embedLength } = require_dist10();
     var isEqual = require_fast_deep_equal();
     var Embed = class _Embed {
-      constructor(data9) {
-        this.data = { ...data9 };
+      constructor(data10) {
+        this.data = { ...data10 };
       }
       /**
        * An array of fields of this embed.
@@ -141893,20 +141893,20 @@ var require_MessageMentions = __commonJS({
        * @param {MessageMentionsHasOptions} [options] The options for the check
        * @returns {boolean}
        */
-      has(data9, { ignoreDirect = false, ignoreRoles = false, ignoreRepliedUser = false, ignoreEveryone = false } = {}) {
-        const user = this.client.users.resolve(data9);
+      has(data10, { ignoreDirect = false, ignoreRoles = false, ignoreRepliedUser = false, ignoreEveryone = false } = {}) {
+        const user = this.client.users.resolve(data10);
         if (!ignoreEveryone && user && this.everyone) return true;
         const userWasRepliedTo = user && this.repliedUser?.id === user.id;
         if (!ignoreRepliedUser && userWasRepliedTo && this.users.has(user.id)) return true;
         if (!ignoreDirect) {
           if (user && (!ignoreRepliedUser || this.parsedUsers.has(user.id)) && this.users.has(user.id)) return true;
-          const role = this.guild?.roles.resolve(data9);
+          const role = this.guild?.roles.resolve(data10);
           if (role && this.roles.has(role.id)) return true;
-          const channel = this.client.channels.resolve(data9);
+          const channel = this.client.channels.resolve(data10);
           if (channel && this.channels.has(channel.id)) return true;
         }
         if (!ignoreRoles) {
-          const member = this.guild?.members.resolve(data9);
+          const member = this.guild?.members.resolve(data10);
           if (member) {
             for (const mentionedRole of this.roles.values()) if (member.roles.cache.has(mentionedRole.id)) return true;
           }
@@ -142192,8 +142192,8 @@ var require_Sticker = __commonJS({
        * @returns {Promise<Sticker>}
        */
       async fetch() {
-        const data9 = await this.client.rest.get(Routes3.sticker(this.id));
-        this._patch(data9);
+        const data10 = await this.client.rest.get(Routes3.sticker(this.id));
+        this._patch(data10);
         return this;
       }
       /**
@@ -142271,24 +142271,24 @@ var require_BaseGuildEmoji = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var BaseGuildEmoji = class extends Emoji {
-      constructor(client, data9, guild) {
-        super(client, data9);
+      constructor(client, data10, guild) {
+        super(client, data10);
         this.guild = guild;
         this.requiresColons = null;
         this.managed = null;
         this.available = null;
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("name" in data9) this.name = data9.name;
-        if ("require_colons" in data9) {
-          this.requiresColons = data9.require_colons;
+      _patch(data10) {
+        if ("name" in data10) this.name = data10.name;
+        if ("require_colons" in data10) {
+          this.requiresColons = data10.require_colons;
         }
-        if ("managed" in data9) {
-          this.managed = data9.managed;
+        if ("managed" in data10) {
+          this.managed = data10.managed;
         }
-        if ("available" in data9) {
-          this.available = data9.available;
+        if ("available" in data10) {
+          this.available = data10.available;
         }
       }
     };
@@ -142409,11 +142409,11 @@ var require_GuildEmoji = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var GuildEmojiRoleManager = require_GuildEmojiRoleManager();
     var GuildEmoji = class _GuildEmoji extends BaseGuildEmoji {
-      constructor(client, data9, guild) {
-        super(client, data9, guild);
+      constructor(client, data10, guild) {
+        super(client, data10, guild);
         this.author = null;
         Object.defineProperty(this, "_roles", { value: [], writable: true });
-        this._patch(data9);
+        this._patch(data10);
       }
       /**
        * The guild this emoji is part of
@@ -142425,10 +142425,10 @@ var require_GuildEmoji = __commonJS({
         clone._roles = this._roles.slice();
         return clone;
       }
-      _patch(data9) {
-        super._patch(data9);
-        if (data9.user) this.author = this.client.users._add(data9.user);
-        if (data9.roles) this._roles = data9.roles;
+      _patch(data10) {
+        super._patch(data10);
+        if (data10.user) this.author = this.client.users._add(data10.user);
+        if (data10.roles) this._roles = data10.roles;
       }
       /**
        * Whether the emoji is deletable by the client user
@@ -142566,12 +142566,12 @@ var require_ReactionUserManager = __commonJS({
       async fetch({ type = ReactionType.Normal, limit = 100, after } = {}) {
         const message = this.reaction.message;
         const query = makeURLSearchParams2({ limit, after, type });
-        const data9 = await this.client.rest.get(
+        const data10 = await this.client.rest.get(
           Routes3.channelMessageReaction(message.channelId, message.id, this.reaction.emoji.identifier),
           { query }
         );
         const users = new Collection3();
-        for (const rawUser of data9) {
+        for (const rawUser of data10) {
           const user = this.client.users._add(rawUser);
           this.cache.set(user.id, user);
           users.set(user.id, user);
@@ -142607,27 +142607,27 @@ var require_MessageReaction = __commonJS({
     var ReactionUserManager = require_ReactionUserManager();
     var { flatten } = require_Util();
     var MessageReaction = class {
-      constructor(client, data9, message) {
+      constructor(client, data10, message) {
         Object.defineProperty(this, "client", { value: client });
         this.message = message;
-        this.me = data9.me;
-        this.meBurst = Boolean(data9.me_burst);
+        this.me = data10.me;
+        this.meBurst = Boolean(data10.me_burst);
         this.users = new ReactionUserManager(this, this.me ? [client.user] : []);
-        this._emoji = new ReactionEmoji(this, data9.emoji);
+        this._emoji = new ReactionEmoji(this, data10.emoji);
         this.burstColors = null;
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if (data9.burst_colors) {
-          this.burstColors = data9.burst_colors;
+      _patch(data10) {
+        if (data10.burst_colors) {
+          this.burstColors = data10.burst_colors;
         }
-        if ("count" in data9) {
-          this.count ??= data9.count;
+        if ("count" in data10) {
+          this.count ??= data10.count;
         }
-        if ("count_details" in data9) {
+        if ("count_details" in data10) {
           this.countDetails = {
-            burst: data9.count_details.burst,
-            normal: data9.count_details.normal
+            burst: data10.count_details.burst,
+            normal: data10.count_details.normal
           };
         } else {
           this.countDetails ??= { burst: 0, normal: 0 };
@@ -142747,8 +142747,8 @@ var require_ReactionManager = __commonJS({
         super(message.client, MessageReaction, iterable);
         this.message = message;
       }
-      _add(data9, cache) {
-        return super._add(data9, cache, { id: data9.emoji.id ?? data9.emoji.name, extras: [this.message] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { id: data10.emoji.id ?? data10.emoji.name, extras: [this.message] });
       }
       /**
        * The reaction cache of this manager
@@ -142797,8 +142797,8 @@ var require_Component = __commonJS({
     "use strict";
     var isEqual = require_fast_deep_equal();
     var Component = class _Component {
-      constructor(data9) {
-        this.data = data9;
+      constructor(data10) {
+        this.data = data10;
       }
       /**
        * The id of this component
@@ -142848,8 +142848,8 @@ var require_ActionRow = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var ActionRow = class extends Component {
-      constructor({ components, ...data9 }) {
-        super(data9);
+      constructor({ components, ...data10 }) {
+        super(data10);
         this.components = components.map((component) => createComponent(component));
       }
       /**
@@ -142885,9 +142885,9 @@ var require_ActionRowBuilder = __commonJS({
     var { createComponentBuilder } = require_Components();
     var { toSnakeCase } = require_Transformers();
     var ActionRowBuilder5 = class extends BuildersActionRow {
-      constructor({ components, ...data9 } = {}) {
+      constructor({ components, ...data10 } = {}) {
         super({
-          ...toSnakeCase(data9),
+          ...toSnakeCase(data10),
           components: components?.map((component) => createComponentBuilder(component))
         });
       }
@@ -142913,8 +142913,8 @@ var require_ButtonBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var ButtonBuilder4 = class extends BuildersButton {
-      constructor({ emoji, ...data9 } = {}) {
-        super(toSnakeCase({ ...data9, emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji }));
+      constructor({ emoji, ...data10 } = {}) {
+        super(toSnakeCase({ ...data10, emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji }));
       }
       /**
        * Sets the emoji to display on this button
@@ -143007,8 +143007,8 @@ var require_ChannelSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var ChannelSelectMenuBuilder = class extends BuildersChannelSelectMenu {
-      constructor(data9 = {}) {
-        super(toSnakeCase(data9));
+      constructor(data10 = {}) {
+        super(toSnakeCase(data10));
       }
       /**
        * Creates a new select menu builder from JSON data
@@ -143100,8 +143100,8 @@ var require_ContainerComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var ContainerComponent = class extends Component {
-      constructor({ components, ...data9 }) {
-        super(data9);
+      constructor({ components, ...data10 }) {
+        super(data10);
         this.components = components.map((component) => createComponent(component));
       }
       /**
@@ -143145,8 +143145,8 @@ var require_UnfurledMediaItem = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/UnfurledMediaItem.js"(exports2, module2) {
     "use strict";
     var UnfurledMediaItem = class {
-      constructor(data9) {
-        this.data = data9;
+      constructor(data10) {
+        this.data = data10;
       }
       /**
        * The URL of this media gallery item
@@ -143175,8 +143175,8 @@ var require_FileComponent = __commonJS({
     var Component = require_Component();
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var FileComponent = class extends Component {
-      constructor({ file, ...data9 }) {
-        super(data9);
+      constructor({ file, ...data10 }) {
+        super(data10);
         this.file = new UnfurledMediaItem(file);
       }
       /**
@@ -143206,8 +143206,8 @@ var require_LabelComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var LabelComponent = class extends Component {
-      constructor({ component, ...data9 }) {
-        super(data9);
+      constructor({ component, ...data10 }) {
+        super(data10);
         this.component = createComponent(component);
       }
       /**
@@ -143247,8 +143247,8 @@ var require_MediaGalleryItem = __commonJS({
     "use strict";
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var MediaGalleryItem = class {
-      constructor({ media, ...data9 }) {
-        this.data = data9;
+      constructor({ media, ...data10 }) {
+        this.data = data10;
         this.media = new UnfurledMediaItem(media);
       }
       /**
@@ -143286,8 +143286,8 @@ var require_MediaGalleryComponent = __commonJS({
     var Component = require_Component();
     var MediaGalleryItem = require_MediaGalleryItem();
     var MediaGalleryComponent = class extends Component {
-      constructor({ items, ...data9 }) {
-        super(data9);
+      constructor({ items, ...data10 }) {
+        super(data10);
         this.items = items.map((item) => new MediaGalleryItem(item));
       }
       /**
@@ -143310,8 +143310,8 @@ var require_MentionableSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var MentionableSelectMenuBuilder = class extends BuildersMentionableSelectMenu {
-      constructor(data9 = {}) {
-        super(toSnakeCase(data9));
+      constructor(data10 = {}) {
+        super(toSnakeCase(data10));
       }
       /**
        * Creates a new select menu builder from JSON data
@@ -143346,8 +143346,8 @@ var require_RoleSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var RoleSelectMenuBuilder = class extends BuildersRoleSelectMenu {
-      constructor(data9 = {}) {
-        super(toSnakeCase(data9));
+      constructor(data10 = {}) {
+        super(toSnakeCase(data10));
       }
       /**
        * Creates a new select menu builder from JSON data
@@ -143380,8 +143380,8 @@ var require_SectionComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var SectionComponent = class extends Component {
-      constructor({ accessory, components, ...data9 }) {
-        super(data9);
+      constructor({ accessory, components, ...data10 }) {
+        super(data10);
         this.components = components.map((component) => createComponent(component));
         this.accessory = createComponent(accessory);
       }
@@ -143438,10 +143438,10 @@ var require_StringSelectMenuBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var StringSelectMenuBuilder3 = class _StringSelectMenuBuilder extends BuildersSelectMenu {
-      constructor({ options, ...data9 } = {}) {
+      constructor({ options, ...data10 } = {}) {
         super(
           toSnakeCase({
-            ...data9,
+            ...data10,
             options: options?.map(({ emoji, ...option }) => ({
               ...option,
               emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji
@@ -143543,8 +143543,8 @@ var require_TextInputBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var TextInputBuilder3 = class extends BuildersTextInput {
-      constructor(data9) {
-        super(toSnakeCase(data9));
+      constructor(data10) {
+        super(toSnakeCase(data10));
       }
       /**
        * Creates a new text input builder from JSON data
@@ -143593,8 +143593,8 @@ var require_ThumbnailComponent = __commonJS({
     var Component = require_Component();
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var ThumbnailComponent = class extends Component {
-      constructor({ media, ...data9 }) {
-        super(data9);
+      constructor({ media, ...data10 }) {
+        super(data10);
         this.media = new UnfurledMediaItem(media);
       }
       /**
@@ -143633,8 +143633,8 @@ var require_UserSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var UserSelectMenuBuilder = class extends BuildersUserSelectMenu {
-      constructor(data9 = {}) {
-        super(toSnakeCase(data9));
+      constructor(data10 = {}) {
+        super(toSnakeCase(data10));
       }
       /**
        * Creates a new select menu builder from JSON data
@@ -143666,11 +143666,11 @@ var require_Components = __commonJS({
     "use strict";
     var { ComponentBuilder } = require_dist10();
     var { ComponentType } = require_v106();
-    function createComponent(data9) {
-      return data9 instanceof Component ? data9 : new (ComponentTypeToComponent[data9.type] ?? Component)(data9);
+    function createComponent(data10) {
+      return data10 instanceof Component ? data10 : new (ComponentTypeToComponent[data10.type] ?? Component)(data10);
     }
-    function createComponentBuilder(data9) {
-      return data9 instanceof ComponentBuilder ? data9 : new (ComponentTypeToBuilder[data9.type] ?? ComponentBuilder)(data9);
+    function createComponentBuilder(data10) {
+      return data10 instanceof ComponentBuilder ? data10 : new (ComponentTypeToBuilder[data10.type] ?? ComponentBuilder)(data10);
     }
     function extractInteractiveComponents(component) {
       switch (component.type) {
@@ -143778,106 +143778,106 @@ var require_Message = __commonJS({
     var { _transformAPIMessageInteractionMetadata } = require_Transformers();
     var { cleanContent, resolvePartialEmoji, transformResolved } = require_Util();
     var Message2 = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.channelId = data9.channel_id;
-        this.guildId = data9.guild_id ?? this.channel?.guild?.id ?? null;
-        this._patch(data9);
+        this.channelId = data10.channel_id;
+        this.guildId = data10.guild_id ?? this.channel?.guild?.id ?? null;
+        this._patch(data10);
       }
-      _patch(data9) {
-        this.id = data9.id;
+      _patch(data10) {
+        this.id = data10.id;
         this.createdTimestamp = DiscordSnowflake.timestampFrom(this.id);
-        if ("type" in data9) {
-          this.type = data9.type;
+        if ("type" in data10) {
+          this.type = data10.type;
           this.system = !NonSystemMessageTypes.includes(this.type);
         } else {
           this.system ??= null;
           this.type ??= null;
         }
-        if ("content" in data9) {
-          this.content = data9.content;
+        if ("content" in data10) {
+          this.content = data10.content;
         } else {
           this.content ??= null;
         }
-        if ("author" in data9) {
-          this.author = this.client.users._add(data9.author, !data9.webhook_id);
+        if ("author" in data10) {
+          this.author = this.client.users._add(data10.author, !data10.webhook_id);
         } else {
           this.author ??= null;
         }
-        if ("pinned" in data9) {
-          this.pinned = Boolean(data9.pinned);
+        if ("pinned" in data10) {
+          this.pinned = Boolean(data10.pinned);
         } else {
           this.pinned ??= null;
         }
-        if ("tts" in data9) {
-          this.tts = data9.tts;
+        if ("tts" in data10) {
+          this.tts = data10.tts;
         } else {
           this.tts ??= null;
         }
-        if ("nonce" in data9) {
-          this.nonce = data9.nonce;
+        if ("nonce" in data10) {
+          this.nonce = data10.nonce;
         } else {
           this.nonce ??= null;
         }
-        if ("embeds" in data9) {
-          this.embeds = data9.embeds.map((embed) => new Embed(embed));
+        if ("embeds" in data10) {
+          this.embeds = data10.embeds.map((embed) => new Embed(embed));
         } else {
           this.embeds = this.embeds?.slice() ?? [];
         }
-        if ("components" in data9) {
-          this.components = data9.components.map((component) => createComponent(component));
+        if ("components" in data10) {
+          this.components = data10.components.map((component) => createComponent(component));
         } else {
           this.components = this.components?.slice() ?? [];
         }
-        if ("attachments" in data9) {
+        if ("attachments" in data10) {
           this.attachments = new Collection3();
-          if (data9.attachments) {
-            for (const attachment of data9.attachments) {
+          if (data10.attachments) {
+            for (const attachment of data10.attachments) {
               this.attachments.set(attachment.id, new Attachment(attachment));
             }
           }
         } else {
           this.attachments = new Collection3(this.attachments);
         }
-        if ("sticker_items" in data9 || "stickers" in data9) {
+        if ("sticker_items" in data10 || "stickers" in data10) {
           this.stickers = new Collection3(
-            (data9.sticker_items ?? data9.stickers)?.map((sticker) => [sticker.id, new Sticker2(this.client, sticker)])
+            (data10.sticker_items ?? data10.stickers)?.map((sticker) => [sticker.id, new Sticker2(this.client, sticker)])
           );
         } else {
           this.stickers = new Collection3(this.stickers);
         }
-        if ("position" in data9) {
-          this.position = data9.position;
+        if ("position" in data10) {
+          this.position = data10.position;
         } else {
           this.position ??= null;
         }
-        if ("role_subscription_data" in data9) {
+        if ("role_subscription_data" in data10) {
           this.roleSubscriptionData = {
-            roleSubscriptionListingId: data9.role_subscription_data.role_subscription_listing_id,
-            tierName: data9.role_subscription_data.tier_name,
-            totalMonthsSubscribed: data9.role_subscription_data.total_months_subscribed,
-            isRenewal: data9.role_subscription_data.is_renewal
+            roleSubscriptionListingId: data10.role_subscription_data.role_subscription_listing_id,
+            tierName: data10.role_subscription_data.tier_name,
+            totalMonthsSubscribed: data10.role_subscription_data.total_months_subscribed,
+            isRenewal: data10.role_subscription_data.is_renewal
           };
         } else {
           this.roleSubscriptionData ??= null;
         }
-        if ("resolved" in data9) {
+        if ("resolved" in data10) {
           this.resolved = transformResolved(
             { client: this.client, guild: this.guild, channel: this.channel },
-            data9.resolved
+            data10.resolved
           );
         } else {
           this.resolved ??= null;
         }
-        if (data9.edited_timestamp) {
-          this.editedTimestamp = Date.parse(data9.edited_timestamp);
+        if (data10.edited_timestamp) {
+          this.editedTimestamp = Date.parse(data10.edited_timestamp);
         } else {
           this.editedTimestamp ??= null;
         }
-        if ("reactions" in data9) {
+        if ("reactions" in data10) {
           this.reactions = new ReactionManager(this);
-          if (data9.reactions?.length > 0) {
-            for (const reaction of data9.reactions) {
+          if (data10.reactions?.length > 0) {
+            for (const reaction of data10.reactions) {
               this.reactions._add(reaction);
             }
           }
@@ -143887,97 +143887,97 @@ var require_Message = __commonJS({
         if (!this.mentions) {
           this.mentions = new Mentions(
             this,
-            data9.mentions,
-            data9.mention_roles,
-            data9.mention_everyone,
-            data9.mention_channels,
-            data9.referenced_message?.author
+            data10.mentions,
+            data10.mention_roles,
+            data10.mention_everyone,
+            data10.mention_channels,
+            data10.referenced_message?.author
           );
         } else {
           this.mentions = new Mentions(
             this,
-            data9.mentions ?? this.mentions.users,
-            data9.mention_roles ?? this.mentions.roles,
-            data9.mention_everyone ?? this.mentions.everyone,
-            data9.mention_channels ?? this.mentions.crosspostedChannels,
-            data9.referenced_message?.author ?? this.mentions.repliedUser
+            data10.mentions ?? this.mentions.users,
+            data10.mention_roles ?? this.mentions.roles,
+            data10.mention_everyone ?? this.mentions.everyone,
+            data10.mention_channels ?? this.mentions.crosspostedChannels,
+            data10.referenced_message?.author ?? this.mentions.repliedUser
           );
         }
-        if ("webhook_id" in data9) {
-          this.webhookId = data9.webhook_id;
+        if ("webhook_id" in data10) {
+          this.webhookId = data10.webhook_id;
         } else {
           this.webhookId ??= null;
         }
-        if ("application" in data9) {
-          this.groupActivityApplication = new ClientApplication(this.client, data9.application);
+        if ("application" in data10) {
+          this.groupActivityApplication = new ClientApplication(this.client, data10.application);
         } else {
           this.groupActivityApplication ??= null;
         }
-        if ("application_id" in data9) {
-          this.applicationId = data9.application_id;
+        if ("application_id" in data10) {
+          this.applicationId = data10.application_id;
         } else {
           this.applicationId ??= null;
         }
-        if ("activity" in data9) {
+        if ("activity" in data10) {
           this.activity = {
-            partyId: data9.activity.party_id,
-            type: data9.activity.type
+            partyId: data10.activity.party_id,
+            type: data10.activity.type
           };
         } else {
           this.activity ??= null;
         }
-        if ("thread" in data9) {
-          this.client.channels._add(data9.thread, this.guild);
+        if ("thread" in data10) {
+          this.client.channels._add(data10.thread, this.guild);
         }
-        if (this.member && data9.member) {
-          this.member._patch(data9.member);
-        } else if (data9.member && this.guild && this.author) {
-          this.guild.members._add(Object.assign(data9.member, { user: this.author }));
+        if (this.member && data10.member) {
+          this.member._patch(data10.member);
+        } else if (data10.member && this.guild && this.author) {
+          this.guild.members._add(Object.assign(data10.member, { user: this.author }));
         }
-        if ("flags" in data9) {
-          this.flags = new MessageFlagsBitField(data9.flags).freeze();
+        if ("flags" in data10) {
+          this.flags = new MessageFlagsBitField(data10.flags).freeze();
         } else {
           this.flags = new MessageFlagsBitField(this.flags).freeze();
         }
-        if ("message_reference" in data9) {
+        if ("message_reference" in data10) {
           this.reference = {
-            channelId: data9.message_reference.channel_id,
-            guildId: data9.message_reference.guild_id,
-            messageId: data9.message_reference.message_id,
-            type: data9.message_reference.type
+            channelId: data10.message_reference.channel_id,
+            guildId: data10.message_reference.guild_id,
+            messageId: data10.message_reference.message_id,
+            type: data10.message_reference.type
           };
         } else {
           this.reference ??= null;
         }
-        if (data9.referenced_message) {
-          this.channel?.messages._add({ guild_id: data9.message_reference?.guild_id, ...data9.referenced_message });
+        if (data10.referenced_message) {
+          this.channel?.messages._add({ guild_id: data10.message_reference?.guild_id, ...data10.referenced_message });
         }
-        if (data9.interaction_metadata) {
-          this.interactionMetadata = _transformAPIMessageInteractionMetadata(this.client, data9.interaction_metadata);
+        if (data10.interaction_metadata) {
+          this.interactionMetadata = _transformAPIMessageInteractionMetadata(this.client, data10.interaction_metadata);
         } else {
           this.interactionMetadata ??= null;
         }
-        if (data9.interaction) {
+        if (data10.interaction) {
           this.interaction = {
-            id: data9.interaction.id,
-            type: data9.interaction.type,
-            commandName: data9.interaction.name,
-            user: this.client.users._add(data9.interaction.user)
+            id: data10.interaction.id,
+            type: data10.interaction.type,
+            commandName: data10.interaction.name,
+            user: this.client.users._add(data10.interaction.user)
           };
         } else {
           this.interaction ??= null;
         }
-        if (data9.poll) {
+        if (data10.poll) {
           if (this.poll) {
-            this.poll._patch(data9.poll);
+            this.poll._patch(data10.poll);
           } else {
-            this.poll = new Poll(this.client, data9.poll, this, this.channel);
+            this.poll = new Poll(this.client, data10.poll, this, this.channel);
           }
         } else {
           this.poll ??= null;
         }
-        if (data9.message_snapshots) {
-          this.messageSnapshots = data9.message_snapshots.reduce((coll, snapshot) => {
+        if (data10.message_snapshots) {
+          this.messageSnapshots = data10.message_snapshots.reduce((coll, snapshot) => {
             const channel = this.client.channels.resolve(this.reference.channelId);
             const snapshotData = {
               ...snapshot.message,
@@ -143993,10 +143993,10 @@ var require_Message = __commonJS({
         } else {
           this.messageSnapshots ??= new Collection3();
         }
-        if (data9.call) {
+        if (data10.call) {
           this.call = {
-            endedTimestamp: data9.call.ended_timestamp ? Date.parse(data9.call.ended_timestamp) : null,
-            participants: data9.call.participants,
+            endedTimestamp: data10.call.ended_timestamp ? Date.parse(data10.call.ended_timestamp) : null,
+            participants: data10.call.participants,
             get endedAt() {
               return this.endedTimestamp && new Date(this.endedTimestamp);
             }
@@ -144392,18 +144392,18 @@ var require_Message = __commonJS({
        */
       async reply(options) {
         if (!this.channel) throw new DiscordjsError2(ErrorCodes2.ChannelNotCached);
-        let data9;
+        let data10;
         if (options instanceof MessagePayload) {
-          data9 = options;
+          data10 = options;
         } else {
-          data9 = MessagePayload.create(this, options, {
+          data10 = MessagePayload.create(this, options, {
             reply: {
               messageReference: this,
               failIfNotExists: options?.failIfNotExists ?? this.client.options.failIfNotExists
             }
           });
         }
-        return this.channel.send(data9);
+        return this.channel.send(data10);
       }
       /**
        * Forwards this message
@@ -144556,49 +144556,49 @@ var require_Webhook = __commonJS({
     var { resolveImage } = require_DataResolver();
     var getMessage = lazy(() => require_Message().Message);
     var Webhook2 = class _Webhook {
-      constructor(client, data9) {
+      constructor(client, data10) {
         Object.defineProperty(this, "client", { value: client });
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        if ("name" in data10) {
+          this.name = data10.name;
         }
         Object.defineProperty(this, "token", {
-          value: data9.token ?? null,
+          value: data10.token ?? null,
           writable: true,
           configurable: true
         });
-        if ("avatar" in data9) {
-          this.avatar = data9.avatar;
+        if ("avatar" in data10) {
+          this.avatar = data10.avatar;
         }
-        this.id = data9.id;
-        if ("type" in data9) {
-          this.type = data9.type;
+        this.id = data10.id;
+        if ("type" in data10) {
+          this.type = data10.type;
         }
-        if ("guild_id" in data9) {
-          this.guildId = data9.guild_id;
+        if ("guild_id" in data10) {
+          this.guildId = data10.guild_id;
         }
-        if ("channel_id" in data9) {
-          this.channelId = data9.channel_id;
+        if ("channel_id" in data10) {
+          this.channelId = data10.channel_id;
         }
-        if ("user" in data9) {
-          this.owner = this.client.users?._add(data9.user) ?? data9.user;
+        if ("user" in data10) {
+          this.owner = this.client.users?._add(data10.user) ?? data10.user;
         } else {
           this.owner ??= null;
         }
-        if ("application_id" in data9) {
-          this.applicationId = data9.application_id;
+        if ("application_id" in data10) {
+          this.applicationId = data10.application_id;
         } else {
           this.applicationId ??= null;
         }
-        if ("source_guild" in data9) {
-          this.sourceGuild = this.client.guilds?.cache.get(data9.source_guild.id) ?? data9.source_guild;
+        if ("source_guild" in data10) {
+          this.sourceGuild = this.client.guilds?.cache.get(data10.source_guild.id) ?? data10.source_guild;
         } else {
           this.sourceGuild ??= null;
         }
-        if ("source_channel" in data9) {
-          this.sourceChannel = this.client.channels?.cache.get(data9.source_channel?.id) ?? data9.source_channel;
+        if ("source_channel" in data10) {
+          this.sourceChannel = this.client.channels?.cache.get(data10.source_channel?.id) ?? data10.source_channel;
         } else {
           this.sourceChannel ??= null;
         }
@@ -144724,12 +144724,12 @@ var require_Webhook = __commonJS({
        */
       async sendSlackMessage(body) {
         if (!this.token) throw new DiscordjsError2(ErrorCodes2.WebhookTokenUnavailable);
-        const data9 = await this.client.rest.post(Routes3.webhookPlatform(this.id, this.token, "slack"), {
+        const data10 = await this.client.rest.post(Routes3.webhookPlatform(this.id, this.token, "slack"), {
           query: makeURLSearchParams2({ wait: true }),
           auth: false,
           body
         });
-        return data9.toString() === "ok";
+        return data10.toString() === "ok";
       }
       /**
        * Options used to edit a {@link Webhook}.
@@ -144750,14 +144750,14 @@ var require_Webhook = __commonJS({
           avatar = await resolveImage(avatar);
         }
         channel &&= channel.id ?? channel;
-        const data9 = await this.client.rest.patch(Routes3.webhook(this.id, channel ? void 0 : this.token), {
+        const data10 = await this.client.rest.patch(Routes3.webhook(this.id, channel ? void 0 : this.token), {
           body: { name, avatar, channel_id: channel },
           reason,
           auth: !this.token || Boolean(channel)
         });
-        this.name = data9.name;
-        this.avatar = data9.avatar;
-        this.channelId = data9.channel_id;
+        this.name = data10.name;
+        this.avatar = data10.avatar;
+        this.channelId = data10.channel_id;
         return this;
       }
       /**
@@ -144777,12 +144777,12 @@ var require_Webhook = __commonJS({
        */
       async fetchMessage(message, { threadId } = {}) {
         if (!this.token) throw new DiscordjsError2(ErrorCodes2.WebhookTokenUnavailable);
-        const data9 = await this.client.rest.get(Routes3.webhookMessage(this.id, this.token, message), {
+        const data10 = await this.client.rest.get(Routes3.webhookMessage(this.id, this.token, message), {
           query: threadId ? makeURLSearchParams2({ thread_id: threadId }) : void 0,
           auth: false
         });
-        if (!this.client.channels) return data9;
-        return this.client.channels.cache.get(data9.channel_id)?.messages._add(data9, false) ?? new (getMessage())(this.client, data9);
+        if (!this.client.channels) return data10;
+        return this.client.channels.cache.get(data10.channel_id)?.messages._add(data10, false) ?? new (getMessage())(this.client, data10);
       }
       /**
        * Edits a message that was sent by this webhook.
@@ -144959,12 +144959,12 @@ var require_WebhookClient = __commonJS({
        * @param {WebhookClientData} data The data of the webhook
        * @param {WebhookClientOptions} [options] Options for the webhook client
        */
-      constructor(data9, options) {
+      constructor(data10, options) {
         super(options);
         Object.defineProperty(this, "client", { value: this });
-        let { id, token } = data9;
-        if ("url" in data9) {
-          const parsed = parseWebhookURL(data9.url);
+        let { id, token } = data10;
+        if ("url" in data10) {
+          const parsed = parseWebhookURL(data10.url);
           if (!parsed) {
             throw new DiscordjsError2(ErrorCodes2.WebhookURLInvalid);
           }
@@ -145031,60 +145031,60 @@ var require_VoiceState = __commonJS({
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var VoiceState = class extends Base {
-      constructor(guild, data9) {
+      constructor(guild, data10) {
         super(guild.client);
         this.guild = guild;
-        this.id = data9.user_id;
-        this._patch(data9);
+        this.id = data10.user_id;
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("deaf" in data9) {
-          this.serverDeaf = data9.deaf;
+      _patch(data10) {
+        if ("deaf" in data10) {
+          this.serverDeaf = data10.deaf;
         } else {
           this.serverDeaf ??= null;
         }
-        if ("mute" in data9) {
-          this.serverMute = data9.mute;
+        if ("mute" in data10) {
+          this.serverMute = data10.mute;
         } else {
           this.serverMute ??= null;
         }
-        if ("self_deaf" in data9) {
-          this.selfDeaf = data9.self_deaf;
+        if ("self_deaf" in data10) {
+          this.selfDeaf = data10.self_deaf;
         } else {
           this.selfDeaf ??= null;
         }
-        if ("self_mute" in data9) {
-          this.selfMute = data9.self_mute;
+        if ("self_mute" in data10) {
+          this.selfMute = data10.self_mute;
         } else {
           this.selfMute ??= null;
         }
-        if ("self_video" in data9) {
-          this.selfVideo = data9.self_video;
+        if ("self_video" in data10) {
+          this.selfVideo = data10.self_video;
         } else {
           this.selfVideo ??= null;
         }
-        if ("session_id" in data9) {
-          this.sessionId = data9.session_id;
+        if ("session_id" in data10) {
+          this.sessionId = data10.session_id;
         } else {
           this.sessionId ??= null;
         }
-        if ("self_video" in data9) {
-          this.streaming = data9.self_stream ?? false;
+        if ("self_video" in data10) {
+          this.streaming = data10.self_stream ?? false;
         } else {
           this.streaming ??= null;
         }
-        if ("channel_id" in data9) {
-          this.channelId = data9.channel_id;
+        if ("channel_id" in data10) {
+          this.channelId = data10.channel_id;
         } else {
           this.channelId ??= null;
         }
-        if ("suppress" in data9) {
-          this.suppress = data9.suppress;
+        if ("suppress" in data10) {
+          this.suppress = data10.suppress;
         } else {
           this.suppress ??= null;
         }
-        if ("request_to_speak_timestamp" in data9) {
-          this.requestToSpeakTimestamp = data9.request_to_speak_timestamp && Date.parse(data9.request_to_speak_timestamp);
+        if ("request_to_speak_timestamp" in data10) {
+          this.requestToSpeakTimestamp = data10.request_to_speak_timestamp && Date.parse(data10.request_to_speak_timestamp);
         } else {
           this.requestToSpeakTimestamp ??= null;
         }
@@ -145469,7 +145469,7 @@ var require_GuildMember = __commonJS({
     var { GuildMemberFlagsBitField } = require_GuildMemberFlagsBitField();
     var PermissionsBitField2 = require_PermissionsBitField();
     var GuildMember = class extends Base {
-      constructor(client, data9, guild) {
+      constructor(client, data10, guild) {
         super(client);
         this.guild = guild;
         this.premiumSinceTimestamp = null;
@@ -145477,49 +145477,49 @@ var require_GuildMember = __commonJS({
         this.pending = null;
         this.communicationDisabledUntilTimestamp = null;
         Object.defineProperty(this, "_roles", { value: [], writable: true });
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("user" in data9) {
-          this.user = this.client.users._add(data9.user, true);
+      _patch(data10) {
+        if ("user" in data10) {
+          this.user = this.client.users._add(data10.user, true);
         }
-        if ("nick" in data9) this.nickname = data9.nick;
-        if ("avatar" in data9) {
-          this.avatar = data9.avatar;
+        if ("nick" in data10) this.nickname = data10.nick;
+        if ("avatar" in data10) {
+          this.avatar = data10.avatar;
         } else if (typeof this.avatar !== "string") {
           this.avatar = null;
         }
-        if ("banner" in data9) {
-          this.banner = data9.banner;
+        if ("banner" in data10) {
+          this.banner = data10.banner;
         } else {
           this.banner ??= null;
         }
-        if ("joined_at" in data9) {
-          this.joinedTimestamp = data9.joined_at && Date.parse(data9.joined_at);
+        if ("joined_at" in data10) {
+          this.joinedTimestamp = data10.joined_at && Date.parse(data10.joined_at);
         } else {
           this.joinedTimestamp ??= null;
         }
-        if ("premium_since" in data9) {
-          this.premiumSinceTimestamp = data9.premium_since ? Date.parse(data9.premium_since) : null;
+        if ("premium_since" in data10) {
+          this.premiumSinceTimestamp = data10.premium_since ? Date.parse(data10.premium_since) : null;
         }
-        if ("roles" in data9) this._roles = data9.roles;
-        if ("pending" in data9) {
-          this.pending = data9.pending;
+        if ("roles" in data10) this._roles = data10.roles;
+        if ("pending" in data10) {
+          this.pending = data10.pending;
         } else if (!this.partial) {
           this.pending ??= false;
         }
-        if ("communication_disabled_until" in data9) {
-          this.communicationDisabledUntilTimestamp = data9.communication_disabled_until && Date.parse(data9.communication_disabled_until);
+        if ("communication_disabled_until" in data10) {
+          this.communicationDisabledUntilTimestamp = data10.communication_disabled_until && Date.parse(data10.communication_disabled_until);
         }
-        if ("flags" in data9) {
-          this.flags = new GuildMemberFlagsBitField(data9.flags).freeze();
+        if ("flags" in data10) {
+          this.flags = new GuildMemberFlagsBitField(data10.flags).freeze();
         } else {
           this.flags ??= new GuildMemberFlagsBitField().freeze();
         }
-        if (data9.avatar_decoration_data) {
+        if (data10.avatar_decoration_data) {
           this.avatarDecorationData = {
-            asset: data9.avatar_decoration_data.asset,
-            skuId: data9.avatar_decoration_data.sku_id
+            asset: data10.avatar_decoration_data.asset,
+            skuId: data10.avatar_decoration_data.sku_id
           };
         } else {
           this.avatarDecorationData = null;
@@ -145924,8 +145924,8 @@ var require_MessageManager = __commonJS({
        * @type {Collection<Snowflake, Message>}
        * @name MessageManager#cache
        */
-      _add(data9, cache) {
-        return super._add(data9, cache);
+      _add(data10, cache) {
+        return super._add(data10, cache);
       }
       /**
        * Data that can be resolved to a Message object. This can be:
@@ -145988,14 +145988,14 @@ var require_MessageManager = __commonJS({
           const existing = this.cache.get(message);
           if (existing && !existing.partial) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.channelMessage(this.channel.id, message));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.channelMessage(this.channel.id, message));
+        return this._add(data10, cache);
       }
       async _fetchMany({ cache, ...apiOptions } = {}) {
-        const data9 = await this.client.rest.get(Routes3.channelMessages(this.channel.id), {
+        const data10 = await this.client.rest.get(Routes3.channelMessages(this.channel.id), {
           query: makeURLSearchParams2(apiOptions)
         });
-        return data9.reduce((_data, message) => _data.set(message.id, this._add(message, cache)), new Collection3());
+        return data10.reduce((_data, message) => _data.set(message.id, this._add(message, cache)), new Collection3());
       }
       /**
        * Options used to fetch pinned messages.
@@ -146034,21 +146034,21 @@ var require_MessageManager = __commonJS({
        *   .catch(console.error);
        */
       async fetchPins({ cache, ...apiOptions } = {}) {
-        const data9 = await this.client.rest.get(Routes3.channelMessagesPins(this.channel.id), {
+        const data10 = await this.client.rest.get(Routes3.channelMessagesPins(this.channel.id), {
           query: makeURLSearchParams2({
             ...apiOptions,
             before: apiOptions.before && new Date(apiOptions.before).toISOString()
           })
         });
         return {
-          items: data9.items.map((item) => ({
+          items: data10.items.map((item) => ({
             pinnedTimestamp: Date.parse(item.pinned_at),
             get pinnedAt() {
               return new Date(this.pinnedTimestamp);
             },
             message: this._add(item.message, cache)
           })),
-          hasMore: data9.has_more
+          hasMore: data10.has_more
         };
       }
       /**
@@ -146067,9 +146067,9 @@ var require_MessageManager = __commonJS({
           );
           deprecationEmittedForFetchPinned = true;
         }
-        const data9 = await this.client.rest.get(Routes3.channelPins(this.channel.id));
+        const data10 = await this.client.rest.get(Routes3.channelPins(this.channel.id));
         const messages = new Collection3();
-        for (const message of data9) messages.set(message.id, this._add(message, cache));
+        for (const message of data10) messages.set(message.id, this._add(message, cache));
         return messages;
       }
       /**
@@ -146128,8 +146128,8 @@ var require_MessageManager = __commonJS({
       async crosspost(message) {
         message = this.resolveId(message);
         if (!message) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        const data9 = await this.client.rest.post(Routes3.channelMessageCrosspost(this.channel.id, message));
-        return this.cache.get(data9.id) ?? this._add(data9);
+        const data10 = await this.client.rest.post(Routes3.channelMessageCrosspost(this.channel.id, message));
+        return this.cache.get(data10.id) ?? this._add(data10);
       }
       /**
        * Pins a message to the channel's pinned messages, even if it's not cached.
@@ -146503,8 +146503,8 @@ var require_MessagePayload = __commonJS({
           attachment = fileLike.attachment;
           name = fileLike.name ?? findName(attachment);
         }
-        const { data: data9, contentType } = await resolveFile(attachment);
-        return { data: data9, name, contentType };
+        const { data: data10, contentType } = await resolveFile(attachment);
+        return { data: data10, name, contentType };
       }
       /**
        * Creates a {@link MessagePayload} from user-level arguments.
@@ -146967,68 +146967,68 @@ var require_User = __commonJS({
     var UserFlagsBitField = require_UserFlagsBitField();
     var { emitDeprecationWarningForUserFetchFlags } = require_Util();
     var User = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.id = data9.id;
+        this.id = data10.id;
         this.bot = null;
         this.system = null;
         this.flags = null;
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("username" in data9) {
-          this.username = data9.username;
+      _patch(data10) {
+        if ("username" in data10) {
+          this.username = data10.username;
         } else {
           this.username ??= null;
         }
-        if ("global_name" in data9) {
-          this.globalName = data9.global_name;
+        if ("global_name" in data10) {
+          this.globalName = data10.global_name;
         } else {
           this.globalName ??= null;
         }
-        if ("bot" in data9) {
-          this.bot = Boolean(data9.bot);
+        if ("bot" in data10) {
+          this.bot = Boolean(data10.bot);
         } else if (!this.partial && typeof this.bot !== "boolean") {
           this.bot = false;
         }
-        if ("discriminator" in data9) {
-          this.discriminator = data9.discriminator;
+        if ("discriminator" in data10) {
+          this.discriminator = data10.discriminator;
         } else {
           this.discriminator ??= null;
         }
-        if ("avatar" in data9) {
-          this.avatar = data9.avatar;
+        if ("avatar" in data10) {
+          this.avatar = data10.avatar;
         } else {
           this.avatar ??= null;
         }
-        if ("banner" in data9) {
-          this.banner = data9.banner;
+        if ("banner" in data10) {
+          this.banner = data10.banner;
         } else if (this.banner !== null) {
           this.banner ??= void 0;
         }
-        if ("accent_color" in data9) {
-          this.accentColor = data9.accent_color;
+        if ("accent_color" in data10) {
+          this.accentColor = data10.accent_color;
         } else if (this.accentColor !== null) {
           this.accentColor ??= void 0;
         }
-        if ("system" in data9) {
-          this.system = Boolean(data9.system);
+        if ("system" in data10) {
+          this.system = Boolean(data10.system);
         } else if (!this.partial && typeof this.system !== "boolean") {
           this.system = false;
         }
-        if ("public_flags" in data9) {
-          this.flags = new UserFlagsBitField(data9.public_flags);
+        if ("public_flags" in data10) {
+          this.flags = new UserFlagsBitField(data10.public_flags);
         }
-        if ("avatar_decoration" in data9) {
-          this.avatarDecoration = data9.avatar_decoration;
+        if ("avatar_decoration" in data10) {
+          this.avatarDecoration = data10.avatar_decoration;
         } else {
           this.avatarDecoration ??= null;
         }
-        if ("avatar_decoration_data" in data9) {
-          if (data9.avatar_decoration_data) {
+        if ("avatar_decoration_data" in data10) {
+          if (data10.avatar_decoration_data) {
             this.avatarDecorationData = {
-              asset: data9.avatar_decoration_data.asset,
-              skuId: data9.avatar_decoration_data.sku_id
+              asset: data10.avatar_decoration_data.asset,
+              skuId: data10.avatar_decoration_data.sku_id
             };
           } else {
             this.avatarDecorationData = null;
@@ -147036,18 +147036,18 @@ var require_User = __commonJS({
         } else {
           this.avatarDecorationData ??= null;
         }
-        if (data9.collectibles) {
-          this.collectibles = _transformCollectibles(data9.collectibles);
+        if (data10.collectibles) {
+          this.collectibles = _transformCollectibles(data10.collectibles);
         } else {
           this.collectibles = null;
         }
-        if ("primary_guild" in data9) {
-          if (data9.primary_guild) {
+        if ("primary_guild" in data10) {
+          if (data10.primary_guild) {
             this.primaryGuild = {
-              identityGuildId: data9.primary_guild.identity_guild_id,
-              identityEnabled: data9.primary_guild.identity_enabled,
-              tag: data9.primary_guild.tag,
-              badge: data9.primary_guild.badge
+              identityGuildId: data10.primary_guild.identity_guild_id,
+              identityEnabled: data10.primary_guild.identity_enabled,
+              tag: data10.primary_guild.tag,
+              badge: data10.primary_guild.badge
             };
           } else {
             this.primaryGuild = null;
@@ -147282,10 +147282,10 @@ var require_PollAnswerVoterManager = __commonJS({
       async fetch({ after, limit } = {}) {
         const poll = this.answer.poll;
         const query = makeURLSearchParams2({ limit, after });
-        const data9 = await this.client.rest.get(Routes3.pollAnswerVoters(poll.channelId, poll.messageId, this.answer.id), {
+        const data10 = await this.client.rest.get(Routes3.pollAnswerVoters(poll.channelId, poll.messageId, this.answer.id), {
           query
         });
-        return data9.users.reduce((coll, rawUser) => {
+        return data10.users.reduce((coll, rawUser) => {
           const user = this.client.users._add(rawUser);
           this.cache.set(user.id, user);
           return coll.set(user.id, user);
@@ -147306,23 +147306,23 @@ var require_PollAnswer = __commonJS({
     var { PollAnswerVoterManager } = require_PollAnswerVoterManager();
     var deprecationEmittedForFetchVoters = false;
     var PollAnswer = class extends Base {
-      constructor(client, data9, poll) {
+      constructor(client, data10, poll) {
         super(client);
         Object.defineProperty(this, "poll", { value: poll });
-        this.id = data9.answer_id;
+        this.id = data10.answer_id;
         this.voters = new PollAnswerVoterManager(this);
         Object.defineProperty(this, "_emoji", { value: null, writable: true });
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("count" in data9) {
-          this.voteCount = data9.count;
+      _patch(data10) {
+        if ("count" in data10) {
+          this.voteCount = data10.count;
         } else {
           this.voteCount ??= this.voters.cache.size;
         }
-        this.text ??= data9.poll_media?.text ?? null;
-        if (data9.poll_media?.emoji) {
-          this._emoji = data9.poll_media.emoji;
+        this.text ??= data10.poll_media?.text ?? null;
+        if (data10.poll_media?.emoji) {
+          this._emoji = data10.poll_media.emoji;
         }
       }
       /**
@@ -147375,18 +147375,18 @@ var require_Poll = __commonJS({
     var { DiscordjsError: DiscordjsError2 } = require_DJSError();
     var { ErrorCodes: ErrorCodes2 } = require_errors4();
     var Poll = class extends Base {
-      constructor(client, data9, message, channel) {
+      constructor(client, data10, message, channel) {
         super(client);
-        this.channelId = data9.channel_id ?? channel.id;
+        this.channelId = data10.channel_id ?? channel.id;
         Object.defineProperty(this, "channel", { value: channel });
-        this.messageId = data9.message_id ?? message.id;
+        this.messageId = data10.message_id ?? message.id;
         Object.defineProperty(this, "message", { value: message });
         this.answers = new Collection3();
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if (data9.answers) {
-          for (const answer of data9.answers) {
+      _patch(data10) {
+        if (data10.answers) {
+          for (const answer of data10.answers) {
             const existing = this.answers.get(answer.answer_id);
             if (existing) {
               existing._patch(answer);
@@ -147395,33 +147395,33 @@ var require_Poll = __commonJS({
             }
           }
         }
-        if (data9.results) {
-          this.resultsFinalized = data9.results.is_finalized;
-          for (const answerResult of data9.results.answer_counts) {
+        if (data10.results) {
+          this.resultsFinalized = data10.results.is_finalized;
+          for (const answerResult of data10.results.answer_counts) {
             const answer = this.answers.get(answerResult.id);
             answer?._patch(answerResult);
           }
         } else {
           this.resultsFinalized ??= false;
         }
-        if ("allow_multiselect" in data9) {
-          this.allowMultiselect = data9.allow_multiselect;
+        if ("allow_multiselect" in data10) {
+          this.allowMultiselect = data10.allow_multiselect;
         } else {
           this.allowMultiselect ??= null;
         }
-        if ("layout_type" in data9) {
-          this.layoutType = data9.layout_type;
+        if ("layout_type" in data10) {
+          this.layoutType = data10.layout_type;
         } else {
           this.layoutType ??= null;
         }
-        if ("expiry" in data9) {
-          this.expiresTimestamp = data9.expiry && Date.parse(data9.expiry);
+        if ("expiry" in data10) {
+          this.expiresTimestamp = data10.expiry && Date.parse(data10.expiry);
         } else {
           this.expiresTimestamp ??= null;
         }
-        if (data9.question) {
+        if (data10.question) {
           this.question = {
-            text: data9.question.text
+            text: data10.question.text
           };
         } else {
           this.question ??= {
@@ -147517,34 +147517,34 @@ var require_Action = __commonJS({
       constructor(client) {
         this.client = client;
       }
-      handle(data9) {
-        return data9;
+      handle(data10) {
+        return data10;
       }
-      getPayload(data9, manager, id, partialType, cache) {
-        return this.client.options.partials.includes(partialType) ? manager._add(data9, cache) : manager.cache.get(id);
+      getPayload(data10, manager, id, partialType, cache) {
+        return this.client.options.partials.includes(partialType) ? manager._add(data10, cache) : manager.cache.get(id);
       }
-      getChannel(data9) {
+      getChannel(data10) {
         const payloadData = {};
-        const id = data9.channel_id ?? data9.id;
-        if ("recipients" in data9) {
-          const recipient = data9.author ?? data9.user ?? { id: data9.user_id };
-          if (!data9.recipients.some((existingRecipient) => recipient.id === existingRecipient.id)) {
-            payloadData.recipients = [...data9.recipients, recipient];
+        const id = data10.channel_id ?? data10.id;
+        if ("recipients" in data10) {
+          const recipient = data10.author ?? data10.user ?? { id: data10.user_id };
+          if (!data10.recipients.some((existingRecipient) => recipient.id === existingRecipient.id)) {
+            payloadData.recipients = [...data10.recipients, recipient];
           }
-        } else if (data9.type === ChannelType4.DM || data9.type === ChannelType4.GroupDM) {
-          const recipient = data9.author ?? data9.user ?? { id: data9.user_id };
+        } else if (data10.type === ChannelType4.DM || data10.type === ChannelType4.GroupDM) {
+          const recipient = data10.author ?? data10.user ?? { id: data10.user_id };
           payloadData.recipients = [recipient];
         }
         if (id !== void 0) payloadData.id = id;
-        return data9[this.client.actions.injectedChannel] ?? this.getPayload({ ...data9, ...payloadData }, this.client.channels, id, Partials2.Channel);
+        return data10[this.client.actions.injectedChannel] ?? this.getPayload({ ...data10, ...payloadData }, this.client.channels, id, Partials2.Channel);
       }
-      getMessage(data9, channel, cache) {
-        const id = data9.message_id ?? data9.id;
-        return data9[this.client.actions.injectedMessage] ?? this.getPayload(
+      getMessage(data10, channel, cache) {
+        const id = data10.message_id ?? data10.id;
+        return data10[this.client.actions.injectedMessage] ?? this.getPayload(
           {
             id,
             channel_id: channel.id,
-            guild_id: data9.guild_id ?? channel.guild?.id
+            guild_id: data10.guild_id ?? channel.guild?.id
           },
           channel.messages,
           id,
@@ -147552,24 +147552,24 @@ var require_Action = __commonJS({
           cache
         );
       }
-      getPoll(data9, message, channel) {
+      getPoll(data10, message, channel) {
         const includePollPartial = this.client.options.partials.includes(Partials2.Poll);
         const includePollAnswerPartial = this.client.options.partials.includes(Partials2.PollAnswer);
         if (message.partial && (!includePollPartial || !includePollAnswerPartial)) return null;
         if (!message.poll && includePollPartial) {
-          message.poll = new Poll(this.client, data9, message, channel);
+          message.poll = new Poll(this.client, data10, message, channel);
         }
-        if (message.poll && !message.poll.answers.has(data9.answer_id) && includePollAnswerPartial) {
-          const pollAnswer = new PollAnswer(this.client, data9, message.poll);
-          message.poll.answers.set(data9.answer_id, pollAnswer);
+        if (message.poll && !message.poll.answers.has(data10.answer_id) && includePollAnswerPartial) {
+          const pollAnswer = new PollAnswer(this.client, data10, message.poll);
+          message.poll.answers.set(data10.answer_id, pollAnswer);
         }
         return message.poll;
       }
-      getReaction(data9, message, user) {
-        const id = data9.emoji.id ?? decodeURIComponent(data9.emoji.name);
+      getReaction(data10, message, user) {
+        const id = data10.emoji.id ?? decodeURIComponent(data10.emoji.name);
         return this.getPayload(
           {
-            emoji: data9.emoji,
+            emoji: data10.emoji,
             count: message.partial ? null : 0,
             me: user?.id === this.client.user.id
           },
@@ -147578,28 +147578,28 @@ var require_Action = __commonJS({
           Partials2.Reaction
         );
       }
-      getMember(data9, guild) {
-        return this.getPayload(data9, guild.members, data9.user.id, Partials2.GuildMember);
+      getMember(data10, guild) {
+        return this.getPayload(data10, guild.members, data10.user.id, Partials2.GuildMember);
       }
-      getUser(data9) {
-        const id = data9.user_id;
-        return data9[this.client.actions.injectedUser] ?? this.getPayload({ id }, this.client.users, id, Partials2.User);
+      getUser(data10) {
+        const id = data10.user_id;
+        return data10[this.client.actions.injectedUser] ?? this.getPayload({ id }, this.client.users, id, Partials2.User);
       }
-      getUserFromMember(data9) {
-        if (data9.guild_id && data9.member?.user) {
-          const guild = this.client.guilds.cache.get(data9.guild_id);
+      getUserFromMember(data10) {
+        if (data10.guild_id && data10.member?.user) {
+          const guild = this.client.guilds.cache.get(data10.guild_id);
           if (guild) {
-            return guild.members._add(data9.member).user;
+            return guild.members._add(data10.member).user;
           } else {
-            return this.client.users._add(data9.member.user);
+            return this.client.users._add(data10.member.user);
           }
         }
-        return this.getUser(data9);
+        return this.getUser(data10);
       }
-      getScheduledEvent(data9, guild) {
-        const id = data9.guild_scheduled_event_id ?? data9.id;
+      getScheduledEvent(data10, guild) {
+        const id = data10.guild_scheduled_event_id ?? data10.id;
         return this.getPayload(
-          { id, guild_id: data9.guild_id ?? guild.id },
+          { id, guild_id: data10.guild_id ?? guild.id },
           guild.scheduledEvents,
           id,
           Partials2.GuildScheduledEvent
@@ -147608,11 +147608,11 @@ var require_Action = __commonJS({
       getThreadMember(id, manager) {
         return this.getPayload({ user_id: id }, manager, id, Partials2.ThreadMember, false);
       }
-      getSoundboardSound(data9, guild) {
-        return this.getPayload(data9, guild.soundboardSounds, data9.sound_id, Partials2.SoundboardSound);
+      getSoundboardSound(data10, guild) {
+        return this.getPayload(data10, guild.soundboardSounds, data10.sound_id, Partials2.SoundboardSound);
       }
-      spreadInjectedData(data9) {
-        return Object.fromEntries(Object.getOwnPropertySymbols(data9).map((symbol) => [symbol, data9[symbol]]));
+      spreadInjectedData(data10) {
+        return Object.fromEntries(Object.getOwnPropertySymbols(data10).map((symbol) => [symbol, data10[symbol]]));
       }
     };
     module2.exports = GenericAction;
@@ -147626,13 +147626,13 @@ var require_ApplicationCommandPermissionsUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ApplicationCommandPermissionsUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
         client.emit(Events3.ApplicationCommandPermissionsUpdate, {
-          permissions: data9.permissions,
-          id: data9.id,
-          guildId: data9.guild_id,
-          applicationId: data9.application_id
+          permissions: data10.permissions,
+          id: data10.id,
+          guildId: data10.guild_id,
+          applicationId: data10.application_id
         });
       }
     };
@@ -147646,18 +147646,18 @@ var require_AutoModerationActionExecution = __commonJS({
     "use strict";
     var { _transformAPIAutoModerationAction } = require_Transformers();
     var AutoModerationActionExecution = class {
-      constructor(data9, guild) {
+      constructor(data10, guild) {
         this.guild = guild;
-        this.action = _transformAPIAutoModerationAction(data9.action);
-        this.ruleId = data9.rule_id;
-        this.ruleTriggerType = data9.rule_trigger_type;
-        this.userId = data9.user_id;
-        this.channelId = data9.channel_id ?? null;
-        this.messageId = data9.message_id ?? null;
-        this.alertSystemMessageId = data9.alert_system_message_id ?? null;
-        this.content = data9.content;
-        this.matchedKeyword = data9.matched_keyword ?? null;
-        this.matchedContent = data9.matched_content ?? null;
+        this.action = _transformAPIAutoModerationAction(data10.action);
+        this.ruleId = data10.rule_id;
+        this.ruleTriggerType = data10.rule_trigger_type;
+        this.userId = data10.user_id;
+        this.channelId = data10.channel_id ?? null;
+        this.messageId = data10.message_id ?? null;
+        this.alertSystemMessageId = data10.alert_system_message_id ?? null;
+        this.content = data10.content;
+        this.matchedKeyword = data10.matched_keyword ?? null;
+        this.matchedContent = data10.matched_content ?? null;
       }
       /**
        * The auto moderation rule this action belongs to.
@@ -147704,11 +147704,11 @@ var require_AutoModerationActionExecution2 = __commonJS({
     var AutoModerationActionExecution = require_AutoModerationActionExecution();
     var Events3 = require_Events();
     var AutoModerationActionExecutionAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const { client } = this;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          client.emit(Events3.AutoModerationActionExecution, new AutoModerationActionExecution(data9, guild));
+          client.emit(Events3.AutoModerationActionExecution, new AutoModerationActionExecution(data10, guild));
         }
         return {};
       }
@@ -147724,11 +147724,11 @@ var require_AutoModerationRuleCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var AutoModerationRuleCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const { client } = this;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const autoModerationRule = guild.autoModerationRules._add(data9);
+          const autoModerationRule = guild.autoModerationRules._add(data10);
           client.emit(Events3.AutoModerationRuleCreate, autoModerationRule);
         }
         return {};
@@ -147745,11 +147745,11 @@ var require_AutoModerationRuleDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var AutoModerationRuleDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const { client } = this;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const autoModerationRule = guild.autoModerationRules.cache.get(data9.id);
+          const autoModerationRule = guild.autoModerationRules.cache.get(data10.id);
           if (autoModerationRule) {
             guild.autoModerationRules.cache.delete(autoModerationRule.id);
             client.emit(Events3.AutoModerationRuleDelete, autoModerationRule);
@@ -147769,12 +147769,12 @@ var require_AutoModerationRuleUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var AutoModerationRuleUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const { client } = this;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const oldAutoModerationRule = guild.autoModerationRules.cache.get(data9.id)?._clone() ?? null;
-          const newAutoModerationRule = guild.autoModerationRules._add(data9);
+          const oldAutoModerationRule = guild.autoModerationRules.cache.get(data10.id)?._clone() ?? null;
+          const newAutoModerationRule = guild.autoModerationRules._add(data10);
           client.emit(Events3.AutoModerationRuleUpdate, oldAutoModerationRule, newAutoModerationRule);
         }
         return {};
@@ -147791,10 +147791,10 @@ var require_ChannelCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ChannelCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const existing = client.channels.cache.has(data9.id);
-        const channel = client.channels._add(data9);
+        const existing = client.channels.cache.has(data10.id);
+        const channel = client.channels._add(data10);
         if (!existing && channel) {
           client.emit(Events3.ChannelCreate, channel);
         }
@@ -147812,9 +147812,9 @@ var require_ChannelDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ChannelDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = client.channels.cache.get(data9.id);
+        const channel = client.channels.cache.get(data10.id);
         if (channel) {
           client.channels._remove(channel.id);
           client.emit(Events3.ChannelDelete, channel);
@@ -147963,28 +147963,28 @@ var require_DMChannel = __commonJS({
     var DMMessageManager = require_DMMessageManager();
     var Partials2 = require_Partials();
     var DMChannel = class extends BaseChannel {
-      constructor(client, data9) {
-        super(client, data9);
+      constructor(client, data10) {
+        super(client, data10);
         this.type = ChannelType4.DM;
         this.messages = new DMMessageManager(this);
       }
-      _patch(data9) {
-        super._patch(data9);
-        if (data9.recipients) {
+      _patch(data10) {
+        super._patch(data10);
+        if (data10.recipients) {
           this.recipientIds = [
-            .../* @__PURE__ */ new Set([...this.recipientIds ?? [], ...data9.recipients.map((recipient) => recipient.id)])
+            .../* @__PURE__ */ new Set([...this.recipientIds ?? [], ...data10.recipients.map((recipient) => recipient.id)])
           ];
-          for (const recipient of data9.recipients) {
+          for (const recipient of data10.recipients) {
             if ("username" in recipient || this.client.options.partials.includes(Partials2.User)) {
               this.client.users._add(recipient);
             }
           }
         }
-        if ("last_message_id" in data9) {
-          this.lastMessageId = data9.last_message_id;
+        if ("last_message_id" in data10) {
+          this.lastMessageId = data10.last_message_id;
         }
-        if ("last_pin_timestamp" in data9) {
-          this.lastPinTimestamp = Date.parse(data9.last_pin_timestamp);
+        if ("last_pin_timestamp" in data10) {
+          this.lastPinTimestamp = Date.parse(data10.last_pin_timestamp);
         } else {
           this.lastPinTimestamp ??= null;
         }
@@ -148125,7 +148125,7 @@ var require_GuildForumThreadManager = __commonJS({
           throw new DiscordjsTypeError2(ErrorCodes2.GuildForumMessageRequired);
         }
         const { body, files } = await (message instanceof MessagePayload ? message : MessagePayload.create(this, message)).resolveBody().resolveFiles();
-        const data9 = await this.client.rest.post(Routes3.threads(this.channel.id), {
+        const data10 = await this.client.rest.post(Routes3.threads(this.channel.id), {
           body: {
             name,
             auto_archive_duration: autoArchiveDuration,
@@ -148136,7 +148136,7 @@ var require_GuildForumThreadManager = __commonJS({
           files,
           reason
         });
-        return this.client.actions.ThreadCreate.handle(data9).thread;
+        return this.client.actions.ThreadCreate.handle(data10).thread;
       }
     };
     module2.exports = GuildForumThreadManager;
@@ -148152,48 +148152,48 @@ var require_ThreadOnlyChannel = __commonJS({
     var GuildForumThreadManager = require_GuildForumThreadManager();
     var { transformAPIGuildForumTag, transformAPIGuildDefaultReaction } = require_Channels();
     var ThreadOnlyChannel = class extends GuildChannel {
-      constructor(guild, data9, client) {
-        super(guild, data9, client, false);
+      constructor(guild, data10, client) {
+        super(guild, data10, client, false);
         this.threads = new GuildForumThreadManager(this);
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        super._patch(data9);
-        if ("available_tags" in data9) {
-          this.availableTags = data9.available_tags.map((tag) => transformAPIGuildForumTag(tag));
+      _patch(data10) {
+        super._patch(data10);
+        if ("available_tags" in data10) {
+          this.availableTags = data10.available_tags.map((tag) => transformAPIGuildForumTag(tag));
         } else {
           this.availableTags ??= [];
         }
-        if ("default_reaction_emoji" in data9) {
-          this.defaultReactionEmoji = data9.default_reaction_emoji ? transformAPIGuildDefaultReaction(data9.default_reaction_emoji) : null;
+        if ("default_reaction_emoji" in data10) {
+          this.defaultReactionEmoji = data10.default_reaction_emoji ? transformAPIGuildDefaultReaction(data10.default_reaction_emoji) : null;
         } else {
           this.defaultReactionEmoji ??= null;
         }
-        if ("default_thread_rate_limit_per_user" in data9) {
-          this.defaultThreadRateLimitPerUser = data9.default_thread_rate_limit_per_user;
+        if ("default_thread_rate_limit_per_user" in data10) {
+          this.defaultThreadRateLimitPerUser = data10.default_thread_rate_limit_per_user;
         } else {
           this.defaultThreadRateLimitPerUser ??= null;
         }
-        if ("rate_limit_per_user" in data9) {
-          this.rateLimitPerUser = data9.rate_limit_per_user;
+        if ("rate_limit_per_user" in data10) {
+          this.rateLimitPerUser = data10.rate_limit_per_user;
         } else {
           this.rateLimitPerUser ??= null;
         }
-        if ("default_auto_archive_duration" in data9) {
-          this.defaultAutoArchiveDuration = data9.default_auto_archive_duration;
+        if ("default_auto_archive_duration" in data10) {
+          this.defaultAutoArchiveDuration = data10.default_auto_archive_duration;
         } else {
           this.defaultAutoArchiveDuration ??= null;
         }
-        if ("nsfw" in data9) {
-          this.nsfw = data9.nsfw;
+        if ("nsfw" in data10) {
+          this.nsfw = data10.nsfw;
         } else {
           this.nsfw ??= false;
         }
-        if ("topic" in data9) {
-          this.topic = data9.topic;
+        if ("topic" in data10) {
+          this.topic = data10.topic;
         }
-        if ("default_sort_order" in data9) {
-          this.defaultSortOrder = data9.default_sort_order;
+        if ("default_sort_order" in data10) {
+          this.defaultSortOrder = data10.default_sort_order;
         } else {
           this.defaultSortOrder ??= null;
         }
@@ -148331,19 +148331,19 @@ var require_ThreadMember = __commonJS({
     var ThreadMemberFlagsBitField = require_ThreadMemberFlagsBitField();
     var { emitDeprecationWarningForRemoveThreadMember } = require_Util();
     var ThreadMember = class extends Base {
-      constructor(thread, data9, extra = {}) {
+      constructor(thread, data10, extra = {}) {
         super(thread.client);
         this.thread = thread;
         this.joinedTimestamp = null;
         this.flags = null;
-        this.id = data9.user_id;
-        this._patch(data9, extra);
+        this.id = data10.user_id;
+        this._patch(data10, extra);
       }
-      _patch(data9, extra = {}) {
-        if ("join_timestamp" in data9) this.joinedTimestamp = Date.parse(data9.join_timestamp);
-        if ("flags" in data9) this.flags = new ThreadMemberFlagsBitField(data9.flags).freeze();
-        if ("member" in data9) {
-          this.member = this.thread.guild.members._add(data9.member, extra.cache);
+      _patch(data10, extra = {}) {
+        if ("join_timestamp" in data10) this.joinedTimestamp = Date.parse(data10.join_timestamp);
+        if ("flags" in data10) this.flags = new ThreadMemberFlagsBitField(data10.flags).freeze();
+        if ("member" in data10) {
+          this.member = this.thread.guild.members._add(data10.member, extra.cache);
         } else {
           this.member ??= null;
         }
@@ -148429,12 +148429,12 @@ var require_ThreadMemberManager = __commonJS({
        * @type {Collection<Snowflake, ThreadMember>}
        * @name ThreadMemberManager#cache
        */
-      _add(data9, cache = true) {
-        const existing = this.cache.get(data9.user_id);
-        if (cache) existing?._patch(data9, { cache });
+      _add(data10, cache = true) {
+        const existing = this.cache.get(data10.user_id);
+        if (cache) existing?._patch(data10, { cache });
         if (existing) return existing;
-        const member = new ThreadMember(this.thread, data9, { cache });
-        if (cache) this.cache.set(data9.user_id, member);
+        const member = new ThreadMember(this.thread, data10, { cache });
+        if (cache) this.cache.set(data10.user_id, member);
         return member;
       }
       /**
@@ -148564,16 +148564,16 @@ var require_ThreadMemberManager = __commonJS({
           const existing = this.cache.get(member);
           if (existing) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.threadMembers(this.thread.id, member), {
+        const data10 = await this.client.rest.get(Routes3.threadMembers(this.thread.id, member), {
           query: makeURLSearchParams2({ with_member: withMember })
         });
-        return this._add(data9, cache);
+        return this._add(data10, cache);
       }
       async _fetchMany({ withMember, after, limit, cache } = {}) {
-        const data9 = await this.client.rest.get(Routes3.threadMembers(this.thread.id), {
+        const data10 = await this.client.rest.get(Routes3.threadMembers(this.thread.id), {
           query: makeURLSearchParams2({ with_member: withMember, after, limit })
         });
-        return data9.reduce((col, member) => col.set(member.user_id, this._add(member, cache)), new Collection3());
+        return data10.reduce((col, member) => col.set(member.user_id, this._add(member, cache)), new Collection3());
       }
     };
     module2.exports = ThreadMemberManager;
@@ -148595,37 +148595,37 @@ var require_ThreadChannel = __commonJS({
     var ThreadMemberManager = require_ThreadMemberManager();
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
     var ThreadChannel = class extends BaseChannel {
-      constructor(guild, data9, client) {
-        super(guild?.client ?? client, data9, false);
+      constructor(guild, data10, client) {
+        super(guild?.client ?? client, data10, false);
         this.guild = guild;
-        this.guildId = guild?.id ?? data9.guild_id;
-        this.ownerId = data9.owner_id;
+        this.guildId = guild?.id ?? data10.guild_id;
+        this.ownerId = data10.owner_id;
         this.messages = new GuildMessageManager(this);
         this.members = new ThreadMemberManager(this);
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        super._patch(data9);
-        if ("message" in data9) this.messages._add(data9.message);
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        super._patch(data10);
+        if ("message" in data10) this.messages._add(data10.message);
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("guild_id" in data9) {
-          this.guildId = data9.guild_id;
+        if ("guild_id" in data10) {
+          this.guildId = data10.guild_id;
         }
-        if ("parent_id" in data9) {
-          this.parentId = data9.parent_id;
+        if ("parent_id" in data10) {
+          this.parentId = data10.parent_id;
         } else {
           this.parentId ??= null;
         }
-        if ("thread_metadata" in data9) {
-          this.locked = data9.thread_metadata.locked ?? false;
-          this.invitable = this.type === ChannelType4.PrivateThread ? data9.thread_metadata.invitable ?? false : null;
-          this.archived = data9.thread_metadata.archived;
-          this.autoArchiveDuration = data9.thread_metadata.auto_archive_duration;
-          this.archiveTimestamp = Date.parse(data9.thread_metadata.archive_timestamp);
-          if ("create_timestamp" in data9.thread_metadata) {
-            this._createdTimestamp = Date.parse(data9.thread_metadata.create_timestamp);
+        if ("thread_metadata" in data10) {
+          this.locked = data10.thread_metadata.locked ?? false;
+          this.invitable = this.type === ChannelType4.PrivateThread ? data10.thread_metadata.invitable ?? false : null;
+          this.archived = data10.thread_metadata.archived;
+          this.autoArchiveDuration = data10.thread_metadata.auto_archive_duration;
+          this.archiveTimestamp = Date.parse(data10.thread_metadata.archive_timestamp);
+          if ("create_timestamp" in data10.thread_metadata) {
+            this._createdTimestamp = Date.parse(data10.thread_metadata.create_timestamp);
           }
         } else {
           this.locked ??= null;
@@ -148635,40 +148635,40 @@ var require_ThreadChannel = __commonJS({
           this.invitable ??= null;
         }
         this._createdTimestamp ??= this.type === ChannelType4.PrivateThread ? super.createdTimestamp : null;
-        if ("last_message_id" in data9) {
-          this.lastMessageId = data9.last_message_id;
+        if ("last_message_id" in data10) {
+          this.lastMessageId = data10.last_message_id;
         } else {
           this.lastMessageId ??= null;
         }
-        if ("last_pin_timestamp" in data9) {
-          this.lastPinTimestamp = data9.last_pin_timestamp ? Date.parse(data9.last_pin_timestamp) : null;
+        if ("last_pin_timestamp" in data10) {
+          this.lastPinTimestamp = data10.last_pin_timestamp ? Date.parse(data10.last_pin_timestamp) : null;
         } else {
           this.lastPinTimestamp ??= null;
         }
-        if ("rate_limit_per_user" in data9) {
-          this.rateLimitPerUser = data9.rate_limit_per_user ?? 0;
+        if ("rate_limit_per_user" in data10) {
+          this.rateLimitPerUser = data10.rate_limit_per_user ?? 0;
         } else {
           this.rateLimitPerUser ??= null;
         }
-        if ("message_count" in data9) {
-          this.messageCount = data9.message_count;
+        if ("message_count" in data10) {
+          this.messageCount = data10.message_count;
         } else {
           this.messageCount ??= null;
         }
-        if ("member_count" in data9) {
-          this.memberCount = data9.member_count;
+        if ("member_count" in data10) {
+          this.memberCount = data10.member_count;
         } else {
           this.memberCount ??= null;
         }
-        if ("total_message_sent" in data9) {
-          this.totalMessageSent = data9.total_message_sent;
+        if ("total_message_sent" in data10) {
+          this.totalMessageSent = data10.total_message_sent;
         } else {
           this.totalMessageSent ??= null;
         }
-        if (data9.member && this.client.user) this.members._add({ user_id: this.client.user.id, ...data9.member });
-        if (data9.messages) for (const message of data9.messages) this.messages._add(message);
-        if ("applied_tags" in data9) {
-          this.appliedTags = data9.applied_tags;
+        if (data10.member && this.client.user) this.members._add({ user_id: this.client.user.id, ...data10.member });
+        if (data10.messages) for (const message of data10.messages) this.messages._add(message);
+        if ("applied_tags" in data10) {
+          this.appliedTags = data10.applied_tags;
         } else {
           this.appliedTags ??= [];
         }
@@ -149178,8 +149178,8 @@ var require_ThreadManager = __commonJS({
        * @returns {Promise<FetchedThreads>}
        */
       async fetchActive(cache = true) {
-        const data9 = await this.channel.guild.channels.rawFetchGuildActiveThreads();
-        return this.constructor._mapThreads(data9, this.client, { parent: this.channel, cache });
+        const data10 = await this.channel.guild.channels.rawFetchGuildActiveThreads();
+        return this.constructor._mapThreads(data10, this.client, { parent: this.channel, cache });
       }
       static _mapThreads(rawThreads, client, { parent, guild, cache }) {
         const threads = rawThreads.threads.reduce((coll, raw) => {
@@ -149268,7 +149268,7 @@ var require_GuildTextThreadManager = __commonJS({
         } else if (this.channel.type !== ChannelType4.GuildAnnouncement) {
           resolvedType = type ?? resolvedType;
         }
-        const data9 = await this.client.rest.post(Routes3.threads(this.channel.id, startMessageId), {
+        const data10 = await this.client.rest.post(Routes3.threads(this.channel.id, startMessageId), {
           body: {
             name,
             auto_archive_duration: autoArchiveDuration,
@@ -149278,7 +149278,7 @@ var require_GuildTextThreadManager = __commonJS({
           },
           reason
         });
-        return this.client.actions.ThreadCreate.handle(data9).thread;
+        return this.client.actions.ThreadCreate.handle(data10).thread;
       }
     };
     module2.exports = GuildTextThreadManager;
@@ -149294,37 +149294,37 @@ var require_BaseGuildTextChannel = __commonJS({
     var GuildMessageManager = require_GuildMessageManager();
     var GuildTextThreadManager = require_GuildTextThreadManager();
     var BaseGuildTextChannel = class extends GuildChannel {
-      constructor(guild, data9, client) {
-        super(guild, data9, client, false);
+      constructor(guild, data10, client) {
+        super(guild, data10, client, false);
         this.messages = new GuildMessageManager(this);
         this.threads = new GuildTextThreadManager(this);
-        this.nsfw = Boolean(data9.nsfw);
-        this._patch(data9);
+        this.nsfw = Boolean(data10.nsfw);
+        this._patch(data10);
       }
-      _patch(data9) {
-        super._patch(data9);
-        if ("topic" in data9) {
-          this.topic = data9.topic;
+      _patch(data10) {
+        super._patch(data10);
+        if ("topic" in data10) {
+          this.topic = data10.topic;
         }
-        if ("nsfw" in data9) {
-          this.nsfw = Boolean(data9.nsfw);
+        if ("nsfw" in data10) {
+          this.nsfw = Boolean(data10.nsfw);
         }
-        if ("last_message_id" in data9) {
-          this.lastMessageId = data9.last_message_id;
+        if ("last_message_id" in data10) {
+          this.lastMessageId = data10.last_message_id;
         }
-        if ("last_pin_timestamp" in data9) {
-          this.lastPinTimestamp = data9.last_pin_timestamp ? Date.parse(data9.last_pin_timestamp) : null;
+        if ("last_pin_timestamp" in data10) {
+          this.lastPinTimestamp = data10.last_pin_timestamp ? Date.parse(data10.last_pin_timestamp) : null;
         }
-        if ("default_auto_archive_duration" in data9) {
-          this.defaultAutoArchiveDuration = data9.default_auto_archive_duration;
+        if ("default_auto_archive_duration" in data10) {
+          this.defaultAutoArchiveDuration = data10.default_auto_archive_duration;
         }
-        if ("default_thread_rate_limit_per_user" in data9) {
-          this.defaultThreadRateLimitPerUser = data9.default_thread_rate_limit_per_user;
+        if ("default_thread_rate_limit_per_user" in data10) {
+          this.defaultThreadRateLimitPerUser = data10.default_thread_rate_limit_per_user;
         } else {
           this.defaultThreadRateLimitPerUser ??= null;
         }
-        if ("messages" in data9) {
-          for (const message of data9.messages) this.messages._add(message);
+        if ("messages" in data10) {
+          for (const message of data10.messages) this.messages._add(message);
         }
       }
       /**
@@ -149480,39 +149480,39 @@ var require_BaseGuildVoiceChannel = __commonJS({
     var TextBasedChannel = require_TextBasedChannel();
     var GuildMessageManager = require_GuildMessageManager();
     var BaseGuildVoiceChannel = class extends GuildChannel {
-      constructor(guild, data9, client) {
-        super(guild, data9, client, false);
+      constructor(guild, data10, client) {
+        super(guild, data10, client, false);
         this.messages = new GuildMessageManager(this);
-        this.nsfw = Boolean(data9.nsfw);
-        this._patch(data9);
+        this.nsfw = Boolean(data10.nsfw);
+        this._patch(data10);
       }
-      _patch(data9) {
-        super._patch(data9);
-        if ("rtc_region" in data9) {
-          this.rtcRegion = data9.rtc_region;
+      _patch(data10) {
+        super._patch(data10);
+        if ("rtc_region" in data10) {
+          this.rtcRegion = data10.rtc_region;
         }
-        if ("bitrate" in data9) {
-          this.bitrate = data9.bitrate;
+        if ("bitrate" in data10) {
+          this.bitrate = data10.bitrate;
         }
-        if ("user_limit" in data9) {
-          this.userLimit = data9.user_limit;
+        if ("user_limit" in data10) {
+          this.userLimit = data10.user_limit;
         }
-        if ("video_quality_mode" in data9) {
-          this.videoQualityMode = data9.video_quality_mode;
+        if ("video_quality_mode" in data10) {
+          this.videoQualityMode = data10.video_quality_mode;
         } else {
           this.videoQualityMode ??= null;
         }
-        if ("last_message_id" in data9) {
-          this.lastMessageId = data9.last_message_id;
+        if ("last_message_id" in data10) {
+          this.lastMessageId = data10.last_message_id;
         }
-        if ("messages" in data9) {
-          for (const message of data9.messages) this.messages._add(message);
+        if ("messages" in data10) {
+          for (const message of data10.messages) this.messages._add(message);
         }
-        if ("rate_limit_per_user" in data9) {
-          this.rateLimitPerUser = data9.rate_limit_per_user;
+        if ("rate_limit_per_user" in data10) {
+          this.rateLimitPerUser = data10.rate_limit_per_user;
         }
-        if ("nsfw" in data9) {
-          this.nsfw = data9.nsfw;
+        if ("nsfw" in data10) {
+          this.nsfw = data10.nsfw;
         }
       }
       /**
@@ -149660,10 +149660,10 @@ var require_StageChannel = __commonJS({
     "use strict";
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
     var StageChannel = class extends BaseGuildVoiceChannel {
-      _patch(data9) {
-        super._patch(data9);
-        if ("topic" in data9) {
-          this.topic = data9.topic;
+      _patch(data10) {
+        super._patch(data10);
+        if ("topic" in data10) {
+          this.topic = data10.topic;
         }
       }
       /**
@@ -149707,10 +149707,10 @@ var require_TextChannel = __commonJS({
     "use strict";
     var BaseGuildTextChannel = require_BaseGuildTextChannel();
     var TextChannel6 = class extends BaseGuildTextChannel {
-      _patch(data9) {
-        super._patch(data9);
-        if ("rate_limit_per_user" in data9) {
-          this.rateLimitPerUser = data9.rate_limit_per_user;
+      _patch(data10) {
+        super._patch(data10);
+        if ("rate_limit_per_user" in data10) {
+          this.rateLimitPerUser = data10.rate_limit_per_user;
         }
       }
       /**
@@ -149784,14 +149784,14 @@ var require_DirectoryChannel = __commonJS({
     "use strict";
     var { BaseChannel } = require_BaseChannel();
     var DirectoryChannel = class extends BaseChannel {
-      constructor(guild, data9, client) {
-        super(client, data9);
+      constructor(guild, data10, client) {
+        super(client, data10);
         this.guild = guild;
         this.guildId = guild.id;
       }
-      _patch(data9) {
-        super._patch(data9);
-        this.name = data9.name;
+      _patch(data10) {
+        super._patch(data10);
+        this.name = data10.name;
       }
     };
     module2.exports = DirectoryChannel;
@@ -149823,25 +149823,25 @@ var require_PartialGroupDMChannel = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var PartialGroupDMMessageManager = require_PartialGroupDMMessageManager();
     var PartialGroupDMChannel = class extends BaseChannel {
-      constructor(client, data9) {
-        super(client, data9);
+      constructor(client, data10) {
+        super(client, data10);
         this.flags = null;
-        this.name = data9.name;
-        this.icon = data9.icon ?? null;
-        this.recipients = data9.recipients ?? [];
+        this.name = data10.name;
+        this.icon = data10.icon ?? null;
+        this.recipients = data10.recipients ?? [];
         this.messages = new PartialGroupDMMessageManager(this);
-        if ("owner_id" in data9) {
-          this.ownerId = data9.owner_id;
+        if ("owner_id" in data10) {
+          this.ownerId = data10.owner_id;
         } else {
           this.ownerId ??= null;
         }
-        if ("last_message_id" in data9) {
-          this.lastMessageId = data9.last_message_id;
+        if ("last_message_id" in data10) {
+          this.lastMessageId = data10.last_message_id;
         } else {
           this.lastMessageId ??= null;
         }
-        if ("last_pin_timestamp" in data9) {
-          this.lastPinTimestamp = data9.last_pin_timestamp ? Date.parse(data9.last_pin_timestamp) : null;
+        if ("last_pin_timestamp" in data10) {
+          this.lastPinTimestamp = data10.last_pin_timestamp ? Date.parse(data10.last_pin_timestamp) : null;
         } else {
           this.lastPinTimestamp ??= null;
         }
@@ -149903,9 +149903,9 @@ var require_ForumChannel = __commonJS({
     "use strict";
     var ThreadOnlyChannel = require_ThreadOnlyChannel();
     var ForumChannel = class extends ThreadOnlyChannel {
-      _patch(data9) {
-        super._patch(data9);
-        this.defaultForumLayout = data9.default_forum_layout;
+      _patch(data10) {
+        super._patch(data10);
+        this.defaultForumLayout = data10.default_forum_layout;
       }
       /**
        * Sets the default forum layout type used to display posts
@@ -149949,53 +149949,53 @@ var require_Channels = __commonJS({
     var getPartialGroupDMChannel = lazy(() => require_PartialGroupDMChannel());
     var getForumChannel = lazy(() => require_ForumChannel());
     var getMediaChannel = lazy(() => require_MediaChannel());
-    function createChannel(client, data9, guild, { allowUnknownGuild } = {}) {
+    function createChannel(client, data10, guild, { allowUnknownGuild } = {}) {
       let channel;
-      if (!data9.guild_id && !guild) {
-        if (data9.recipients && data9.type !== ChannelType4.GroupDM || data9.type === ChannelType4.DM) {
-          channel = new (getDMChannel())(client, data9);
-        } else if (data9.type === ChannelType4.GroupDM) {
-          channel = new (getPartialGroupDMChannel())(client, data9);
+      if (!data10.guild_id && !guild) {
+        if (data10.recipients && data10.type !== ChannelType4.GroupDM || data10.type === ChannelType4.DM) {
+          channel = new (getDMChannel())(client, data10);
+        } else if (data10.type === ChannelType4.GroupDM) {
+          channel = new (getPartialGroupDMChannel())(client, data10);
         }
       } else {
-        guild ??= client.guilds.cache.get(data9.guild_id);
+        guild ??= client.guilds.cache.get(data10.guild_id);
         if (guild || allowUnknownGuild) {
-          switch (data9.type) {
+          switch (data10.type) {
             case ChannelType4.GuildText: {
-              channel = new (getTextChannel())(guild, data9, client);
+              channel = new (getTextChannel())(guild, data10, client);
               break;
             }
             case ChannelType4.GuildVoice: {
-              channel = new (getVoiceChannel())(guild, data9, client);
+              channel = new (getVoiceChannel())(guild, data10, client);
               break;
             }
             case ChannelType4.GuildCategory: {
-              channel = new (getCategoryChannel())(guild, data9, client);
+              channel = new (getCategoryChannel())(guild, data10, client);
               break;
             }
             case ChannelType4.GuildAnnouncement: {
-              channel = new (getNewsChannel())(guild, data9, client);
+              channel = new (getNewsChannel())(guild, data10, client);
               break;
             }
             case ChannelType4.GuildStageVoice: {
-              channel = new (getStageChannel())(guild, data9, client);
+              channel = new (getStageChannel())(guild, data10, client);
               break;
             }
             case ChannelType4.AnnouncementThread:
             case ChannelType4.PublicThread:
             case ChannelType4.PrivateThread: {
-              channel = new (getThreadChannel())(guild, data9, client);
+              channel = new (getThreadChannel())(guild, data10, client);
               if (!allowUnknownGuild) channel.parent?.threads.cache.set(channel.id, channel);
               break;
             }
             case ChannelType4.GuildDirectory:
-              channel = new (getDirectoryChannel())(guild, data9, client);
+              channel = new (getDirectoryChannel())(guild, data10, client);
               break;
             case ChannelType4.GuildForum:
-              channel = new (getForumChannel())(guild, data9, client);
+              channel = new (getForumChannel())(guild, data10, client);
               break;
             case ChannelType4.GuildMedia:
-              channel = new (getMediaChannel())(guild, data9, client);
+              channel = new (getMediaChannel())(guild, data10, client);
               break;
           }
           if (channel && !allowUnknownGuild) guild.channels?.cache.set(channel.id, channel);
@@ -150052,13 +150052,13 @@ var require_ChannelUpdate = __commonJS({
     var Action = require_Action();
     var { createChannel } = require_Channels();
     var ChannelUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        let channel = client.channels.cache.get(data9.id);
+        let channel = client.channels.cache.get(data10.id);
         if (channel) {
-          const old = channel._update(data9);
-          if (channel.type !== data9.type) {
-            const newChannel = createChannel(this.client, data9, channel.guild);
+          const old = channel._update(data10);
+          if (channel.type !== data10.type) {
+            const newChannel = createChannel(this.client, data10, channel.guild);
             if (!newChannel) {
               this.client.channels.cache.delete(channel.id);
               return {};
@@ -150074,7 +150074,7 @@ var require_ChannelUpdate = __commonJS({
             updated: channel
           };
         } else {
-          client.channels._add(data9);
+          client.channels._add(data10);
         }
         return {};
       }
@@ -150090,9 +150090,9 @@ var require_EntitlementCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var EntitlementCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const entitlement = client.application.entitlements._add(data9);
+        const entitlement = client.application.entitlements._add(data10);
         client.emit(Events3.EntitlementCreate, entitlement);
         return {};
       }
@@ -150108,9 +150108,9 @@ var require_EntitlementDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var EntitlementDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const entitlement = client.application.entitlements._add(data9, false);
+        const entitlement = client.application.entitlements._add(data10, false);
         client.application.entitlements.cache.delete(entitlement.id);
         client.emit(Events3.EntitlementDelete, entitlement);
         return {};
@@ -150127,10 +150127,10 @@ var require_EntitlementUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var EntitlementUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const oldEntitlement = client.application.entitlements.cache.get(data9.id)?._clone() ?? null;
-        const newEntitlement = client.application.entitlements._add(data9);
+        const oldEntitlement = client.application.entitlements.cache.get(data10.id)?._clone() ?? null;
+        const newEntitlement = client.application.entitlements._add(data10);
         client.emit(Events3.EntitlementUpdate, oldEntitlement, newEntitlement);
         return {};
       }
@@ -150147,45 +150147,45 @@ var require_AutoModerationRule = __commonJS({
     var Base = require_Base();
     var { _transformAPIAutoModerationAction } = require_Transformers();
     var AutoModerationRule = class extends Base {
-      constructor(client, data9, guild) {
+      constructor(client, data10, guild) {
         super(client);
-        this.id = data9.id;
+        this.id = data10.id;
         this.guild = guild;
-        this.creatorId = data9.creator_id;
-        this.triggerType = data9.trigger_type;
-        this._patch(data9);
+        this.creatorId = data10.creator_id;
+        this.triggerType = data10.trigger_type;
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("event_type" in data9) {
-          this.eventType = data9.event_type;
+        if ("event_type" in data10) {
+          this.eventType = data10.event_type;
         }
-        if ("trigger_metadata" in data9) {
+        if ("trigger_metadata" in data10) {
           this.triggerMetadata = {
-            keywordFilter: data9.trigger_metadata.keyword_filter ?? [],
-            regexPatterns: data9.trigger_metadata.regex_patterns ?? [],
-            presets: data9.trigger_metadata.presets ?? [],
-            allowList: data9.trigger_metadata.allow_list ?? [],
-            mentionTotalLimit: data9.trigger_metadata.mention_total_limit ?? null,
-            mentionRaidProtectionEnabled: data9.trigger_metadata.mention_raid_protection_enabled ?? false
+            keywordFilter: data10.trigger_metadata.keyword_filter ?? [],
+            regexPatterns: data10.trigger_metadata.regex_patterns ?? [],
+            presets: data10.trigger_metadata.presets ?? [],
+            allowList: data10.trigger_metadata.allow_list ?? [],
+            mentionTotalLimit: data10.trigger_metadata.mention_total_limit ?? null,
+            mentionRaidProtectionEnabled: data10.trigger_metadata.mention_raid_protection_enabled ?? false
           };
         }
-        if ("actions" in data9) {
-          this.actions = data9.actions.map((action) => _transformAPIAutoModerationAction(action));
+        if ("actions" in data10) {
+          this.actions = data10.actions.map((action) => _transformAPIAutoModerationAction(action));
         }
-        if ("enabled" in data9) {
-          this.enabled = data9.enabled;
+        if ("enabled" in data10) {
+          this.enabled = data10.enabled;
         }
-        if ("exempt_roles" in data9) {
+        if ("exempt_roles" in data10) {
           this.exemptRoles = new Collection3(
-            data9.exempt_roles.map((exemptRole) => [exemptRole, this.guild.roles.cache.get(exemptRole)])
+            data10.exempt_roles.map((exemptRole) => [exemptRole, this.guild.roles.cache.get(exemptRole)])
           );
         }
-        if ("exempt_channels" in data9) {
+        if ("exempt_channels" in data10) {
           this.exemptChannels = new Collection3(
-            data9.exempt_channels.map((exemptChannel) => [exemptChannel, this.guild.channels.cache.get(exemptChannel)])
+            data10.exempt_channels.map((exemptChannel) => [exemptChannel, this.guild.channels.cache.get(exemptChannel)])
           );
         }
       }
@@ -150333,22 +150333,22 @@ var require_GuildOnboardingPromptOption = __commonJS({
     var Base = require_Base();
     var { Emoji } = require_Emoji();
     var GuildOnboardingPromptOption = class extends Base {
-      constructor(client, data9, guildId) {
+      constructor(client, data10, guildId) {
         super(client);
         this.guildId = guildId;
         const guild = this.guild;
-        this.id = data9.id;
-        this.channels = data9.channel_ids.reduce(
+        this.id = data10.id;
+        this.channels = data10.channel_ids.reduce(
           (channels, channelId) => channels.set(channelId, guild.channels.cache.get(channelId)),
           new Collection3()
         );
-        this.roles = data9.role_ids.reduce(
+        this.roles = data10.role_ids.reduce(
           (roles, roleId) => roles.set(roleId, guild.roles.cache.get(roleId)),
           new Collection3()
         );
-        this._emoji = data9.emoji;
-        this.title = data9.title;
-        this.description = data9.description;
+        this._emoji = data10.emoji;
+        this.title = data10.title;
+        this.description = data10.description;
       }
       /**
        * The guild this onboarding prompt option is from
@@ -150379,19 +150379,19 @@ var require_GuildOnboardingPrompt = __commonJS({
     var Base = require_Base();
     var { GuildOnboardingPromptOption } = require_GuildOnboardingPromptOption();
     var GuildOnboardingPrompt = class extends Base {
-      constructor(client, data9, guildId) {
+      constructor(client, data10, guildId) {
         super(client);
         this.guildId = guildId;
-        this.id = data9.id;
-        this.options = data9.options.reduce(
+        this.id = data10.id;
+        this.options = data10.options.reduce(
           (options, option) => options.set(option.id, new GuildOnboardingPromptOption(client, option, guildId)),
           new Collection3()
         );
-        this.title = data9.title;
-        this.singleSelect = data9.single_select;
-        this.required = data9.required;
-        this.inOnboarding = data9.in_onboarding;
-        this.type = data9.type;
+        this.title = data10.title;
+        this.singleSelect = data10.single_select;
+        this.required = data10.required;
+        this.inOnboarding = data10.in_onboarding;
+        this.type = data10.type;
       }
       /**
        * The guild this onboarding prompt is from
@@ -150414,46 +150414,46 @@ var require_Integration = __commonJS({
     var Base = require_Base();
     var IntegrationApplication = require_IntegrationApplication();
     var Integration = class extends Base {
-      constructor(client, data9, guild) {
+      constructor(client, data10, guild) {
         super(client);
         this.guild = guild;
-        this.id = data9.id;
-        this.name = data9.name;
-        this.type = data9.type;
-        this.enabled = data9.enabled ?? null;
-        if ("syncing" in data9) {
-          this.syncing = data9.syncing;
+        this.id = data10.id;
+        this.name = data10.name;
+        this.type = data10.type;
+        this.enabled = data10.enabled ?? null;
+        if ("syncing" in data10) {
+          this.syncing = data10.syncing;
         } else {
           this.syncing ??= null;
         }
-        this.role = this.guild.roles.resolve(data9.role_id);
-        if ("enable_emoticons" in data9) {
-          this.enableEmoticons = data9.enable_emoticons;
+        this.role = this.guild.roles.resolve(data10.role_id);
+        if ("enable_emoticons" in data10) {
+          this.enableEmoticons = data10.enable_emoticons;
         } else {
           this.enableEmoticons ??= null;
         }
-        if (data9.user) {
-          this.user = this.client.users._add(data9.user);
+        if (data10.user) {
+          this.user = this.client.users._add(data10.user);
         } else {
           this.user ??= null;
         }
-        this.account = data9.account;
-        if ("synced_at" in data9) {
-          this.syncedTimestamp = Date.parse(data9.synced_at);
+        this.account = data10.account;
+        if ("synced_at" in data10) {
+          this.syncedTimestamp = Date.parse(data10.synced_at);
         } else {
           this.syncedTimestamp ??= null;
         }
-        if ("subscriber_count" in data9) {
-          this.subscriberCount = data9.subscriber_count;
+        if ("subscriber_count" in data10) {
+          this.subscriberCount = data10.subscriber_count;
         } else {
           this.subscriberCount ??= null;
         }
-        if ("revoked" in data9) {
-          this.revoked = data9.revoked;
+        if ("revoked" in data10) {
+          this.revoked = data10.revoked;
         } else {
           this.revoked ??= null;
         }
-        this._patch(data9);
+        this._patch(data10);
       }
       /**
        * The date at which this integration was last synced at
@@ -150472,28 +150472,28 @@ var require_Integration = __commonJS({
         const roles = this.guild.roles.cache;
         return roles.filter((role) => role.tags?.integrationId === this.id);
       }
-      _patch(data9) {
-        if ("expire_behavior" in data9) {
-          this.expireBehavior = data9.expire_behavior;
+      _patch(data10) {
+        if ("expire_behavior" in data10) {
+          this.expireBehavior = data10.expire_behavior;
         } else {
           this.expireBehavior ??= null;
         }
-        if ("expire_grace_period" in data9) {
-          this.expireGracePeriod = data9.expire_grace_period;
+        if ("expire_grace_period" in data10) {
+          this.expireGracePeriod = data10.expire_grace_period;
         } else {
           this.expireGracePeriod ??= null;
         }
-        if ("application" in data9) {
+        if ("application" in data10) {
           if (this.application) {
-            this.application._patch(data9.application);
+            this.application._patch(data10.application);
           } else {
-            this.application = new IntegrationApplication(this.client, data9.application);
+            this.application = new IntegrationApplication(this.client, data10.application);
           }
         } else {
           this.application ??= null;
         }
-        if ("scopes" in data9) {
-          this.scopes = data9.scopes;
+        if ("scopes" in data10) {
+          this.scopes = data10.scopes;
         } else {
           this.scopes ??= [];
         }
@@ -150526,31 +150526,31 @@ var require_StageInstance = __commonJS({
     var { DiscordSnowflake } = require_cjs3();
     var Base = require_Base();
     var StageInstance = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.id = data9.id;
-        this._patch(data9);
+        this.id = data10.id;
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("guild_id" in data9) {
-          this.guildId = data9.guild_id;
+      _patch(data10) {
+        if ("guild_id" in data10) {
+          this.guildId = data10.guild_id;
         }
-        if ("channel_id" in data9) {
-          this.channelId = data9.channel_id;
+        if ("channel_id" in data10) {
+          this.channelId = data10.channel_id;
         }
-        if ("topic" in data9) {
-          this.topic = data9.topic;
+        if ("topic" in data10) {
+          this.topic = data10.topic;
         }
-        if ("privacy_level" in data9) {
-          this.privacyLevel = data9.privacy_level;
+        if ("privacy_level" in data10) {
+          this.privacyLevel = data10.privacy_level;
         }
-        if ("discoverable_disabled" in data9) {
-          this.discoverableDisabled = data9.discoverable_disabled;
+        if ("discoverable_disabled" in data10) {
+          this.discoverableDisabled = data10.discoverable_disabled;
         } else {
           this.discoverableDisabled ??= null;
         }
-        if ("guild_scheduled_event_id" in data9) {
-          this.guildScheduledEventId = data9.guild_scheduled_event_id;
+        if ("guild_scheduled_event_id" in data10) {
+          this.guildScheduledEventId = data10.guild_scheduled_event_id;
         } else {
           this.guildScheduledEventId ??= null;
         }
@@ -150691,62 +150691,62 @@ var require_GuildAuditLogsEntry = __commonJS({
        * @memberof GuildAuditLogsEntry
        */
       static Targets = Targets;
-      constructor(guild, data9, logs) {
-        this.targetType = _GuildAuditLogsEntry.targetType(data9.action_type);
+      constructor(guild, data10, logs) {
+        this.targetType = _GuildAuditLogsEntry.targetType(data10.action_type);
         const targetType = this.targetType;
-        this.actionType = _GuildAuditLogsEntry.actionType(data9.action_type);
-        this.action = data9.action_type;
-        this.reason = data9.reason ?? null;
-        this.executorId = data9.user_id;
-        this.executor = data9.user_id ? guild.client.options.partials.includes(Partials2.User) ? guild.client.users._add({ id: data9.user_id }) : guild.client.users.cache.get(data9.user_id) ?? null : null;
-        this.changes = data9.changes?.map((change) => ({
+        this.actionType = _GuildAuditLogsEntry.actionType(data10.action_type);
+        this.action = data10.action_type;
+        this.reason = data10.reason ?? null;
+        this.executorId = data10.user_id;
+        this.executor = data10.user_id ? guild.client.options.partials.includes(Partials2.User) ? guild.client.users._add({ id: data10.user_id }) : guild.client.users.cache.get(data10.user_id) ?? null : null;
+        this.changes = data10.changes?.map((change) => ({
           key: change.key,
           ..."old_value" in change ? { old: change.old_value } : {},
           ..."new_value" in change ? { new: change.new_value } : {}
         })) ?? [];
-        this.id = data9.id;
+        this.id = data10.id;
         this.extra = null;
-        switch (data9.action_type) {
+        switch (data10.action_type) {
           case AuditLogEvent.MemberPrune:
             this.extra = {
-              removed: Number(data9.options.members_removed),
-              days: Number(data9.options.delete_member_days)
+              removed: Number(data10.options.members_removed),
+              days: Number(data10.options.delete_member_days)
             };
             break;
           case AuditLogEvent.MemberMove:
           case AuditLogEvent.MessageDelete:
             this.extra = {
-              channel: guild.channels.cache.get(data9.options.channel_id) ?? { id: data9.options.channel_id },
-              count: Number(data9.options.count)
+              channel: guild.channels.cache.get(data10.options.channel_id) ?? { id: data10.options.channel_id },
+              count: Number(data10.options.count)
             };
             break;
           case AuditLogEvent.MessagePin:
           case AuditLogEvent.MessageUnpin:
             this.extra = {
-              channel: guild.client.channels.cache.get(data9.options.channel_id) ?? { id: data9.options.channel_id },
-              messageId: data9.options.message_id
+              channel: guild.client.channels.cache.get(data10.options.channel_id) ?? { id: data10.options.channel_id },
+              messageId: data10.options.message_id
             };
             break;
           case AuditLogEvent.MessageBulkDelete:
           case AuditLogEvent.MemberDisconnect:
             this.extra = {
-              count: Number(data9.options.count)
+              count: Number(data10.options.count)
             };
             break;
           case AuditLogEvent.ChannelOverwriteCreate:
           case AuditLogEvent.ChannelOverwriteUpdate:
           case AuditLogEvent.ChannelOverwriteDelete:
-            switch (data9.options.type) {
+            switch (data10.options.type) {
               case AuditLogOptionsType.Role:
-                this.extra = guild.roles.cache.get(data9.options.id) ?? {
-                  id: data9.options.id,
-                  name: data9.options.role_name,
+                this.extra = guild.roles.cache.get(data10.options.id) ?? {
+                  id: data10.options.id,
+                  name: data10.options.role_name,
                   type: AuditLogOptionsType.Role
                 };
                 break;
               case AuditLogOptionsType.Member:
-                this.extra = guild.members.cache.get(data9.options.id) ?? {
-                  id: data9.options.id,
+                this.extra = guild.members.cache.get(data10.options.id) ?? {
+                  id: data10.options.id,
                   type: AuditLogOptionsType.Member
                 };
                 break;
@@ -150758,28 +150758,28 @@ var require_GuildAuditLogsEntry = __commonJS({
           case AuditLogEvent.StageInstanceDelete:
           case AuditLogEvent.StageInstanceUpdate:
             this.extra = {
-              channel: guild.client.channels.cache.get(data9.options?.channel_id) ?? { id: data9.options?.channel_id }
+              channel: guild.client.channels.cache.get(data10.options?.channel_id) ?? { id: data10.options?.channel_id }
             };
             break;
           case AuditLogEvent.ApplicationCommandPermissionUpdate:
             this.extra = {
-              applicationId: data9.options.application_id
+              applicationId: data10.options.application_id
             };
             break;
           case AuditLogEvent.AutoModerationBlockMessage:
           case AuditLogEvent.AutoModerationFlagToChannel:
           case AuditLogEvent.AutoModerationUserCommunicationDisabled:
             this.extra = {
-              autoModerationRuleName: data9.options.auto_moderation_rule_name,
-              autoModerationRuleTriggerType: data9.options.auto_moderation_rule_trigger_type,
-              channel: guild.client.channels.cache.get(data9.options?.channel_id) ?? { id: data9.options?.channel_id }
+              autoModerationRuleName: data10.options.auto_moderation_rule_name,
+              autoModerationRuleTriggerType: data10.options.auto_moderation_rule_trigger_type,
+              channel: guild.client.channels.cache.get(data10.options?.channel_id) ?? { id: data10.options?.channel_id }
             };
             break;
           case AuditLogEvent.MemberKick:
           case AuditLogEvent.MemberRoleUpdate: {
-            if (data9.integration_type) {
+            if (data10.integration_type) {
               this.extra = {
-                integrationType: data9.integration_type
+                integrationType: data10.integration_type
               };
             }
             break;
@@ -150787,20 +150787,20 @@ var require_GuildAuditLogsEntry = __commonJS({
           default:
             break;
         }
-        this.targetId = data9.target_id;
+        this.targetId = data10.target_id;
         this.target = null;
         if (targetType === Targets.Unknown) {
           this.target = changesReduce(this.changes);
-          this.target.id = data9.target_id;
-        } else if (targetType === Targets.User && data9.target_id) {
-          this.target = guild.client.options.partials.includes(Partials2.User) ? guild.client.users._add({ id: data9.target_id }) : guild.client.users.cache.get(data9.target_id) ?? null;
+          this.target.id = data10.target_id;
+        } else if (targetType === Targets.User && data10.target_id) {
+          this.target = guild.client.options.partials.includes(Partials2.User) ? guild.client.users._add({ id: data10.target_id }) : guild.client.users.cache.get(data10.target_id) ?? null;
         } else if (targetType === Targets.Guild) {
-          this.target = guild.client.guilds.cache.get(data9.target_id);
+          this.target = guild.client.guilds.cache.get(data10.target_id);
         } else if (targetType === Targets.Webhook) {
-          this.target = logs?.webhooks.get(data9.target_id) ?? new Webhook2(
+          this.target = logs?.webhooks.get(data10.target_id) ?? new Webhook2(
             guild.client,
             changesReduce(this.changes, {
-              id: data9.target_id,
+              id: data10.target_id,
               guild_id: guild.id
             })
           );
@@ -150808,42 +150808,42 @@ var require_GuildAuditLogsEntry = __commonJS({
           const inviteChange = this.changes.find(({ key }) => key === "code");
           this.target = guild.invites.cache.get(inviteChange.new ?? inviteChange.old) ?? new Invite2(guild.client, changesReduce(this.changes, { guild }));
         } else if (targetType === Targets.Message) {
-          this.target = data9.action_type === AuditLogEvent.MessageBulkDelete ? guild.channels.cache.get(data9.target_id) ?? { id: data9.target_id } : guild.client.users.cache.get(data9.target_id) ?? null;
+          this.target = data10.action_type === AuditLogEvent.MessageBulkDelete ? guild.channels.cache.get(data10.target_id) ?? { id: data10.target_id } : guild.client.users.cache.get(data10.target_id) ?? null;
         } else if (targetType === Targets.Integration) {
-          this.target = logs?.integrations.get(data9.target_id) ?? new Integration(guild.client, changesReduce(this.changes, { id: data9.target_id }), guild);
+          this.target = logs?.integrations.get(data10.target_id) ?? new Integration(guild.client, changesReduce(this.changes, { id: data10.target_id }), guild);
         } else if (targetType === Targets.Channel || targetType === Targets.Thread) {
-          this.target = guild.channels.cache.get(data9.target_id) ?? changesReduce(this.changes, { id: data9.target_id });
+          this.target = guild.channels.cache.get(data10.target_id) ?? changesReduce(this.changes, { id: data10.target_id });
         } else if (targetType === Targets.StageInstance) {
-          this.target = guild.stageInstances.cache.get(data9.target_id) ?? new StageInstance(
+          this.target = guild.stageInstances.cache.get(data10.target_id) ?? new StageInstance(
             guild.client,
             changesReduce(this.changes, {
-              id: data9.target_id,
-              channel_id: data9.options?.channel_id,
+              id: data10.target_id,
+              channel_id: data10.options?.channel_id,
               guild_id: guild.id
             })
           );
         } else if (targetType === Targets.Sticker) {
-          this.target = guild.stickers.cache.get(data9.target_id) ?? new Sticker2(guild.client, changesReduce(this.changes, { id: data9.target_id }));
+          this.target = guild.stickers.cache.get(data10.target_id) ?? new Sticker2(guild.client, changesReduce(this.changes, { id: data10.target_id }));
         } else if (targetType === Targets.GuildScheduledEvent) {
-          this.target = guild.scheduledEvents.cache.get(data9.target_id) ?? new GuildScheduledEvent(guild.client, changesReduce(this.changes, { id: data9.target_id, guild_id: guild.id }));
+          this.target = guild.scheduledEvents.cache.get(data10.target_id) ?? new GuildScheduledEvent(guild.client, changesReduce(this.changes, { id: data10.target_id, guild_id: guild.id }));
         } else if (targetType === Targets.ApplicationCommand) {
-          this.target = logs?.applicationCommands.get(data9.target_id) ?? { id: data9.target_id };
+          this.target = logs?.applicationCommands.get(data10.target_id) ?? { id: data10.target_id };
         } else if (targetType === Targets.AutoModeration) {
-          this.target = guild.autoModerationRules.cache.get(data9.target_id) ?? new AutoModerationRule(
+          this.target = guild.autoModerationRules.cache.get(data10.target_id) ?? new AutoModerationRule(
             guild.client,
-            changesReduce(this.changes, { id: data9.target_id, guild_id: guild.id }),
+            changesReduce(this.changes, { id: data10.target_id, guild_id: guild.id }),
             guild
           );
         } else if (targetType === Targets.GuildOnboardingPrompt) {
-          this.target = data9.action_type === AuditLogEvent.OnboardingPromptCreate ? new GuildOnboardingPrompt(guild.client, changesReduce(this.changes, { id: data9.target_id }), guild.id) : changesReduce(this.changes, { id: data9.target_id });
+          this.target = data10.action_type === AuditLogEvent.OnboardingPromptCreate ? new GuildOnboardingPrompt(guild.client, changesReduce(this.changes, { id: data10.target_id }), guild.id) : changesReduce(this.changes, { id: data10.target_id });
         } else if (targetType === Targets.Role) {
-          this.target = guild.roles.cache.get(data9.target_id) ?? { id: data9.target_id };
+          this.target = guild.roles.cache.get(data10.target_id) ?? { id: data10.target_id };
         } else if (targetType === Targets.Emoji) {
-          this.target = guild.emojis.cache.get(data9.target_id) ?? { id: data9.target_id };
+          this.target = guild.emojis.cache.get(data10.target_id) ?? { id: data10.target_id };
         } else if (targetType === Targets.SoundboardSound) {
-          this.target = guild.soundboardSounds.cache.get(data9.target_id) ?? { id: data9.target_id };
-        } else if (data9.target_id) {
-          this.target = { id: data9.target_id };
+          this.target = guild.soundboardSounds.cache.get(data10.target_id) ?? { id: data10.target_id };
+        } else if (data10.target_id) {
+          this.target = { id: data10.target_id };
         }
       }
       /**
@@ -150988,12 +150988,12 @@ var require_GuildAuditLogEntryCreate = __commonJS({
     var GuildAuditLogsEntry = require_GuildAuditLogsEntry();
     var Events3 = require_Events();
     var GuildAuditLogEntryCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         let auditLogEntry;
         if (guild) {
-          auditLogEntry = new GuildAuditLogsEntry(guild, data9);
+          auditLogEntry = new GuildAuditLogsEntry(guild, data10);
           client.emit(Events3.GuildAuditLogEntryCreate, auditLogEntry, guild);
         }
         return { auditLogEntry };
@@ -151010,10 +151010,10 @@ var require_GuildBanAdd = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildBanAdd = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
-        if (guild) client.emit(Events3.GuildBanAdd, guild.bans._add(data9));
+        const guild = client.guilds.cache.get(data10.guild_id);
+        if (guild) client.emit(Events3.GuildBanAdd, guild.bans._add(data10));
       }
     };
     module2.exports = GuildBanAdd;
@@ -151026,17 +151026,17 @@ var require_GuildBan = __commonJS({
     "use strict";
     var Base = require_Base();
     var GuildBan = class extends Base {
-      constructor(client, data9, guild) {
+      constructor(client, data10, guild) {
         super(client);
         this.guild = guild;
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("user" in data9) {
-          this.user = this.client.users._add(data9.user, true);
+      _patch(data10) {
+        if ("user" in data10) {
+          this.user = this.client.users._add(data10.user, true);
         }
-        if ("reason" in data9) {
-          this.reason = data9.reason;
+        if ("reason" in data10) {
+          this.reason = data10.reason;
         }
       }
       /**
@@ -151068,11 +151068,11 @@ var require_GuildBanRemove = __commonJS({
     var GuildBan = require_GuildBan();
     var Events3 = require_Events();
     var GuildBanRemove = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const ban = guild.bans.cache.get(data9.user.id) ?? new GuildBan(client, data9, guild);
+          const ban = guild.bans.cache.get(data10.user.id) ?? new GuildBan(client, data10, guild);
           guild.bans.cache.delete(ban.user.id);
           client.emit(Events3.GuildBanRemove, ban);
         }
@@ -151088,11 +151088,11 @@ var require_GuildChannelsPositionUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildChannelsPositionUpdate = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          for (const partialChannel of data9.channels) {
+          for (const partialChannel of data10.channels) {
             const channel = guild.channels.cache.get(partialChannel.id);
             if (channel) channel.rawPosition = partialChannel.position;
           }
@@ -151111,17 +151111,17 @@ var require_GuildDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        let guild = client.guilds.cache.get(data9.id);
+        let guild = client.guilds.cache.get(data10.id);
         if (guild) {
-          if (data9.unavailable) {
+          if (data10.unavailable) {
             guild.available = false;
             client.emit(Events3.GuildUnavailable, guild);
             return;
           }
           for (const channel of guild.channels.cache.values()) this.client.channels._remove(channel.id);
-          client.voice.adapters.get(data9.id)?.destroy();
+          client.voice.adapters.get(data10.id)?.destroy();
           client.guilds.cache.delete(guild.id);
           client.emit(Events3.GuildDelete, guild);
         }
@@ -151173,8 +151173,8 @@ var require_GuildEmojiUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildEmojiUpdateAction = class extends Action {
-      handle(current, data9) {
-        const old = current._update(data9);
+      handle(current, data10) {
+        const old = current._update(data10);
         this.client.emit(Events3.GuildEmojiUpdate, old, current);
         return { emoji: current };
       }
@@ -151189,11 +151189,11 @@ var require_GuildEmojisUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildEmojisUpdateAction = class extends Action {
-      handle(data9) {
-        const guild = this.client.guilds.cache.get(data9.guild_id);
+      handle(data10) {
+        const guild = this.client.guilds.cache.get(data10.guild_id);
         if (!guild?.emojis) return;
         const deletions = new Map(guild.emojis.cache);
-        for (const emoji of data9.emojis) {
+        for (const emoji of data10.emojis) {
           const cachedEmoji = guild.emojis.cache.get(emoji.id);
           if (cachedEmoji) {
             deletions.delete(emoji.id);
@@ -151220,9 +151220,9 @@ var require_GuildIntegrationsUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildIntegrationsUpdate = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) client.emit(Events3.GuildIntegrationsUpdate, guild);
       }
     };
@@ -151257,19 +151257,19 @@ var require_GuildMemberRemove = __commonJS({
     var Events3 = require_Events();
     var Status2 = require_Status();
     var GuildMemberRemoveAction = class extends Action {
-      handle(data9, shard) {
+      handle(data10, shard) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         let member = null;
         if (guild) {
-          member = this.getMember({ user: data9.user }, guild);
+          member = this.getMember({ user: data10.user }, guild);
           guild.memberCount--;
           if (member) {
             guild.members.cache.delete(member.id);
             if (shard.status === Status2.Ready) client.emit(Events3.GuildMemberRemove, member);
           }
-          guild.presences.cache.delete(data9.user.id);
-          guild.voiceStates.cache.delete(data9.user.id);
+          guild.presences.cache.delete(data10.user.id);
+          guild.voiceStates.cache.delete(data10.user.id);
         }
         return { guild, member };
       }
@@ -151286,24 +151286,24 @@ var require_GuildMemberUpdate = __commonJS({
     var Events3 = require_Events();
     var Status2 = require_Status();
     var GuildMemberUpdateAction = class extends Action {
-      handle(data9, shard) {
+      handle(data10, shard) {
         const { client } = this;
-        if (data9.user.username) {
-          const user = client.users.cache.get(data9.user.id);
+        if (data10.user.username) {
+          const user = client.users.cache.get(data10.user.id);
           if (!user) {
-            client.users._add(data9.user);
-          } else if (!user._equals(data9.user)) {
-            client.actions.UserUpdate.handle(data9.user);
+            client.users._add(data10.user);
+          } else if (!user._equals(data10.user)) {
+            client.actions.UserUpdate.handle(data10.user);
           }
         }
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const member = this.getMember({ user: data9.user }, guild);
+          const member = this.getMember({ user: data10.user }, guild);
           if (member) {
-            const old = member._update(data9);
+            const old = member._update(data10);
             if (shard.status === Status2.Ready && !member.equals(old)) client.emit(Events3.GuildMemberUpdate, old, member);
           } else {
-            const newMember = guild.members._add(data9);
+            const newMember = guild.members._add(data10);
             this.client.emit(Events3.GuildMemberAvailable, newMember);
           }
         }
@@ -151320,13 +151320,13 @@ var require_GuildRoleCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildRoleCreate = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         let role;
         if (guild) {
-          const already = guild.roles.cache.has(data9.role.id);
-          role = guild.roles._add(data9.role);
+          const already = guild.roles.cache.has(data10.role.id);
+          role = guild.roles._add(data10.role);
           if (!already) client.emit(Events3.GuildRoleCreate, role);
         }
         return { role };
@@ -151343,14 +151343,14 @@ var require_GuildRoleDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildRoleDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         let role;
         if (guild) {
-          role = guild.roles.cache.get(data9.role_id);
+          role = guild.roles.cache.get(data10.role_id);
           if (role) {
-            guild.roles.cache.delete(data9.role_id);
+            guild.roles.cache.delete(data10.role_id);
             client.emit(Events3.GuildRoleDelete, role);
           }
         }
@@ -151368,14 +151368,14 @@ var require_GuildRoleUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildRoleUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
           let old = null;
-          const role = guild.roles.cache.get(data9.role.id);
+          const role = guild.roles.cache.get(data10.role.id);
           if (role) {
-            old = role._update(data9.role);
+            old = role._update(data10.role);
             client.emit(Events3.GuildRoleUpdate, old, role);
           }
           return {
@@ -151399,11 +151399,11 @@ var require_GuildRolesPositionUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildRolesPositionUpdate = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          for (const partialRole of data9.roles) {
+          for (const partialRole of data10.roles) {
             const role = guild.roles.cache.get(partialRole.id);
             if (role) role.rawPosition = partialRole.position;
           }
@@ -151422,11 +151422,11 @@ var require_GuildScheduledEventCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const guildScheduledEvent = guild.scheduledEvents._add(data9);
+          const guildScheduledEvent = guild.scheduledEvents._add(data10);
           client.emit(Events3.GuildScheduledEventCreate, guildScheduledEvent);
           return { guildScheduledEvent };
         }
@@ -151444,11 +151444,11 @@ var require_GuildScheduledEventDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const guildScheduledEvent = this.getScheduledEvent(data9, guild);
+          const guildScheduledEvent = this.getScheduledEvent(data10, guild);
           if (guildScheduledEvent) {
             guild.scheduledEvents.cache.delete(guildScheduledEvent.id);
             client.emit(Events3.GuildScheduledEventDelete, guildScheduledEvent);
@@ -151469,12 +151469,12 @@ var require_GuildScheduledEventUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const oldGuildScheduledEvent = guild.scheduledEvents.cache.get(data9.id)?._clone() ?? null;
-          const newGuildScheduledEvent = guild.scheduledEvents._add(data9);
+          const oldGuildScheduledEvent = guild.scheduledEvents.cache.get(data10.id)?._clone() ?? null;
+          const newGuildScheduledEvent = guild.scheduledEvents._add(data10);
           client.emit(Events3.GuildScheduledEventUpdate, oldGuildScheduledEvent, newGuildScheduledEvent);
           return { oldGuildScheduledEvent, newGuildScheduledEvent };
         }
@@ -151492,12 +151492,12 @@ var require_GuildScheduledEventUserAdd = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventUserAddAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const guildScheduledEvent = this.getScheduledEvent(data9, guild);
-          const user = this.getUser(data9);
+          const guildScheduledEvent = this.getScheduledEvent(data10, guild);
+          const user = this.getUser(data10);
           if (guildScheduledEvent && user) {
             client.emit(Events3.GuildScheduledEventUserAdd, guildScheduledEvent, user);
             return { guildScheduledEvent, user };
@@ -151517,12 +151517,12 @@ var require_GuildScheduledEventUserRemove = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventUserRemoveAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const guildScheduledEvent = this.getScheduledEvent(data9, guild);
-          const user = this.getUser(data9);
+          const guildScheduledEvent = this.getScheduledEvent(data10, guild);
+          const user = this.getUser(data10);
           if (guildScheduledEvent && user) {
             client.emit(Events3.GuildScheduledEventUserRemove, guildScheduledEvent, user);
             return { guildScheduledEvent, user };
@@ -151542,10 +151542,10 @@ var require_GuildSoundboardSoundDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildSoundboardSoundDeleteAction = class extends Action {
-      handle(data9) {
-        const guild = this.client.guilds.cache.get(data9.guild_id);
+      handle(data10) {
+        const guild = this.client.guilds.cache.get(data10.guild_id);
         if (!guild) return {};
-        const soundboardSound = this.getSoundboardSound(data9, guild);
+        const soundboardSound = this.getSoundboardSound(data10, guild);
         if (soundboardSound) {
           guild.soundboardSounds.cache.delete(soundboardSound.soundId);
           this.client.emit(Events3.GuildSoundboardSoundDelete, soundboardSound);
@@ -151599,8 +151599,8 @@ var require_GuildStickerUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildStickerUpdateAction = class extends Action {
-      handle(current, data9) {
-        const old = current._update(data9);
+      handle(current, data10) {
+        const old = current._update(data10);
         this.client.emit(Events3.GuildStickerUpdate, old, current);
         return { sticker: current };
       }
@@ -151615,11 +151615,11 @@ var require_GuildStickersUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildStickersUpdateAction = class extends Action {
-      handle(data9) {
-        const guild = this.client.guilds.cache.get(data9.guild_id);
+      handle(data10) {
+        const guild = this.client.guilds.cache.get(data10.guild_id);
         if (!guild?.stickers) return;
         const deletions = new Map(guild.stickers.cache);
-        for (const sticker of data9.stickers) {
+        for (const sticker of data10.stickers) {
           const cachedSticker = guild.stickers.cache.get(sticker.id);
           if (cachedSticker) {
             deletions.delete(sticker.id);
@@ -151646,11 +151646,11 @@ var require_GuildUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.id);
+        const guild = client.guilds.cache.get(data10.id);
         if (guild) {
-          const old = guild._update(data9);
+          const old = guild._update(data10);
           client.emit(Events3.GuildUpdate, old, guild);
           return {
             old,
@@ -151924,14 +151924,14 @@ var require_AutocompleteInteraction = __commonJS({
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var AutocompleteInteraction = class extends BaseInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        this.commandId = data9.data.id;
-        this.commandName = data9.data.name;
-        this.commandType = data9.data.type;
-        this.commandGuildId = data9.data.guild_id ?? null;
+      constructor(client, data10) {
+        super(client, data10);
+        this.commandId = data10.data.id;
+        this.commandName = data10.data.name;
+        this.commandType = data10.data.type;
+        this.commandGuildId = data10.data.guild_id ?? null;
         this.responded = false;
-        this.options = new CommandInteractionOptionResolver(this.client, data9.data.options ?? []);
+        this.options = new CommandInteractionOptionResolver(this.client, data10.data.options ?? []);
       }
       /**
        * The invoked application command, if it was fetched before
@@ -151983,14 +151983,14 @@ var require_InteractionCallback = __commonJS({
     "use strict";
     var { DiscordSnowflake } = require_cjs3();
     var InteractionCallback = class {
-      constructor(client, data9) {
+      constructor(client, data10) {
         Object.defineProperty(this, "client", { value: client });
-        this.id = data9.id;
-        this.type = data9.type;
-        this.activityInstanceId = data9.activity_instance_id ?? null;
-        this.responseMessageId = data9.response_message_id ?? null;
-        this.responseMessageLoading = data9.response_message_loading ?? null;
-        this.responseMessageEphemeral = data9.response_message_ephemeral ?? null;
+        this.id = data10.id;
+        this.type = data10.type;
+        this.activityInstanceId = data10.activity_instance_id ?? null;
+        this.responseMessageId = data10.response_message_id ?? null;
+        this.responseMessageLoading = data10.response_message_loading ?? null;
+        this.responseMessageEphemeral = data10.response_message_ephemeral ?? null;
       }
       /**
        * The timestamp the original interaction was created at
@@ -152020,12 +152020,12 @@ var require_InteractionCallbackResource = __commonJS({
     var { lazy } = require_dist3();
     var getMessage = lazy(() => require_Message().Message);
     var InteractionCallbackResource = class {
-      constructor(client, data9) {
+      constructor(client, data10) {
         Object.defineProperty(this, "client", { value: client });
-        this.type = data9.type;
-        this.activityInstance = data9.activity_instance ?? null;
-        if ("message" in data9) {
-          this.message = this.client.channels.cache.get(data9.message.channel_id)?.messages._add(data9.message) ?? new (getMessage())(client, data9.message);
+        this.type = data10.type;
+        this.activityInstance = data10.activity_instance ?? null;
+        if ("message" in data10) {
+          this.message = this.client.channels.cache.get(data10.message.channel_id)?.messages._add(data10.message) ?? new (getMessage())(client, data10.message);
         } else {
           this.message = null;
         }
@@ -152042,10 +152042,10 @@ var require_InteractionCallbackResponse = __commonJS({
     var InteractionCallback = require_InteractionCallback();
     var InteractionCallbackResource = require_InteractionCallbackResource();
     var InteractionCallbackResponse = class {
-      constructor(client, data9) {
+      constructor(client, data10) {
         Object.defineProperty(this, "client", { value: client });
-        this.interaction = new InteractionCallback(client, data9.interaction);
-        this.resource = data9.resource ? new InteractionCallbackResource(client, data9.resource) : null;
+        this.interaction = new InteractionCallback(client, data10.interaction);
+        this.resource = data10.resource ? new InteractionCallbackResource(client, data10.resource) : null;
       }
     };
     module2.exports = InteractionCallbackResponse;
@@ -152298,17 +152298,17 @@ var require_InteractionResponses = __commonJS({
         let messagePayload;
         if (options instanceof MessagePayload) messagePayload = options;
         else messagePayload = MessagePayload.create(this, options);
-        const { body: data9, files } = await messagePayload.resolveBody().resolveFiles();
+        const { body: data10, files } = await messagePayload.resolveBody().resolveFiles();
         const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.ChannelMessageWithSource,
-            data: data9
+            data: data10
           },
           files,
           auth: false,
           query: makeURLSearchParams2({ with_response: options.withResponse ?? false })
         });
-        this.ephemeral = Boolean(data9.flags & MessageFlags.Ephemeral);
+        this.ephemeral = Boolean(data10.flags & MessageFlags.Ephemeral);
         this.replied = true;
         return options.withResponse ? new InteractionCallbackResponse(this.client, response) : options.fetchReply ? this.fetchReply() : new InteractionResponse(this);
       }
@@ -152432,11 +152432,11 @@ var require_InteractionResponses = __commonJS({
         let messagePayload;
         if (options instanceof MessagePayload) messagePayload = options;
         else messagePayload = MessagePayload.create(this, options);
-        const { body: data9, files } = await messagePayload.resolveBody().resolveFiles();
+        const { body: data10, files } = await messagePayload.resolveBody().resolveFiles();
         const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.UpdateMessage,
-            data: data9
+            data: data10
           },
           files,
           auth: false,
@@ -152572,11 +152572,11 @@ var require_MessageComponentInteraction = __commonJS({
     var { findComponentByCustomId } = require_Components();
     var getMessage = lazy(() => require_Message().Message);
     var MessageComponentInteraction = class extends BaseInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        this.message = this.channel?.messages._add(data9.message) ?? new (getMessage())(client, data9.message);
-        this.customId = data9.data.custom_id;
-        this.componentType = data9.data.component_type;
+      constructor(client, data10) {
+        super(client, data10);
+        this.message = this.channel?.messages._add(data10.message) ?? new (getMessage())(client, data10.message);
+        this.customId = data10.data.custom_id;
+        this.componentType = data10.data.component_type;
         this.deferred = false;
         this.ephemeral = null;
         this.replied = false;
@@ -152651,9 +152651,9 @@ var require_ChannelSelectMenuInteraction = __commonJS({
     var { Collection: Collection3 } = require_dist8();
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var ChannelSelectMenuInteraction = class extends MessageComponentInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        const { resolved, values } = data9.data;
+      constructor(client, data10) {
+        super(client, data10);
+        const { resolved, values } = data10.data;
         this.values = values ?? [];
         this.channels = new Collection3();
         for (const channel of Object.values(resolved?.channels ?? {})) {
@@ -152674,12 +152674,12 @@ var require_CommandInteraction = __commonJS({
     var InteractionWebhook = require_InteractionWebhook();
     var InteractionResponses = require_InteractionResponses();
     var CommandInteraction = class extends BaseInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        this.commandId = data9.data.id;
-        this.commandName = data9.data.name;
-        this.commandType = data9.data.type;
-        this.commandGuildId = data9.data.guild_id ?? null;
+      constructor(client, data10) {
+        super(client, data10);
+        this.commandId = data10.data.id;
+        this.commandName = data10.data.name;
+        this.commandType = data10.data.type;
+        this.commandGuildId = data10.data.guild_id ?? null;
         this.deferred = false;
         this.replied = false;
         this.ephemeral = null;
@@ -152787,13 +152787,13 @@ var require_ChatInputCommandInteraction = __commonJS({
     var CommandInteraction = require_CommandInteraction();
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { transformResolved } = require_Util();
-    var ChatInputCommandInteraction11 = class extends CommandInteraction {
-      constructor(client, data9) {
-        super(client, data9);
+    var ChatInputCommandInteraction12 = class extends CommandInteraction {
+      constructor(client, data10) {
+        super(client, data10);
         this.options = new CommandInteractionOptionResolver(
           this.client,
-          data9.data.options?.map((option) => this.transformOption(option, data9.data.resolved)) ?? [],
-          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data9.data.resolved)
+          data10.data.options?.map((option) => this.transformOption(option, data10.data.resolved)) ?? [],
+          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data10.data.resolved)
         );
       }
       /**
@@ -152811,7 +152811,7 @@ var require_ChatInputCommandInteraction = __commonJS({
         return `/${properties.filter(Boolean).join(" ")}`;
       }
     };
-    module2.exports = ChatInputCommandInteraction11;
+    module2.exports = ChatInputCommandInteraction12;
   }
 });
 
@@ -152823,9 +152823,9 @@ var require_MentionableSelectMenuInteraction = __commonJS({
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var Events3 = require_Events();
     var MentionableSelectMenuInteraction = class extends MessageComponentInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        const { resolved, values } = data9.data;
+      constructor(client, data10) {
+        super(client, data10);
+        const { resolved, values } = data10.data;
         const { members, users, roles } = resolved ?? {};
         this.values = values ?? [];
         this.users = new Collection3();
@@ -152871,14 +152871,14 @@ var require_ContextMenuCommandInteraction = __commonJS({
     var { transformResolved } = require_Util();
     var getMessage = lazy(() => require_Message().Message);
     var ContextMenuCommandInteraction = class extends CommandInteraction {
-      constructor(client, data9) {
-        super(client, data9);
+      constructor(client, data10) {
+        super(client, data10);
         this.options = new CommandInteractionOptionResolver(
           this.client,
-          this.resolveContextMenuOptions(data9.data),
-          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data9.data.resolved)
+          this.resolveContextMenuOptions(data10.data),
+          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data10.data.resolved)
         );
-        this.targetId = data9.data.target_id;
+        this.targetId = data10.data.target_id;
       }
       /**
        * Resolves and transforms options received from the API for a context menu interaction.
@@ -153157,23 +153157,23 @@ var require_ModalSubmitInteraction = __commonJS({
     var getMessage = lazy(() => require_Message().Message);
     var getAttachment = lazy(() => require_Attachment());
     var ModalSubmitInteraction3 = class _ModalSubmitInteraction extends BaseInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        this.customId = data9.data.custom_id;
-        if ("message" in data9) {
-          this.message = this.channel?.messages._add(data9.message) ?? new (getMessage())(this.client, data9.message);
+      constructor(client, data10) {
+        super(client, data10);
+        this.customId = data10.data.custom_id;
+        if ("message" in data10) {
+          this.message = this.channel?.messages._add(data10.message) ?? new (getMessage())(this.client, data10.message);
         } else {
           this.message = null;
         }
-        this.components = data9.data.components?.map(
-          (component) => _ModalSubmitInteraction.transformComponent(component, data9.data.resolved, {
+        this.components = data10.data.components?.map(
+          (component) => _ModalSubmitInteraction.transformComponent(component, data10.data.resolved, {
             client: this.client,
             guild: this.guild
           })
         );
         this.fields = new ModalSubmitFields(
           this.components,
-          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data9.data.resolved)
+          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data10.data.resolved)
         );
         this.deferred = false;
         this.replied = false;
@@ -153204,61 +153204,61 @@ var require_ModalSubmitInteraction = __commonJS({
             component: this.transformComponent(rawComponent.component, resolved, { client, guild })
           };
         }
-        const data9 = {
+        const data10 = {
           type: rawComponent.type,
           id: rawComponent.id
         };
-        if ("custom_id" in rawComponent) data9.customId = rawComponent.custom_id;
-        if ("value" in rawComponent) data9.value = rawComponent.value;
+        if ("custom_id" in rawComponent) data10.customId = rawComponent.custom_id;
+        if ("value" in rawComponent) data10.value = rawComponent.value;
         if (rawComponent.values) {
-          data9.values = rawComponent.values;
+          data10.values = rawComponent.values;
           if (resolved) {
             const { members, users, channels, roles, attachments } = resolved;
             const valueSet = new Set(rawComponent.values);
             if (users) {
-              data9.users = new Collection3();
+              data10.users = new Collection3();
               for (const [id, user] of Object.entries(users)) {
                 if (valueSet.has(id)) {
-                  data9.users.set(id, client.users._add(user));
+                  data10.users.set(id, client.users._add(user));
                 }
               }
             }
             if (channels) {
-              data9.channels = new Collection3();
+              data10.channels = new Collection3();
               for (const [id, apiChannel] of Object.entries(channels)) {
                 if (valueSet.has(id)) {
-                  data9.channels.set(id, client.channels._add(apiChannel, guild) ?? apiChannel);
+                  data10.channels.set(id, client.channels._add(apiChannel, guild) ?? apiChannel);
                 }
               }
             }
             if (members) {
-              data9.members = new Collection3();
+              data10.members = new Collection3();
               for (const [id, member] of Object.entries(members)) {
                 if (valueSet.has(id)) {
                   const user = users?.[id];
-                  data9.members.set(id, guild?.members._add({ user, ...member }) ?? member);
+                  data10.members.set(id, guild?.members._add({ user, ...member }) ?? member);
                 }
               }
             }
             if (roles) {
-              data9.roles = new Collection3();
+              data10.roles = new Collection3();
               for (const [id, role] of Object.entries(roles)) {
                 if (valueSet.has(id)) {
-                  data9.roles.set(id, guild?.roles._add(role) ?? role);
+                  data10.roles.set(id, guild?.roles._add(role) ?? role);
                 }
               }
             }
             if (attachments) {
-              data9.attachments = new Collection3();
+              data10.attachments = new Collection3();
               for (const [id, attachment] of Object.entries(attachments)) {
                 if (valueSet.has(id)) {
-                  data9.attachments.set(id, new (getAttachment())(attachment));
+                  data10.attachments.set(id, new (getAttachment())(attachment));
                 }
               }
             }
           }
         }
-        return data9;
+        return data10;
       }
       /**
        * Whether this is from a {@link MessageComponentInteraction}.
@@ -153313,9 +153313,9 @@ var require_RoleSelectMenuInteraction = __commonJS({
     var { Collection: Collection3 } = require_dist8();
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var RoleSelectMenuInteraction = class extends MessageComponentInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        const { resolved, values } = data9.data;
+      constructor(client, data10) {
+        super(client, data10);
+        const { resolved, values } = data10.data;
         this.values = values ?? [];
         this.roles = new Collection3();
         for (const role of Object.values(resolved?.roles ?? {})) {
@@ -153333,9 +153333,9 @@ var require_StringSelectMenuInteraction = __commonJS({
     "use strict";
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var StringSelectMenuInteraction3 = class extends MessageComponentInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        this.values = data9.data.values ?? [];
+      constructor(client, data10) {
+        super(client, data10);
+        this.values = data10.data.values ?? [];
       }
     };
     module2.exports = StringSelectMenuInteraction3;
@@ -153377,9 +153377,9 @@ var require_UserSelectMenuInteraction = __commonJS({
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var Events3 = require_Events();
     var UserSelectMenuInteraction = class extends MessageComponentInteraction {
-      constructor(client, data9) {
-        super(client, data9);
-        const { resolved, values } = data9.data;
+      constructor(client, data10) {
+        super(client, data10);
+        const { resolved, values } = data10.data;
         this.values = values ?? [];
         this.users = new Collection3();
         this.members = new Collection3();
@@ -153409,7 +153409,7 @@ var require_InteractionCreate = __commonJS({
     var AutocompleteInteraction = require_AutocompleteInteraction();
     var ButtonInteraction3 = require_ButtonInteraction();
     var ChannelSelectMenuInteraction = require_ChannelSelectMenuInteraction();
-    var ChatInputCommandInteraction11 = require_ChatInputCommandInteraction();
+    var ChatInputCommandInteraction12 = require_ChatInputCommandInteraction();
     var MentionableSelectMenuInteraction = require_MentionableSelectMenuInteraction();
     var MessageContextMenuCommandInteraction = require_MessageContextMenuCommandInteraction();
     var ModalSubmitInteraction3 = require_ModalSubmitInteraction();
@@ -153420,15 +153420,15 @@ var require_InteractionCreate = __commonJS({
     var UserSelectMenuInteraction = require_UserSelectMenuInteraction();
     var Events3 = require_Events();
     var InteractionCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = data9.channel && this.getChannel({ ...data9.channel, ..."recipients" in data9.channel ? { user: data9.user } : void 0 });
+        const channel = data10.channel && this.getChannel({ ...data10.channel, ..."recipients" in data10.channel ? { user: data10.user } : void 0 });
         let InteractionClass;
-        switch (data9.type) {
+        switch (data10.type) {
           case InteractionType.ApplicationCommand:
-            switch (data9.data.type) {
+            switch (data10.data.type) {
               case ApplicationCommandType.ChatInput:
-                InteractionClass = ChatInputCommandInteraction11;
+                InteractionClass = ChatInputCommandInteraction12;
                 break;
               case ApplicationCommandType.User:
                 InteractionClass = UserContextMenuCommandInteraction;
@@ -153443,14 +153443,14 @@ var require_InteractionCreate = __commonJS({
               default:
                 client.emit(
                   Events3.Debug,
-                  `[INTERACTION] Received application command interaction with unknown type: ${data9.data.type}`
+                  `[INTERACTION] Received application command interaction with unknown type: ${data10.data.type}`
                 );
                 return;
             }
             break;
           case InteractionType.MessageComponent:
             if (channel && !channel.isTextBased()) return;
-            switch (data9.data.component_type) {
+            switch (data10.data.component_type) {
               case ComponentType.Button:
                 InteractionClass = ButtonInteraction3;
                 break;
@@ -153472,7 +153472,7 @@ var require_InteractionCreate = __commonJS({
               default:
                 client.emit(
                   Events3.Debug,
-                  `[INTERACTION] Received component interaction with unknown type: ${data9.data.component_type}`
+                  `[INTERACTION] Received component interaction with unknown type: ${data10.data.component_type}`
                 );
                 return;
             }
@@ -153484,10 +153484,10 @@ var require_InteractionCreate = __commonJS({
             InteractionClass = ModalSubmitInteraction3;
             break;
           default:
-            client.emit(Events3.Debug, `[INTERACTION] Received interaction with unknown type: ${data9.type}`);
+            client.emit(Events3.Debug, `[INTERACTION] Received interaction with unknown type: ${data10.type}`);
             return;
         }
-        const interaction = new InteractionClass(client, data9);
+        const interaction = new InteractionClass(client, data10);
         client.emit(Events3.InteractionCreate, interaction);
       }
     };
@@ -153502,12 +153502,12 @@ var require_InviteCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var InviteCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = client.channels.cache.get(data9.channel_id);
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const channel = client.channels.cache.get(data10.channel_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (!channel) return false;
-        const inviteData = Object.assign(data9, { channel, guild });
+        const inviteData = Object.assign(data10, { channel, guild });
         const invite = guild.invites._add(inviteData);
         client.emit(Events3.InviteCreate, invite);
         return { invite };
@@ -153525,12 +153525,12 @@ var require_InviteDelete = __commonJS({
     var Invite2 = require_Invite();
     var Events3 = require_Events();
     var InviteDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = client.channels.cache.get(data9.channel_id);
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const channel = client.channels.cache.get(data10.channel_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (!channel) return false;
-        const inviteData = Object.assign(data9, { channel, guild });
+        const inviteData = Object.assign(data10, { channel, guild });
         const invite = new Invite2(client, inviteData);
         guild.invites.cache.delete(invite.code);
         client.emit(Events3.InviteDelete, invite);
@@ -153548,13 +153548,13 @@ var require_MessageCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
         const channel = this.getChannel({
-          id: data9.channel_id,
-          author: data9.author,
-          ..."guild_id" in data9 && { guild_id: data9.guild_id },
-          ..."channel_type" in data9 && { type: data9.channel_type }
+          id: data10.channel_id,
+          author: data10.author,
+          ..."guild_id" in data10 && { guild_id: data10.guild_id },
+          ..."channel_type" in data10 && { type: data10.channel_type }
         });
         if (channel) {
           if (!channel.isTextBased()) return {};
@@ -153562,10 +153562,10 @@ var require_MessageCreate = __commonJS({
             channel.messageCount++;
             channel.totalMessageSent++;
           }
-          const existing = channel.messages.cache.get(data9.id);
+          const existing = channel.messages.cache.get(data10.id);
           if (existing && existing.author?.id !== this.client.user.id) return { message: existing };
-          const message = existing ?? channel.messages._add(data9);
-          channel.lastMessageId = data9.id;
+          const message = existing ?? channel.messages._add(data10);
+          channel.lastMessageId = data10.id;
           client.emit(Events3.MessageCreate, message);
           return { message };
         }
@@ -153583,14 +153583,14 @@ var require_MessageDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = this.getChannel({ id: data9.channel_id, ..."guild_id" in data9 && { guild_id: data9.guild_id } });
+        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
         let message;
         if (channel) {
           if (!channel.isTextBased()) return {};
           if (channel.isThread()) channel.messageCount--;
-          message = this.getMessage(data9, channel);
+          message = this.getMessage(data10, channel);
           if (message) {
             channel.messages.cache.delete(message.id);
             client.emit(Events3.MessageDelete, message);
@@ -153611,19 +153611,19 @@ var require_MessageDeleteBulk = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageDeleteBulkAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = client.channels.cache.get(data9.channel_id);
+        const channel = client.channels.cache.get(data10.channel_id);
         if (channel) {
           if (!channel.isTextBased()) return {};
-          if (channel.isThread()) channel.messageCount -= data9.ids.length;
-          const ids = data9.ids;
+          if (channel.isThread()) channel.messageCount -= data10.ids.length;
+          const ids = data10.ids;
           const messages = new Collection3();
           for (const id of ids) {
             const message = this.getMessage(
               {
                 id,
-                guild_id: data9.guild_id
+                guild_id: data10.guild_id
               },
               channel,
               false
@@ -153650,21 +153650,21 @@ var require_MessagePollVoteAdd = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessagePollVoteAddAction = class extends Action {
-      handle(data9) {
-        const channel = this.getChannel({ id: data9.channel_id, ..."guild_id" in data9 && { guild_id: data9.guild_id } });
+      handle(data10) {
+        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data9, channel);
+        const message = this.getMessage(data10, channel);
         if (!message) return false;
-        const poll = this.getPoll(data9, message, channel);
+        const poll = this.getPoll(data10, message, channel);
         if (!poll) return false;
-        const answer = poll.answers.get(data9.answer_id);
+        const answer = poll.answers.get(data10.answer_id);
         if (!answer) return false;
-        const user = this.getUser(data9);
+        const user = this.getUser(data10);
         if (user) {
           answer.voters._add(user);
         }
         answer.voteCount++;
-        this.client.emit(Events3.MessagePollVoteAdd, answer, data9.user_id);
+        this.client.emit(Events3.MessagePollVoteAdd, answer, data10.user_id);
         return { poll };
       }
     };
@@ -153679,20 +153679,20 @@ var require_MessagePollVoteRemove = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessagePollVoteRemoveAction = class extends Action {
-      handle(data9) {
-        const channel = this.getChannel({ id: data9.channel_id, ..."guild_id" in data9 && { guild_id: data9.guild_id } });
+      handle(data10) {
+        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data9, channel);
+        const message = this.getMessage(data10, channel);
         if (!message) return false;
-        const poll = this.getPoll(data9, message, channel);
+        const poll = this.getPoll(data10, message, channel);
         if (!poll) return false;
-        const answer = poll.answers.get(data9.answer_id);
+        const answer = poll.answers.get(data10.answer_id);
         if (!answer) return false;
-        answer.voters.cache.delete(data9.user_id);
+        answer.voters.cache.delete(data10.user_id);
         if (answer.voteCount > 0) {
           answer.voteCount--;
         }
-        this.client.emit(Events3.MessagePollVoteRemove, answer, data9.user_id);
+        this.client.emit(Events3.MessagePollVoteRemove, answer, data10.user_id);
         return { poll };
       }
     };
@@ -153708,31 +153708,31 @@ var require_MessageReactionAdd = __commonJS({
     var Events3 = require_Events();
     var Partials2 = require_Partials();
     var MessageReactionAdd = class extends Action {
-      handle(data9, fromStructure = false) {
-        if (!data9.emoji) return false;
-        const user = this.getUserFromMember(data9);
+      handle(data10, fromStructure = false) {
+        if (!data10.emoji) return false;
+        const user = this.getUserFromMember(data10);
         if (!user) return false;
         const channel = this.getChannel({
-          id: data9.channel_id,
-          ..."guild_id" in data9 && { guild_id: data9.guild_id },
-          user_id: data9.user_id,
-          ...this.spreadInjectedData(data9)
+          id: data10.channel_id,
+          ..."guild_id" in data10 && { guild_id: data10.guild_id },
+          user_id: data10.user_id,
+          ...this.spreadInjectedData(data10)
         });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data9, channel);
+        const message = this.getMessage(data10, channel);
         if (!message) return false;
         const includePartial = this.client.options.partials.includes(Partials2.Reaction);
         if (message.partial && !includePartial) return false;
         const reaction = message.reactions._add({
-          emoji: data9.emoji,
+          emoji: data10.emoji,
           count: message.partial ? null : 0,
           me: user.id === this.client.user.id,
-          burst_colors: data9.burst_colors
+          burst_colors: data10.burst_colors
         });
         if (!reaction) return false;
-        reaction._add(user, data9.burst);
+        reaction._add(user, data10.burst);
         if (fromStructure) return { message, reaction, user };
-        this.client.emit(Events3.MessageReactionAdd, reaction, user, { type: data9.type, burst: data9.burst });
+        this.client.emit(Events3.MessageReactionAdd, reaction, user, { type: data10.type, burst: data10.burst });
         return { message, reaction, user };
       }
     };
@@ -153747,22 +153747,22 @@ var require_MessageReactionRemove = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageReactionRemove = class extends Action {
-      handle(data9) {
-        if (!data9.emoji) return false;
-        const user = this.getUser(data9);
+      handle(data10) {
+        if (!data10.emoji) return false;
+        const user = this.getUser(data10);
         if (!user) return false;
         const channel = this.getChannel({
-          id: data9.channel_id,
-          ..."guild_id" in data9 && { guild_id: data9.guild_id },
-          user_id: data9.user_id
+          id: data10.channel_id,
+          ..."guild_id" in data10 && { guild_id: data10.guild_id },
+          user_id: data10.user_id
         });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data9, channel);
+        const message = this.getMessage(data10, channel);
         if (!message) return false;
-        const reaction = this.getReaction(data9, message, user);
+        const reaction = this.getReaction(data10, message, user);
         if (!reaction) return false;
-        reaction._remove(user, data9.burst);
-        this.client.emit(Events3.MessageReactionRemove, reaction, user, { type: data9.type, burst: data9.burst });
+        reaction._remove(user, data10.burst);
+        this.client.emit(Events3.MessageReactionRemove, reaction, user, { type: data10.type, burst: data10.burst });
         return { message, reaction, user };
       }
     };
@@ -153777,10 +153777,10 @@ var require_MessageReactionRemoveAll = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageReactionRemoveAll = class extends Action {
-      handle(data9) {
-        const channel = this.getChannel({ id: data9.channel_id, ..."guild_id" in data9 && { guild_id: data9.guild_id } });
+      handle(data10) {
+        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data9, channel);
+        const message = this.getMessage(data10, channel);
         if (!message) return false;
         const removed = message.reactions.cache.clone();
         message.reactions.cache.clear();
@@ -153799,12 +153799,12 @@ var require_MessageReactionRemoveEmoji = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageReactionRemoveEmoji = class extends Action {
-      handle(data9) {
-        const channel = this.getChannel({ id: data9.channel_id, ..."guild_id" in data9 && { guild_id: data9.guild_id } });
+      handle(data10) {
+        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data9, channel);
+        const message = this.getMessage(data10, channel);
         if (!message) return false;
-        const reaction = this.getReaction(data9, message);
+        const reaction = this.getReaction(data10, message);
         if (!reaction) return false;
         if (!message.partial) message.reactions.cache.delete(reaction.emoji.id ?? reaction.emoji.name);
         this.client.emit(Events3.MessageReactionRemoveEmoji, reaction);
@@ -153821,14 +153821,14 @@ var require_MessageUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var MessageUpdateAction = class extends Action {
-      handle(data9) {
-        const channel = this.getChannel({ id: data9.channel_id, ..."guild_id" in data9 && { guild_id: data9.guild_id } });
+      handle(data10) {
+        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
         if (channel) {
           if (!channel.isTextBased()) return {};
-          const { id, channel_id, guild_id, author, timestamp, type } = data9;
+          const { id, channel_id, guild_id, author, timestamp, type } = data10;
           const message = this.getMessage({ id, channel_id, guild_id, author, timestamp, type }, channel);
           if (message) {
-            const old = message._update(data9);
+            const old = message._update(data10);
             return {
               old,
               updated: message
@@ -153850,20 +153850,20 @@ var require_PresenceUpdate = __commonJS({
     var Events3 = require_Events();
     var Partials2 = require_Partials();
     var PresenceUpdateAction = class extends Action {
-      handle(data9) {
-        let user = this.client.users.cache.get(data9.user.id);
-        if (!user && ("username" in data9.user || this.client.options.partials.includes(Partials2.User))) {
-          user = this.client.users._add(data9.user);
+      handle(data10) {
+        let user = this.client.users.cache.get(data10.user.id);
+        if (!user && ("username" in data10.user || this.client.options.partials.includes(Partials2.User))) {
+          user = this.client.users._add(data10.user);
         }
         if (!user) return;
-        if (data9.user.username) {
-          if (!user._equals(data9.user)) this.client.actions.UserUpdate.handle(data9.user);
+        if (data10.user.username) {
+          if (!user._equals(data10.user)) this.client.actions.UserUpdate.handle(data10.user);
         }
-        const guild = this.client.guilds.cache.get(data9.guild_id);
+        const guild = this.client.guilds.cache.get(data10.guild_id);
         if (!guild) return;
         const oldPresence = guild.presences.cache.get(user.id)?._clone() ?? null;
         let member = guild.members.cache.get(user.id);
-        if (!member && data9.status !== "offline") {
+        if (!member && data10.status !== "offline") {
           member = guild.members._add({
             user,
             deaf: false,
@@ -153871,7 +153871,7 @@ var require_PresenceUpdate = __commonJS({
           });
           this.client.emit(Events3.GuildMemberAvailable, member);
         }
-        const newPresence = guild.presences._add(Object.assign(data9, { guild }));
+        const newPresence = guild.presences._add(Object.assign(data10, { guild }));
         if (this.client.listenerCount(Events3.PresenceUpdate) && !newPresence.equals(oldPresence)) {
           this.client.emit(Events3.PresenceUpdate, oldPresence, newPresence);
         }
@@ -153888,11 +153888,11 @@ var require_StageInstanceCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var StageInstanceCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = this.getChannel({ id: data9.channel_id, guild_id: data9.guild_id });
+        const channel = this.getChannel({ id: data10.channel_id, guild_id: data10.guild_id });
         if (channel) {
-          const stageInstance = channel.guild.stageInstances._add(data9);
+          const stageInstance = channel.guild.stageInstances._add(data10);
           client.emit(Events3.StageInstanceCreate, stageInstance);
           return { stageInstance };
         }
@@ -153910,11 +153910,11 @@ var require_StageInstanceDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var StageInstanceDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = this.getChannel({ id: data9.channel_id, guild_id: data9.guild_id });
+        const channel = this.getChannel({ id: data10.channel_id, guild_id: data10.guild_id });
         if (channel) {
-          const stageInstance = channel.guild.stageInstances._add(data9);
+          const stageInstance = channel.guild.stageInstances._add(data10);
           if (stageInstance) {
             channel.guild.stageInstances.cache.delete(stageInstance.id);
             client.emit(Events3.StageInstanceDelete, stageInstance);
@@ -153935,12 +153935,12 @@ var require_StageInstanceUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var StageInstanceUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = this.getChannel({ id: data9.channel_id, guild_id: data9.guild_id });
+        const channel = this.getChannel({ id: data10.channel_id, guild_id: data10.guild_id });
         if (channel) {
-          const oldStageInstance = channel.guild.stageInstances.cache.get(data9.id)?._clone() ?? null;
-          const newStageInstance = channel.guild.stageInstances._add(data9);
+          const oldStageInstance = channel.guild.stageInstances.cache.get(data10.id)?._clone() ?? null;
+          const newStageInstance = channel.guild.stageInstances._add(data10);
           client.emit(Events3.StageInstanceUpdate, oldStageInstance, newStageInstance);
           return { oldStageInstance, newStageInstance };
         }
@@ -153958,12 +153958,12 @@ var require_ThreadCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadCreateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const existing = client.channels.cache.has(data9.id);
-        const thread = client.channels._add(data9);
+        const existing = client.channels.cache.has(data10.id);
+        const thread = client.channels._add(data10);
         if (!existing && thread) {
-          client.emit(Events3.ThreadCreate, thread, data9.newly_created ?? false);
+          client.emit(Events3.ThreadCreate, thread, data10.newly_created ?? false);
         }
         return { thread };
       }
@@ -153979,9 +153979,9 @@ var require_ThreadDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadDeleteAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const thread = client.channels.cache.get(data9.id);
+        const thread = client.channels.cache.get(data10.id);
         if (thread) {
           client.channels._remove(thread.id);
           client.emit(Events3.ThreadDelete, thread);
@@ -154001,12 +154001,12 @@ var require_ThreadListSync = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadListSyncAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (!guild) return {};
-        if (data9.channel_ids) {
-          for (const id of data9.channel_ids) {
+        if (data10.channel_ids) {
+          for (const id of data10.channel_ids) {
             const channel = client.channels.cache.get(id);
             if (channel) this.removeStale(channel);
           }
@@ -154015,11 +154015,11 @@ var require_ThreadListSync = __commonJS({
             this.removeStale(channel);
           }
         }
-        const syncedThreads = data9.threads.reduce((coll, rawThread) => {
+        const syncedThreads = data10.threads.reduce((coll, rawThread) => {
           const thread = client.channels._add(rawThread);
           return coll.set(thread.id, thread);
         }, new Collection3());
-        for (const rawMember of Object.values(data9.members)) {
+        for (const rawMember of Object.values(data10.members)) {
           const thread = client.channels.cache.get(rawMember.id);
           if (thread) {
             thread.members._add(rawMember);
@@ -154049,16 +154049,16 @@ var require_ThreadMemberUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadMemberUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const thread = client.channels.cache.get(data9.id);
+        const thread = client.channels.cache.get(data10.id);
         if (thread) {
-          const member = thread.members.cache.get(data9.user_id);
+          const member = thread.members.cache.get(data10.user_id);
           if (!member) {
-            const newMember = thread.members._add(data9);
+            const newMember = thread.members._add(data10);
             return { newMember };
           }
-          const old = member._update(data9);
+          const old = member._update(data10);
           client.emit(Events3.ThreadMemberUpdate, old, member);
         }
         return {};
@@ -154076,18 +154076,18 @@ var require_ThreadMembersUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadMembersUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const thread = client.channels.cache.get(data9.id);
+        const thread = client.channels.cache.get(data10.id);
         if (thread) {
-          thread.memberCount = data9.member_count;
+          thread.memberCount = data10.member_count;
           const addedMembers = new Collection3();
           const removedMembers = new Collection3();
-          data9.added_members?.reduce(
+          data10.added_members?.reduce(
             (_addedMembers, addedMember) => _addedMembers.set(addedMember.user_id, thread.members._add(addedMember)),
             addedMembers
           );
-          data9.removed_member_ids?.reduce((removedMembersIds, removedMembersId) => {
+          data10.removed_member_ids?.reduce((removedMembersIds, removedMembersId) => {
             const threadMember = this.getThreadMember(removedMembersId, thread.members);
             if (threadMember) removedMembersIds.set(threadMember.id, threadMember);
             thread.members.cache.delete(removedMembersId);
@@ -154111,15 +154111,15 @@ var require_Typing = __commonJS({
     "use strict";
     var Base = require_Base();
     var Typing = class extends Base {
-      constructor(channel, user, data9) {
+      constructor(channel, user, data10) {
         super(channel.client);
         this.channel = channel;
         this.user = user;
-        this._patch(data9);
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("timestamp" in data9) {
-          this.startedTimestamp = data9.timestamp * 1e3;
+      _patch(data10) {
+        if ("timestamp" in data10) {
+          this.startedTimestamp = data10.timestamp * 1e3;
         }
       }
       /**
@@ -154166,16 +154166,16 @@ var require_TypingStart = __commonJS({
     var Typing = require_Typing();
     var Events3 = require_Events();
     var TypingStart = class extends Action {
-      handle(data9) {
-        const channel = this.getChannel({ id: data9.channel_id, ..."guild_id" in data9 && { guild_id: data9.guild_id } });
+      handle(data10) {
+        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
         if (!channel) return;
         if (!channel.isTextBased()) {
           this.client.emit(Events3.Warn, `Discord sent a typing packet to a ${channel.type} channel ${channel.id}`);
           return;
         }
-        const user = this.getUserFromMember(data9);
+        const user = this.getUserFromMember(data10);
         if (user) {
-          this.client.emit(Events3.TypingStart, new Typing(channel, user, data9));
+          this.client.emit(Events3.TypingStart, new Typing(channel, user, data10));
         }
       }
     };
@@ -154190,10 +154190,10 @@ var require_UserUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var UserUpdateAction = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const newUser = data9.id === client.user.id ? client.user : client.users.cache.get(data9.id);
-        const oldUser = newUser._update(data9);
+        const newUser = data10.id === client.user.id ? client.user : client.users.cache.get(data10.id);
+        const oldUser = newUser._update(data10);
         if (!oldUser.equals(newUser)) {
           client.emit(Events3.UserUpdate, oldUser, newUser);
           return {
@@ -154219,21 +154219,21 @@ var require_VoiceStateUpdate = __commonJS({
     var VoiceState = require_VoiceState();
     var Events3 = require_Events();
     var VoiceStateUpdate = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data9.guild_id);
+        const guild = client.guilds.cache.get(data10.guild_id);
         if (guild) {
-          const oldState = guild.voiceStates.cache.get(data9.user_id)?._clone() ?? new VoiceState(guild, { user_id: data9.user_id });
-          const newState = guild.voiceStates._add(data9);
-          let member = guild.members.cache.get(data9.user_id);
-          if (member && data9.member) {
-            member._patch(data9.member);
-          } else if (data9.member?.user && data9.member.joined_at) {
-            member = guild.members._add(data9.member);
+          const oldState = guild.voiceStates.cache.get(data10.user_id)?._clone() ?? new VoiceState(guild, { user_id: data10.user_id });
+          const newState = guild.voiceStates._add(data10);
+          let member = guild.members.cache.get(data10.user_id);
+          if (member && data10.member) {
+            member._patch(data10.member);
+          } else if (data10.member?.user && data10.member.joined_at) {
+            member = guild.members._add(data10.member);
           }
           if (member?.user.id === client.user.id) {
-            client.emit("debug", `[VOICE] received voice state update: ${JSON.stringify(data9)}`);
-            client.voice.onVoiceStateUpdate(data9);
+            client.emit("debug", `[VOICE] received voice state update: ${JSON.stringify(data10)}`);
+            client.voice.onVoiceStateUpdate(data10);
           }
           client.emit(Events3.VoiceStateUpdate, oldState, newState);
         }
@@ -154251,9 +154251,9 @@ var require_WebhooksUpdate = __commonJS({
     var Action = require_Action();
     var deprecationEmitted = false;
     var WebhooksUpdate = class extends Action {
-      handle(data9) {
+      handle(data10) {
         const client = this.client;
-        const channel = client.channels.cache.get(data9.channel_id);
+        const channel = client.channels.cache.get(data10.channel_id);
         if (!channel) return;
         client.emit("webhooksUpdate", channel);
         if (client.emit("webhookUpdate", channel) && !deprecationEmitted) {
@@ -154442,16 +154442,16 @@ var require_buffer_util = __commonJS({
       }
       return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.length);
     }
-    function toBuffer(data9) {
+    function toBuffer(data10) {
       toBuffer.readOnly = true;
-      if (Buffer.isBuffer(data9)) return data9;
+      if (Buffer.isBuffer(data10)) return data10;
       let buf;
-      if (data9 instanceof ArrayBuffer) {
-        buf = new FastBuffer(data9);
-      } else if (ArrayBuffer.isView(data9)) {
-        buf = new FastBuffer(data9.buffer, data9.byteOffset, data9.byteLength);
+      if (data10 instanceof ArrayBuffer) {
+        buf = new FastBuffer(data10);
+      } else if (ArrayBuffer.isView(data10)) {
+        buf = new FastBuffer(data10.buffer, data10.byteOffset, data10.byteLength);
       } else {
-        buf = Buffer.from(data9);
+        buf = Buffer.from(data10);
         toBuffer.readOnly = false;
       }
       return buf;
@@ -154765,9 +154765,9 @@ var require_permessage_deflate2 = __commonJS({
        * @param {Function} callback Callback
        * @public
        */
-      decompress(data9, fin, callback) {
+      decompress(data10, fin, callback) {
         zlibLimiter.add((done) => {
-          this._decompress(data9, fin, (err, result) => {
+          this._decompress(data10, fin, (err, result) => {
             done();
             callback(err, result);
           });
@@ -154781,9 +154781,9 @@ var require_permessage_deflate2 = __commonJS({
        * @param {Function} callback Callback
        * @public
        */
-      compress(data9, fin, callback) {
+      compress(data10, fin, callback) {
         zlibLimiter.add((done) => {
-          this._compress(data9, fin, (err, result) => {
+          this._compress(data10, fin, (err, result) => {
             done();
             callback(err, result);
           });
@@ -154797,7 +154797,7 @@ var require_permessage_deflate2 = __commonJS({
        * @param {Function} callback Callback
        * @private
        */
-      _decompress(data9, fin, callback) {
+      _decompress(data10, fin, callback) {
         const endpoint = this._isServer ? "client" : "server";
         if (!this._inflate) {
           const key = `${endpoint}_max_window_bits`;
@@ -154813,7 +154813,7 @@ var require_permessage_deflate2 = __commonJS({
           this._inflate.on("data", inflateOnData);
         }
         this._inflate[kCallback] = callback;
-        this._inflate.write(data9);
+        this._inflate.write(data10);
         if (fin) this._inflate.write(TRAILER);
         this._inflate.flush(() => {
           const err = this._inflate[kError];
@@ -154823,7 +154823,7 @@ var require_permessage_deflate2 = __commonJS({
             callback(err);
             return;
           }
-          const data10 = bufferUtil.concat(
+          const data11 = bufferUtil.concat(
             this._inflate[kBuffers],
             this._inflate[kTotalLength]
           );
@@ -154837,7 +154837,7 @@ var require_permessage_deflate2 = __commonJS({
               this._inflate.reset();
             }
           }
-          callback(null, data10);
+          callback(null, data11);
         });
       }
       /**
@@ -154848,7 +154848,7 @@ var require_permessage_deflate2 = __commonJS({
        * @param {Function} callback Callback
        * @private
        */
-      _compress(data9, fin, callback) {
+      _compress(data10, fin, callback) {
         const endpoint = this._isServer ? "server" : "client";
         if (!this._deflate) {
           const key = `${endpoint}_max_window_bits`;
@@ -154862,17 +154862,17 @@ var require_permessage_deflate2 = __commonJS({
           this._deflate.on("data", deflateOnData);
         }
         this._deflate[kCallback] = callback;
-        this._deflate.write(data9);
+        this._deflate.write(data10);
         this._deflate.flush(zlib.Z_SYNC_FLUSH, () => {
           if (!this._deflate) {
             return;
           }
-          let data10 = bufferUtil.concat(
+          let data11 = bufferUtil.concat(
             this._deflate[kBuffers],
             this._deflate[kTotalLength]
           );
           if (fin) {
-            data10 = new FastBuffer(data10.buffer, data10.byteOffset, data10.length - 4);
+            data11 = new FastBuffer(data11.buffer, data11.byteOffset, data11.length - 4);
           }
           this._deflate[kCallback] = null;
           this._deflate[kTotalLength] = 0;
@@ -154880,7 +154880,7 @@ var require_permessage_deflate2 = __commonJS({
           if (fin && this.params[`${endpoint}_no_context_takeover`]) {
             this._deflate.reset();
           }
-          callback(null, data10);
+          callback(null, data11);
         });
       }
     };
@@ -155514,27 +155514,27 @@ var require_receiver2 = __commonJS({
        * @private
        */
       getData(cb) {
-        let data9 = EMPTY_BUFFER;
+        let data10 = EMPTY_BUFFER;
         if (this._payloadLength) {
           if (this._bufferedBytes < this._payloadLength) {
             this._loop = false;
             return;
           }
-          data9 = this.consume(this._payloadLength);
+          data10 = this.consume(this._payloadLength);
           if (this._masked && (this._mask[0] | this._mask[1] | this._mask[2] | this._mask[3]) !== 0) {
-            unmask(data9, this._mask);
+            unmask(data10, this._mask);
           }
         }
         if (this._opcode > 7) {
-          this.controlMessage(data9, cb);
+          this.controlMessage(data10, cb);
           return;
         }
         if (this._compressed) {
           this._state = INFLATING;
-          this.decompress(data9, cb);
+          this.decompress(data10, cb);
           return;
         }
-        if (data9.length) {
+        if (data10.length) {
           if (this._maxFragments > 0 && this._fragments.length >= this._maxFragments) {
             const error = this.createError(
               RangeError,
@@ -155547,7 +155547,7 @@ var require_receiver2 = __commonJS({
             return;
           }
           this._messageLength = this._totalPayloadLength;
-          this._fragments.push(data9);
+          this._fragments.push(data10);
         }
         this.dataMessage(cb);
       }
@@ -155558,9 +155558,9 @@ var require_receiver2 = __commonJS({
        * @param {Function} cb Callback
        * @private
        */
-      decompress(data9, cb) {
+      decompress(data10, cb) {
         const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
-        perMessageDeflate.decompress(data9, this._fin, (err, buf) => {
+        perMessageDeflate.decompress(data10, this._fin, (err, buf) => {
           if (err) return cb(err);
           if (buf.length) {
             this._messageLength += buf.length;
@@ -155610,23 +155610,23 @@ var require_receiver2 = __commonJS({
         this._fragmented = 0;
         this._fragments = [];
         if (this._opcode === 2) {
-          let data9;
+          let data10;
           if (this._binaryType === "nodebuffer") {
-            data9 = concat(fragments, messageLength);
+            data10 = concat(fragments, messageLength);
           } else if (this._binaryType === "arraybuffer") {
-            data9 = toArrayBuffer(concat(fragments, messageLength));
+            data10 = toArrayBuffer(concat(fragments, messageLength));
           } else if (this._binaryType === "blob") {
-            data9 = new Blob(fragments);
+            data10 = new Blob(fragments);
           } else {
-            data9 = fragments;
+            data10 = fragments;
           }
           if (this._allowSynchronousEvents) {
-            this.emit("message", data9, true);
+            this.emit("message", data10, true);
             this._state = GET_INFO;
           } else {
             this._state = DEFER_EVENT;
             setImmediate(() => {
-              this.emit("message", data9, true);
+              this.emit("message", data10, true);
               this._state = GET_INFO;
               this.startLoop(cb);
             });
@@ -155664,14 +155664,14 @@ var require_receiver2 = __commonJS({
        * @return {(Error|RangeError|undefined)} A possible error
        * @private
        */
-      controlMessage(data9, cb) {
+      controlMessage(data10, cb) {
         if (this._opcode === 8) {
-          if (data9.length === 0) {
+          if (data10.length === 0) {
             this._loop = false;
             this.emit("conclude", 1005, EMPTY_BUFFER);
             this.end();
           } else {
-            const code = data9.readUInt16BE(0);
+            const code = data10.readUInt16BE(0);
             if (!isValidStatusCode(code)) {
               const error = this.createError(
                 RangeError,
@@ -155684,9 +155684,9 @@ var require_receiver2 = __commonJS({
               return;
             }
             const buf = new FastBuffer(
-              data9.buffer,
-              data9.byteOffset + 2,
-              data9.length - 2
+              data10.buffer,
+              data10.byteOffset + 2,
+              data10.length - 2
             );
             if (!this._skipUTF8Validation && !isValidUTF8(buf)) {
               const error = this.createError(
@@ -155707,12 +155707,12 @@ var require_receiver2 = __commonJS({
           return;
         }
         if (this._allowSynchronousEvents) {
-          this.emit(this._opcode === 9 ? "ping" : "pong", data9);
+          this.emit(this._opcode === 9 ? "ping" : "pong", data10);
           this._state = GET_INFO;
         } else {
           this._state = DEFER_EVENT;
           setImmediate(() => {
-            this.emit(this._opcode === 9 ? "ping" : "pong", data9);
+            this.emit(this._opcode === 9 ? "ping" : "pong", data10);
             this._state = GET_INFO;
             this.startLoop(cb);
           });
@@ -155812,7 +155812,7 @@ var require_sender2 = __commonJS({
        * @return {(Buffer|String)[]} The framed data
        * @public
        */
-      static frame(data9, options) {
+      static frame(data10, options) {
         let mask;
         let merge = false;
         let offset = 2;
@@ -155838,15 +155838,15 @@ var require_sender2 = __commonJS({
           offset = 6;
         }
         let dataLength;
-        if (typeof data9 === "string") {
+        if (typeof data10 === "string") {
           if ((!options.mask || skipMasking) && options[kByteLength] !== void 0) {
             dataLength = options[kByteLength];
           } else {
-            data9 = Buffer.from(data9);
-            dataLength = data9.length;
+            data10 = Buffer.from(data10);
+            dataLength = data10.length;
           }
         } else {
-          dataLength = data9.length;
+          dataLength = data10.length;
           merge = options.mask && options.readOnly && !skipMasking;
         }
         let payloadLength = dataLength;
@@ -155867,19 +155867,19 @@ var require_sender2 = __commonJS({
           target[2] = target[3] = 0;
           target.writeUIntBE(dataLength, 4, 6);
         }
-        if (!options.mask) return [target, data9];
+        if (!options.mask) return [target, data10];
         target[1] |= 128;
         target[offset - 4] = mask[0];
         target[offset - 3] = mask[1];
         target[offset - 2] = mask[2];
         target[offset - 1] = mask[3];
-        if (skipMasking) return [target, data9];
+        if (skipMasking) return [target, data10];
         if (merge) {
-          applyMask(data9, mask, target, offset, dataLength);
+          applyMask(data10, mask, target, offset, dataLength);
           return [target];
         }
-        applyMask(data9, mask, data9, 0, dataLength);
-        return [target, data9];
+        applyMask(data10, mask, data10, 0, dataLength);
+        return [target, data10];
       }
       /**
        * Sends a close message to the other peer.
@@ -155890,26 +155890,26 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @public
        */
-      close(code, data9, mask, cb) {
+      close(code, data10, mask, cb) {
         let buf;
         if (code === void 0) {
           buf = EMPTY_BUFFER;
         } else if (typeof code !== "number" || !isValidStatusCode(code)) {
           throw new TypeError("First argument must be a valid error code number");
-        } else if (data9 === void 0 || !data9.length) {
+        } else if (data10 === void 0 || !data10.length) {
           buf = Buffer.allocUnsafe(2);
           buf.writeUInt16BE(code, 0);
         } else {
-          const length = Buffer.byteLength(data9);
+          const length = Buffer.byteLength(data10);
           if (length > 123) {
             throw new RangeError("The message must not be greater than 123 bytes");
           }
           buf = Buffer.allocUnsafe(2 + length);
           buf.writeUInt16BE(code, 0);
-          if (typeof data9 === "string") {
-            buf.write(data9, 2);
-          } else if (isUint8Array(data9)) {
-            buf.set(data9, 2);
+          if (typeof data10 === "string") {
+            buf.write(data10, 2);
+          } else if (isUint8Array(data10)) {
+            buf.set(data10, 2);
           } else {
             throw new TypeError("Second argument must be a string or a Uint8Array");
           }
@@ -155938,18 +155938,18 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @public
        */
-      ping(data9, mask, cb) {
+      ping(data10, mask, cb) {
         let byteLength;
         let readOnly;
-        if (typeof data9 === "string") {
-          byteLength = Buffer.byteLength(data9);
+        if (typeof data10 === "string") {
+          byteLength = Buffer.byteLength(data10);
           readOnly = false;
-        } else if (isBlob(data9)) {
-          byteLength = data9.size;
+        } else if (isBlob(data10)) {
+          byteLength = data10.size;
           readOnly = false;
         } else {
-          data9 = toBuffer(data9);
-          byteLength = data9.length;
+          data10 = toBuffer(data10);
+          byteLength = data10.length;
           readOnly = toBuffer.readOnly;
         }
         if (byteLength > 125) {
@@ -155965,16 +155965,16 @@ var require_sender2 = __commonJS({
           readOnly,
           rsv1: false
         };
-        if (isBlob(data9)) {
+        if (isBlob(data10)) {
           if (this._state !== DEFAULT) {
-            this.enqueue([this.getBlobData, data9, false, options, cb]);
+            this.enqueue([this.getBlobData, data10, false, options, cb]);
           } else {
-            this.getBlobData(data9, false, options, cb);
+            this.getBlobData(data10, false, options, cb);
           }
         } else if (this._state !== DEFAULT) {
-          this.enqueue([this.dispatch, data9, false, options, cb]);
+          this.enqueue([this.dispatch, data10, false, options, cb]);
         } else {
-          this.sendFrame(_Sender.frame(data9, options), cb);
+          this.sendFrame(_Sender.frame(data10, options), cb);
         }
       }
       /**
@@ -155985,18 +155985,18 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @public
        */
-      pong(data9, mask, cb) {
+      pong(data10, mask, cb) {
         let byteLength;
         let readOnly;
-        if (typeof data9 === "string") {
-          byteLength = Buffer.byteLength(data9);
+        if (typeof data10 === "string") {
+          byteLength = Buffer.byteLength(data10);
           readOnly = false;
-        } else if (isBlob(data9)) {
-          byteLength = data9.size;
+        } else if (isBlob(data10)) {
+          byteLength = data10.size;
           readOnly = false;
         } else {
-          data9 = toBuffer(data9);
-          byteLength = data9.length;
+          data10 = toBuffer(data10);
+          byteLength = data10.length;
           readOnly = toBuffer.readOnly;
         }
         if (byteLength > 125) {
@@ -156012,16 +156012,16 @@ var require_sender2 = __commonJS({
           readOnly,
           rsv1: false
         };
-        if (isBlob(data9)) {
+        if (isBlob(data10)) {
           if (this._state !== DEFAULT) {
-            this.enqueue([this.getBlobData, data9, false, options, cb]);
+            this.enqueue([this.getBlobData, data10, false, options, cb]);
           } else {
-            this.getBlobData(data9, false, options, cb);
+            this.getBlobData(data10, false, options, cb);
           }
         } else if (this._state !== DEFAULT) {
-          this.enqueue([this.dispatch, data9, false, options, cb]);
+          this.enqueue([this.dispatch, data10, false, options, cb]);
         } else {
-          this.sendFrame(_Sender.frame(data9, options), cb);
+          this.sendFrame(_Sender.frame(data10, options), cb);
         }
       }
       /**
@@ -156040,21 +156040,21 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @public
        */
-      send(data9, options, cb) {
+      send(data10, options, cb) {
         const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
         let opcode = options.binary ? 2 : 1;
         let rsv1 = options.compress;
         let byteLength;
         let readOnly;
-        if (typeof data9 === "string") {
-          byteLength = Buffer.byteLength(data9);
+        if (typeof data10 === "string") {
+          byteLength = Buffer.byteLength(data10);
           readOnly = false;
-        } else if (isBlob(data9)) {
-          byteLength = data9.size;
+        } else if (isBlob(data10)) {
+          byteLength = data10.size;
           readOnly = false;
         } else {
-          data9 = toBuffer(data9);
-          byteLength = data9.length;
+          data10 = toBuffer(data10);
+          byteLength = data10.length;
           readOnly = toBuffer.readOnly;
         }
         if (this._firstFragment) {
@@ -156078,16 +156078,16 @@ var require_sender2 = __commonJS({
           readOnly,
           rsv1
         };
-        if (isBlob(data9)) {
+        if (isBlob(data10)) {
           if (this._state !== DEFAULT) {
-            this.enqueue([this.getBlobData, data9, this._compress, opts, cb]);
+            this.enqueue([this.getBlobData, data10, this._compress, opts, cb]);
           } else {
-            this.getBlobData(data9, this._compress, opts, cb);
+            this.getBlobData(data10, this._compress, opts, cb);
           }
         } else if (this._state !== DEFAULT) {
-          this.enqueue([this.dispatch, data9, this._compress, opts, cb]);
+          this.enqueue([this.dispatch, data10, this._compress, opts, cb]);
         } else {
-          this.dispatch(data9, this._compress, opts, cb);
+          this.dispatch(data10, this._compress, opts, cb);
         }
       }
       /**
@@ -156125,13 +156125,13 @@ var require_sender2 = __commonJS({
             return;
           }
           this._bufferedBytes -= options[kByteLength];
-          const data9 = toBuffer(arrayBuffer);
+          const data10 = toBuffer(arrayBuffer);
           if (!compress) {
             this._state = DEFAULT;
-            this.sendFrame(_Sender.frame(data9, options), cb);
+            this.sendFrame(_Sender.frame(data10, options), cb);
             this.dequeue();
           } else {
-            this.dispatch(data9, compress, options, cb);
+            this.dispatch(data10, compress, options, cb);
           }
         }).catch((err) => {
           process.nextTick(onError, this, err, cb);
@@ -156160,15 +156160,15 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @private
        */
-      dispatch(data9, compress, options, cb) {
+      dispatch(data10, compress, options, cb) {
         if (!compress) {
-          this.sendFrame(_Sender.frame(data9, options), cb);
+          this.sendFrame(_Sender.frame(data10, options), cb);
           return;
         }
         const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
         this._bufferedBytes += options[kByteLength];
         this._state = DEFLATING;
-        perMessageDeflate.compress(data9, options.fin, (_, buf) => {
+        perMessageDeflate.compress(data10, options.fin, (_, buf) => {
           if (this._socket.destroyed) {
             const err = new Error(
               "The socket was closed while data was being compressed"
@@ -156392,9 +156392,9 @@ var require_event_target = __commonJS({
         }
         let wrapper;
         if (type === "message") {
-          wrapper = function onMessage(data9, isBinary) {
+          wrapper = function onMessage(data10, isBinary) {
             const event = new MessageEvent("message", {
-              data: isBinary ? data9 : data9.toString()
+              data: isBinary ? data10 : data10.toString()
             });
             event[kTarget] = this;
             callListener(handler, this, event);
@@ -156874,7 +156874,7 @@ var require_websocket2 = __commonJS({
        *     closing
        * @public
        */
-      close(code, data9) {
+      close(code, data10) {
         if (this.readyState === _WebSocket.CLOSED) return;
         if (this.readyState === _WebSocket.CONNECTING) {
           const msg = "WebSocket was closed before the connection was established";
@@ -156888,7 +156888,7 @@ var require_websocket2 = __commonJS({
           return;
         }
         this._readyState = _WebSocket.CLOSING;
-        this._sender.close(code, data9, !this._isServer, (err) => {
+        this._sender.close(code, data10, !this._isServer, (err) => {
           if (err) return;
           this._closeFrameSent = true;
           if (this._closeFrameReceived || this._receiver._writableState.errorEmitted) {
@@ -156917,24 +156917,24 @@ var require_websocket2 = __commonJS({
        * @param {Function} [cb] Callback which is executed when the ping is sent
        * @public
        */
-      ping(data9, mask, cb) {
+      ping(data10, mask, cb) {
         if (this.readyState === _WebSocket.CONNECTING) {
           throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
         }
-        if (typeof data9 === "function") {
-          cb = data9;
-          data9 = mask = void 0;
+        if (typeof data10 === "function") {
+          cb = data10;
+          data10 = mask = void 0;
         } else if (typeof mask === "function") {
           cb = mask;
           mask = void 0;
         }
-        if (typeof data9 === "number") data9 = data9.toString();
+        if (typeof data10 === "number") data10 = data10.toString();
         if (this.readyState !== _WebSocket.OPEN) {
-          sendAfterClose(this, data9, cb);
+          sendAfterClose(this, data10, cb);
           return;
         }
         if (mask === void 0) mask = !this._isServer;
-        this._sender.ping(data9 || EMPTY_BUFFER, mask, cb);
+        this._sender.ping(data10 || EMPTY_BUFFER, mask, cb);
       }
       /**
        * Send a pong.
@@ -156944,24 +156944,24 @@ var require_websocket2 = __commonJS({
        * @param {Function} [cb] Callback which is executed when the pong is sent
        * @public
        */
-      pong(data9, mask, cb) {
+      pong(data10, mask, cb) {
         if (this.readyState === _WebSocket.CONNECTING) {
           throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
         }
-        if (typeof data9 === "function") {
-          cb = data9;
-          data9 = mask = void 0;
+        if (typeof data10 === "function") {
+          cb = data10;
+          data10 = mask = void 0;
         } else if (typeof mask === "function") {
           cb = mask;
           mask = void 0;
         }
-        if (typeof data9 === "number") data9 = data9.toString();
+        if (typeof data10 === "number") data10 = data10.toString();
         if (this.readyState !== _WebSocket.OPEN) {
-          sendAfterClose(this, data9, cb);
+          sendAfterClose(this, data10, cb);
           return;
         }
         if (mask === void 0) mask = !this._isServer;
-        this._sender.pong(data9 || EMPTY_BUFFER, mask, cb);
+        this._sender.pong(data10 || EMPTY_BUFFER, mask, cb);
       }
       /**
        * Resume the socket.
@@ -156990,7 +156990,7 @@ var require_websocket2 = __commonJS({
        * @param {Function} [cb] Callback which is executed when data is written out
        * @public
        */
-      send(data9, options, cb) {
+      send(data10, options, cb) {
         if (this.readyState === _WebSocket.CONNECTING) {
           throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
         }
@@ -156998,13 +156998,13 @@ var require_websocket2 = __commonJS({
           cb = options;
           options = {};
         }
-        if (typeof data9 === "number") data9 = data9.toString();
+        if (typeof data10 === "number") data10 = data10.toString();
         if (this.readyState !== _WebSocket.OPEN) {
-          sendAfterClose(this, data9, cb);
+          sendAfterClose(this, data10, cb);
           return;
         }
         const opts = {
-          binary: typeof data9 !== "string",
+          binary: typeof data10 !== "string",
           mask: !this._isServer,
           compress: true,
           fin: true,
@@ -157013,7 +157013,7 @@ var require_websocket2 = __commonJS({
         if (!this._extensions[PerMessageDeflate.extensionName]) {
           opts.compress = false;
         }
-        this._sender.send(data9 || EMPTY_BUFFER, opts, cb);
+        this._sender.send(data10 || EMPTY_BUFFER, opts, cb);
       }
       /**
        * Forcibly close the connection.
@@ -157398,9 +157398,9 @@ var require_websocket2 = __commonJS({
         stream.once("close", websocket.emitClose.bind(websocket));
       }
     }
-    function sendAfterClose(websocket, data9, cb) {
-      if (data9) {
-        const length = isBlob(data9) ? data9.size : toBuffer(data9).length;
+    function sendAfterClose(websocket, data10, cb) {
+      if (data10) {
+        const length = isBlob(data10) ? data10.size : toBuffer(data10).length;
         if (websocket._socket) websocket._sender._bufferedBytes += length;
         else websocket._bufferedAmount += length;
       }
@@ -157441,16 +157441,16 @@ var require_websocket2 = __commonJS({
     function receiverOnFinish() {
       this[kWebSocket].emitClose();
     }
-    function receiverOnMessage(data9, isBinary) {
-      this[kWebSocket].emit("message", data9, isBinary);
+    function receiverOnMessage(data10, isBinary) {
+      this[kWebSocket].emit("message", data10, isBinary);
     }
-    function receiverOnPing(data9) {
+    function receiverOnPing(data10) {
       const websocket = this[kWebSocket];
-      if (websocket._autoPong) websocket.pong(data9, !this._isServer, NOOP);
-      websocket.emit("ping", data9);
+      if (websocket._autoPong) websocket.pong(data10, !this._isServer, NOOP);
+      websocket.emit("ping", data10);
     }
-    function receiverOnPong(data9) {
-      this[kWebSocket].emit("pong", data9);
+    function receiverOnPong(data10) {
+      this[kWebSocket].emit("pong", data10);
     }
     function resume(stream) {
       stream.resume();
@@ -157548,8 +157548,8 @@ var require_stream = __commonJS({
         writableObjectMode: false
       });
       ws.on("message", function message(msg, isBinary) {
-        const data9 = !isBinary && duplex._readableState.objectMode ? msg.toString() : msg;
-        if (!duplex.push(data9)) ws.pause();
+        const data10 = !isBinary && duplex._readableState.objectMode ? msg.toString() : msg;
+        if (!duplex.push(data10)) ws.pause();
       });
       ws.once("error", function error(err) {
         if (duplex.destroyed) return;
@@ -158296,7 +158296,7 @@ var require_dist11 = __commonJS({
       /**
        * {@inheritDoc IShardingStrategy.send}
        */
-      send(shardId, data9) {
+      send(shardId, data10) {
         const worker = this.#workerByShardId.get(shardId);
         if (!worker) {
           throw new Error(`No worker found for shard ${shardId}`);
@@ -158304,7 +158304,7 @@ var require_dist11 = __commonJS({
         const payload = {
           op: 2,
           shardId,
-          payload: data9
+          payload: data10
         };
         worker.postMessage(payload);
       }
@@ -158990,15 +158990,15 @@ var require_dist11 = __commonJS({
         this.lastHeartbeatAt = Date.now();
         this.isAck = false;
       }
-      async unpackMessage(data9, isBinary) {
+      async unpackMessage(data10, isBinary) {
         if (!isBinary) {
           try {
-            return JSON.parse(data9);
+            return JSON.parse(data10);
           } catch {
             return null;
           }
         }
-        const decompressable = new Uint8Array(data9);
+        const decompressable = new Uint8Array(data10);
         if (this.useIdentifyCompress) {
           return new Promise((resolve2, reject) => {
             (0, import_node_zlib.inflate)(decompressable, { chunkSize: 65535 }, (err, result) => {
@@ -159037,8 +159037,8 @@ var require_dist11 = __commonJS({
         ]);
         return null;
       }
-      async onMessage(data9, isBinary) {
-        const payload = await this.unpackMessage(data9, isBinary);
+      async onMessage(data10, isBinary) {
+        const payload = await this.unpackMessage(data10, isBinary);
         if (!payload) {
           return;
         }
@@ -159449,11 +159449,11 @@ var require_dist11 = __commonJS({
         for (const shardId of this.data.shardIds) {
           const shard = new WebSocketShard(new WorkerContextFetchingStrategy(this.data), shardId);
           for (const event of options.forwardEvents ?? Object.values(WebSocketShardEvents)) {
-            shard.on(event, (data9) => {
+            shard.on(event, (data10) => {
               const payload = {
                 op: 2,
                 event,
-                data: data9,
+                data: data10,
                 shardId
               };
               import_node_worker_threads3.parentPort.postMessage(payload);
@@ -159515,8 +159515,8 @@ var require_dist11 = __commonJS({
             return this.gatewayInformation.data;
           }
         }
-        const data9 = await this.options.rest.get(import_v103.Routes.gatewayBot());
-        this.gatewayInformation = { data: data9, expiresAt: Date.now() + (data9.session_start_limit.reset_after || 5e3) };
+        const data10 = await this.options.rest.get(import_v103.Routes.gatewayBot());
+        this.gatewayInformation = { data: data10, expiresAt: Date.now() + (data10.session_start_limit.reset_after || 5e3) };
         return this.gatewayInformation.data;
       }
       /**
@@ -159557,8 +159557,8 @@ var require_dist11 = __commonJS({
             shardIds = [...(0, import_util32.range)({ start, end: end + 1 })];
           }
         } else {
-          const data9 = await this.fetchGatewayInformation();
-          shardIds = [...(0, import_util32.range)(this.options.shardCount ?? data9.shards)];
+          const data10 = await this.fetchGatewayInformation();
+          shardIds = [...(0, import_util32.range)(this.options.shardCount ?? data10.shards)];
         }
         this.shardIds = shardIds;
         return shardIds;
@@ -159567,10 +159567,10 @@ var require_dist11 = __commonJS({
         const shardCount = await this.getShardCount();
         await this.updateShardCount(shardCount);
         const shardIds = await this.getShardIds();
-        const data9 = await this.fetchGatewayInformation();
-        if (data9.session_start_limit.remaining < shardIds.length) {
+        const data10 = await this.fetchGatewayInformation();
+        if (data10.session_start_limit.remaining < shardIds.length) {
           throw new Error(
-            `Not enough sessions remaining to spawn ${shardIds.length} shards; only ${data9.session_start_limit.remaining} remaining; resets at ${new Date(Date.now() + data9.session_start_limit.reset_after).toISOString()}`
+            `Not enough sessions remaining to spawn ${shardIds.length} shards; only ${data10.session_start_limit.remaining} remaining; resets at ${new Date(Date.now() + data10.session_start_limit.reset_after).toISOString()}`
           );
         }
         await this.strategy.connect();
@@ -159725,7 +159725,7 @@ var require_WebSocketShard = __commonJS({
        * @param {boolean} [important=false] If this packet should be added first in queue
        * <warn>This parameter is **deprecated**. Important payloads are determined by their opcode instead.</warn>
        */
-      send(data9, important = false) {
+      send(data10, important = false) {
         if (important && !deprecationEmittedForImportant) {
           process2.emitWarning(
             "Sending important payloads explicitly is deprecated. They are determined by their opcode implicitly now.",
@@ -159733,7 +159733,7 @@ var require_WebSocketShard = __commonJS({
           );
           deprecationEmittedForImportant = true;
         }
-        this.manager._ws.send(this.id, data9);
+        this.manager._ws.send(this.id, data10);
       }
     };
     module2.exports = WebSocketShard;
@@ -159815,9 +159815,9 @@ var require_CHANNEL_PINS_UPDATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/CHANNEL_PINS_UPDATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const channel = client.channels.cache.get(data9.channel_id);
-      const time = data9.last_pin_timestamp ? Date.parse(data9.last_pin_timestamp) : null;
+    module2.exports = (client, { d: data10 }) => {
+      const channel = client.channels.cache.get(data10.channel_id);
+      const time = data10.last_pin_timestamp ? Date.parse(data10.last_pin_timestamp) : null;
       if (channel) {
         channel.lastPinTimestamp = time;
         client.emit(Events3.ChannelPinsUpdate, channel, time);
@@ -159906,16 +159906,16 @@ var require_GUILD_CREATE = __commonJS({
     "use strict";
     var Events3 = require_Events();
     var Status2 = require_Status();
-    module2.exports = (client, { d: data9 }, shard) => {
-      let guild = client.guilds.cache.get(data9.id);
+    module2.exports = (client, { d: data10 }, shard) => {
+      let guild = client.guilds.cache.get(data10.id);
       if (guild) {
-        if (!guild.available && !data9.unavailable) {
-          guild._patch(data9);
+        if (!guild.available && !data10.unavailable) {
+          guild._patch(data10);
           client.emit(Events3.GuildAvailable, guild);
         }
       } else {
-        data9.shardId = shard.id;
-        guild = client.guilds._add(data9);
+        data10.shardId = shard.id;
+        guild = client.guilds._add(data10);
         if (client.ws.status === Status2.Ready) {
           client.emit(Events3.GuildCreate, guild);
         }
@@ -159960,19 +159960,19 @@ var require_GUILD_MEMBERS_CHUNK = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist8();
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const guild = client.guilds.cache.get(data9.guild_id);
+    module2.exports = (client, { d: data10 }) => {
+      const guild = client.guilds.cache.get(data10.guild_id);
       if (!guild) return;
       const members = new Collection3();
-      for (const member of data9.members) members.set(member.user.id, guild.members._add(member));
-      if (data9.presences) {
-        for (const presence of data9.presences) guild.presences._add(Object.assign(presence, { guild }));
+      for (const member of data10.members) members.set(member.user.id, guild.members._add(member));
+      if (data10.presences) {
+        for (const presence of data10.presences) guild.presences._add(Object.assign(presence, { guild }));
       }
       client.emit(Events3.GuildMembersChunk, members, guild, {
-        index: data9.chunk_index,
-        count: data9.chunk_count,
-        notFound: data9.not_found,
-        nonce: data9.nonce
+        index: data10.chunk_index,
+        count: data10.chunk_count,
+        notFound: data10.not_found,
+        nonce: data10.nonce
       });
     };
   }
@@ -159984,11 +159984,11 @@ var require_GUILD_MEMBER_ADD = __commonJS({
     "use strict";
     var Events3 = require_Events();
     var Status2 = require_Status();
-    module2.exports = (client, { d: data9 }, shard) => {
-      const guild = client.guilds.cache.get(data9.guild_id);
+    module2.exports = (client, { d: data10 }, shard) => {
+      const guild = client.guilds.cache.get(data10.guild_id);
       if (guild) {
         guild.memberCount++;
-        const member = guild.members._add(data9);
+        const member = guild.members._add(data10);
         if (shard.status === Status2.Ready) {
           client.emit(Events3.GuildMemberAdd, member);
         }
@@ -160103,11 +160103,11 @@ var require_GUILD_SOUNDBOARD_SOUNDS_UPDATE = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist8();
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const guild = client.guilds.cache.get(data9.guild_id);
+    module2.exports = (client, { d: data10 }) => {
+      const guild = client.guilds.cache.get(data10.guild_id);
       if (!guild) return;
       const soundboardSounds = new Collection3();
-      for (const soundboardSound of data9.soundboard_sounds) {
+      for (const soundboardSound of data10.soundboard_sounds) {
         soundboardSounds.set(soundboardSound.sound_id, guild.soundboardSounds._add(soundboardSound));
       }
       client.emit(Events3.GuildSoundboardSoundsUpdate, soundboardSounds, guild);
@@ -160120,10 +160120,10 @@ var require_GUILD_SOUNDBOARD_SOUND_CREATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/GUILD_SOUNDBOARD_SOUND_CREATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const guild = client.guilds.cache.get(data9.guild_id);
+    module2.exports = (client, { d: data10 }) => {
+      const guild = client.guilds.cache.get(data10.guild_id);
       if (!guild) return;
-      const soundboardSound = guild.soundboardSounds._add(data9);
+      const soundboardSound = guild.soundboardSounds._add(data10);
       client.emit(Events3.GuildSoundboardSoundCreate, soundboardSound);
     };
   }
@@ -160133,8 +160133,8 @@ var require_GUILD_SOUNDBOARD_SOUND_CREATE = __commonJS({
 var require_GUILD_SOUNDBOARD_SOUND_DELETE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/GUILD_SOUNDBOARD_SOUND_DELETE.js"(exports2, module2) {
     "use strict";
-    module2.exports = (client, { d: data9 }) => {
-      client.actions.GuildSoundboardSoundDelete.handle(data9);
+    module2.exports = (client, { d: data10 }) => {
+      client.actions.GuildSoundboardSoundDelete.handle(data10);
     };
   }
 });
@@ -160144,11 +160144,11 @@ var require_GUILD_SOUNDBOARD_SOUND_UPDATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/GUILD_SOUNDBOARD_SOUND_UPDATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const guild = client.guilds.cache.get(data9.guild_id);
+    module2.exports = (client, { d: data10 }) => {
+      const guild = client.guilds.cache.get(data10.guild_id);
       if (!guild) return;
-      const oldGuildSoundboardSound = guild.soundboardSounds.cache.get(data9.sound_id)?._clone() ?? null;
-      const newGuildSoundboardSound = guild.soundboardSounds._add(data9);
+      const oldGuildSoundboardSound = guild.soundboardSounds.cache.get(data10.sound_id)?._clone() ?? null;
+      const newGuildSoundboardSound = guild.soundboardSounds._add(data10);
       client.emit(Events3.GuildSoundboardSoundUpdate, oldGuildSoundboardSound, newGuildSoundboardSound);
     };
   }
@@ -160325,18 +160325,18 @@ var require_RATE_LIMITED = __commonJS({
     var process2 = __require("node:process");
     var { GatewayOpcodes } = require_v106();
     var emittedFor = /* @__PURE__ */ new Set();
-    module2.exports = (_, { d: data9 }) => {
-      switch (data9.opcode) {
+    module2.exports = (_, { d: data10 }) => {
+      switch (data10.opcode) {
         case GatewayOpcodes.RequestGuildMembers: {
           break;
         }
         default: {
-          if (!emittedFor.has(data9.opcode)) {
+          if (!emittedFor.has(data10.opcode)) {
             process2.emitWarning(
               // eslint-disable-next-line max-len
-              `Hit a gateway rate limit on opcode ${data9.opcode} (${GatewayOpcodes[data9.opcode]}). If the discord.js version you're using is up-to-date, please open an issue on GitHub.`
+              `Hit a gateway rate limit on opcode ${data10.opcode} (${GatewayOpcodes[data10.opcode]}). If the discord.js version you're using is up-to-date, please open an issue on GitHub.`
             );
-            emittedFor.add(data9.opcode);
+            emittedFor.add(data10.opcode);
           }
         }
       }
@@ -160352,17 +160352,17 @@ var require_ClientUser = __commonJS({
     var User = require_User();
     var { resolveImage } = require_DataResolver();
     var ClientUser = class extends User {
-      _patch(data9) {
-        super._patch(data9);
-        if ("verified" in data9) {
-          this.verified = data9.verified;
+      _patch(data10) {
+        super._patch(data10);
+        if ("verified" in data10) {
+          this.verified = data10.verified;
         }
-        if ("mfa_enabled" in data9) {
-          this.mfaEnabled = typeof data9.mfa_enabled === "boolean" ? data9.mfa_enabled : null;
+        if ("mfa_enabled" in data10) {
+          this.mfaEnabled = typeof data10.mfa_enabled === "boolean" ? data10.mfa_enabled : null;
         } else {
           this.mfaEnabled ??= null;
         }
-        if ("token" in data9) this.client.token = data9.token;
+        if ("token" in data10) this.client.token = data10.token;
       }
       /**
        * Represents the client user's presence
@@ -160385,14 +160385,14 @@ var require_ClientUser = __commonJS({
        * @returns {Promise<ClientUser>}
        */
       async edit({ username, avatar, banner }) {
-        const data9 = await this.client.rest.patch(Routes3.user(), {
+        const data10 = await this.client.rest.patch(Routes3.user(), {
           body: {
             username,
             avatar: avatar && await resolveImage(avatar),
             banner: banner && await resolveImage(banner)
           }
         });
-        const { updated } = this.client.actions.UserUpdate.handle(data9);
+        const { updated } = this.client.actions.UserUpdate.handle(data10);
         return updated ?? this;
       }
       /**
@@ -160460,8 +160460,8 @@ var require_ClientUser = __commonJS({
        * // Set the client user's presence
        * client.user.setPresence({ activities: [{ name: 'with discord.js' }], status: 'idle' });
        */
-      setPresence(data9) {
-        return this.client.presence.set(data9);
+      setPresence(data10) {
+        return this.client.presence.set(data10);
       }
       /**
        * A user's status. Must be one of:
@@ -160526,22 +160526,22 @@ var require_READY = __commonJS({
     "use strict";
     var ClientApplication = require_ClientApplication();
     var ClientUser;
-    module2.exports = (client, { d: data9 }, shard) => {
+    module2.exports = (client, { d: data10 }, shard) => {
       if (client.user) {
-        client.user._patch(data9.user);
+        client.user._patch(data10.user);
       } else {
         ClientUser ??= require_ClientUser();
-        client.user = new ClientUser(client, data9.user);
+        client.user = new ClientUser(client, data10.user);
         client.users.cache.set(client.user.id, client.user);
       }
-      for (const guild of data9.guilds) {
+      for (const guild of data10.guilds) {
         guild.shardId = shard.id;
         client.guilds._add(guild);
       }
       if (client.application) {
-        client.application._patch(data9.application);
+        client.application._patch(data10.application);
       } else {
-        client.application = new ClientApplication(client, data9.application);
+        client.application = new ClientApplication(client, data10.application);
       }
       shard.checkReady();
     };
@@ -160566,11 +160566,11 @@ var require_SOUNDBOARD_SOUNDS = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist8();
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const guild = client.guilds.cache.get(data9.guild_id);
+    module2.exports = (client, { d: data10 }) => {
+      const guild = client.guilds.cache.get(data10.guild_id);
       if (!guild) return;
       const soundboardSounds = new Collection3();
-      for (const soundboardSound of data9.soundboard_sounds) {
+      for (const soundboardSound of data10.soundboard_sounds) {
         soundboardSounds.set(soundboardSound.sound_id, guild.soundboardSounds._add(soundboardSound));
       }
       client.emit(Events3.SoundboardSounds, soundboardSounds, guild);
@@ -160613,8 +160613,8 @@ var require_SUBSCRIPTION_CREATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/SUBSCRIPTION_CREATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const subscription = client.application.subscriptions._add(data9);
+    module2.exports = (client, { d: data10 }) => {
+      const subscription = client.application.subscriptions._add(data10);
       client.emit(Events3.SubscriptionCreate, subscription);
     };
   }
@@ -160625,8 +160625,8 @@ var require_SUBSCRIPTION_DELETE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/SUBSCRIPTION_DELETE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const subscription = client.application.subscriptions._add(data9, false);
+    module2.exports = (client, { d: data10 }) => {
+      const subscription = client.application.subscriptions._add(data10, false);
       client.application.subscriptions.cache.delete(subscription.id);
       client.emit(Events3.SubscriptionDelete, subscription);
     };
@@ -160638,9 +160638,9 @@ var require_SUBSCRIPTION_UPDATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/SUBSCRIPTION_UPDATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const oldSubscription = client.application.subscriptions.cache.get(data9.id)?._clone() ?? null;
-      const newSubscription = client.application.subscriptions._add(data9);
+    module2.exports = (client, { d: data10 }) => {
+      const oldSubscription = client.application.subscriptions.cache.get(data10.id)?._clone() ?? null;
+      const newSubscription = client.application.subscriptions._add(data10);
       client.emit(Events3.SubscriptionUpdate, oldSubscription, newSubscription);
     };
   }
@@ -160736,15 +160736,15 @@ var require_VoiceChannelEffect = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var VoiceChannelEffect = class {
-      constructor(data9, guild) {
+      constructor(data10, guild) {
         this.guild = guild;
-        this.channelId = data9.channel_id;
-        this.userId = data9.user_id;
-        this.emoji = data9.emoji ? new Emoji(guild.client, data9.emoji) : null;
-        this.animationType = data9.animation_type ?? null;
-        this.animationId = data9.animation_id ?? null;
-        this.soundId = data9.sound_id ?? null;
-        this.soundVolume = data9.sound_volume ?? null;
+        this.channelId = data10.channel_id;
+        this.userId = data10.user_id;
+        this.emoji = data10.emoji ? new Emoji(guild.client, data10.emoji) : null;
+        this.animationType = data10.animation_type ?? null;
+        this.animationId = data10.animation_id ?? null;
+        this.soundId = data10.sound_id ?? null;
+        this.soundVolume = data10.sound_volume ?? null;
       }
       /**
        * The channel the effect was sent in.
@@ -160773,10 +160773,10 @@ var require_VOICE_CHANNEL_EFFECT_SEND = __commonJS({
     "use strict";
     var VoiceChannelEffect = require_VoiceChannelEffect();
     var Events3 = require_Events();
-    module2.exports = (client, { d: data9 }) => {
-      const guild = client.guilds.cache.get(data9.guild_id);
+    module2.exports = (client, { d: data10 }) => {
+      const guild = client.guilds.cache.get(data10.guild_id);
       if (!guild) return;
-      client.emit(Events3.VoiceChannelEffectSend, new VoiceChannelEffect(data9, guild));
+      client.emit(Events3.VoiceChannelEffectSend, new VoiceChannelEffect(data10, guild));
     };
   }
 });
@@ -161056,17 +161056,17 @@ var require_WebSocketManager = __commonJS({
        */
       attachEvents() {
         this._ws.on(WSWebSocketShardEvents.Debug, ({ message, shardId }) => this.debug([message], shardId));
-        this._ws.on(WSWebSocketShardEvents.Dispatch, ({ data: data9, shardId }) => {
-          this.client.emit(Events3.Raw, data9, shardId);
-          this.emit(data9.t, data9.d, shardId);
+        this._ws.on(WSWebSocketShardEvents.Dispatch, ({ data: data10, shardId }) => {
+          this.client.emit(Events3.Raw, data10, shardId);
+          this.emit(data10.t, data10.d, shardId);
           const shard = this.shards.get(shardId);
-          this.handlePacket(data9, shard);
-          if (shard.status === Status2.WaitingForGuilds && WaitingForGuildEvents.includes(data9.t)) {
-            shard.gotGuild(data9.d.id);
+          this.handlePacket(data10, shard);
+          if (shard.status === Status2.WaitingForGuilds && WaitingForGuildEvents.includes(data10.t)) {
+            shard.gotGuild(data10.d.id);
           }
         });
-        this._ws.on(WSWebSocketShardEvents.Ready, ({ data: data9, shardId }) => {
-          this.shards.get(shardId).onReadyPacket(data9);
+        this._ws.on(WSWebSocketShardEvents.Ready, ({ data: data10, shardId }) => {
+          this.shards.get(shardId).onReadyPacket(data10);
         });
         this._ws.on(WSWebSocketShardEvents.Closed, ({ code, shardId }) => {
           const shard = this.shards.get(shardId);
@@ -161288,19 +161288,19 @@ var require_ChannelManager = __commonJS({
        * @type {Collection<Snowflake, BaseChannel>}
        * @name ChannelManager#cache
        */
-      _add(data9, guild, { cache = true, allowUnknownGuild = false } = {}) {
-        const existing = this.cache.get(data9.id);
+      _add(data10, guild, { cache = true, allowUnknownGuild = false } = {}) {
+        const existing = this.cache.get(data10.id);
         if (existing) {
-          if (cache) existing._patch(data9);
+          if (cache) existing._patch(data10);
           guild?.channels?._add(existing);
           if (ThreadChannelTypes.includes(existing.type)) {
             existing.parent?.threads?._add(existing);
           }
           return existing;
         }
-        const channel = createChannel(this.client, data9, guild, { allowUnknownGuild });
+        const channel = createChannel(this.client, data10, guild, { allowUnknownGuild });
         if (!channel) {
-          this.client.emit(Events3.Debug, `Failed to find guild, or unknown type for channel ${data9.id} ${data9.type}`);
+          this.client.emit(Events3.Debug, `Failed to find guild, or unknown type for channel ${data10.id} ${data10.type}`);
           return null;
         }
         if (cache && !allowUnknownGuild) this.cache.set(channel.id, channel);
@@ -161365,8 +161365,8 @@ var require_ChannelManager = __commonJS({
           const existing = this.cache.get(id);
           if (existing && !existing.partial) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.channel(id));
-        return this._add(data9, null, { cache, allowUnknownGuild });
+        const data10 = await this.client.rest.get(Routes3.channel(id));
+        return this._add(data10, null, { cache, allowUnknownGuild });
       }
     };
     module2.exports = ChannelManager2;
@@ -161636,37 +161636,37 @@ var require_GuildAuditLogs = __commonJS({
     var Webhook2 = require_Webhook();
     var { flatten } = require_Util();
     var GuildAuditLogs = class {
-      constructor(guild, data9) {
-        if (data9.users) for (const user of data9.users) guild.client.users._add(user);
-        if (data9.threads) for (const thread of data9.threads) guild.client.channels._add(thread, guild);
+      constructor(guild, data10) {
+        if (data10.users) for (const user of data10.users) guild.client.users._add(user);
+        if (data10.threads) for (const thread of data10.threads) guild.client.channels._add(thread, guild);
         this.webhooks = new Collection3();
-        if (data9.webhooks) {
-          for (const hook of data9.webhooks) {
+        if (data10.webhooks) {
+          for (const hook of data10.webhooks) {
             this.webhooks.set(hook.id, new Webhook2(guild.client, hook));
           }
         }
         this.integrations = new Collection3();
-        if (data9.integrations) {
-          for (const integration of data9.integrations) {
+        if (data10.integrations) {
+          for (const integration of data10.integrations) {
             this.integrations.set(integration.id, new Integration(guild.client, integration, guild));
           }
         }
-        this.guildScheduledEvents = data9.guild_scheduled_events.reduce(
+        this.guildScheduledEvents = data10.guild_scheduled_events.reduce(
           (guildScheduledEvents, guildScheduledEvent) => guildScheduledEvents.set(guildScheduledEvent.id, guild.scheduledEvents._add(guildScheduledEvent)),
           new Collection3()
         );
         this.applicationCommands = new Collection3();
-        if (data9.application_commands) {
-          for (const command of data9.application_commands) {
+        if (data10.application_commands) {
+          for (const command of data10.application_commands) {
             this.applicationCommands.set(command.id, new ApplicationCommand(guild.client, command, guild));
           }
         }
-        this.autoModerationRules = data9.auto_moderation_rules.reduce(
+        this.autoModerationRules = data10.auto_moderation_rules.reduce(
           (autoModerationRules, autoModerationRule) => autoModerationRules.set(autoModerationRule.id, guild.autoModerationRules._add(autoModerationRule)),
           new Collection3()
         );
         this.entries = new Collection3();
-        for (const item of data9.audit_log_entries) {
+        for (const item of data10.audit_log_entries) {
           const entry = new GuildAuditLogsEntry(guild, item, this);
           this.entries.set(entry.id, entry);
         }
@@ -161687,20 +161687,20 @@ var require_GuildOnboarding = __commonJS({
     var Base = require_Base();
     var { GuildOnboardingPrompt } = require_GuildOnboardingPrompt();
     var GuildOnboarding = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.guildId = data9.guild_id;
+        this.guildId = data10.guild_id;
         const guild = this.guild;
-        this.prompts = data9.prompts.reduce(
+        this.prompts = data10.prompts.reduce(
           (prompts, prompt) => prompts.set(prompt.id, new GuildOnboardingPrompt(client, prompt, this.guildId)),
           new Collection3()
         );
-        this.defaultChannels = data9.default_channel_ids.reduce(
+        this.defaultChannels = data10.default_channel_ids.reduce(
           (channels, channelId) => channels.set(channelId, guild.channels.cache.get(channelId)),
           new Collection3()
         );
-        this.enabled = data9.enabled;
-        this.mode = data9.mode;
+        this.enabled = data10.enabled;
+        this.mode = data10.mode;
       }
       /**
        * The guild this onboarding is from
@@ -161726,9 +161726,9 @@ var require_GuildPreviewEmoji = __commonJS({
        * @type {GuildPreview}
        * @name GuildPreviewEmoji#guild
        */
-      constructor(client, data9, guild) {
-        super(client, data9, guild);
-        this.roles = data9.roles;
+      constructor(client, data10, guild) {
+        super(client, data10, guild);
+        this.roles = data10.roles;
       }
     };
     module2.exports = GuildPreviewEmoji;
@@ -161746,36 +161746,36 @@ var require_GuildPreview = __commonJS({
     var GuildPreviewEmoji = require_GuildPreviewEmoji();
     var { Sticker: Sticker2 } = require_Sticker();
     var GuildPreview2 = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        if (!data9) return;
-        this._patch(data9);
+        if (!data10) return;
+        this._patch(data10);
       }
-      _patch(data9) {
-        this.id = data9.id;
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        this.id = data10.id;
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("icon" in data9) {
-          this.icon = data9.icon;
+        if ("icon" in data10) {
+          this.icon = data10.icon;
         }
-        if ("splash" in data9) {
-          this.splash = data9.splash;
+        if ("splash" in data10) {
+          this.splash = data10.splash;
         }
-        if ("discovery_splash" in data9) {
-          this.discoverySplash = data9.discovery_splash;
+        if ("discovery_splash" in data10) {
+          this.discoverySplash = data10.discovery_splash;
         }
-        if ("features" in data9) {
-          this.features = data9.features;
+        if ("features" in data10) {
+          this.features = data10.features;
         }
-        if ("approximate_member_count" in data9) {
-          this.approximateMemberCount = data9.approximate_member_count;
+        if ("approximate_member_count" in data10) {
+          this.approximateMemberCount = data10.approximate_member_count;
         }
-        if ("approximate_presence_count" in data9) {
-          this.approximatePresenceCount = data9.approximate_presence_count;
+        if ("approximate_presence_count" in data10) {
+          this.approximatePresenceCount = data10.approximate_presence_count;
         }
-        if ("description" in data9) {
-          this.description = data9.description;
+        if ("description" in data10) {
+          this.description = data10.description;
         } else {
           this.description ??= null;
         }
@@ -161784,10 +161784,10 @@ var require_GuildPreview = __commonJS({
         } else {
           this.emojis.clear();
         }
-        for (const emoji of data9.emojis) {
+        for (const emoji of data10.emojis) {
           this.emojis.set(emoji.id, new GuildPreviewEmoji(this.client, emoji, this));
         }
-        this.stickers = data9.stickers.reduce(
+        this.stickers = data10.stickers.reduce(
           (stickers, sticker) => stickers.set(sticker.id, new Sticker2(this.client, sticker)),
           new Collection3()
         );
@@ -161837,8 +161837,8 @@ var require_GuildPreview = __commonJS({
        * @returns {Promise<GuildPreview>}
        */
       async fetch() {
-        const data9 = await this.client.rest.get(Routes3.guildPreview(this.id));
-        this._patch(data9);
+        const data10 = await this.client.rest.get(Routes3.guildPreview(this.id));
+        this._patch(data10);
         return this;
       }
       /**
@@ -161896,8 +161896,8 @@ var require_AutoModerationRuleManager = __commonJS({
        * @param {AutoModerationRuleResolvable} autoModerationRule The AutoModerationRule resolvable to resolve
        * @returns {?Snowflake}
        */
-      _add(data9, cache) {
-        return super._add(data9, cache, { extras: [this.guild] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { extras: [this.guild] });
       }
       /**
        * Options used to set the trigger metadata of an auto moderation rule.
@@ -161966,7 +161966,7 @@ var require_AutoModerationRuleManager = __commonJS({
         exemptChannels,
         reason
       }) {
-        const data9 = await this.client.rest.post(Routes3.guildAutoModerationRules(this.guild.id), {
+        const data10 = await this.client.rest.post(Routes3.guildAutoModerationRules(this.guild.id), {
           body: {
             name,
             event_type: eventType,
@@ -161993,7 +161993,7 @@ var require_AutoModerationRuleManager = __commonJS({
           },
           reason
         });
-        return this._add(data9);
+        return this._add(data10);
       }
       /**
        * Options used to edit an auto moderation rule.
@@ -162018,7 +162018,7 @@ var require_AutoModerationRuleManager = __commonJS({
        */
       async edit(autoModerationRule, { name, eventType, triggerMetadata, actions, enabled, exemptRoles, exemptChannels, reason }) {
         const autoModerationRuleId = this.resolveId(autoModerationRule);
-        const data9 = await this.client.rest.patch(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRuleId), {
+        const data10 = await this.client.rest.patch(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRuleId), {
           body: {
             name,
             event_type: eventType,
@@ -162044,7 +162044,7 @@ var require_AutoModerationRuleManager = __commonJS({
           },
           reason
         });
-        return this._add(data9);
+        return this._add(data10);
       }
       /**
        * Data that can be resolved to give an AutoModerationRule object. This can be:
@@ -162097,12 +162097,12 @@ var require_AutoModerationRuleManager = __commonJS({
           const existing = this.cache.get(autoModerationRule);
           if (existing) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRule));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRule));
+        return this._add(data10, cache);
       }
       async _fetchMany(options = {}) {
-        const data9 = await this.client.rest.get(Routes3.guildAutoModerationRules(this.guild.id));
-        return data9.reduce(
+        const data10 = await this.client.rest.get(Routes3.guildAutoModerationRules(this.guild.id));
+        return data10.reduce(
           (col, autoModerationRule) => col.set(autoModerationRule.id, this._add(autoModerationRule, options.cache)),
           new Collection3()
         );
@@ -162162,8 +162162,8 @@ var require_GuildBanManager = __commonJS({
        * @type {Collection<Snowflake, GuildBan>}
        * @name GuildBanManager#cache
        */
-      _add(data9, cache) {
-        return super._add(data9, cache, { id: data9.user.id, extras: [this.guild] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { id: data10.user.id, extras: [this.guild] });
       }
       /**
        * Data that resolves to give a GuildBan object. This can be:
@@ -162237,14 +162237,14 @@ var require_GuildBanManager = __commonJS({
           const existing = this.cache.get(user);
           if (existing && !existing.partial) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.guildBan(this.guild.id, user));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.guildBan(this.guild.id, user));
+        return this._add(data10, cache);
       }
       async _fetchMany({ cache, ...apiOptions } = {}) {
-        const data9 = await this.client.rest.get(Routes3.guildBans(this.guild.id), {
+        const data10 = await this.client.rest.get(Routes3.guildBans(this.guild.id), {
           query: makeURLSearchParams2(apiOptions)
         });
-        return data9.reduce((col, ban) => col.set(ban.user.id, this._add(ban, cache)), new Collection3());
+        return data10.reduce((col, ban) => col.set(ban.user.id, this._add(ban, cache)), new Collection3());
       }
       /**
        * Options used to ban a user from a guild.
@@ -162514,7 +162514,7 @@ var require_GuildChannelManager = __commonJS({
       }) {
         parent &&= this.client.channels.resolveId(parent);
         permissionOverwrites &&= permissionOverwrites.map((overwrite) => PermissionOverwrites.resolve(overwrite, this.guild));
-        const data9 = await this.client.rest.post(Routes3.guildChannels(this.guild.id), {
+        const data10 = await this.client.rest.post(Routes3.guildChannels(this.guild.id), {
           body: {
             name,
             topic,
@@ -162537,7 +162537,7 @@ var require_GuildChannelManager = __commonJS({
           },
           reason
         });
-        return this.client.actions.ChannelCreate.handle(data9).channel;
+        return this.client.actions.ChannelCreate.handle(data10).channel;
       }
       /**
        * @typedef {ChannelWebhookCreateOptions} WebhookCreateOptions
@@ -162563,14 +162563,14 @@ var require_GuildChannelManager = __commonJS({
         const id = this.resolveId(channel);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "channel", "GuildChannelResolvable");
         const resolvedImage = await resolveImage(avatar);
-        const data9 = await this.client.rest.post(Routes3.channelWebhooks(id), {
+        const data10 = await this.client.rest.post(Routes3.channelWebhooks(id), {
           body: {
             name,
             avatar: resolvedImage
           },
           reason
         });
-        return new Webhook2(this.client, data9);
+        return new Webhook2(this.client, data10);
       }
       /**
        * Options used to edit a guild channel.
@@ -162713,13 +162713,13 @@ var require_GuildChannelManager = __commonJS({
           if (existing) return existing;
         }
         if (id) {
-          const data10 = await this.client.rest.get(Routes3.channel(id));
-          if (this.guild.id !== data10.guild_id) throw new DiscordjsError2(ErrorCodes2.GuildChannelUnowned);
-          return this.client.channels._add(data10, this.guild, { cache });
+          const data11 = await this.client.rest.get(Routes3.channel(id));
+          if (this.guild.id !== data11.guild_id) throw new DiscordjsError2(ErrorCodes2.GuildChannelUnowned);
+          return this.client.channels._add(data11, this.guild, { cache });
         }
-        const data9 = await this.client.rest.get(Routes3.guildChannels(this.guild.id));
+        const data10 = await this.client.rest.get(Routes3.guildChannels(this.guild.id));
         const channels = new Collection3();
-        for (const channel of data9) channels.set(channel.id, this.client.channels._add(channel, this.guild, { cache }));
+        for (const channel of data10) channels.set(channel.id, this.client.channels._add(channel, this.guild, { cache }));
         return channels;
       }
       /**
@@ -162735,8 +162735,8 @@ var require_GuildChannelManager = __commonJS({
       async fetchWebhooks(channel) {
         const id = this.resolveId(channel);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "channel", "GuildChannelResolvable");
-        const data9 = await this.client.rest.get(Routes3.channelWebhooks(id));
-        return data9.reduce((hooks, hook) => hooks.set(hook.id, new Webhook2(this.client, hook)), new Collection3());
+        const data10 = await this.client.rest.get(Routes3.channelWebhooks(id));
+        return data10.reduce((hooks, hook) => hooks.set(hook.id, new Webhook2(this.client, hook)), new Collection3());
       }
       /**
        * Data that can be resolved to give a Category Channel object. This can be:
@@ -162792,8 +162792,8 @@ var require_GuildChannelManager = __commonJS({
        *   .catch(console.error);
        */
       async fetchActiveThreads(cache = true) {
-        const data9 = await this.rawFetchGuildActiveThreads();
-        return GuildTextThreadManager._mapThreads(data9, this.client, { guild: this.guild, cache });
+        const data10 = await this.rawFetchGuildActiveThreads();
+        return GuildTextThreadManager._mapThreads(data10, this.client, { guild: this.guild, cache });
       }
       /**
        * `GET /guilds/{guild.id}/threads/active`
@@ -162839,8 +162839,8 @@ var require_GuildEmojiManager = __commonJS({
         super(guild.client, iterable);
         this.guild = guild;
       }
-      _add(data9, cache) {
-        return super._add(data9, cache, { extras: [this.guild] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { extras: [this.guild] });
       }
       /**
        * Options used for creating an emoji in a guild.
@@ -162915,9 +162915,9 @@ var require_GuildEmojiManager = __commonJS({
           const emoji = await this.client.rest.get(Routes3.guildEmoji(this.guild.id, id));
           return this._add(emoji, cache);
         }
-        const data9 = await this.client.rest.get(Routes3.guildEmojis(this.guild.id));
+        const data10 = await this.client.rest.get(Routes3.guildEmojis(this.guild.id));
         const emojis = new Collection3();
-        for (const emoji of data9) emojis.set(emoji.id, this._add(emoji, cache));
+        for (const emoji of data10) emojis.set(emoji.id, this._add(emoji, cache));
         return emojis;
       }
       /**
@@ -162972,8 +162972,8 @@ var require_GuildEmojiManager = __commonJS({
         if (!me.permissions.any(PermissionFlagsBits5.CreateGuildExpressions | PermissionFlagsBits5.ManageGuildExpressions)) {
           throw new DiscordjsError2(ErrorCodes2.MissingManageGuildExpressionsPermission, this.guild);
         }
-        const data9 = await this.client.rest.get(Routes3.guildEmoji(this.guild.id, emoji.id));
-        emoji._patch(data9);
+        const data10 = await this.client.rest.get(Routes3.guildEmoji(this.guild.id, emoji.id));
+        emoji._patch(data10);
         return emoji.author;
       }
     };
@@ -163001,8 +163001,8 @@ var require_GuildInviteManager = __commonJS({
        * @type {Collection<string, Invite>}
        * @name GuildInviteManager#cache
        */
-      _add(data9, cache) {
-        return super._add(data9, cache, { id: data9.code, extras: [this.guild] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { id: data10.code, extras: [this.guild] });
       }
       /**
        * Data that resolves to give an Invite object. This can be:
@@ -163119,12 +163119,12 @@ var require_GuildInviteManager = __commonJS({
         return invite;
       }
       async _fetchMany(cache) {
-        const data9 = await this.client.rest.get(Routes3.guildInvites(this.guild.id));
-        return data9.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection3());
+        const data10 = await this.client.rest.get(Routes3.guildInvites(this.guild.id));
+        return data10.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection3());
       }
       async _fetchChannelMany(channelId, cache) {
-        const data9 = await this.client.rest.get(Routes3.channelInvites(channelId));
-        return data9.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection3());
+        const data10 = await this.client.rest.get(Routes3.channelInvites(channelId));
+        return data10.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection3());
       }
       /**
        * Create an invite to the guild from the provided channel.
@@ -163200,8 +163200,8 @@ var require_GuildMemberManager = __commonJS({
        * @type {Collection<Snowflake, GuildMember>}
        * @name GuildMemberManager#cache
        */
-      _add(data9, cache = true) {
-        return super._add(data9, cache, { id: data9.user.id, extras: [this.guild] });
+      _add(data10, cache = true) {
+        return super._add(data10, cache, { id: data10.user.id, extras: [this.guild] });
       }
       /**
        * Data that resolves to give a GuildMember object. This can be:
@@ -163287,8 +163287,8 @@ var require_GuildMemberManager = __commonJS({
           }
           resolvedOptions.roles = resolvedRoles;
         }
-        const data9 = await this.client.rest.put(Routes3.guildMember(this.guild.id, userId), { body: resolvedOptions });
-        return data9 instanceof ArrayBuffer ? options.fetchWhenExisting === false ? null : this.fetch(userId) : this._add(data9);
+        const data10 = await this.client.rest.put(Routes3.guildMember(this.guild.id, userId), { body: resolvedOptions });
+        return data10 instanceof ArrayBuffer ? options.fetchWhenExisting === false ? null : this.fetch(userId) : this._add(data10);
       }
       /**
        * The client user as a GuildMember of this guild
@@ -163362,8 +163362,8 @@ var require_GuildMemberManager = __commonJS({
           const existing = this.cache.get(user);
           if (existing && !existing.partial) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.guildMember(this.guild.id, user));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.guildMember(this.guild.id, user));
+        return this._add(data10, cache);
       }
       async _fetchMany({
         limit = 0,
@@ -163446,10 +163446,10 @@ var require_GuildMemberManager = __commonJS({
        * @returns {Promise<Collection<Snowflake, GuildMember>>}
        */
       async search({ query, limit, cache = true } = {}) {
-        const data9 = await this.client.rest.get(Routes3.guildMembersSearch(this.guild.id), {
+        const data10 = await this.client.rest.get(Routes3.guildMembersSearch(this.guild.id), {
           query: makeURLSearchParams2({ query, limit })
         });
-        return data9.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection3());
+        return data10.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection3());
       }
       /**
        * Options used for listing guild members.
@@ -163465,8 +163465,8 @@ var require_GuildMemberManager = __commonJS({
        */
       async list({ after, limit, cache = true } = {}) {
         const query = makeURLSearchParams2({ limit, after });
-        const data9 = await this.client.rest.get(Routes3.guildMembers(this.guild.id), { query });
-        return data9.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection3());
+        const data10 = await this.client.rest.get(Routes3.guildMembers(this.guild.id), { query });
+        return data10.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection3());
       }
       /**
        * The data for editing a guild member.
@@ -163549,7 +163549,7 @@ var require_GuildMemberManager = __commonJS({
        * @returns {Promise<GuildMember>}
        */
       async editMe({ reason, ...options }) {
-        const data9 = await this.client.rest.patch(Routes3.guildMember(this.guild.id, "@me"), {
+        const data10 = await this.client.rest.patch(Routes3.guildMember(this.guild.id, "@me"), {
           body: {
             ...options,
             banner: options.banner && await resolveImage(options.banner),
@@ -163558,8 +163558,8 @@ var require_GuildMemberManager = __commonJS({
           reason
         });
         const clone = this.me?._clone();
-        clone?._patch(data9);
-        return clone ?? this._add(data9, false);
+        clone?._patch(data10);
+        return clone ?? this._add(data10, false);
       }
       /**
        * Options used for pruning guild members.
@@ -163810,7 +163810,7 @@ var require_GuildScheduledEventManager = __commonJS({
           if (!channel_id) throw new DiscordjsError2(ErrorCodes2.GuildVoiceChannelResolve);
           entity_metadata = entityMetadata === void 0 ? entityMetadata : null;
         }
-        const data9 = await this.client.rest.post(Routes3.guildScheduledEvents(this.guild.id), {
+        const data10 = await this.client.rest.post(Routes3.guildScheduledEvents(this.guild.id), {
           body: {
             channel_id,
             name,
@@ -163825,7 +163825,7 @@ var require_GuildScheduledEventManager = __commonJS({
           },
           reason
         });
-        return this._add(data9);
+        return this._add(data10);
       }
       /**
        * Options used to fetch a single guild scheduled event from a guild.
@@ -163853,15 +163853,15 @@ var require_GuildScheduledEventManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const data10 = await this.client.rest.get(Routes3.guildScheduledEvent(this.guild.id, id), {
+          const data11 = await this.client.rest.get(Routes3.guildScheduledEvent(this.guild.id, id), {
             query: makeURLSearchParams2({ with_user_count: options.withUserCount ?? true })
           });
-          return this._add(data10, options.cache);
+          return this._add(data11, options.cache);
         }
-        const data9 = await this.client.rest.get(Routes3.guildScheduledEvents(this.guild.id), {
+        const data10 = await this.client.rest.get(Routes3.guildScheduledEvents(this.guild.id), {
           query: makeURLSearchParams2({ with_user_count: options.withUserCount ?? true })
         });
-        return data9.reduce(
+        return data10.reduce(
           (coll, rawGuildScheduledEventData) => coll.set(rawGuildScheduledEventData.id, this._add(rawGuildScheduledEventData, options.cache)),
           new Collection3()
         );
@@ -163916,7 +163916,7 @@ var require_GuildScheduledEventManager = __commonJS({
             location: entityMetadata.location
           };
         }
-        const data9 = await this.client.rest.patch(Routes3.guildScheduledEvent(this.guild.id, guildScheduledEventId), {
+        const data10 = await this.client.rest.patch(Routes3.guildScheduledEvent(this.guild.id, guildScheduledEventId), {
           body: {
             channel_id: channel === void 0 ? channel : this.guild.channels.resolveId(channel),
             name,
@@ -163932,7 +163932,7 @@ var require_GuildScheduledEventManager = __commonJS({
           },
           reason
         });
-        return this._add(data9);
+        return this._add(data10);
       }
       /**
        * Deletes a guild scheduled event.
@@ -163975,10 +163975,10 @@ var require_GuildScheduledEventManager = __commonJS({
           before: options.before,
           after: options.after
         });
-        const data9 = await this.client.rest.get(Routes3.guildScheduledEventUsers(this.guild.id, guildScheduledEventId), {
+        const data10 = await this.client.rest.get(Routes3.guildScheduledEventUsers(this.guild.id, guildScheduledEventId), {
           query
         });
-        return data9.reduce(
+        return data10.reduce(
           (coll, rawData) => coll.set(rawData.user.id, {
             guildScheduledEventId: rawData.guild_scheduled_event_id,
             user: this.client.users._add(rawData.user),
@@ -164001,42 +164001,42 @@ var require_SoundboardSound = __commonJS({
     var { Emoji } = require_Emoji();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var SoundboardSound2 = class _SoundboardSound extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.soundId = data9.sound_id;
-        this._patch(data9);
+        this.soundId = data10.sound_id;
+        this._patch(data10);
       }
-      _patch(data9) {
-        if ("available" in data9) {
-          this.available = data9.available;
+      _patch(data10) {
+        if ("available" in data10) {
+          this.available = data10.available;
         } else {
           this.available ??= null;
         }
-        if ("name" in data9) {
-          this.name = data9.name;
+        if ("name" in data10) {
+          this.name = data10.name;
         } else {
           this.name ??= null;
         }
-        if ("volume" in data9) {
-          this.volume = data9.volume;
+        if ("volume" in data10) {
+          this.volume = data10.volume;
         } else {
           this.volume ??= null;
         }
-        if ("emoji_id" in data9) {
+        if ("emoji_id" in data10) {
           this._emoji = {
-            id: data9.emoji_id,
-            name: data9.emoji_name
+            id: data10.emoji_id,
+            name: data10.emoji_name
           };
         } else {
           this._emoji ??= null;
         }
-        if ("guild_id" in data9) {
-          this.guildId = data9.guild_id;
+        if ("guild_id" in data10) {
+          this.guildId = data10.guild_id;
         } else {
           this.guildId ??= null;
         }
-        if ("user" in data9) {
-          this.user = this.client.users._add(data9.user);
+        if ("user" in data10) {
+          this.user = this.client.users._add(data10.user);
         } else {
           this.user ??= null;
         }
@@ -164149,8 +164149,8 @@ var require_GuildSoundboardSoundManager = __commonJS({
        * @type {Collection<Snowflake, SoundboardSound>}
        * @name GuildSoundboardSoundManager#cache
        */
-      _add(data9, cache) {
-        return super._add(data9, cache, { extras: [this.guild], id: data9.sound_id });
+      _add(data10, cache) {
+        return super._add(data10, cache, { extras: [this.guild], id: data10.sound_id });
       }
       /**
        * Data that resolves to give a SoundboardSound object. This can be:
@@ -164228,17 +164228,17 @@ var require_GuildSoundboardSoundManager = __commonJS({
         if (!soundId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "soundboardSound", "SoundboardSoundResolvable");
         const { emojiId, emojiName, name, reason, volume } = options;
         const body = { emoji_id: emojiId, emoji_name: emojiName, name, volume };
-        const data9 = await this.client.rest.patch(Routes3.guildSoundboardSound(this.guild.id, soundId), {
+        const data10 = await this.client.rest.patch(Routes3.guildSoundboardSound(this.guild.id, soundId), {
           body,
           reason
         });
         const existing = this.cache.get(soundId);
         if (existing) {
           const clone = existing._clone();
-          clone._patch(data9);
+          clone._patch(data10);
           return clone;
         }
-        return this._add(data9);
+        return this._add(data10);
       }
       /**
        * Deletes a soundboard sound.
@@ -164290,12 +164290,12 @@ var require_GuildSoundboardSoundManager = __commonJS({
           const existing = this.cache.get(soundboardSound);
           if (existing) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.guildSoundboardSound(this.guild.id, soundboardSound));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.guildSoundboardSound(this.guild.id, soundboardSound));
+        return this._add(data10, cache);
       }
       async _fetchMany({ cache } = {}) {
-        const data9 = await this.client.rest.get(Routes3.guildSoundboardSounds(this.guild.id));
-        return data9.items.reduce((coll, sound) => coll.set(sound.sound_id, this._add(sound, cache)), new Collection3());
+        const data10 = await this.client.rest.get(Routes3.guildSoundboardSounds(this.guild.id));
+        return data10.items.reduce((coll, sound) => coll.set(sound.sound_id, this._add(sound, cache)), new Collection3());
       }
     };
     exports2.GuildSoundboardSoundManager = GuildSoundboardSoundManager;
@@ -164322,8 +164322,8 @@ var require_GuildStickerManager = __commonJS({
        * @type {Collection<Snowflake, Sticker>}
        * @name GuildStickerManager#cache
        */
-      _add(data9, cache) {
-        return super._add(data9, cache, { extras: [this.guild] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { extras: [this.guild] });
       }
       /**
        * Options used to create a guild sticker.
@@ -164441,8 +164441,8 @@ var require_GuildStickerManager = __commonJS({
           const sticker = await this.client.rest.get(Routes3.guildSticker(this.guild.id, id));
           return this._add(sticker, cache);
         }
-        const data9 = await this.client.rest.get(Routes3.guildStickers(this.guild.id));
-        return new Collection3(data9.map((sticker) => [sticker.id, this._add(sticker, cache)]));
+        const data10 = await this.client.rest.get(Routes3.guildStickers(this.guild.id));
+        return new Collection3(data10.map((sticker) => [sticker.id, this._add(sticker, cache)]));
       }
       /**
        * Fetches the user who uploaded this sticker, if this is a guild sticker.
@@ -164452,8 +164452,8 @@ var require_GuildStickerManager = __commonJS({
       async fetchUser(sticker) {
         sticker = this.resolve(sticker);
         if (!sticker) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "sticker", "StickerResolvable");
-        const data9 = await this.client.rest.get(Routes3.guildSticker(this.guild.id, sticker.id));
-        sticker._patch(data9);
+        const data10 = await this.client.rest.get(Routes3.guildSticker(this.guild.id, sticker.id));
+        sticker._patch(data10);
         return sticker.user;
       }
     };
@@ -164488,11 +164488,11 @@ var require_Presence = __commonJS({
     var ActivityFlagsBitField = require_ActivityFlagsBitField();
     var { flatten } = require_Util();
     var Presence = class extends Base {
-      constructor(client, data9 = {}) {
+      constructor(client, data10 = {}) {
         super(client);
-        this.userId = data9.user.id;
-        this.guild = data9.guild ?? null;
-        this._patch(data9);
+        this.userId = data10.user.id;
+        this.guild = data10.guild ?? null;
+        this._patch(data10);
       }
       /**
        * The user of this presence
@@ -164510,19 +164510,19 @@ var require_Presence = __commonJS({
       get member() {
         return this.guild.members.resolve(this.userId);
       }
-      _patch(data9) {
-        if ("status" in data9) {
-          this.status = data9.status;
+      _patch(data10) {
+        if ("status" in data10) {
+          this.status = data10.status;
         } else {
           this.status ??= "offline";
         }
-        if ("activities" in data9) {
-          this.activities = data9.activities.map((activity) => new Activity(this, activity));
+        if ("activities" in data10) {
+          this.activities = data10.activities.map((activity) => new Activity(this, activity));
         } else {
           this.activities ??= [];
         }
-        if ("client_status" in data9) {
-          this.clientStatus = data9.client_status;
+        if ("client_status" in data10) {
+          this.clientStatus = data10.client_status;
         } else {
           this.clientStatus ??= null;
         }
@@ -164546,25 +164546,25 @@ var require_Presence = __commonJS({
       }
     };
     var Activity = class {
-      constructor(presence, data9) {
+      constructor(presence, data10) {
         Object.defineProperty(this, "presence", { value: presence });
-        this.name = data9.name;
-        this.type = data9.type;
-        this.url = data9.url ?? null;
-        this.details = data9.details ?? null;
-        this.state = data9.state ?? null;
-        this.applicationId = data9.application_id ?? null;
-        this.timestamps = data9.timestamps ? {
-          start: data9.timestamps.start ? new Date(Number(data9.timestamps.start)) : null,
-          end: data9.timestamps.end ? new Date(Number(data9.timestamps.end)) : null
+        this.name = data10.name;
+        this.type = data10.type;
+        this.url = data10.url ?? null;
+        this.details = data10.details ?? null;
+        this.state = data10.state ?? null;
+        this.applicationId = data10.application_id ?? null;
+        this.timestamps = data10.timestamps ? {
+          start: data10.timestamps.start ? new Date(Number(data10.timestamps.start)) : null,
+          end: data10.timestamps.end ? new Date(Number(data10.timestamps.end)) : null
         } : null;
-        this.party = data9.party ?? null;
-        this.syncId = data9.sync_id ?? null;
-        this.assets = data9.assets ? new RichPresenceAssets(this, data9.assets) : null;
-        this.flags = new ActivityFlagsBitField(data9.flags).freeze();
-        this.emoji = data9.emoji ? new Emoji(presence.client, data9.emoji) : null;
-        this.buttons = data9.buttons ?? [];
-        this.createdTimestamp = data9.created_at;
+        this.party = data10.party ?? null;
+        this.syncId = data10.sync_id ?? null;
+        this.assets = data10.assets ? new RichPresenceAssets(this, data10.assets) : null;
+        this.flags = new ActivityFlagsBitField(data10.flags).freeze();
+        this.emoji = data10.emoji ? new Emoji(presence.client, data10.emoji) : null;
+        this.buttons = data10.buttons ?? [];
+        this.createdTimestamp = data10.created_at;
       }
       /**
        * Whether this activity is equal to another activity.
@@ -164665,8 +164665,8 @@ var require_PresenceManager = __commonJS({
        * @type {Collection<Snowflake, Presence>}
        * @name PresenceManager#cache
        */
-      _add(data9, cache) {
-        return super._add(data9, cache, { id: data9.user.id });
+      _add(data10, cache) {
+        return super._add(data10, cache, { id: data10.user.id });
       }
       /**
        * Data that can be resolved to a Presence object. This can be:
@@ -164736,8 +164736,8 @@ var require_RoleManager = __commonJS({
        * @type {Collection<Snowflake, Role>}
        * @name RoleManager#cache
        */
-      _add(data9, cache) {
-        return super._add(data9, cache, { extras: [this.guild] });
+      _add(data10, cache) {
+        return super._add(data10, cache, { extras: [this.guild] });
       }
       /**
        * Obtains a role from Discord, or the role cache if they're already available.
@@ -164757,9 +164757,9 @@ var require_RoleManager = __commonJS({
        */
       async fetch(id, { cache = true, force = false } = {}) {
         if (!id) {
-          const data9 = await this.client.rest.get(Routes3.guildRoles(this.guild.id));
+          const data10 = await this.client.rest.get(Routes3.guildRoles(this.guild.id));
           const roles = new Collection3();
-          for (const role of data9) roles.set(role.id, this._add(role, cache));
+          for (const role of data10) roles.set(role.id, this._add(role, cache));
           return roles;
         }
         if (!force) {
@@ -164767,8 +164767,8 @@ var require_RoleManager = __commonJS({
           if (existing) return existing;
         }
         try {
-          const data9 = await this.client.rest.get(Routes3.guildRole(this.guild.id, id));
-          return this._add(data9, cache);
+          const data10 = await this.client.rest.get(Routes3.guildRole(this.guild.id, id));
+          return this._add(data10, cache);
         } catch (error) {
           if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownRole) {
             return null;
@@ -164885,7 +164885,7 @@ var require_RoleManager = __commonJS({
             tertiary_color: null
           };
         }
-        const data9 = await this.client.rest.post(Routes3.guildRoles(this.guild.id), {
+        const data10 = await this.client.rest.post(Routes3.guildRoles(this.guild.id), {
           body: {
             name,
             colors,
@@ -164899,7 +164899,7 @@ var require_RoleManager = __commonJS({
         });
         const { role } = this.client.actions.GuildRoleCreate.handle({
           guild_id: this.guild.id,
-          role: data9
+          role: data10
         });
         if (position) return this.setPosition(role, position, { reason });
         return role;
@@ -165147,7 +165147,7 @@ var require_StageInstanceManager = __commonJS({
         if (typeof options !== "object") throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "options", "object", true);
         const { guildScheduledEvent, topic, privacyLevel, sendStartNotification } = options;
         const guildScheduledEventId = guildScheduledEvent && this.resolveId(guildScheduledEvent);
-        const data9 = await this.client.rest.post(Routes3.stageInstances(), {
+        const data10 = await this.client.rest.post(Routes3.stageInstances(), {
           body: {
             channel_id: channelId,
             topic,
@@ -165156,7 +165156,7 @@ var require_StageInstanceManager = __commonJS({
             guild_scheduled_event_id: guildScheduledEventId
           }
         });
-        return this._add(data9);
+        return this._add(data10);
       }
       /**
        * Fetches the stage instance associated with a stage channel, if it exists.
@@ -165176,8 +165176,8 @@ var require_StageInstanceManager = __commonJS({
           const existing = this.cache.find((stageInstance) => stageInstance.channelId === channelId);
           if (existing) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.stageInstance(channelId));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.stageInstance(channelId));
+        return this._add(data10, cache);
       }
       /**
        * Options used to edit an existing stage instance.
@@ -165201,18 +165201,18 @@ var require_StageInstanceManager = __commonJS({
         const channelId = this.guild.channels.resolveId(channel);
         if (!channelId) throw new DiscordjsError2(ErrorCodes2.StageChannelResolve);
         let { topic, privacyLevel } = options;
-        const data9 = await this.client.rest.patch(Routes3.stageInstance(channelId), {
+        const data10 = await this.client.rest.patch(Routes3.stageInstance(channelId), {
           body: {
             topic,
             privacy_level: privacyLevel
           }
         });
-        if (this.cache.has(data9.id)) {
-          const clone = this.cache.get(data9.id)._clone();
-          clone._patch(data9);
+        if (this.cache.has(data10.id)) {
+          const clone = this.cache.get(data10.id)._clone();
+          clone._patch(data10);
           return clone;
         }
-        return this._add(data9);
+        return this._add(data10);
       }
       /**
        * Deletes an existing stage instance.
@@ -165246,11 +165246,11 @@ var require_VoiceStateManager = __commonJS({
        * @type {Collection<Snowflake, VoiceState>}
        * @name VoiceStateManager#cache
        */
-      _add(data9, cache = true) {
-        const existing = this.cache.get(data9.user_id);
-        if (existing) return existing._patch(data9);
-        const entry = new this.holds(this.guild, data9);
-        if (cache) this.cache.set(data9.user_id, entry);
+      _add(data10, cache = true) {
+        const existing = this.cache.get(data10.user_id);
+        if (existing) return existing._patch(data10);
+        const entry = new this.holds(this.guild, data10);
+        if (cache) this.cache.set(data10.user_id, entry);
         return entry;
       }
       /**
@@ -165270,8 +165270,8 @@ var require_VoiceStateManager = __commonJS({
           const existing = this.cache.get(id === "@me" ? this.client.user.id : id);
           if (existing) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.guildVoiceState(this.guild.id, id));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.guildVoiceState(this.guild.id, id));
+        return this._add(data10, cache);
       }
     };
     module2.exports = VoiceStateManager;
@@ -165333,8 +165333,8 @@ var require_Guild = __commonJS({
     var { _transformAPIIncidentsData } = require_Transformers();
     var { discordSort, getSortableGroupTypes, resolvePartialEmoji } = require_Util();
     var Guild = class extends AnonymousGuild {
-      constructor(client, data9) {
-        super(client, data9, false);
+      constructor(client, data10) {
+        super(client, data10, false);
         this.commands = new GuildApplicationCommandManager(this);
         this.members = new GuildMemberManager(this);
         this.channels = new GuildChannelManager(this);
@@ -165347,14 +165347,14 @@ var require_Guild = __commonJS({
         this.scheduledEvents = new GuildScheduledEventManager(this);
         this.autoModerationRules = new AutoModerationRuleManager(this);
         this.soundboardSounds = new GuildSoundboardSoundManager(this);
-        if (!data9) return;
-        if (data9.unavailable) {
+        if (!data10) return;
+        if (data10.unavailable) {
           this.available = false;
         } else {
-          this._patch(data9);
-          if (!data9.channels) this.available = false;
+          this._patch(data10);
+          if (!data10.channels) this.available = false;
         }
-        this.shardId = data9.shardId;
+        this.shardId = data10.shardId;
       }
       /**
        * The Shard this Guild belongs to.
@@ -165364,184 +165364,184 @@ var require_Guild = __commonJS({
       get shard() {
         return this.client.ws.shards.get(this.shardId);
       }
-      _patch(data9) {
-        super._patch(data9);
-        this.id = data9.id;
-        if ("name" in data9) this.name = data9.name;
-        if ("icon" in data9) this.icon = data9.icon;
-        if ("unavailable" in data9) {
-          this.available = !data9.unavailable;
+      _patch(data10) {
+        super._patch(data10);
+        this.id = data10.id;
+        if ("name" in data10) this.name = data10.name;
+        if ("icon" in data10) this.icon = data10.icon;
+        if ("unavailable" in data10) {
+          this.available = !data10.unavailable;
         } else {
           this.available ??= true;
         }
-        if ("discovery_splash" in data9) {
-          this.discoverySplash = data9.discovery_splash;
+        if ("discovery_splash" in data10) {
+          this.discoverySplash = data10.discovery_splash;
         }
-        if ("member_count" in data9) {
-          this.memberCount = data9.member_count;
+        if ("member_count" in data10) {
+          this.memberCount = data10.member_count;
         }
-        if ("large" in data9) {
-          this.large = Boolean(data9.large);
+        if ("large" in data10) {
+          this.large = Boolean(data10.large);
         }
-        if ("premium_progress_bar_enabled" in data9) {
-          this.premiumProgressBarEnabled = data9.premium_progress_bar_enabled;
+        if ("premium_progress_bar_enabled" in data10) {
+          this.premiumProgressBarEnabled = data10.premium_progress_bar_enabled;
         }
-        if ("application_id" in data9) {
-          this.applicationId = data9.application_id;
+        if ("application_id" in data10) {
+          this.applicationId = data10.application_id;
         }
-        if ("afk_timeout" in data9) {
-          this.afkTimeout = data9.afk_timeout;
+        if ("afk_timeout" in data10) {
+          this.afkTimeout = data10.afk_timeout;
         }
-        if ("afk_channel_id" in data9) {
-          this.afkChannelId = data9.afk_channel_id;
+        if ("afk_channel_id" in data10) {
+          this.afkChannelId = data10.afk_channel_id;
         }
-        if ("system_channel_id" in data9) {
-          this.systemChannelId = data9.system_channel_id;
+        if ("system_channel_id" in data10) {
+          this.systemChannelId = data10.system_channel_id;
         }
-        if ("premium_tier" in data9) {
-          this.premiumTier = data9.premium_tier;
+        if ("premium_tier" in data10) {
+          this.premiumTier = data10.premium_tier;
         }
-        if ("widget_enabled" in data9) {
-          this.widgetEnabled = data9.widget_enabled;
+        if ("widget_enabled" in data10) {
+          this.widgetEnabled = data10.widget_enabled;
         } else {
           this.widgetEnabled ??= null;
         }
-        if ("widget_channel_id" in data9) {
-          this.widgetChannelId = data9.widget_channel_id;
+        if ("widget_channel_id" in data10) {
+          this.widgetChannelId = data10.widget_channel_id;
         } else {
           this.widgetChannelId ??= null;
         }
-        if ("explicit_content_filter" in data9) {
-          this.explicitContentFilter = data9.explicit_content_filter;
+        if ("explicit_content_filter" in data10) {
+          this.explicitContentFilter = data10.explicit_content_filter;
         }
-        if ("mfa_level" in data9) {
-          this.mfaLevel = data9.mfa_level;
+        if ("mfa_level" in data10) {
+          this.mfaLevel = data10.mfa_level;
         }
-        if ("joined_at" in data9) {
-          this.joinedTimestamp = Date.parse(data9.joined_at);
+        if ("joined_at" in data10) {
+          this.joinedTimestamp = Date.parse(data10.joined_at);
         }
-        if ("default_message_notifications" in data9) {
-          this.defaultMessageNotifications = data9.default_message_notifications;
+        if ("default_message_notifications" in data10) {
+          this.defaultMessageNotifications = data10.default_message_notifications;
         }
-        if ("system_channel_flags" in data9) {
-          this.systemChannelFlags = new SystemChannelFlagsBitField(data9.system_channel_flags).freeze();
+        if ("system_channel_flags" in data10) {
+          this.systemChannelFlags = new SystemChannelFlagsBitField(data10.system_channel_flags).freeze();
         }
-        if ("max_members" in data9) {
-          this.maximumMembers = data9.max_members;
+        if ("max_members" in data10) {
+          this.maximumMembers = data10.max_members;
         } else {
           this.maximumMembers ??= null;
         }
-        if ("max_presences" in data9) {
-          this.maximumPresences = data9.max_presences;
+        if ("max_presences" in data10) {
+          this.maximumPresences = data10.max_presences;
         } else {
           this.maximumPresences ??= null;
         }
-        if ("max_video_channel_users" in data9) {
-          this.maxVideoChannelUsers = data9.max_video_channel_users;
+        if ("max_video_channel_users" in data10) {
+          this.maxVideoChannelUsers = data10.max_video_channel_users;
         } else {
           this.maxVideoChannelUsers ??= null;
         }
-        if ("max_stage_video_channel_users" in data9) {
-          this.maxStageVideoChannelUsers = data9.max_stage_video_channel_users;
+        if ("max_stage_video_channel_users" in data10) {
+          this.maxStageVideoChannelUsers = data10.max_stage_video_channel_users;
         } else {
           this.maxStageVideoChannelUsers ??= null;
         }
-        if ("approximate_member_count" in data9) {
-          this.approximateMemberCount = data9.approximate_member_count;
+        if ("approximate_member_count" in data10) {
+          this.approximateMemberCount = data10.approximate_member_count;
         } else {
           this.approximateMemberCount ??= null;
         }
-        if ("approximate_presence_count" in data9) {
-          this.approximatePresenceCount = data9.approximate_presence_count;
+        if ("approximate_presence_count" in data10) {
+          this.approximatePresenceCount = data10.approximate_presence_count;
         } else {
           this.approximatePresenceCount ??= null;
         }
         this.vanityURLUses ??= null;
-        if ("rules_channel_id" in data9) {
-          this.rulesChannelId = data9.rules_channel_id;
+        if ("rules_channel_id" in data10) {
+          this.rulesChannelId = data10.rules_channel_id;
         }
-        if ("public_updates_channel_id" in data9) {
-          this.publicUpdatesChannelId = data9.public_updates_channel_id;
+        if ("public_updates_channel_id" in data10) {
+          this.publicUpdatesChannelId = data10.public_updates_channel_id;
         }
-        if ("preferred_locale" in data9) {
-          this.preferredLocale = data9.preferred_locale;
+        if ("preferred_locale" in data10) {
+          this.preferredLocale = data10.preferred_locale;
         }
-        if ("safety_alerts_channel_id" in data9) {
-          this.safetyAlertsChannelId = data9.safety_alerts_channel_id;
+        if ("safety_alerts_channel_id" in data10) {
+          this.safetyAlertsChannelId = data10.safety_alerts_channel_id;
         } else {
           this.safetyAlertsChannelId ??= null;
         }
-        if (data9.channels) {
+        if (data10.channels) {
           this.channels.cache.clear();
-          for (const rawChannel of data9.channels) {
+          for (const rawChannel of data10.channels) {
             this.client.channels._add(rawChannel, this);
           }
         }
-        if (data9.threads) {
-          for (const rawThread of data9.threads) {
+        if (data10.threads) {
+          for (const rawThread of data10.threads) {
             this.client.channels._add(rawThread, this);
           }
         }
-        if (data9.roles) {
+        if (data10.roles) {
           this.roles.cache.clear();
-          for (const role of data9.roles) this.roles._add(role);
+          for (const role of data10.roles) this.roles._add(role);
         }
-        if (data9.members) {
+        if (data10.members) {
           this.members.cache.clear();
-          for (const guildUser of data9.members) this.members._add(guildUser);
+          for (const guildUser of data10.members) this.members._add(guildUser);
         }
-        if ("owner_id" in data9) {
-          this.ownerId = data9.owner_id;
+        if ("owner_id" in data10) {
+          this.ownerId = data10.owner_id;
         }
-        if (data9.presences) {
-          for (const presence of data9.presences) {
+        if (data10.presences) {
+          for (const presence of data10.presences) {
             this.presences._add(Object.assign(presence, { guild: this }));
           }
         }
-        if (data9.stage_instances) {
+        if (data10.stage_instances) {
           this.stageInstances.cache.clear();
-          for (const stageInstance of data9.stage_instances) {
+          for (const stageInstance of data10.stage_instances) {
             this.stageInstances._add(stageInstance);
           }
         }
-        if (data9.guild_scheduled_events) {
+        if (data10.guild_scheduled_events) {
           this.scheduledEvents.cache.clear();
-          for (const scheduledEvent of data9.guild_scheduled_events) {
+          for (const scheduledEvent of data10.guild_scheduled_events) {
             this.scheduledEvents._add(scheduledEvent);
           }
         }
-        if (data9.voice_states) {
+        if (data10.voice_states) {
           this.voiceStates.cache.clear();
-          for (const voiceState of data9.voice_states) {
+          for (const voiceState of data10.voice_states) {
             this.voiceStates._add(voiceState);
           }
         }
         if (!this.emojis) {
           this.emojis = new GuildEmojiManager(this);
-          if (data9.emojis) for (const emoji of data9.emojis) this.emojis._add(emoji);
-        } else if (data9.emojis) {
+          if (data10.emojis) for (const emoji of data10.emojis) this.emojis._add(emoji);
+        } else if (data10.emojis) {
           this.client.actions.GuildEmojisUpdate.handle({
             guild_id: this.id,
-            emojis: data9.emojis
+            emojis: data10.emojis
           });
         }
         if (!this.stickers) {
           this.stickers = new GuildStickerManager(this);
-          if (data9.stickers) for (const sticker of data9.stickers) this.stickers._add(sticker);
-        } else if (data9.stickers) {
+          if (data10.stickers) for (const sticker of data10.stickers) this.stickers._add(sticker);
+        } else if (data10.stickers) {
           this.client.actions.GuildStickersUpdate.handle({
             guild_id: this.id,
-            stickers: data9.stickers
+            stickers: data10.stickers
           });
         }
-        if ("incidents_data" in data9) {
-          this.incidentsData = data9.incidents_data && _transformAPIIncidentsData(data9.incidents_data);
+        if ("incidents_data" in data10) {
+          this.incidentsData = data10.incidents_data && _transformAPIIncidentsData(data10.incidents_data);
         } else {
           this.incidentsData ??= null;
         }
-        if (data9.soundboard_sounds) {
+        if (data10.soundboard_sounds) {
           this.soundboardSounds.cache.clear();
-          for (const soundboardSound of data9.soundboard_sounds) {
+          for (const soundboardSound of data10.soundboard_sounds) {
             this.soundboardSounds._add(soundboardSound);
           }
         }
@@ -165654,8 +165654,8 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchIntegrations() {
-        const data9 = await this.client.rest.get(Routes3.guildIntegrations(this.id));
-        return data9.reduce(
+        const data10 = await this.client.rest.get(Routes3.guildIntegrations(this.id));
+        return data10.reduce(
           (collection, integration) => collection.set(integration.id, new Integration(this.client, integration, this)),
           new Collection3()
         );
@@ -165667,15 +165667,15 @@ var require_Guild = __commonJS({
        */
       async fetchTemplates() {
         const templates = await this.client.rest.get(Routes3.guildTemplates(this.id));
-        return templates.reduce((col, data9) => col.set(data9.code, new GuildTemplate2(this.client, data9)), new Collection3());
+        return templates.reduce((col, data10) => col.set(data10.code, new GuildTemplate2(this.client, data10)), new Collection3());
       }
       /**
        * Fetches the welcome screen for this guild.
        * @returns {Promise<WelcomeScreen>}
        */
       async fetchWelcomeScreen() {
-        const data9 = await this.client.rest.get(Routes3.guildWelcomeScreen(this.id));
-        return new WelcomeScreen(this, data9);
+        const data10 = await this.client.rest.get(Routes3.guildWelcomeScreen(this.id));
+        return new WelcomeScreen(this, data10);
       }
       /**
        * Creates a template for the guild.
@@ -165684,16 +165684,16 @@ var require_Guild = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async createTemplate(name, description) {
-        const data9 = await this.client.rest.post(Routes3.guildTemplates(this.id), { body: { name, description } });
-        return new GuildTemplate2(this.client, data9);
+        const data10 = await this.client.rest.post(Routes3.guildTemplates(this.id), { body: { name, description } });
+        return new GuildTemplate2(this.client, data10);
       }
       /**
        * Obtains a guild preview for this guild from Discord.
        * @returns {Promise<GuildPreview>}
        */
       async fetchPreview() {
-        const data9 = await this.client.rest.get(Routes3.guildPreview(this.id));
-        return new GuildPreview2(this.client, data9);
+        const data10 = await this.client.rest.get(Routes3.guildPreview(this.id));
+        return new GuildPreview2(this.client, data10);
       }
       /**
        * An object containing information about a guild's vanity invite.
@@ -165714,10 +165714,10 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchVanityData() {
-        const data9 = await this.client.rest.get(Routes3.guildVanityUrl(this.id));
-        this.vanityURLCode = data9.code;
-        this.vanityURLUses = data9.uses;
-        return data9;
+        const data10 = await this.client.rest.get(Routes3.guildVanityUrl(this.id));
+        this.vanityURLCode = data10.code;
+        this.vanityURLUses = data10.uses;
+        return data10;
       }
       /**
        * Fetches all webhooks for the guild.
@@ -165770,12 +165770,12 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchWidgetSettings() {
-        const data9 = await this.client.rest.get(Routes3.guildWidgetSettings(this.id));
-        this.widgetEnabled = data9.enabled;
-        this.widgetChannelId = data9.channel_id;
+        const data10 = await this.client.rest.get(Routes3.guildWidgetSettings(this.id));
+        this.widgetEnabled = data10.enabled;
+        this.widgetChannelId = data10.channel_id;
         return {
-          enabled: data9.enabled,
-          channel: data9.channel_id ? this.channels.cache.get(data9.channel_id) : null
+          enabled: data10.enabled,
+          channel: data10.channel_id ? this.channels.cache.get(data10.channel_id) : null
         };
       }
       /**
@@ -165817,16 +165817,16 @@ var require_Guild = __commonJS({
           if (!userId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "user", "UserResolvable");
           query.set("user_id", userId);
         }
-        const data9 = await this.client.rest.get(Routes3.guildAuditLog(this.id), { query });
-        return new GuildAuditLogs(this, data9);
+        const data10 = await this.client.rest.get(Routes3.guildAuditLog(this.id), { query });
+        return new GuildAuditLogs(this, data10);
       }
       /**
        * Fetches the guild onboarding data for this guild.
        * @returns {Promise<GuildOnboarding>}
        */
       async fetchOnboarding() {
-        const data9 = await this.client.rest.get(Routes3.guildOnboarding(this.id));
-        return new GuildOnboarding(this.client, data9);
+        const data10 = await this.client.rest.get(Routes3.guildOnboarding(this.id));
+        return new GuildOnboarding(this.client, data10);
       }
       /**
        * The data for editing a guild.
@@ -165899,7 +165899,7 @@ var require_Guild = __commonJS({
         safetyAlertsChannel,
         ...options
       }) {
-        const data9 = await this.client.rest.patch(Routes3.guild(this.id), {
+        const data10 = await this.client.rest.patch(Routes3.guild(this.id), {
           body: {
             ...options,
             verification_level: verificationLevel,
@@ -165922,7 +165922,7 @@ var require_Guild = __commonJS({
           },
           reason: options.reason
         });
-        return this.client.actions.GuildUpdate.handle(data9).updated;
+        return this.client.actions.GuildUpdate.handle(data10).updated;
       }
       /**
        * Options used to edit the guild onboarding.
@@ -166403,9 +166403,9 @@ var require_Guild = __commonJS({
         return (methods) => {
           this.client.voice.adapters.set(this.id, methods);
           return {
-            sendPayload: (data9) => {
+            sendPayload: (data10) => {
               if (this.shard.status !== Status2.Ready) return false;
-              this.shard.send(data9);
+              this.shard.send(data10);
               return true;
             },
             destroy: () => {
@@ -166449,10 +166449,10 @@ var require_OAuth2Guild = __commonJS({
     var BaseGuild = require_BaseGuild();
     var PermissionsBitField2 = require_PermissionsBitField();
     var OAuth2Guild = class extends BaseGuild {
-      constructor(client, data9) {
-        super(client, data9);
-        this.owner = data9.owner;
-        this.permissions = new PermissionsBitField2(BigInt(data9.permissions)).freeze();
+      constructor(client, data10) {
+        super(client, data10);
+        this.owner = data10.owner;
+        this.permissions = new PermissionsBitField2(BigInt(data10.permissions)).freeze();
       }
     };
     module2.exports = OAuth2Guild;
@@ -166615,7 +166615,7 @@ var require_GuildManager = __commonJS({
         systemChannelId,
         systemChannelFlags
       }) {
-        const data9 = await this.client.rest.post(Routes3.guilds(), {
+        const data10 = await this.client.rest.post(Routes3.guilds(), {
           body: {
             name,
             icon: icon && await resolveImage(icon),
@@ -166656,9 +166656,9 @@ var require_GuildManager = __commonJS({
             system_channel_flags: systemChannelFlags === void 0 ? void 0 : SystemChannelFlagsBitField.resolve(systemChannelFlags)
           }
         });
-        return this.client.guilds.cache.get(data9.id) ?? new Promise((resolve) => {
+        return this.client.guilds.cache.get(data10.id) ?? new Promise((resolve) => {
           const handleGuild = (guild) => {
-            if (guild.id === data9.id) {
+            if (guild.id === data10.id) {
               clearTimeout2(timeout);
               this.client.decrementMaxListeners();
               resolve(guild);
@@ -166669,7 +166669,7 @@ var require_GuildManager = __commonJS({
           const timeout = setTimeout2(() => {
             this.client.removeListener(Events3.GuildCreate, handleGuild);
             this.client.decrementMaxListeners();
-            resolve(this.client.guilds._add(data9));
+            resolve(this.client.guilds._add(data10));
           }, 1e4).unref();
         });
       }
@@ -166698,14 +166698,14 @@ var require_GuildManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const data10 = await this.client.rest.get(Routes3.guild(id), {
+          const data11 = await this.client.rest.get(Routes3.guild(id), {
             query: makeURLSearchParams2({ with_counts: options.withCounts ?? true })
           });
-          data10.shardId = ShardClientUtil2.shardIdForGuildId(id, this.client.options.shardCount);
-          return this._add(data10, options.cache);
+          data11.shardId = ShardClientUtil2.shardIdForGuildId(id, this.client.options.shardCount);
+          return this._add(data11, options.cache);
         }
-        const data9 = await this.client.rest.get(Routes3.userGuilds(), { query: makeURLSearchParams2(options) });
-        return data9.reduce((coll, guild) => coll.set(guild.id, new OAuth2Guild(this.client, guild)), new Collection3());
+        const data10 = await this.client.rest.get(Routes3.userGuilds(), { query: makeURLSearchParams2(options) });
+        return data10.reduce((coll, guild) => coll.set(guild.id, new OAuth2Guild(this.client, guild)), new Collection3());
       }
       /**
        * @typedef {Object} FetchSoundboardSoundsOptions
@@ -166779,13 +166779,13 @@ var require_GuildManager = __commonJS({
        */
       async setIncidentActions(guild, { invitesDisabledUntil, dmsDisabledUntil }) {
         const guildId = this.resolveId(guild);
-        const data9 = await this.client.rest.put(Routes3.guildIncidentActions(guildId), {
+        const data10 = await this.client.rest.put(Routes3.guildIncidentActions(guildId), {
           body: {
             invites_disabled_until: invitesDisabledUntil && new Date(invitesDisabledUntil).toISOString(),
             dms_disabled_until: dmsDisabledUntil && new Date(dmsDisabledUntil).toISOString()
           }
         });
-        const parsedData = _transformAPIIncidentsData(data9);
+        const parsedData = _transformAPIIncidentsData(data10);
         const resolvedGuild = this.resolve(guild);
         if (resolvedGuild) {
           resolvedGuild.incidentsData = parsedData;
@@ -166861,8 +166861,8 @@ var require_UserManager = __commonJS({
           const dmChannel = this.dmChannel(id);
           if (dmChannel && !dmChannel.partial) return dmChannel;
         }
-        const data9 = await this.client.rest.post(Routes3.userChannels(), { body: { recipient_id: id } });
-        return this.client.channels._add(data9, null, { cache });
+        const data10 = await this.client.rest.post(Routes3.userChannels(), { body: { recipient_id: id } });
+        return this.client.channels._add(data10, null, { cache });
       }
       /**
        * Deletes a {@link DMChannel} (if one exists) between the client and a user. Resolves with the channel if successful.
@@ -166889,8 +166889,8 @@ var require_UserManager = __commonJS({
           const existing = this.cache.get(id);
           if (existing && !existing.partial) return existing;
         }
-        const data9 = await this.client.rest.get(Routes3.user(id));
-        return this._add(data9, cache);
+        const data10 = await this.client.rest.get(Routes3.user(id));
+        return this._add(data10, cache);
       }
       /**
        * Fetches a user's flags.
@@ -166947,8 +166947,8 @@ var require_ClientPresence = __commonJS({
     var { Presence } = require_Presence();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var ClientPresence2 = class extends Presence {
-      constructor(client, data9 = {}) {
-        super(client, Object.assign(data9, { status: data9.status ?? "online", user: { id: null } }));
+      constructor(client, data10 = {}) {
+        super(client, Object.assign(data10, { status: data10.status ?? "online", user: { id: null } }));
       }
       /**
        * Sets the client's presence
@@ -166976,7 +166976,7 @@ var require_ClientPresence = __commonJS({
        * @private
        */
       _parse({ status, since, afk, activities }) {
-        const data9 = {
+        const data10 = {
           activities: [],
           afk: typeof afk === "boolean" ? afk : false,
           since: typeof since === "number" && !Number.isNaN(since) ? since : null,
@@ -166992,7 +166992,7 @@ var require_ClientPresence = __commonJS({
               activity.state = activity.name;
               activity.name = "Custom Status";
             }
-            data9.activities.push({
+            data10.activities.push({
               type: activity.type,
               name: activity.name,
               state: activity.state,
@@ -167000,7 +167000,7 @@ var require_ClientPresence = __commonJS({
             });
           }
         } else if (!activities && (status || afk || since) && this.activities.length) {
-          data9.activities.push(
+          data10.activities.push(
             ...this.activities.map((activity) => ({
               name: activity.name,
               state: activity.state ?? void 0,
@@ -167009,7 +167009,7 @@ var require_ClientPresence = __commonJS({
             }))
           );
         }
-        return data9;
+        return data10;
       }
     };
     module2.exports = ClientPresence2;
@@ -167078,12 +167078,12 @@ var require_VoiceRegion = __commonJS({
     "use strict";
     var { flatten } = require_Util();
     var VoiceRegion2 = class {
-      constructor(data9) {
-        this.id = data9.id;
-        this.name = data9.name;
-        this.deprecated = data9.deprecated;
-        this.optimal = data9.optimal;
-        this.custom = data9.custom;
+      constructor(data10) {
+        this.id = data10.id;
+        this.name = data10.name;
+        this.deprecated = data10.deprecated;
+        this.optimal = data10.optimal;
+        this.custom = data10.custom;
       }
       toJSON() {
         return flatten(this);
@@ -167104,21 +167104,21 @@ var require_WidgetMember = __commonJS({
        * @typedef {Object} WidgetActivity
        * @property {string} name The name of the activity
        */
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this.id = data9.id;
-        this.username = data9.username;
-        this.discriminator = data9.discriminator;
-        this.avatar = data9.avatar;
-        this.status = data9.status;
-        this.deaf = data9.deaf ?? null;
-        this.mute = data9.mute ?? null;
-        this.selfDeaf = data9.self_deaf ?? null;
-        this.selfMute = data9.self_mute ?? null;
-        this.suppress = data9.suppress ?? null;
-        this.channelId = data9.channel_id ?? null;
-        this.avatarURL = data9.avatar_url;
-        this.activity = data9.activity ?? null;
+        this.id = data10.id;
+        this.username = data10.username;
+        this.discriminator = data10.discriminator;
+        this.avatar = data10.avatar;
+        this.status = data10.status;
+        this.deaf = data10.deaf ?? null;
+        this.mute = data10.mute ?? null;
+        this.selfDeaf = data10.self_deaf ?? null;
+        this.selfMute = data10.self_mute ?? null;
+        this.suppress = data10.suppress ?? null;
+        this.channelId = data10.channel_id ?? null;
+        this.avatarURL = data10.avatar_url;
+        this.activity = data10.activity ?? null;
       }
     };
     module2.exports = WidgetMember;
@@ -167134,9 +167134,9 @@ var require_Widget = __commonJS({
     var Base = require_Base();
     var WidgetMember = require_WidgetMember();
     var Widget2 = class extends Base {
-      constructor(client, data9) {
+      constructor(client, data10) {
         super(client);
-        this._patch(data9);
+        this._patch(data10);
       }
       /**
        * Represents a channel in a Widget
@@ -167145,24 +167145,24 @@ var require_Widget = __commonJS({
        * @property {string} name Name of the channel
        * @property {number} position Position of the channel
        */
-      _patch(data9) {
-        this.id = data9.id;
-        if ("name" in data9) {
-          this.name = data9.name;
+      _patch(data10) {
+        this.id = data10.id;
+        if ("name" in data10) {
+          this.name = data10.name;
         }
-        if ("instant_invite" in data9) {
-          this.instantInvite = data9.instant_invite;
+        if ("instant_invite" in data10) {
+          this.instantInvite = data10.instant_invite;
         }
         this.channels = new Collection3();
-        for (const channel of data9.channels) {
+        for (const channel of data10.channels) {
           this.channels.set(channel.id, channel);
         }
         this.members = new Collection3();
-        for (const member of data9.members) {
+        for (const member of data10.members) {
           this.members.set(member.id, new WidgetMember(this.client, member));
         }
-        if ("presence_count" in data9) {
-          this.presenceCount = data9.presence_count;
+        if ("presence_count" in data10) {
+          this.presenceCount = data10.presence_count;
         }
       }
       /**
@@ -167170,8 +167170,8 @@ var require_Widget = __commonJS({
        * @returns {Promise<Widget>}
        */
       async fetch() {
-        const data9 = await this.client.rest.get(Routes3.guildWidgetJSON(this.id));
-        this._patch(data9);
+        const data10 = await this.client.rest.get(Routes3.guildWidgetJSON(this.id));
+        this._patch(data10);
         return this;
       }
       /**
@@ -167658,16 +167658,16 @@ var require_Client = __commonJS({
        */
       constructor(options) {
         super(options);
-        const data9 = __require("node:worker_threads").workerData ?? process.env;
+        const data10 = __require("node:worker_threads").workerData ?? process.env;
         const defaults = Options.createDefault();
         if (this.options.shards === defaults.shards) {
-          if ("SHARDS" in data9) {
-            this.options.shards = JSON.parse(data9.SHARDS);
+          if ("SHARDS" in data10) {
+            this.options.shards = JSON.parse(data10.SHARDS);
           }
         }
         if (this.options.shardCount === defaults.shardCount) {
-          if ("SHARD_COUNT" in data9) {
-            this.options.shardCount = Number(data9.SHARD_COUNT);
+          if ("SHARD_COUNT" in data10) {
+            this.options.shardCount = Number(data10.SHARD_COUNT);
           } else if (Array.isArray(this.options.shards)) {
             this.options.shardCount = this.options.shards.length;
           }
@@ -167798,8 +167798,8 @@ var require_Client = __commonJS({
           with_counts: true,
           guild_scheduled_event_id: options?.guildScheduledEventId
         });
-        const data9 = await this.rest.get(Routes.invite(code), { query });
-        return new Invite(this, data9);
+        const data10 = await this.rest.get(Routes.invite(code), { query });
+        return new Invite(this, data10);
       }
       /**
        * Obtains a template from Discord.
@@ -167812,8 +167812,8 @@ var require_Client = __commonJS({
        */
       async fetchGuildTemplate(template) {
         const code = resolveGuildTemplateCode(template);
-        const data9 = await this.rest.get(Routes.template(code));
-        return new GuildTemplate(this, data9);
+        const data10 = await this.rest.get(Routes.template(code));
+        return new GuildTemplate(this, data10);
       }
       /**
        * Obtains a webhook from Discord.
@@ -167826,8 +167826,8 @@ var require_Client = __commonJS({
        *   .catch(console.error);
        */
       async fetchWebhook(id, token) {
-        const data9 = await this.rest.get(Routes.webhook(id, token), { auth: token === void 0 });
-        return new Webhook(this, { token, ...data9 });
+        const data10 = await this.rest.get(Routes.webhook(id, token), { auth: token === void 0 });
+        return new Webhook(this, { token, ...data10 });
       }
       /**
        * Obtains the available voice regions from Discord.
@@ -167853,8 +167853,8 @@ var require_Client = __commonJS({
        *   .catch(console.error);
        */
       async fetchSticker(id) {
-        const data9 = await this.rest.get(Routes.sticker(id));
-        return new Sticker(this, data9);
+        const data10 = await this.rest.get(Routes.sticker(id));
+        return new Sticker(this, data10);
       }
       /**
        * Options for fetching sticker packs.
@@ -167877,11 +167877,11 @@ var require_Client = __commonJS({
        */
       async fetchStickerPacks({ packId } = {}) {
         if (packId) {
-          const data10 = await this.rest.get(Routes.stickerPack(packId));
-          return new StickerPack(this, data10);
+          const data11 = await this.rest.get(Routes.stickerPack(packId));
+          return new StickerPack(this, data11);
         }
-        const data9 = await this.rest.get(Routes.stickerPacks());
-        return new Collection(data9.sticker_packs.map((stickerPack) => [stickerPack.id, new StickerPack(this, stickerPack)]));
+        const data10 = await this.rest.get(Routes.stickerPacks());
+        return new Collection(data10.sticker_packs.map((stickerPack) => [stickerPack.id, new StickerPack(this, stickerPack)]));
       }
       /**
        * Obtains the list of available sticker packs.
@@ -167907,8 +167907,8 @@ var require_Client = __commonJS({
        *  .catch(console.error);
        */
       async fetchDefaultSoundboardSounds() {
-        const data9 = await this.rest.get(Routes.soundboardDefaultSounds());
-        return new Collection(data9.map((sound) => [sound.sound_id, new SoundboardSound(this, sound)]));
+        const data10 = await this.rest.get(Routes.soundboardDefaultSounds());
+        return new Collection(data10.map((sound) => [sound.sound_id, new SoundboardSound(this, sound)]));
       }
       /**
        * Obtains a guild preview from Discord, available for all guilds the bot is in and all Discoverable guilds.
@@ -167918,8 +167918,8 @@ var require_Client = __commonJS({
       async fetchGuildPreview(guild) {
         const id = this.guilds.resolveId(guild);
         if (!id) throw new DiscordjsTypeError(ErrorCodes.InvalidType, "guild", "GuildResolvable");
-        const data9 = await this.rest.get(Routes.guildPreview(id));
-        return new GuildPreview(this, data9);
+        const data10 = await this.rest.get(Routes.guildPreview(id));
+        return new GuildPreview(this, data10);
       }
       /**
        * Obtains the widget data of a guild from Discord, available for guilds with the widget enabled.
@@ -167929,8 +167929,8 @@ var require_Client = __commonJS({
       async fetchGuildWidget(guild) {
         const id = this.guilds.resolveId(guild);
         if (!id) throw new DiscordjsTypeError(ErrorCodes.InvalidType, "guild", "GuildResolvable");
-        const data9 = await this.rest.get(Routes.guildWidgetJSON(id));
-        return new Widget(this, data9);
+        const data10 = await this.rest.get(Routes.guildWidgetJSON(id));
+        return new Widget(this, data10);
       }
       /**
        * Options for {@link Client#generateInvite}.
@@ -168906,9 +168906,9 @@ var require_EmbedBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var { resolveColor } = require_Util();
-    var EmbedBuilder10 = class extends BuildersEmbed {
-      constructor(data9) {
-        super(toSnakeCase(data9));
+    var EmbedBuilder11 = class extends BuildersEmbed {
+      constructor(data10) {
+        super(toSnakeCase(data10));
       }
       /**
        * Sets the color of this embed
@@ -168935,7 +168935,7 @@ var require_EmbedBuilder = __commonJS({
         return embedLength(this.data);
       }
     };
-    module2.exports = EmbedBuilder10;
+    module2.exports = EmbedBuilder11;
   }
 });
 
@@ -168949,10 +168949,10 @@ var require_AttachmentBuilder = __commonJS({
        * @param {BufferResolvable|Stream} attachment The file
        * @param {AttachmentData} [data] Extra data
        */
-      constructor(attachment, data9 = {}) {
+      constructor(attachment, data10 = {}) {
         this.attachment = attachment;
-        this.name = data9.name;
-        this.description = data9.description;
+        this.name = data10.name;
+        this.description = data10.description;
       }
       /**
        * Sets the description of this attachment.
@@ -169032,9 +169032,9 @@ var require_ModalBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var ModalBuilder3 = class extends BuildersModal {
-      constructor({ components, ...data9 } = {}) {
+      constructor({ components, ...data10 } = {}) {
         super({
-          ...toSnakeCase(data9),
+          ...toSnakeCase(data10),
           components: components?.map(
             (component) => component instanceof ComponentBuilder ? component : toSnakeCase(component)
           )
@@ -169131,10 +169131,10 @@ var require_StringSelectMenuOptionBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var StringSelectMenuOptionBuilder3 = class extends BuildersSelectMenuOption {
-      constructor({ emoji, ...data9 } = {}) {
+      constructor({ emoji, ...data10 } = {}) {
         super(
           toSnakeCase({
-            ...data9,
+            ...data10,
             emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji
           })
         );
@@ -169461,7 +169461,14 @@ var init_GuildConfig = __esm({
         default: []
       },
       applicationGames: { type: [String], default: [] },
-      ticketImageUrl: { type: String, default: null }
+      ticketImageUrl: { type: String, default: null },
+      applicationQuestions: {
+        type: [{
+          game: String,
+          questions: [{ label: String, placeholder: String, style: String }]
+        }],
+        default: []
+      }
     });
     GuildConfig = import_mongoose2.default.model("GuildConfig", GuildConfigSchema);
   }
@@ -169563,14 +169570,8 @@ function getAccountAgeDays(userId) {
   const ms = Number((BigInt(userId) >> 22n) + DISCORD_EPOCH);
   return Math.floor((Date.now() - ms) / 864e5);
 }
-function buildApplicationEmbed(applicantTag, userId, game, accountAgeDays, joinedAgoDays, answers) {
-  const questions = [
-    "Can you solo most content in the game?",
-    "What can't you solo?",
-    "What level are you?",
-    "What's your team?",
-    "How many hours per day can you help?"
-  ];
+function buildApplicationEmbed(applicantTag, userId, game, accountAgeDays, joinedAgoDays, answers, questionLabels) {
+  const questions = questionLabels ?? DEFAULT_APP_QUESTIONS.map((q) => q.label);
   const embed = new import_discord2.EmbedBuilder().setAuthor({ name: applicantTag }).setTitle(`\u{1F4CB} ${game} Helper Application`).setColor(15277708).addFields(
     { name: "User", value: `<@${userId}>`, inline: true },
     { name: "Game", value: game, inline: true },
@@ -170119,17 +170120,18 @@ async function handleSelectMenu(interaction) {
     const rawTitle = `${game} Application`;
     const title = rawTitle.length > 45 ? rawTitle.slice(0, 42) + "..." : rawTitle;
     const modal = new import_discord2.ModalBuilder().setCustomId(`helper_app:${game}`).setTitle(title);
-    const q1 = new import_discord2.TextInputBuilder().setCustomId("app_q1").setLabel("Can you solo most content in the game?").setStyle(import_discord2.TextInputStyle.Paragraph).setPlaceholder("Yes / No and details").setRequired(true).setMaxLength(500);
-    const q2 = new import_discord2.TextInputBuilder().setCustomId("app_q2").setLabel("What can't you solo?").setStyle(import_discord2.TextInputStyle.Short).setPlaceholder("List any content you struggle with").setRequired(true).setMaxLength(300);
-    const q3 = new import_discord2.TextInputBuilder().setCustomId("app_q3").setLabel("What level are you?").setStyle(import_discord2.TextInputStyle.Short).setPlaceholder("e.g. Level 150").setRequired(true).setMaxLength(100);
-    const q4 = new import_discord2.TextInputBuilder().setCustomId("app_q4").setLabel("What's your team?").setStyle(import_discord2.TextInputStyle.Short).setPlaceholder("List your main units").setRequired(true).setMaxLength(300);
-    const q5 = new import_discord2.TextInputBuilder().setCustomId("app_q5").setLabel("How many hours per day can you help?").setStyle(import_discord2.TextInputStyle.Short).setPlaceholder("e.g. 3-5 hours").setRequired(true).setMaxLength(100);
+    const appConfig = await GuildConfig.findOne({ guildId });
+    const customEntry = (appConfig?.applicationQuestions ?? []).find(
+      (aq) => aq.game.toLowerCase() === game.toLowerCase()
+    );
+    const questions = customEntry?.questions?.length ? customEntry.questions : DEFAULT_APP_QUESTIONS;
+    const maxLengths = [500, 300, 100, 300, 100];
     modal.addComponents(
-      new import_discord2.ActionRowBuilder().addComponents(q1),
-      new import_discord2.ActionRowBuilder().addComponents(q2),
-      new import_discord2.ActionRowBuilder().addComponents(q3),
-      new import_discord2.ActionRowBuilder().addComponents(q4),
-      new import_discord2.ActionRowBuilder().addComponents(q5)
+      ...questions.map(
+        (q, i) => new import_discord2.ActionRowBuilder().addComponents(
+          new import_discord2.TextInputBuilder().setCustomId(`app_q${i + 1}`).setLabel(q.label).setStyle(q.style === "paragraph" ? import_discord2.TextInputStyle.Paragraph : import_discord2.TextInputStyle.Short).setPlaceholder(q.placeholder || " ").setRequired(true).setMaxLength(maxLengths[i] ?? 300)
+        )
+      )
     );
     await interaction.showModal(modal);
     return;
@@ -170458,13 +170460,18 @@ async function handleModalSubmit(interaction) {
       answers,
       status: "pending"
     });
+    const customQEntry = (config.applicationQuestions ?? []).find(
+      (aq) => aq.game.toLowerCase() === game.toLowerCase()
+    );
+    const questionLabels = customQEntry?.questions?.length ? customQEntry.questions.map((q) => q.label) : void 0;
     const embed = buildApplicationEmbed(
       `${interaction.user.displayName} (${interaction.user.username})`,
       interaction.user.id,
       game,
       accountAgeDays,
       joinedAgoDays,
-      answers
+      answers,
+      questionLabels
     );
     const appRoleEntry = (config.applicationRoles ?? []).find(
       (ar) => ar.game.toLowerCase() === game.toLowerCase()
@@ -170481,7 +170488,7 @@ async function handleModalSubmit(interaction) {
     return;
   }
 }
-var import_discord2, DEFAULT_GAMES;
+var import_discord2, DEFAULT_APP_QUESTIONS, DEFAULT_GAMES;
 var init_interactions = __esm({
   "src/bot/interactions.ts"() {
     "use strict";
@@ -170491,6 +170498,13 @@ var init_interactions = __esm({
     init_Vouch();
     init_UserMessageCount();
     init_Application();
+    DEFAULT_APP_QUESTIONS = [
+      { label: "Can you solo most content in the game?", placeholder: "Yes / No and details", style: "paragraph" },
+      { label: "What can't you solo?", placeholder: "List any content you struggle with", style: "short" },
+      { label: "What level are you?", placeholder: "e.g. Level 150", style: "short" },
+      { label: "What's your team?", placeholder: "List your main units", style: "short" },
+      { label: "How many hours per day can you help?", placeholder: "e.g. 3-5 hours", style: "short" }
+    ];
     DEFAULT_GAMES = [
       "Universal Tower Defense",
       "Sailor Piece",
@@ -170617,15 +170631,15 @@ var ZodParsedType = util.arrayToEnum([
   "map",
   "set"
 ]);
-var getParsedType = (data9) => {
-  const t = typeof data9;
+var getParsedType = (data10) => {
+  const t = typeof data10;
   switch (t) {
     case "undefined":
       return ZodParsedType.undefined;
     case "string":
       return ZodParsedType.string;
     case "number":
-      return Number.isNaN(data9) ? ZodParsedType.nan : ZodParsedType.number;
+      return Number.isNaN(data10) ? ZodParsedType.nan : ZodParsedType.number;
     case "boolean":
       return ZodParsedType.boolean;
     case "function":
@@ -170635,22 +170649,22 @@ var getParsedType = (data9) => {
     case "symbol":
       return ZodParsedType.symbol;
     case "object":
-      if (Array.isArray(data9)) {
+      if (Array.isArray(data10)) {
         return ZodParsedType.array;
       }
-      if (data9 === null) {
+      if (data10 === null) {
         return ZodParsedType.null;
       }
-      if (data9.then && typeof data9.then === "function" && data9.catch && typeof data9.catch === "function") {
+      if (data10.then && typeof data10.then === "function" && data10.catch && typeof data10.catch === "function") {
         return ZodParsedType.promise;
       }
-      if (typeof Map !== "undefined" && data9 instanceof Map) {
+      if (typeof Map !== "undefined" && data10 instanceof Map) {
         return ZodParsedType.map;
       }
-      if (typeof Set !== "undefined" && data9 instanceof Set) {
+      if (typeof Set !== "undefined" && data10 instanceof Set) {
         return ZodParsedType.set;
       }
-      if (typeof Date !== "undefined" && data9 instanceof Date) {
+      if (typeof Date !== "undefined" && data10 instanceof Date) {
         return ZodParsedType.date;
       }
       return ZodParsedType.object;
@@ -170884,7 +170898,7 @@ function getErrorMap() {
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/helpers/parseUtil.js
 var makeIssue = (params) => {
-  const { data: data9, path: path2, errorMaps, issueData } = params;
+  const { data: data10, path: path2, errorMaps, issueData } = params;
   const fullPath = [...path2, ...issueData.path || []];
   const fullIssue = {
     ...issueData,
@@ -170900,7 +170914,7 @@ var makeIssue = (params) => {
   let errorMessage = "";
   const maps = errorMaps.filter((m) => !!m).slice().reverse();
   for (const map of maps) {
-    errorMessage = map(fullIssue, { data: data9, defaultError: errorMessage }).message;
+    errorMessage = map(fullIssue, { data: data10, defaultError: errorMessage }).message;
   }
   return {
     ...issueData,
@@ -171101,13 +171115,13 @@ var ZodType = class {
     const result = this._parse(input);
     return Promise.resolve(result);
   }
-  parse(data9, params) {
-    const result = this.safeParse(data9, params);
+  parse(data10, params) {
+    const result = this.safeParse(data10, params);
     if (result.success)
       return result.data;
     throw result.error;
   }
-  safeParse(data9, params) {
+  safeParse(data10, params) {
     const ctx = {
       common: {
         issues: [],
@@ -171117,13 +171131,13 @@ var ZodType = class {
       path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
-      data: data9,
-      parsedType: getParsedType(data9)
+      data: data10,
+      parsedType: getParsedType(data10)
     };
-    const result = this._parseSync({ data: data9, path: ctx.path, parent: ctx });
+    const result = this._parseSync({ data: data10, path: ctx.path, parent: ctx });
     return handleResult(ctx, result);
   }
-  "~validate"(data9) {
+  "~validate"(data10) {
     const ctx = {
       common: {
         issues: [],
@@ -171132,12 +171146,12 @@ var ZodType = class {
       path: [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
-      data: data9,
-      parsedType: getParsedType(data9)
+      data: data10,
+      parsedType: getParsedType(data10)
     };
     if (!this["~standard"].async) {
       try {
-        const result = this._parseSync({ data: data9, path: [], parent: ctx });
+        const result = this._parseSync({ data: data10, path: [], parent: ctx });
         return isValid(result) ? {
           value: result.value
         } : {
@@ -171153,19 +171167,19 @@ var ZodType = class {
         };
       }
     }
-    return this._parseAsync({ data: data9, path: [], parent: ctx }).then((result) => isValid(result) ? {
+    return this._parseAsync({ data: data10, path: [], parent: ctx }).then((result) => isValid(result) ? {
       value: result.value
     } : {
       issues: ctx.common.issues
     });
   }
-  async parseAsync(data9, params) {
-    const result = await this.safeParseAsync(data9, params);
+  async parseAsync(data10, params) {
+    const result = await this.safeParseAsync(data10, params);
     if (result.success)
       return result.data;
     throw result.error;
   }
-  async safeParseAsync(data9, params) {
+  async safeParseAsync(data10, params) {
     const ctx = {
       common: {
         issues: [],
@@ -171175,10 +171189,10 @@ var ZodType = class {
       path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
-      data: data9,
-      parsedType: getParsedType(data9)
+      data: data10,
+      parsedType: getParsedType(data10)
     };
-    const maybeAsyncResult = this._parse({ data: data9, path: ctx.path, parent: ctx });
+    const maybeAsyncResult = this._parse({ data: data10, path: ctx.path, parent: ctx });
     const result = await (isAsync(maybeAsyncResult) ? maybeAsyncResult : Promise.resolve(maybeAsyncResult));
     return handleResult(ctx, result);
   }
@@ -171199,8 +171213,8 @@ var ZodType = class {
         ...getIssueProperties(val)
       });
       if (typeof Promise !== "undefined" && result instanceof Promise) {
-        return result.then((data9) => {
-          if (!data9) {
+        return result.then((data10) => {
+          if (!data10) {
             setError();
             return false;
           } else {
@@ -171266,7 +171280,7 @@ var ZodType = class {
     this["~standard"] = {
       version: 1,
       vendor: "zod",
-      validate: (data9) => this["~validate"](data9)
+      validate: (data10) => this["~validate"](data10)
     };
   }
   optional() {
@@ -171726,7 +171740,7 @@ var ZodString = class _ZodString extends ZodType {
     return { status: status.value, value: input.data };
   }
   _regex(regex, validation, message) {
-    return this.refinement((data9) => regex.test(data9), {
+    return this.refinement((data10) => regex.test(data10), {
       validation,
       code: ZodIssueCode.invalid_string,
       ...errorUtil.errToObj(message)
@@ -173942,8 +173956,8 @@ var ZodPromise = class extends ZodType {
       return INVALID;
     }
     const promisified = ctx.parsedType === ZodParsedType.promise ? ctx.data : Promise.resolve(ctx.data);
-    return OK(promisified.then((data9) => {
-      return this._def.type.parseAsync(data9, {
+    return OK(promisified.then((data10) => {
+      return this._def.type.parseAsync(data10, {
         path: ctx.path,
         errorMap: ctx.common.contextualErrorMap
       });
@@ -174137,12 +174151,12 @@ ZodNullable.create = (type, params) => {
 var ZodDefault = class extends ZodType {
   _parse(input) {
     const { ctx } = this._processInputParams(input);
-    let data9 = ctx.data;
+    let data10 = ctx.data;
     if (ctx.parsedType === ZodParsedType.undefined) {
-      data9 = this._def.defaultValue();
+      data10 = this._def.defaultValue();
     }
     return this._def.innerType._parse({
-      data: data9,
+      data: data10,
       path: ctx.path,
       parent: ctx
     });
@@ -174236,9 +174250,9 @@ ZodNaN.create = (params) => {
 var ZodBranded = class extends ZodType {
   _parse(input) {
     const { ctx } = this._processInputParams(input);
-    const data9 = ctx.data;
+    const data10 = ctx.data;
     return this._def.type._parse({
-      data: data9,
+      data: data10,
       path: ctx.path,
       parent: ctx
     });
@@ -174305,13 +174319,13 @@ var ZodPipeline = class _ZodPipeline extends ZodType {
 var ZodReadonly = class extends ZodType {
   _parse(input) {
     const result = this._def.innerType._parse(input);
-    const freeze = (data9) => {
-      if (isValid(data9)) {
-        data9.value = Object.freeze(data9.value);
+    const freeze = (data10) => {
+      if (isValid(data10)) {
+        data10.value = Object.freeze(data10.value);
       }
-      return data9;
+      return data10;
     };
-    return isAsync(result) ? result.then((data9) => freeze(data9)) : freeze(result);
+    return isAsync(result) ? result.then((data10) => freeze(data10)) : freeze(result);
   }
   unwrap() {
     return this._def.innerType;
@@ -174409,8 +174423,8 @@ var HealthCheckResponse = objectType({
 // src/routes/health.ts
 var router = (0, import_express.Router)();
 router.get("/healthz", (_req, res) => {
-  const data9 = HealthCheckResponse.parse({ status: "ok" });
-  res.json(data9);
+  const data10 = HealthCheckResponse.parse({ status: "ok" });
+  res.json(data10);
 });
 var health_default = router;
 
@@ -174482,7 +174496,7 @@ async function connectDB() {
 }
 
 // src/bot/client.ts
-var import_discord11 = __toESM(require_src2(), 1);
+var import_discord12 = __toESM(require_src2(), 1);
 
 // src/bot/commands/setup.ts
 var setup_exports = {};
@@ -175476,12 +175490,116 @@ async function execute8(interaction) {
   await interaction.reply({ embeds: [embed], ephemeral: true });
 }
 
+// src/bot/commands/appquestions.ts
+var appquestions_exports = {};
+__export(appquestions_exports, {
+  data: () => data9,
+  execute: () => execute9
+});
+var import_discord10 = __toESM(require_src2(), 1);
+init_GuildConfig();
+var DEFAULT_QUESTIONS = [
+  { label: "Can you solo most content in the game?", placeholder: "Yes / No and details", style: "paragraph" },
+  { label: "What can't you solo?", placeholder: "List any content you struggle with", style: "short" },
+  { label: "What level are you?", placeholder: "e.g. Level 150", style: "short" },
+  { label: "What's your team?", placeholder: "List your main units", style: "short" },
+  { label: "How many hours per day can you help?", placeholder: "e.g. 3-5 hours", style: "short" }
+];
+var data9 = new import_discord10.SlashCommandBuilder().setName("appquestions").setDescription("Customize the application questions shown for each game").addSubcommand(
+  (sub) => sub.setName("set").setDescription("Set a question for a specific slot (1\u20135) for a game").addStringOption(
+    (opt) => opt.setName("game").setDescription("Game name (must match exactly)").setRequired(true).setMaxLength(100)
+  ).addIntegerOption(
+    (opt) => opt.setName("slot").setDescription("Question slot (1\u20135)").setRequired(true).setMinValue(1).setMaxValue(5)
+  ).addStringOption(
+    (opt) => opt.setName("label").setDescription("The question text shown to the applicant").setRequired(true).setMaxLength(45)
+  ).addStringOption(
+    (opt) => opt.setName("placeholder").setDescription("Hint text shown inside the answer box").setRequired(false).setMaxLength(100)
+  ).addStringOption(
+    (opt) => opt.setName("style").setDescription("Answer box style (default: short)").setRequired(false).addChoices(
+      { name: "Short (single line)", value: "short" },
+      { name: "Paragraph (multi-line)", value: "paragraph" }
+    )
+  )
+).addSubcommand(
+  (sub) => sub.setName("view").setDescription("View the current questions for a game").addStringOption(
+    (opt) => opt.setName("game").setDescription("Game name").setRequired(true).setMaxLength(100)
+  )
+).addSubcommand(
+  (sub) => sub.setName("clear").setDescription("Remove all custom questions for a game (reverts to defaults)").addStringOption(
+    (opt) => opt.setName("game").setDescription("Game name").setRequired(true).setMaxLength(100)
+  )
+);
+async function execute9(interaction) {
+  if (!interaction.guildId) {
+    await interaction.reply({ content: "This command can only be used in a server.", ephemeral: true });
+    return;
+  }
+  const isAdmin = interaction.member?.permissions?.has(BigInt(8));
+  if (!isAdmin) {
+    await interaction.reply({ content: "\u274C Only admins can manage application questions.", ephemeral: true });
+    return;
+  }
+  const sub = interaction.options.getSubcommand();
+  const game = interaction.options.getString("game", true).trim();
+  const config = await GuildConfig.findOneAndUpdate(
+    { guildId: interaction.guildId },
+    {},
+    { upsert: true, new: true }
+  );
+  const entryIdx = (config.applicationQuestions ?? []).findIndex(
+    (aq) => aq.game.toLowerCase() === game.toLowerCase()
+  );
+  if (sub === "set") {
+    const slot = interaction.options.getInteger("slot", true) - 1;
+    const label = interaction.options.getString("label", true).trim();
+    const placeholder = interaction.options.getString("placeholder")?.trim() ?? "";
+    const style = interaction.options.getString("style") ?? "short";
+    if (entryIdx === -1) {
+      const questions = DEFAULT_QUESTIONS.map((q) => ({ ...q }));
+      questions[slot] = { label, placeholder, style };
+      config.applicationQuestions.push({ game, questions });
+    } else {
+      const questions = [...config.applicationQuestions[entryIdx].questions];
+      while (questions.length < 5) questions.push({ label: DEFAULT_QUESTIONS[questions.length].label, placeholder: DEFAULT_QUESTIONS[questions.length].placeholder, style: DEFAULT_QUESTIONS[questions.length].style });
+      questions[slot] = { label, placeholder, style };
+      config.applicationQuestions[entryIdx].questions = questions;
+    }
+    await config.save();
+    await interaction.reply({
+      content: `\u2705 Question ${slot + 1} for **${game}** set to: **${label}**`,
+      ephemeral: true
+    });
+  } else if (sub === "view") {
+    const entry = entryIdx !== -1 ? config.applicationQuestions[entryIdx] : null;
+    const questions = entry?.questions?.length ? entry.questions : DEFAULT_QUESTIONS;
+    const isCustom = !!entry?.questions?.length;
+    const embed = new import_discord10.EmbedBuilder().setTitle(`\u{1F4CB} Application Questions \u2014 ${game}`).setColor(15277708).setDescription(isCustom ? "Using **custom** questions." : "Using **default** questions (no custom set).").setTimestamp();
+    questions.forEach((q, i) => {
+      embed.addFields({
+        name: `Q${i + 1}. ${q.label}`,
+        value: `Placeholder: *${q.placeholder || "none"}*
+Style: ${q.style}`
+      });
+    });
+    await interaction.reply({ embeds: [embed], ephemeral: true });
+  } else if (sub === "clear") {
+    if (entryIdx !== -1) {
+      config.applicationQuestions.splice(entryIdx, 1);
+      await config.save();
+    }
+    await interaction.reply({
+      content: `\u2705 Custom questions for **${game}** cleared \u2014 reverted to defaults.`,
+      ephemeral: true
+    });
+  }
+}
+
 // src/bot/client.ts
 init_interactions();
 init_UserMessageCount();
 
 // src/bot/deploy-commands.ts
-var import_discord10 = __toESM(require_src2(), 1);
+var import_discord11 = __toESM(require_src2(), 1);
 async function deployCommands(guildIds) {
   const token = process.env["DISCORD_TOKEN"];
   const clientId = process.env["DISCORD_CLIENT_ID"];
@@ -175496,13 +175614,14 @@ async function deployCommands(guildIds) {
     data5.toJSON(),
     data6.toJSON(),
     data7.toJSON(),
-    data8.toJSON()
+    data8.toJSON(),
+    data9.toJSON()
   ];
-  const rest = new import_discord10.REST({ version: "10" }).setToken(token);
-  await rest.put(import_discord10.Routes.applicationCommands(clientId), { body: [] });
+  const rest = new import_discord11.REST({ version: "10" }).setToken(token);
+  await rest.put(import_discord11.Routes.applicationCommands(clientId), { body: [] });
   await Promise.all(
     guildIds.map(
-      (guildId) => rest.put(import_discord10.Routes.applicationGuildCommands(clientId, guildId), { body: commands2 })
+      (guildId) => rest.put(import_discord11.Routes.applicationGuildCommands(clientId, guildId), { body: commands2 })
     )
   );
 }
@@ -175516,19 +175635,20 @@ var commands = /* @__PURE__ */ new Map([
   ["leaderboard", leaderboard_exports],
   ["applicationpanel", application_panel_exports],
   ["helpercommands", helpercommands_exports],
-  ["applicationcommands", applicationcommands_exports]
+  ["applicationcommands", applicationcommands_exports],
+  ["appquestions", appquestions_exports]
 ]);
 function createBotClient() {
-  const client = new import_discord11.Client({
+  const client = new import_discord12.Client({
     intents: [
-      import_discord11.GatewayIntentBits.Guilds,
-      import_discord11.GatewayIntentBits.GuildMessages,
-      import_discord11.GatewayIntentBits.MessageContent,
-      import_discord11.GatewayIntentBits.GuildMembers
+      import_discord12.GatewayIntentBits.Guilds,
+      import_discord12.GatewayIntentBits.GuildMessages,
+      import_discord12.GatewayIntentBits.MessageContent,
+      import_discord12.GatewayIntentBits.GuildMembers
     ],
-    partials: [import_discord11.Partials.Channel, import_discord11.Partials.Message]
+    partials: [import_discord12.Partials.Channel, import_discord12.Partials.Message]
   });
-  client.once(import_discord11.Events.ClientReady, async (c) => {
+  client.once(import_discord12.Events.ClientReady, async (c) => {
     logger.info(`CarryBot online as ${c.user.tag}`);
     try {
       const guildIds = c.guilds.cache.map((g) => g.id);
@@ -175538,7 +175658,7 @@ function createBotClient() {
       logger.error({ err }, "Failed to register slash commands");
     }
   });
-  client.on(import_discord11.Events.GuildCreate, async (guild) => {
+  client.on(import_discord12.Events.GuildCreate, async (guild) => {
     logger.info({ guildId: guild.id, guildName: guild.name }, "Joined new guild \u2014 registering commands");
     try {
       await deployCommands([guild.id]);
@@ -175546,7 +175666,7 @@ function createBotClient() {
       logger.error({ err, guildId: guild.id }, "Failed to register commands for new guild");
     }
   });
-  client.on(import_discord11.Events.MessageCreate, async (message) => {
+  client.on(import_discord12.Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.guildId) return;
     try {
       await UserMessageCount.findOneAndUpdate(
@@ -175558,7 +175678,7 @@ function createBotClient() {
       logger.error({ err }, "Failed to update message count");
     }
   });
-  client.on(import_discord11.Events.InteractionCreate, async (interaction) => {
+  client.on(import_discord12.Events.InteractionCreate, async (interaction) => {
     if (interaction.isChatInputCommand()) {
       const cmd = commands.get(interaction.commandName);
       if (!cmd) return;

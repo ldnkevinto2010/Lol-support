@@ -18,6 +18,17 @@ export interface IApplicationRole {
   cooldownMs?: number;
 }
 
+export interface IApplicationQuestion {
+  label: string;
+  placeholder: string;
+  style: "short" | "paragraph";
+}
+
+export interface IGameApplicationQuestions {
+  game: string;
+  questions: IApplicationQuestion[];
+}
+
 export interface IGuildConfig extends Document {
   guildId: string;
   ticketCategoryId: string | null;
@@ -40,6 +51,7 @@ export interface IGuildConfig extends Document {
   applicationRoles: IApplicationRole[];
   applicationGames: string[];
   ticketImageUrl: string | null;
+  applicationQuestions: IGameApplicationQuestions[];
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -67,6 +79,13 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
   },
   applicationGames: { type: [String], default: [] },
   ticketImageUrl: { type: String, default: null },
+  applicationQuestions: {
+    type: [{
+      game: String,
+      questions: [{ label: String, placeholder: String, style: String }],
+    }],
+    default: [],
+  },
 });
 
 export const GuildConfig = mongoose.model<IGuildConfig>("GuildConfig", GuildConfigSchema);
