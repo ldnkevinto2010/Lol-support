@@ -175514,11 +175514,6 @@ var data9 = new import_discord10.SlashCommandBuilder().setName("appquestions").s
     (opt) => opt.setName("label").setDescription("The question text shown to the applicant").setRequired(true).setMaxLength(45)
   ).addStringOption(
     (opt) => opt.setName("placeholder").setDescription("Hint text shown inside the answer box").setRequired(false).setMaxLength(100)
-  ).addStringOption(
-    (opt) => opt.setName("style").setDescription("Answer box style (default: short)").setRequired(false).addChoices(
-      { name: "Short (single line)", value: "short" },
-      { name: "Paragraph (multi-line)", value: "paragraph" }
-    )
   )
 ).addSubcommand(
   (sub) => sub.setName("view").setDescription("View the current questions for a game").addStringOption(
@@ -175553,7 +175548,7 @@ async function execute9(interaction) {
     const slot = interaction.options.getInteger("slot", true) - 1;
     const label = interaction.options.getString("label", true).trim();
     const placeholder = interaction.options.getString("placeholder")?.trim() ?? "";
-    const style = interaction.options.getString("style") ?? "short";
+    const style = "paragraph";
     if (entryIdx === -1) {
       const questions = DEFAULT_QUESTIONS.map((q) => ({ ...q }));
       questions[slot] = { label, placeholder, style };
@@ -175577,8 +175572,7 @@ async function execute9(interaction) {
     questions.forEach((q, i) => {
       embed.addFields({
         name: `Q${i + 1}. ${q.label}`,
-        value: `Placeholder: *${q.placeholder || "none"}*
-Style: ${q.style}`
+        value: q.placeholder ? `Placeholder: *${q.placeholder}*` : "*No placeholder*"
       });
     });
     await interaction.reply({ embeds: [embed], ephemeral: true });

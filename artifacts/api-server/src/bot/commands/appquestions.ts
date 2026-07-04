@@ -32,16 +32,6 @@ export const data = new SlashCommandBuilder()
       .addStringOption((opt) =>
         opt.setName("placeholder").setDescription("Hint text shown inside the answer box").setRequired(false).setMaxLength(100)
       )
-      .addStringOption((opt) =>
-        opt
-          .setName("style")
-          .setDescription("Answer box style (default: short)")
-          .setRequired(false)
-          .addChoices(
-            { name: "Short (single line)", value: "short" },
-            { name: "Paragraph (multi-line)", value: "paragraph" }
-          )
-      )
   )
   .addSubcommand((sub) =>
     sub
@@ -89,7 +79,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const slot = interaction.options.getInteger("slot", true) - 1;
     const label = interaction.options.getString("label", true).trim();
     const placeholder = interaction.options.getString("placeholder")?.trim() ?? "";
-    const style = (interaction.options.getString("style") ?? "short") as "short" | "paragraph";
+    const style: "paragraph" = "paragraph";
 
     if (entryIdx === -1) {
       const questions = DEFAULT_QUESTIONS.map((q) => ({ ...q })) as { label: string; placeholder: string; style: "short" | "paragraph" }[];
@@ -122,7 +112,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     questions.forEach((q, i) => {
       embed.addFields({
         name: `Q${i + 1}. ${q.label}`,
-        value: `Placeholder: *${q.placeholder || "none"}*\nStyle: ${q.style}`,
+        value: q.placeholder ? `Placeholder: *${q.placeholder}*` : "*No placeholder*",
       });
     });
 
