@@ -18,6 +18,7 @@ import * as applicationPanelCmd from "./commands/application-panel";
 import * as helperCommandsCmd from "./commands/helpercommands";
 import * as applicationCommandsCmd from "./commands/applicationcommands";
 import * as appQuestionsCmd from "./commands/appquestions";
+import * as ticketRoleCmd from "./commands/ticketrole";
 import { handleButton, handleModalSubmit, handleSelectMenu } from "./interactions";
 import { UserMessageCount } from "./models/UserMessageCount";
 import { deployCommands } from "./deploy-commands";
@@ -32,6 +33,7 @@ const commands = new Map<string, { data: unknown; execute: (i: ChatInputCommandI
   ["helpercommands", helperCommandsCmd],
   ["applicationcommands", applicationCommandsCmd],
   ["appquestions", appQuestionsCmd],
+  ["ticketrole", ticketRoleCmd],
 ]);
 
 export function createBotClient(): Client {

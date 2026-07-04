@@ -8,6 +8,7 @@ import * as applicationPanelCmd from "./commands/application-panel";
 import * as helperCommandsCmd from "./commands/helpercommands";
 import * as applicationCommandsCmd from "./commands/applicationcommands";
 import * as appQuestionsCmd from "./commands/appquestions";
+import * as ticketRoleCmd from "./commands/ticketrole";
 
 export async function deployCommands(guildIds: string[]): Promise<void> {
   const token = process.env["DISCORD_TOKEN"];
@@ -27,6 +28,7 @@ export async function deployCommands(guildIds: string[]): Promise<void> {
     helperCommandsCmd.data.toJSON(),
     applicationCommandsCmd.data.toJSON(),
     appQuestionsCmd.data.toJSON(),
+    ticketRoleCmd.data.toJSON(),
   ];
 
   const rest = new REST({ version: "10" }).setToken(token);

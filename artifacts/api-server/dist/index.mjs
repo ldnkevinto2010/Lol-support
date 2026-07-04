@@ -20336,8 +20336,8 @@ var require_dist = __commonJS({
     }
     function compile(path2, options = {}) {
       const { encode = encodeURIComponent, delimiter = DEFAULT_DELIMITER } = options;
-      const data10 = typeof path2 === "object" ? path2 : parse(path2, options);
-      const fn = tokensToFunction(data10.tokens, delimiter, encode);
+      const data11 = typeof path2 === "object" ? path2 : parse(path2, options);
+      const fn = tokensToFunction(data11.tokens, delimiter, encode);
       return function path3(params = {}) {
         const missing = [];
         const path4 = fn(params, missing);
@@ -20349,10 +20349,10 @@ var require_dist = __commonJS({
     }
     function tokensToFunction(tokens, delimiter, encode) {
       const encoders = tokens.map((token) => tokenToFunction(token, delimiter, encode));
-      return (data10, missing) => {
+      return (data11, missing) => {
         let result = "";
         for (const encoder of encoders) {
-          result += encoder(data10, missing);
+          result += encoder(data11, missing);
         }
         return result;
       };
@@ -20362,9 +20362,9 @@ var require_dist = __commonJS({
         return () => token.value;
       if (token.type === "group") {
         const fn = tokensToFunction(token.tokens, delimiter, encode);
-        return (data10, missing) => {
+        return (data11, missing) => {
           const len = missing.length;
-          const value = fn(data10, missing);
+          const value = fn(data11, missing);
           if (missing.length === len)
             return value;
           missing.length = len;
@@ -20373,8 +20373,8 @@ var require_dist = __commonJS({
       }
       const encodeValue = encode || NOOP_VALUE;
       if (token.type === "wildcard" && encode !== false) {
-        return (data10, missing) => {
-          const value = data10[token.name];
+        return (data11, missing) => {
+          const value = data11[token.name];
           if (value == null) {
             missing.push(token.name);
             return "";
@@ -20394,8 +20394,8 @@ var require_dist = __commonJS({
           return result;
         };
       }
-      return (data10, missing) => {
-        const value = data10[token.name];
+      return (data11, missing) => {
+        const value = data11[token.name];
         if (value == null) {
           missing.push(token.name);
           return "";
@@ -20443,14 +20443,14 @@ var require_dist = __commonJS({
             process2(p);
           return;
         }
-        const data10 = typeof path3 === "object" ? path3 : parse(path3, options);
-        flatten(data10.tokens, 0, [], (tokens) => {
+        const data11 = typeof path3 === "object" ? path3 : parse(path3, options);
+        flatten(data11.tokens, 0, [], (tokens) => {
           if (combinations >= 256) {
-            throw new PathError("Too many path combinations", data10.originalPath);
+            throw new PathError("Too many path combinations", data11.originalPath);
           }
           if (combinations > 0)
             source += "|";
-          source += toRegExpSource(tokens, delimiter, keys, data10.originalPath);
+          source += toRegExpSource(tokens, delimiter, keys, data11.originalPath);
           combinations++;
         });
       }
@@ -20569,8 +20569,8 @@ var require_dist = __commonJS({
       }
       return value;
     }
-    function stringify(data10) {
-      return stringifyTokens(data10.tokens, 0);
+    function stringify(data11) {
+      return stringifyTokens(data11.tokens, 0);
     }
     function stringifyName(name, next) {
       if (!ID.test(name))
@@ -25679,22 +25679,22 @@ var require_sonic_boom = __commonJS({
       }
       return Buffer.concat(bufs, len);
     }
-    function write(data10) {
+    function write(data11) {
       if (this.destroyed) {
         throw new Error("SonicBoom destroyed");
       }
-      data10 = "" + data10;
-      const dataLen = Buffer.byteLength(data10);
+      data11 = "" + data11;
+      const dataLen = Buffer.byteLength(data11);
       const len = this._len + dataLen;
       const bufs = this._bufs;
       if (this.maxLength && len > this.maxLength) {
-        this.emit("drop", data10);
+        this.emit("drop", data11);
         return this._len < this._hwm;
       }
       if (bufs.length === 0 || Buffer.byteLength(bufs[bufs.length - 1]) + dataLen > this.maxWrite) {
-        bufs.push(data10);
+        bufs.push(data11);
       } else {
-        bufs[bufs.length - 1] += data10;
+        bufs[bufs.length - 1] += data11;
       }
       this._len = len;
       if (!this._writing && this._len >= this.minLength) {
@@ -25702,23 +25702,23 @@ var require_sonic_boom = __commonJS({
       }
       return this._len < this._hwm;
     }
-    function writeBuffer(data10) {
+    function writeBuffer(data11) {
       if (this.destroyed) {
         throw new Error("SonicBoom destroyed");
       }
-      const len = this._len + data10.length;
+      const len = this._len + data11.length;
       const bufs = this._bufs;
       const lens = this._lens;
       if (this.maxLength && len > this.maxLength) {
-        this.emit("drop", data10);
+        this.emit("drop", data11);
         return this._len < this._hwm;
       }
-      if (bufs.length === 0 || lens[lens.length - 1] + data10.length > this.maxWrite) {
-        bufs.push([data10]);
-        lens.push(data10.length);
+      if (bufs.length === 0 || lens[lens.length - 1] + data11.length > this.maxWrite) {
+        bufs.push([data11]);
+        lens.push(data11.length);
       } else {
-        bufs[bufs.length - 1].push(data10);
-        lens[lens.length - 1] += data10.length;
+        bufs[bufs.length - 1].push(data11);
+        lens[lens.length - 1] += data11.length;
       }
       this._len = len;
       if (!this._writing && this._len >= this.minLength) {
@@ -26430,7 +26430,7 @@ var require_thread_stream = __commonJS({
           this.worker.postMessage(message, transferList);
         });
       }
-      write(data10) {
+      write(data11) {
         if (this[kImpl].destroyed) {
           error(this, new Error("the worker has exited"));
           return false;
@@ -26439,7 +26439,7 @@ var require_thread_stream = __commonJS({
           error(this, new Error("the worker is ending"));
           return false;
         }
-        if (this[kImpl].flushing && this[kImpl].buf.length + data10.length >= MAX_STRING) {
+        if (this[kImpl].flushing && this[kImpl].buf.length + data11.length >= MAX_STRING) {
           try {
             writeSync(this);
             this[kImpl].flushing = true;
@@ -26448,7 +26448,7 @@ var require_thread_stream = __commonJS({
             return false;
           }
         }
-        this[kImpl].buf += data10;
+        this[kImpl].buf += data11;
         if (this[kImpl].sync) {
           try {
             writeSync(this);
@@ -26561,10 +26561,10 @@ var require_thread_stream = __commonJS({
         });
       }
     }
-    function write(stream, data10, cb) {
+    function write(stream, data11, cb) {
       const current = Atomics.load(stream[kImpl].state, WRITE_INDEX);
-      const length = Buffer.byteLength(data10);
-      stream[kImpl].data.write(data10, current);
+      const length = Buffer.byteLength(data11);
+      stream[kImpl].data.write(data11, current);
       Atomics.store(stream[kImpl].state, WRITE_INDEX, current + length);
       Atomics.notify(stream[kImpl].state, WRITE_INDEX);
       cb();
@@ -26914,8 +26914,8 @@ var require_tools = __commonJS({
       const formatters = this[formattersSym];
       const messageKey = this[messageKeySym];
       const errorKey = this[errorKeySym];
-      let data10 = this[lsCacheSym][num] + time;
-      data10 = data10 + chindings;
+      let data11 = this[lsCacheSym][num] + time;
+      data11 = data11 + chindings;
       let value;
       if (formatters.log) {
         obj = formatters.log(obj);
@@ -26980,14 +26980,14 @@ var require_tools = __commonJS({
         }
       }
       if (this[nestedKeySym] && propStr) {
-        return data10 + this[nestedKeyStrSym] + propStr.slice(1) + "}" + msgStr + end;
+        return data11 + this[nestedKeyStrSym] + propStr.slice(1) + "}" + msgStr + end;
       } else {
-        return data10 + propStr + msgStr + end;
+        return data11 + propStr + msgStr + end;
       }
     }
     function asChindings(instance, bindings) {
       let value;
-      let data10 = instance[chindingsSym];
+      let data11 = instance[chindingsSym];
       const stringify2 = instance[stringifySym];
       const stringifySafe = instance[stringifySafeSym];
       const stringifiers = instance[stringifiersSym];
@@ -27002,10 +27002,10 @@ var require_tools = __commonJS({
           value = serializers[key] ? serializers[key](value) : value;
           value = (stringifiers[key] || wildcardStringifier || stringify2)(value, stringifySafe);
           if (value === void 0) continue;
-          data10 += ',"' + key + '":' + value;
+          data11 += ',"' + key + '":' + value;
         }
       }
-      return data10;
+      return data11;
     }
     function hasBeenTampered(stream) {
       return stream.write !== stream.constructor.prototype.write;
@@ -28221,7 +28221,7 @@ var require_multistream = __commonJS({
       }
       streamsArray = null;
       return res;
-      function write(data10) {
+      function write(data11) {
         let dest;
         const level = this.lastLevel;
         const { streams } = this;
@@ -28242,7 +28242,7 @@ var require_multistream = __commonJS({
               stream.lastObj = lastObj;
               stream.lastLogger = lastLogger;
             }
-            stream.write(data10);
+            stream.write(data11);
             if (opts.dedupe) {
               recordedLevel = dest.level;
             }
@@ -29556,26 +29556,26 @@ var require_bson = __commonJS({
       }
       static fromExtendedJSON(doc, options) {
         options = options || {};
-        let data10;
+        let data11;
         let type;
         if ("$binary" in doc) {
           if (options.legacy && typeof doc.$binary === "string" && "$type" in doc) {
             type = doc.$type ? parseInt(doc.$type, 16) : 0;
-            data10 = ByteUtils.fromBase64(doc.$binary);
+            data11 = ByteUtils.fromBase64(doc.$binary);
           } else {
             if (typeof doc.$binary !== "string") {
               type = doc.$binary.subType ? parseInt(doc.$binary.subType, 16) : 0;
-              data10 = ByteUtils.fromBase64(doc.$binary.base64);
+              data11 = ByteUtils.fromBase64(doc.$binary.base64);
             }
           }
         } else if ("$uuid" in doc) {
           type = 4;
-          data10 = UUID.bytesFromString(doc.$uuid);
+          data11 = UUID.bytesFromString(doc.$uuid);
         }
-        if (!data10) {
+        if (!data11) {
           throw new BSONError(`Unexpected Binary Extended JSON format ${JSON.stringify(doc)}`);
         }
-        return type === BSON_BINARY_SUBTYPE_UUID_NEW ? new UUID(data10) : new _Binary(data10, type);
+        return type === BSON_BINARY_SUBTYPE_UUID_NEW ? new UUID(data11) : new _Binary(data11, type);
       }
       inspect(depth, options, inspect) {
         inspect ??= defaultInspect;
@@ -32421,7 +32421,7 @@ var require_bson = __commonJS({
       const numberOfWrittenBytes = ByteUtils.encodeUTF8Into(buffer2, key, index);
       index = index + numberOfWrittenBytes;
       buffer2[index++] = 0;
-      const data10 = value.buffer;
+      const data11 = value.buffer;
       let size = value.position;
       if (value.sub_type === Binary.SUBTYPE_BYTE_ARRAY)
         size = size + 4;
@@ -32436,9 +32436,9 @@ var require_bson = __commonJS({
       }
       if (size <= 16) {
         for (let i = 0; i < size; i++)
-          buffer2[index + i] = data10[i];
+          buffer2[index + i] = data11[i];
       } else {
-        buffer2.set(data10, index);
+        buffer2.set(data11, index);
       }
       index = index + value.position;
       return index;
@@ -33126,9 +33126,9 @@ var require_bson = __commonJS({
       const ignoreUndefined = typeof options.ignoreUndefined === "boolean" ? options.ignoreUndefined : true;
       return internalCalculateObjectSize(object, serializeFunctions, ignoreUndefined);
     }
-    function deserializeStream(data10, startIndex, numberOfDocuments, documents, docStartIndex, options) {
+    function deserializeStream(data11, startIndex, numberOfDocuments, documents, docStartIndex, options) {
       const internalOptions = Object.assign({ allowObjectSmallerThanBufferSize: true, index: 0 }, options);
-      const bufferData = ByteUtils.toLocalBufferType(data10);
+      const bufferData = ByteUtils.toLocalBufferType(data11);
       let index = startIndex;
       for (let i = 0; i < numberOfDocuments; i++) {
         const size = NumberUtils.getInt32LE(bufferData, index);
@@ -35696,7 +35696,7 @@ var require_utils4 = __commonJS({
     async function once(ee, name, options) {
       options?.signal?.throwIfAborted();
       const { promise, resolve, reject } = promiseWithResolvers();
-      const onEvent = (data10) => resolve(data10);
+      const onEvent = (data11) => resolve(data11);
       const onError = (error) => reject(error);
       const abortListener = addAbortListener(options?.signal, function() {
         reject(this.reason);
@@ -50059,8 +50059,8 @@ var require_compression = __commonJS({
         agreedCompressor: description.agreedCompressor ?? "none",
         zlibCompressionLevel: description.zlibCompressionLevel ?? 0
       });
-      const data10 = await finalCommand.toBin();
-      return bson_1.ByteUtils.concat(data10);
+      const data11 = await finalCommand.toBin();
+      return bson_1.ByteUtils.concat(data11);
     }
     async function decompressResponse(message) {
       const messageHeader = {
@@ -50709,8 +50709,8 @@ var require_state_machine = __commonJS({
             destroySockets();
             rejectOnTlsSocketError(this.reason);
           });
-          socket.once("error", (err) => rejectOnTlsSocketError(onerror(err))).once("close", () => rejectOnTlsSocketError(onclose())).on("data", (data10) => {
-            buffer.append(data10);
+          socket.once("error", (err) => rejectOnTlsSocketError(onerror(err))).once("close", () => rejectOnTlsSocketError(onclose())).on("data", (data11) => {
+            buffer.append(data11);
             while (request.bytesNeeded > 0 && buffer.length) {
               const bytesNeeded = Math.min(request.bytesNeeded, buffer.length);
               request.addResponse(buffer.read(bytesNeeded));
@@ -56281,8 +56281,8 @@ var require_aws4 = __commonJS({
     exports2.aws4Sign = aws4Sign;
     var bson_1 = require_bson2();
     var getHexSha256 = async (str) => {
-      const data10 = stringToBuffer(str);
-      const hashBuffer = await crypto.subtle.digest("SHA-256", data10);
+      const data11 = stringToBuffer(str);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data11);
       const hashHex = bson_1.ByteUtils.toHex(new Uint8Array(hashBuffer));
       return hashHex;
     };
@@ -56303,9 +56303,9 @@ var require_aws4 = __commonJS({
       return value.toString().trim().replace(/\s+/g, " ");
     };
     function stringToBuffer(str) {
-      const data10 = new Uint8Array(bson_1.ByteUtils.utf8ByteLength(str));
-      bson_1.ByteUtils.encodeUTF8Into(data10, str, 0);
-      return data10;
+      const data11 = new Uint8Array(bson_1.ByteUtils.utf8ByteLength(str));
+      bson_1.ByteUtils.encodeUTF8Into(data11, str, 0);
+      return data11;
     }
     async function aws4Sign(options, credentials) {
       const date = options.date;
@@ -57378,12 +57378,12 @@ var require_memory_code_points = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.createMemoryCodePoints = createMemoryCodePoints;
     var sparse_bitfield_1 = __importDefault2(require_sparse_bitfield());
-    function createMemoryCodePoints(data10) {
+    function createMemoryCodePoints(data11) {
       let offset = 0;
       function read() {
-        const size = data10.readUInt32BE(offset);
+        const size = data11.readUInt32BE(offset);
         offset += 4;
-        const codepoints = data10.slice(offset, offset + size);
+        const codepoints = data11.slice(offset, offset + size);
         offset += size;
         return (0, sparse_bitfield_1.default)({ buffer: codepoints });
       }
@@ -57641,12 +57641,12 @@ var require_scram = __commonJS({
       sha256: 32,
       sha1: 20
     };
-    async function HI(data10, salt, iterations, cryptoMethod) {
-      const key = [data10, bson_1.ByteUtils.toBase64(salt), iterations].join("_");
+    async function HI(data11, salt, iterations, cryptoMethod) {
+      const key = [data11, bson_1.ByteUtils.toBase64(salt), iterations].join("_");
       if (_hiCache[key] != null) {
         return _hiCache[key];
       }
-      const keyMaterial = await crypto.subtle.importKey("raw", new TextEncoder().encode(data10), { name: "PBKDF2" }, false, ["deriveBits"]);
+      const keyMaterial = await crypto.subtle.importKey("raw", new TextEncoder().encode(data11), { name: "PBKDF2" }, false, ["deriveBits"]);
       const params = {
         name: "PBKDF2",
         salt,
@@ -60592,12 +60592,12 @@ var require_upload = __commonJS({
       stream.state.errored = true;
       queueMicrotask(() => callback(error));
     }
-    function createChunkDoc(filesId, n, data10) {
+    function createChunkDoc(filesId, n, data11) {
       return {
         _id: new bson_1.ObjectId(),
         files_id: filesId,
         n,
-        data: data10
+        data: data11
       };
     }
     async function checkChunksIndex(stream) {
@@ -62133,11 +62133,11 @@ var require_changeStream = __commonJS({
                 this.closed = true;
               });
               driverChangeStreamEvents.forEach((ev) => {
-                this.driverChangeStream.on(ev, (data10) => {
-                  if (data10?.fullDocument != null && this.options?.hydrate) {
-                    data10.fullDocument = this.options.model.hydrate(data10.fullDocument);
+                this.driverChangeStream.on(ev, (data11) => {
+                  if (data11?.fullDocument != null && this.options?.hydrate) {
+                    data11.fullDocument = this.options.model.hydrate(data11.fullDocument);
                   }
-                  this.emit(ev, data10);
+                  this.emit(ev, data11);
                 });
               });
             },
@@ -62151,11 +62151,11 @@ var require_changeStream = __commonJS({
           this.closed = true;
         });
         driverChangeStreamEvents.forEach((ev) => {
-          this.driverChangeStream.on(ev, (data10) => {
-            if (data10?.fullDocument != null && this.options?.hydrate) {
-              data10.fullDocument = this.options.model.hydrate(data10.fullDocument);
+          this.driverChangeStream.on(ev, (data11) => {
+            if (data11?.fullDocument != null && this.options?.hydrate) {
+              data11.fullDocument = this.options.model.hydrate(data11.fullDocument);
             }
-            this.emit(ev, data10);
+            this.emit(ev, data11);
           });
         });
       }
@@ -62183,14 +62183,14 @@ var require_changeStream = __commonJS({
         if (this.options?.hydrate) {
           if (cb != null) {
             const originalCb = cb;
-            cb = (err, data10) => {
+            cb = (err, data11) => {
               if (err != null) {
                 return originalCb(err);
               }
-              if (data10.fullDocument != null) {
-                data10.fullDocument = this.options.model.hydrate(data10.fullDocument);
+              if (data11.fullDocument != null) {
+                data11.fullDocument = this.options.model.hydrate(data11.fullDocument);
               }
-              return originalCb(null, data10);
+              return originalCb(null, data11);
             };
           }
           let maybePromise;
@@ -62208,11 +62208,11 @@ var require_changeStream = __commonJS({
             );
           }
           if (typeof maybePromise?.then === "function") {
-            maybePromise = maybePromise.then((data10) => {
-              if (data10.fullDocument != null) {
-                data10.fullDocument = this.options.model.hydrate(data10.fullDocument);
+            maybePromise = maybePromise.then((data11) => {
+              if (data11.fullDocument != null) {
+                data11.fullDocument = this.options.model.hydrate(data11.fullDocument);
               }
-              return data10;
+              return data11;
             });
           }
           return maybePromise;
@@ -69906,11 +69906,11 @@ var require_document2 = __commonJS({
       if (pathsToSave != null) {
         dirty = [];
         unsavedDirty = [];
-        for (const data10 of allDirty) {
-          if (isInPathsToSave(data10.path, pathsToSaveSet, pathsToSave)) {
-            dirty.push(data10);
+        for (const data11 of allDirty) {
+          if (isInPathsToSave(data11.path, pathsToSaveSet, pathsToSave)) {
+            dirty.push(data11);
           } else {
-            unsavedDirty.push(data10);
+            unsavedDirty.push(data11);
           }
         }
       }
@@ -69953,52 +69953,52 @@ var require_document2 = __commonJS({
         where._id = where._id.toObject({ transform: false, depopulate: true });
       }
       for (; d < len; ++d) {
-        const data10 = dirty[d];
-        let value = data10.value;
-        const match = checkDivergentArray(this, data10.path, value);
+        const data11 = dirty[d];
+        let value = data11.value;
+        const match = checkDivergentArray(this, data11.path, value);
         if (match) {
           divergent.push(match);
           continue;
         }
-        const pop = this.$populated(data10.path, true);
+        const pop = this.$populated(data11.path, true);
         if (!pop && this.$__.selected) {
-          const pathSplit = data10.path.split(".");
+          const pathSplit = data11.path.split(".");
           const top = pathSplit[0];
           if (this.$__.selected[top] && this.$__.selected[top].$elemMatch) {
             if (pathSplit.length > 1 && pathSplit[1] == 0 && typeof where[top] === "undefined") {
               where[top] = this.$__.selected[top];
               pathSplit[1] = "$";
-              data10.path = pathSplit.join(".");
+              data11.path = pathSplit.join(".");
             } else {
-              divergent.push(data10.path);
+              divergent.push(data11.path);
               continue;
             }
           }
         }
-        if (this.$isDefault(data10.path) && this.$__.selected) {
-          if (data10.path.indexOf(".") === -1 && isPathExcluded(this.$__.selected, data10.path)) {
+        if (this.$isDefault(data11.path) && this.$__.selected) {
+          if (data11.path.indexOf(".") === -1 && isPathExcluded(this.$__.selected, data11.path)) {
             continue;
           }
-          const pathsToCheck = parentPaths(data10.path);
+          const pathsToCheck = parentPaths(data11.path);
           if (pathsToCheck.find((path2) => isPathExcluded(this.$__.isSelected, path2))) {
             continue;
           }
         }
         if (divergent.length) continue;
         if (value === void 0) {
-          operand(this, where, delta, data10, 1, "$unset");
+          operand(this, where, delta, data11, 1, "$unset");
         } else if (value === null) {
-          operand(this, where, delta, data10, null);
+          operand(this, where, delta, data11, null);
         } else if (typeof value.getAtomics === "function") {
-          handleAtomics(this, where, delta, data10, value);
+          handleAtomics(this, where, delta, data11, value);
         } else if (value[MongooseBuffer.pathSymbol] && Buffer.isBuffer(value)) {
           value = value.toObject();
-          operand(this, where, delta, data10, value);
+          operand(this, where, delta, data11, value);
         } else {
-          if (this.$__.primitiveAtomics?.[data10.path] != null) {
-            const val = this.$__.primitiveAtomics[data10.path];
+          if (this.$__.primitiveAtomics?.[data11.path] != null) {
+            const val = this.$__.primitiveAtomics[data11.path];
             const op = firstKey(val);
-            operand(this, where, delta, data10, val[op], op);
+            operand(this, where, delta, data11, val[op], op);
           } else {
             value = clone(value, {
               depopulate: true,
@@ -70008,7 +70008,7 @@ var require_document2 = __commonJS({
               omitUndefined: true,
               _isNested: true
             });
-            operand(this, where, delta, data10, value);
+            operand(this, where, delta, data11, value);
           }
         }
       }
@@ -70049,12 +70049,12 @@ var require_document2 = __commonJS({
         }
       }
     }
-    function operand(self2, where, delta, data10, val, op) {
+    function operand(self2, where, delta, data11, val, op) {
       op || (op = "$set");
       if (!delta[op]) delta[op] = {};
-      delta[op][data10.path] = val;
+      delta[op][data11.path] = val;
       if (self2.$__schema.options.versionKey === false) return;
-      if (shouldSkipVersioning(self2, data10.path)) return;
+      if (shouldSkipVersioning(self2, data11.path)) return;
       if (VERSION_ALL === (VERSION_ALL & self2.$__.version)) return;
       if (self2.$__schema.options.optimisticConcurrency === true || Array.isArray(self2.$__schema.options.optimisticConcurrency) || Array.isArray(self2.$__schema.options.optimisticConcurrency?.exclude)) {
         return;
@@ -70073,7 +70073,7 @@ var require_document2 = __commonJS({
           return;
       }
       if (op === "$push" || op === "$addToSet" || op === "$pullAll" || op === "$pull") {
-        if (/\.\d+\.|\.\d+$/.test(data10.path)) {
+        if (/\.\d+\.|\.\d+$/.test(data11.path)) {
           self2.$__.version = VERSION_ALL;
         } else {
           self2.$__.version |= VERSION_INC;
@@ -70082,19 +70082,19 @@ var require_document2 = __commonJS({
         self2.$__.version = VERSION_ALL;
       } else if (Array.isArray(val)) {
         self2.$__.version = VERSION_ALL;
-      } else if (/\.\d+\.|\.\d+$/.test(data10.path)) {
+      } else if (/\.\d+\.|\.\d+$/.test(data11.path)) {
         self2.$__.version |= VERSION_WHERE;
       }
     }
-    function handleAtomics(self2, where, delta, data10, value) {
-      if (delta.$set?.[data10.path]) {
+    function handleAtomics(self2, where, delta, data11, value) {
+      if (delta.$set?.[data11.path]) {
         return;
       }
       if (typeof value.getAtomics === "function") {
         value.getAtomics().forEach(function(atomic) {
           const op2 = atomic[0];
           const val2 = atomic[1];
-          operand(self2, where, delta, data10, val2, op2);
+          operand(self2, where, delta, data11, val2, op2);
         });
         return;
       }
@@ -70102,7 +70102,7 @@ var require_document2 = __commonJS({
         value.$__getAtomics().forEach(function(atomic) {
           const op2 = atomic[0];
           const val2 = atomic[1];
-          operand(self2, where, delta, data10, val2, op2);
+          operand(self2, where, delta, data11, val2, op2);
         });
         return;
       }
@@ -70117,7 +70117,7 @@ var require_document2 = __commonJS({
         } else if (value.valueOf) {
           value = value.valueOf();
         }
-        return operand(self2, where, delta, data10, value);
+        return operand(self2, where, delta, data11, value);
       }
       function iter(mem) {
         return utils.isMongooseObject(mem) ? mem.toObject({ depopulate: 1, _isNested: true }) : mem;
@@ -70135,7 +70135,7 @@ var require_document2 = __commonJS({
         if (op === "$addToSet") {
           val = { $each: val };
         }
-        operand(self2, where, delta, data10, val, op);
+        operand(self2, where, delta, data11, val, op);
       }
     }
     function shouldSkipVersioning(self2, path2) {
@@ -82104,9 +82104,9 @@ var require_connection3 = __commonJS({
         }
       });
       if (options.monitorCommands) {
-        client.on("commandStarted", (data10) => conn.emit("commandStarted", data10));
-        client.on("commandFailed", (data10) => conn.emit("commandFailed", data10));
-        client.on("commandSucceeded", (data10) => conn.emit("commandSucceeded", data10));
+        client.on("commandStarted", (data11) => conn.emit("commandStarted", data11));
+        client.on("commandFailed", (data11) => conn.emit("commandFailed", data11));
+        client.on("commandSucceeded", (data11) => conn.emit("commandSucceeded", data11));
       }
       conn.onOpen();
       for (const i in conn.collections) {
@@ -90160,7 +90160,7 @@ var require_getModelsMapForPopulate = __commonJS({
         let modelNamesInOrder = null;
         if (schema?.instance === "Embedded") {
           if (schema.options.ref) {
-            const data11 = {
+            const data12 = {
               localField: options.path + "._id",
               foreignField: "_id",
               justOne: true
@@ -90168,7 +90168,7 @@ var require_getModelsMapForPopulate = __commonJS({
             const res = _getModelNames(doc, schema, modelNameFromQuery, model);
             const unpopulatedValue = mpath.get(options.path, doc);
             const id2 = mpath.get("_id", unpopulatedValue);
-            addModelNamesToMap(model, map, available, res.modelNames, options, data11, id2, doc, schemaOptions, unpopulatedValue);
+            addModelNamesToMap(model, map, available, res.modelNames, options, data12, id2, doc, schemaOptions, unpopulatedValue);
           }
           continue;
         }
@@ -90220,7 +90220,7 @@ var require_getModelsMapForPopulate = __commonJS({
             continue;
           }
         }
-        const data10 = {};
+        const data11 = {};
         const localField = options.path;
         const foreignField = "_id";
         if ("justOne" in options && options.justOne !== void 0) {
@@ -90233,10 +90233,10 @@ var require_getModelsMapForPopulate = __commonJS({
         if (!modelNames) {
           continue;
         }
-        data10.isVirtual = false;
-        data10.justOne = justOne;
-        data10.localField = localField;
-        data10.foreignField = foreignField;
+        data11.isVirtual = false;
+        data11.justOne = justOne;
+        data11.localField = localField;
+        data11.foreignField = foreignField;
         const ret = _getLocalFieldValues(doc, localField, model, options, null, schema);
         const id = String(utils.getValue(foreignField, doc));
         options._docs[id] = Array.isArray(ret) ? ret.slice() : ret;
@@ -90246,16 +90246,16 @@ var require_getModelsMapForPopulate = __commonJS({
           match = match.call(doc, doc);
         }
         throwOn$where(match);
-        data10.match = match;
-        data10.hasMatchFunction = hasMatchFunction;
-        data10.isRefPath = isRefPath;
-        data10.modelNamesInOrder = modelNamesInOrder;
+        data11.match = match;
+        data11.hasMatchFunction = hasMatchFunction;
+        data11.isRefPath = isRefPath;
+        data11.modelNamesInOrder = modelNamesInOrder;
         if (isRefPath) {
           const normalizedRefPathForDiscriminators = typeof normalizedRefPath === "string" ? normalizedRefPath.replace(numericPathSegmentRE, "") : normalizedRefPath;
           const embeddedDiscriminatorModelNames = _findRefPathForDiscriminators(
             doc,
             modelSchema,
-            data10,
+            data11,
             options,
             normalizedRefPathForDiscriminators,
             ret
@@ -90263,7 +90263,7 @@ var require_getModelsMapForPopulate = __commonJS({
           modelNames = embeddedDiscriminatorModelNames || modelNames;
         }
         try {
-          addModelNamesToMap(model, map, available, modelNames, options, data10, ret, doc, schemaOptions);
+          addModelNamesToMap(model, map, available, modelNames, options, data11, ret, doc, schemaOptions);
         } catch (err) {
           return err;
         }
@@ -90450,7 +90450,7 @@ var require_getModelsMapForPopulate = __commonJS({
       const virtual = _virtualRes.virtual;
       for (const doc of docs) {
         let modelNames = null;
-        const data10 = {};
+        const data11 = {};
         let localField;
         const virtualPrefix = _virtualRes.nestedSchemaPath ? _virtualRes.nestedSchemaPath + "." : "";
         if (typeof options.localField === "string") {
@@ -90462,7 +90462,7 @@ var require_getModelsMapForPopulate = __commonJS({
         } else {
           localField = virtualPrefix + virtual.options.localField;
         }
-        data10.count = virtual.options.count;
+        data11.count = virtual.options.count;
         if (virtual.options.skip != null && !Object.hasOwn(options, "skip")) {
           options.skip = virtual.options.skip;
         }
@@ -90482,7 +90482,7 @@ var require_getModelsMapForPopulate = __commonJS({
         if (typeof foreignField === "function") {
           foreignField = foreignField.call(doc, doc);
         }
-        data10.isRefPath = false;
+        data11.isRefPath = false;
         let justOne = null;
         if ("justOne" in options && options.justOne !== void 0) {
           justOne = options.justOne;
@@ -90495,18 +90495,18 @@ var require_getModelsMapForPopulate = __commonJS({
         }
         if (virtual.options.refPath) {
           justOne = !!virtual.options.justOne;
-          data10.isRefPath = true;
+          data11.isRefPath = true;
         } else if (virtual.options.ref) {
           justOne = !!virtual.options.justOne;
         }
-        data10.isVirtual = true;
-        data10.virtual = virtual;
-        data10.justOne = justOne;
-        const baseMatch = get(data10, "virtual.options.match", null) || get(data10, "virtual.options.options.match", null);
+        data11.isVirtual = true;
+        data11.virtual = virtual;
+        data11.justOne = justOne;
+        const baseMatch = get(data11, "virtual.options.match", null) || get(data11, "virtual.options.options.match", null);
         let match = get(options, "match", null) || baseMatch;
         let hasMatchFunction = typeof match === "function";
         if (hasMatchFunction) {
-          match = match.call(doc, doc, data10.virtual);
+          match = match.call(doc, doc, data11.virtual);
         }
         if (Array.isArray(localField) && Array.isArray(foreignField) && localField.length === foreignField.length) {
           match = Object.assign({}, match);
@@ -90517,21 +90517,21 @@ var require_getModelsMapForPopulate = __commonJS({
           localField = localField[0];
           foreignField = foreignField[0];
         }
-        data10.localField = localField;
-        data10.foreignField = foreignField;
-        data10.match = match;
-        data10.hasMatchFunction = hasMatchFunction;
+        data11.localField = localField;
+        data11.foreignField = foreignField;
+        data11.match = match;
+        data11.hasMatchFunction = hasMatchFunction;
         throwOn$where(match);
         const ret = _getLocalFieldValues(doc, localField, model, options, virtual);
         try {
-          addModelNamesToMap(model, map, available, modelNames, options, data10, ret, doc);
+          addModelNamesToMap(model, map, available, modelNames, options, data11, ret, doc);
         } catch (err) {
           return err;
         }
       }
       return map;
     }
-    function addModelNamesToMap(model, map, available, modelNames, options, data10, ret, doc, schemaOptions, unpopulatedValue) {
+    function addModelNamesToMap(model, map, available, modelNames, options, data11, ret, doc, schemaOptions, unpopulatedValue) {
       const connection = options.connection ?? model.db;
       unpopulatedValue = unpopulatedValue === void 0 ? ret : unpopulatedValue;
       if (Array.isArray(unpopulatedValue)) {
@@ -90564,16 +90564,16 @@ var require_getModelsMapForPopulate = __commonJS({
           }
         }
         let ids = ret;
-        const modelNamesForRefPath = data10.modelNamesInOrder || modelNames;
-        if (data10.isRefPath && Array.isArray(ret) && ret.length === modelNamesForRefPath.length) {
+        const modelNamesForRefPath = data11.modelNamesInOrder || modelNames;
+        if (data11.isRefPath && Array.isArray(ret) && ret.length === modelNamesForRefPath.length) {
           ids = matchIdsToRefPaths(ret, modelNamesForRefPath, modelName);
         }
         if (!available[modelName]) {
           const currentOptions = {
             model: Model
           };
-          if (data10.isVirtual && get(data10.virtual, "options.options")) {
-            currentOptions.options = clone(data10.virtual.options.options);
+          if (data11.isVirtual && get(data11.virtual, "options.options")) {
+            currentOptions.options = clone(data11.virtual.options.options);
           } else if (schemaOptions != null) {
             currentOptions.options = Object.assign({}, schemaOptions);
           }
@@ -90583,31 +90583,31 @@ var require_getModelsMapForPopulate = __commonJS({
           available[modelName] = {
             model: Model,
             options: currentOptions,
-            match: data10.hasMatchFunction ? [data10.match] : data10.match,
+            match: data11.hasMatchFunction ? [data11.match] : data11.match,
             docs: [doc],
             ids: [ids],
             allIds: [ret],
             unpopulatedValues: [unpopulatedValue],
-            localField: /* @__PURE__ */ new Set([data10.localField]),
-            foreignField: /* @__PURE__ */ new Set([data10.foreignField]),
-            justOne: data10.justOne,
-            isVirtual: data10.isVirtual,
-            virtual: data10.virtual,
-            count: data10.count,
-            isRefPath: !!data10.isRefPath,
+            localField: /* @__PURE__ */ new Set([data11.localField]),
+            foreignField: /* @__PURE__ */ new Set([data11.foreignField]),
+            justOne: data11.justOne,
+            isVirtual: data11.isVirtual,
+            virtual: data11.virtual,
+            count: data11.count,
+            isRefPath: !!data11.isRefPath,
             [populateModelSymbol]: Model
           };
           map.push(available[modelName]);
         } else {
-          available[modelName].localField.add(data10.localField);
-          available[modelName].foreignField.add(data10.foreignField);
+          available[modelName].localField.add(data11.localField);
+          available[modelName].foreignField.add(data11.foreignField);
           available[modelName].docs.push(doc);
           available[modelName].ids.push(ids);
           available[modelName].allIds.push(ret);
           available[modelName].unpopulatedValues.push(unpopulatedValue);
-          available[modelName].isRefPath = available[modelName].isRefPath || !!data10.isRefPath;
-          if (data10.hasMatchFunction) {
-            available[modelName].match.push(data10.match);
+          available[modelName].isRefPath = available[modelName].isRefPath || !!data11.isRefPath;
+          if (data11.hasMatchFunction) {
+            available[modelName].match.push(data11.match);
           }
         }
       }
@@ -90686,8 +90686,8 @@ var require_getModelsMapForPopulate = __commonJS({
       }
       return val;
     }
-    function _findRefPathForDiscriminators(doc, modelSchema, data10, options, normalizedRefPath, ret) {
-      if (!data10.isRefPath || normalizedRefPath == null) {
+    function _findRefPathForDiscriminators(doc, modelSchema, data11, options, normalizedRefPath, ret) {
+      if (!data11.isRefPath || normalizedRefPath == null) {
         return;
       }
       const pieces = normalizedRefPath.split(".");
@@ -90711,7 +90711,7 @@ var require_getModelsMapForPopulate = __commonJS({
             }
             const _path = discriminatorSchema.path(remnant);
             if (_path == null || _path.options.refPath == null) {
-              const docValue = utils.getValue(data10.localField.substring(cur.length + 1), subdoc);
+              const docValue = utils.getValue(data11.localField.substring(cur.length + 1), subdoc);
               ret.forEach((v, i2) => {
                 if (v === docValue) {
                   ret[i2] = SkipPopulateValue(v);
@@ -94462,9 +94462,9 @@ var require_dist3 = __commonJS({
     }
     __name(isEquatable, "isEquatable");
     var GatewayRateLimitError = class _GatewayRateLimitError extends Error {
-      constructor(data10, payload) {
-        super(`Request with opcode ${data10.opcode} was rate limited. Retry after ${data10.retry_after} seconds.`);
-        this.data = data10;
+      constructor(data11, payload) {
+        super(`Request with opcode ${data11.opcode} was rate limited. Retry after ${data11.retry_after} seconds.`);
+        this.data = data11;
         this.payload = payload;
       }
       static {
@@ -95318,11 +95318,11 @@ var require_errors3 = __commonJS({
     };
     var kHTTPParserError = /* @__PURE__ */ Symbol.for("undici.error.UND_ERR_HTTP_PARSER");
     var HTTPParserError = class extends Error {
-      constructor(message, code, data10) {
+      constructor(message, code, data11) {
         super(message);
         this.name = "HTTPParserError";
         this.code = code ? `HPE_${code}` : void 0;
-        this.data = data10 ? data10.toString() : void 0;
+        this.data = data11 ? data11.toString() : void 0;
       }
       static [Symbol.hasInstance](instance) {
         return instance && instance[kHTTPParserError] === true;
@@ -95344,13 +95344,13 @@ var require_errors3 = __commonJS({
     };
     var kRequestRetryError = /* @__PURE__ */ Symbol.for("undici.error.UND_ERR_REQ_RETRY");
     var RequestRetryError = class extends UndiciError {
-      constructor(message, code, { headers, data: data10 }) {
+      constructor(message, code, { headers, data: data11 }) {
         super(message);
         this.name = "RequestRetryError";
         this.message = message || "Request retry error";
         this.code = "UND_ERR_REQ_RETRY";
         this.statusCode = code;
-        this.data = data10;
+        this.data = data11;
         this.headers = headers;
       }
       static [Symbol.hasInstance](instance) {
@@ -95360,13 +95360,13 @@ var require_errors3 = __commonJS({
     };
     var kResponseError = /* @__PURE__ */ Symbol.for("undici.error.UND_ERR_RESPONSE");
     var ResponseError = class extends UndiciError {
-      constructor(message, code, { headers, data: data10 }) {
+      constructor(message, code, { headers, data: data11 }) {
         super(message);
         this.name = "ResponseError";
         this.message = message || "Response error";
         this.code = "UND_ERR_RESPONSE";
         this.statusCode = code;
-        this.data = data10;
+        this.data = data11;
         this.headers = headers;
       }
       static [Symbol.hasInstance](instance) {
@@ -96811,8 +96811,8 @@ var require_dispatcher_base = __commonJS({
       close(callback) {
         if (callback === void 0) {
           return new Promise((resolve, reject) => {
-            this.close((err, data10) => {
-              return err ? reject(err) : resolve(data10);
+            this.close((err, data11) => {
+              return err ? reject(err) : resolve(data11);
             });
           });
         }
@@ -96851,11 +96851,11 @@ var require_dispatcher_base = __commonJS({
         }
         if (callback === void 0) {
           return new Promise((resolve, reject) => {
-            this.destroy(err, (err2, data10) => {
+            this.destroy(err, (err2, data11) => {
               return err2 ? (
                 /* istanbul ignore next: should never error */
                 reject(err2)
-              ) : resolve(data10);
+              ) : resolve(data11);
             });
           });
         }
@@ -98140,13 +98140,13 @@ var require_data_url = __commonJS({
       }
       return mimeType;
     }
-    function forgivingBase64(data10) {
-      data10 = data10.replace(ASCII_WHITESPACE_REPLACE_REGEX, "");
-      let dataLength = data10.length;
+    function forgivingBase64(data11) {
+      data11 = data11.replace(ASCII_WHITESPACE_REPLACE_REGEX, "");
+      let dataLength = data11.length;
       if (dataLength % 4 === 0) {
-        if (data10.charCodeAt(dataLength - 1) === 61) {
+        if (data11.charCodeAt(dataLength - 1) === 61) {
           --dataLength;
-          if (data10.charCodeAt(dataLength - 1) === 61) {
+          if (data11.charCodeAt(dataLength - 1) === 61) {
             --dataLength;
           }
         }
@@ -98154,10 +98154,10 @@ var require_data_url = __commonJS({
       if (dataLength % 4 === 1) {
         return "failure";
       }
-      if (/[^+/0-9A-Za-z]/.test(data10.length === dataLength ? data10 : data10.substring(0, dataLength))) {
+      if (/[^+/0-9A-Za-z]/.test(data11.length === dataLength ? data11 : data11.substring(0, dataLength))) {
         return "failure";
       }
-      const buffer = Buffer.from(data10, "base64");
+      const buffer = Buffer.from(data11, "base64");
       return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     }
     function collectAnHTTPQuotedString(input, position, extractValue) {
@@ -99335,26 +99335,26 @@ var require_util2 = __commonJS({
       return protocol === "http:" || protocol === "https:";
     }
     function simpleRangeHeaderValue(value, allowWhitespace) {
-      const data10 = value;
-      if (!data10.startsWith("bytes")) {
+      const data11 = value;
+      if (!data11.startsWith("bytes")) {
         return "failure";
       }
       const position = { position: 5 };
       if (allowWhitespace) {
         collectASequenceOfCodePoints(
           (char) => char === "	" || char === " ",
-          data10,
+          data11,
           position
         );
       }
-      if (data10.charCodeAt(position.position) !== 61) {
+      if (data11.charCodeAt(position.position) !== 61) {
         return "failure";
       }
       position.position++;
       if (allowWhitespace) {
         collectASequenceOfCodePoints(
           (char) => char === "	" || char === " ",
-          data10,
+          data11,
           position
         );
       }
@@ -99363,25 +99363,25 @@ var require_util2 = __commonJS({
           const code = char.charCodeAt(0);
           return code >= 48 && code <= 57;
         },
-        data10,
+        data11,
         position
       );
       const rangeStartValue = rangeStart.length ? Number(rangeStart) : null;
       if (allowWhitespace) {
         collectASequenceOfCodePoints(
           (char) => char === "	" || char === " ",
-          data10,
+          data11,
           position
         );
       }
-      if (data10.charCodeAt(position.position) !== 45) {
+      if (data11.charCodeAt(position.position) !== 45) {
         return "failure";
       }
       position.position++;
       if (allowWhitespace) {
         collectASequenceOfCodePoints(
           (char) => char === "	" || char === " ",
-          data10,
+          data11,
           position
         );
       }
@@ -99390,11 +99390,11 @@ var require_util2 = __commonJS({
           const code = char.charCodeAt(0);
           return code >= 48 && code <= 57;
         },
-        data10,
+        data11,
         position
       );
       const rangeEndValue = rangeEnd.length ? Number(rangeEnd) : null;
-      if (position.position < data10.length) {
+      if (position.position < data11.length) {
         return "failure";
       }
       if (rangeEndValue === null && rangeStartValue === null) {
@@ -100340,9 +100340,9 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       throwIfAborted(object[kState]);
       const promise = createDeferredPromise();
       const errorSteps = (error) => promise.reject(error);
-      const successSteps = (data10) => {
+      const successSteps = (data11) => {
         try {
-          promise.resolve(convertBytesToJSValue(data10));
+          promise.resolve(convertBytesToJSValue(data11));
         } catch (e) {
           errorSteps(e);
         }
@@ -100575,25 +100575,25 @@ var require_client_h1 = __commonJS({
           this.execute(chunk);
         }
       }
-      execute(data10) {
+      execute(data11) {
         assert(this.ptr != null);
         assert(currentParser == null);
         assert(!this.paused);
         const { socket, llhttp } = this;
-        if (data10.length > currentBufferSize) {
+        if (data11.length > currentBufferSize) {
           if (currentBufferPtr) {
             llhttp.free(currentBufferPtr);
           }
-          currentBufferSize = Math.ceil(data10.length / 4096) * 4096;
+          currentBufferSize = Math.ceil(data11.length / 4096) * 4096;
           currentBufferPtr = llhttp.malloc(currentBufferSize);
         }
-        new Uint8Array(llhttp.memory.buffer, currentBufferPtr, currentBufferSize).set(data10);
+        new Uint8Array(llhttp.memory.buffer, currentBufferPtr, currentBufferSize).set(data11);
         try {
           let ret;
           try {
-            currentBufferRef = data10;
+            currentBufferRef = data11;
             currentParser = this;
-            ret = llhttp.llhttp_execute(this.ptr, currentBufferPtr, data10.length);
+            ret = llhttp.llhttp_execute(this.ptr, currentBufferPtr, data11.length);
           } catch (err) {
             throw err;
           } finally {
@@ -100602,10 +100602,10 @@ var require_client_h1 = __commonJS({
           }
           const offset = llhttp.llhttp_get_error_pos(this.ptr) - currentBufferPtr;
           if (ret === constants.ERROR.PAUSED_UPGRADE) {
-            this.onUpgrade(data10.slice(offset));
+            this.onUpgrade(data11.slice(offset));
           } else if (ret === constants.ERROR.PAUSED) {
             this.paused = true;
-            socket.unshift(data10.slice(offset));
+            socket.unshift(data11.slice(offset));
           } else if (ret !== constants.ERROR.OK) {
             const ptr = llhttp.llhttp_get_error_reason(this.ptr);
             let message = "";
@@ -100613,7 +100613,7 @@ var require_client_h1 = __commonJS({
               const len = new Uint8Array(llhttp.memory.buffer, ptr).indexOf(0);
               message = "Response does not match the HTTP/1.1 protocol (" + Buffer.from(llhttp.memory.buffer, ptr, len).toString() + ")";
             }
-            throw new HTTPParserError(message, constants.ERROR[ret], data10.slice(offset));
+            throw new HTTPParserError(message, constants.ERROR[ret], data11.slice(offset));
           }
         } catch (err) {
           util2.destroy(socket, err);
@@ -102642,8 +102642,8 @@ var require_fixed_queue = __commonJS({
       isFull() {
         return (this.top + 1 & kMask) === this.bottom;
       }
-      push(data10) {
-        this.list[this.top] = data10;
+      push(data11) {
+        this.list[this.top] = data11;
         this.top = this.top + 1 & kMask;
       }
       shift() {
@@ -102662,11 +102662,11 @@ var require_fixed_queue = __commonJS({
       isEmpty() {
         return this.head.isEmpty();
       }
-      push(data10) {
+      push(data11) {
         if (this.head.isFull()) {
           this.head = this.head.next = new FixedCircularBuffer();
         }
-        this.head.push(data10);
+        this.head.push(data11);
       }
       shift() {
         const tail = this.tail;
@@ -103248,14 +103248,14 @@ var require_proxy_agent = __commonJS({
       }
       [kDispatch](opts, handler) {
         const onHeaders = handler.onHeaders;
-        handler.onHeaders = function(statusCode, data10, resume) {
+        handler.onHeaders = function(statusCode, data11, resume) {
           if (statusCode === 407) {
             if (typeof handler.onError === "function") {
               handler.onError(new InvalidArgumentError("Proxy Authentication Required (407)"));
             }
             return;
           }
-          if (onHeaders) onHeaders.call(this, statusCode, data10, resume);
+          if (onHeaders) onHeaders.call(this, statusCode, data11, resume);
         };
         const {
           origin,
@@ -104411,8 +104411,8 @@ var require_api_request = __commonJS({
     function request(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          request.call(this, opts, (err, data10) => {
-            return err ? reject(err) : resolve(data10);
+          request.call(this, opts, (err, data11) => {
+            return err ? reject(err) : resolve(data11);
           });
         });
       }
@@ -104636,8 +104636,8 @@ var require_api_stream = __commonJS({
     function stream(opts, factory, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          stream.call(this, opts, factory, (err, data10) => {
-            return err ? reject(err) : resolve(data10);
+          stream.call(this, opts, factory, (err, data11) => {
+            return err ? reject(err) : resolve(data11);
           });
         });
       }
@@ -104923,8 +104923,8 @@ var require_api_upgrade = __commonJS({
     function upgrade(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          upgrade.call(this, opts, (err, data10) => {
-            return err ? reject(err) : resolve(data10);
+          upgrade.call(this, opts, (err, data11) => {
+            return err ? reject(err) : resolve(data11);
           });
         });
       }
@@ -105017,8 +105017,8 @@ var require_api_connect = __commonJS({
     function connect(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          connect.call(this, opts, (err, data10) => {
-            return err ? reject(err) : resolve(data10);
+          connect.call(this, opts, (err, data11) => {
+            return err ? reject(err) : resolve(data11);
           });
         });
       }
@@ -105202,17 +105202,17 @@ var require_mock_utils = __commonJS({
       const headersMatch = matchHeaders(mockDispatch2, headers);
       return pathMatch && methodMatch && bodyMatch && headersMatch;
     }
-    function getResponseData(data10) {
-      if (Buffer.isBuffer(data10)) {
-        return data10;
-      } else if (data10 instanceof Uint8Array) {
-        return data10;
-      } else if (data10 instanceof ArrayBuffer) {
-        return data10;
-      } else if (typeof data10 === "object") {
-        return JSON.stringify(data10);
+    function getResponseData(data11) {
+      if (Buffer.isBuffer(data11)) {
+        return data11;
+      } else if (data11 instanceof Uint8Array) {
+        return data11;
+      } else if (data11 instanceof ArrayBuffer) {
+        return data11;
+      } else if (typeof data11 === "object") {
+        return JSON.stringify(data11);
       } else {
-        return data10.toString();
+        return data11.toString();
       }
     }
     function getMockDispatch(mockDispatches, key) {
@@ -105237,9 +105237,9 @@ var require_mock_utils = __commonJS({
       }
       return matchedMockDispatches[0];
     }
-    function addMockDispatch(mockDispatches, key, data10) {
+    function addMockDispatch(mockDispatches, key, data11) {
       const baseData = { timesInvoked: 0, times: 1, persist: false, consumed: false };
-      const replyData = typeof data10 === "function" ? { callback: data10 } : { ...data10 };
+      const replyData = typeof data11 === "function" ? { callback: data11 } : { ...data11 };
       const newMockDispatch = { ...baseData, ...key, pending: true, data: { error: null, ...replyData } };
       mockDispatches.push(newMockDispatch);
       return newMockDispatch;
@@ -105265,12 +105265,12 @@ var require_mock_utils = __commonJS({
         query
       };
     }
-    function generateKeyValues(data10) {
-      const keys = Object.keys(data10);
+    function generateKeyValues(data11) {
+      const keys = Object.keys(data11);
       const result = [];
       for (let i = 0; i < keys.length; ++i) {
         const key = keys[i];
-        const value = data10[key];
+        const value = data11[key];
         const name = Buffer.from(`${key}`);
         if (Array.isArray(value)) {
           for (let j = 0; j < value.length; ++j) {
@@ -105287,8 +105287,8 @@ var require_mock_utils = __commonJS({
     }
     async function getResponse(body) {
       const buffers = [];
-      for await (const data10 of body) {
-        buffers.push(data10);
+      for await (const data11 of body) {
+        buffers.push(data11);
       }
       return Buffer.concat(buffers).toString("utf8");
     }
@@ -105299,7 +105299,7 @@ var require_mock_utils = __commonJS({
       if (mockDispatch2.data.callback) {
         mockDispatch2.data = { ...mockDispatch2.data, ...mockDispatch2.data.callback(opts) };
       }
-      const { data: { statusCode, data: data10, headers, trailers, error }, delay, persist } = mockDispatch2;
+      const { data: { statusCode, data: data11, headers, trailers, error }, delay, persist } = mockDispatch2;
       const { timesInvoked, times } = mockDispatch2;
       mockDispatch2.consumed = !persist && timesInvoked >= times;
       mockDispatch2.pending = timesInvoked < times;
@@ -105315,7 +105315,7 @@ var require_mock_utils = __commonJS({
       } else {
         handleReply(this[kDispatches]);
       }
-      function handleReply(mockDispatches, _data = data10) {
+      function handleReply(mockDispatches, _data = data11) {
         const optsHeaders = Array.isArray(opts.headers) ? buildHeadersFromArray(opts.headers) : opts.headers;
         const body = typeof _data === "function" ? _data({ ...opts, headers: optsHeaders }) : _data;
         if (isPromise(body)) {
@@ -105473,12 +105473,12 @@ var require_mock_interceptor = __commonJS({
         this[kDefaultTrailers] = {};
         this[kContentLength] = false;
       }
-      createMockScopeDispatchData({ statusCode, data: data10, responseOptions }) {
-        const responseData = getResponseData(data10);
+      createMockScopeDispatchData({ statusCode, data: data11, responseOptions }) {
+        const responseData = getResponseData(data11);
         const contentLength = this[kContentLength] ? { "content-length": responseData.length } : {};
         const headers = { ...this[kDefaultHeaders], ...contentLength, ...responseOptions.headers };
         const trailers = { ...this[kDefaultTrailers], ...responseOptions.trailers };
-        return { statusCode, data: data10, headers, trailers };
+        return { statusCode, data: data11, headers, trailers };
       }
       validateReplyParameters(replyParameters) {
         if (typeof replyParameters.statusCode === "undefined") {
@@ -106858,13 +106858,13 @@ var require_response2 = __commonJS({
         return responseObject;
       }
       // https://fetch.spec.whatwg.org/#dom-response-json
-      static json(data10, init = {}) {
+      static json(data11, init = {}) {
         webidl.argumentLengthCheck(arguments, 1, "Response.json");
         if (init !== null) {
           init = webidl.converters.ResponseInit(init);
         }
         const bytes = textEncoder.encode(
-          serializeJavascriptValueToJSONString(data10)
+          serializeJavascriptValueToJSONString(data11)
         );
         const body = extractBody(bytes);
         const responseObject = fromInnerResponse(makeResponse({}), "response");
@@ -111030,13 +111030,13 @@ var require_events2 = __commonJS({
         }
         return this.#eventInit.ports;
       }
-      initMessageEvent(type, bubbles = false, cancelable = false, data10 = null, origin = "", lastEventId = "", source = null, ports = []) {
+      initMessageEvent(type, bubbles = false, cancelable = false, data11 = null, origin = "", lastEventId = "", source = null, ports = []) {
         webidl.brandCheck(this, _MessageEvent);
         webidl.argumentLengthCheck(arguments, 1, "MessageEvent.initMessageEvent");
         return new _MessageEvent(type, {
           bubbles,
           cancelable,
-          data: data10,
+          data: data11,
           origin,
           lastEventId,
           source,
@@ -111348,23 +111348,23 @@ var require_util7 = __commonJS({
       const event = eventFactory(e, eventInitDict);
       target.dispatchEvent(event);
     }
-    function websocketMessageReceived(ws, type, data10) {
+    function websocketMessageReceived(ws, type, data11) {
       if (ws[kReadyState] !== states.OPEN) {
         return;
       }
       let dataForEvent;
       if (type === opcodes.TEXT) {
         try {
-          dataForEvent = utf8Decode(data10);
+          dataForEvent = utf8Decode(data11);
         } catch {
           failWebsocketConnection(ws, "Received invalid UTF-8 in text frame.");
           return;
         }
       } else if (type === opcodes.BINARY) {
         if (ws[kBinaryType] === "blob") {
-          dataForEvent = new Blob([data10]);
+          dataForEvent = new Blob([data11]);
         } else {
-          dataForEvent = toArrayBuffer(data10);
+          dataForEvent = toArrayBuffer(data11);
         }
       }
       fireEvent("message", ws, createFastMessageEvent, {
@@ -111529,8 +111529,8 @@ var require_frame = __commonJS({
       /**
        * @param {Buffer|undefined} data
        */
-      constructor(data10) {
-        this.frameData = data10;
+      constructor(data11) {
+        this.frameData = data11;
       }
       createFrame(opcode) {
         const frameData = this.frameData;
@@ -111806,11 +111806,11 @@ var require_permessage_deflate = __commonJS({
           }
           this.#inflate[kBuffer] = [];
           this.#inflate[kLength] = 0;
-          this.#inflate.on("data", (data10) => {
+          this.#inflate.on("data", (data11) => {
             if (this.#aborted) {
               return;
             }
-            this.#inflate[kLength] += data10.length;
+            this.#inflate[kLength] += data11.length;
             if (this.#inflate[kLength] > kDefaultMaxDecompressedSize) {
               this.#aborted = true;
               this.#inflate.removeAllListeners();
@@ -111823,7 +111823,7 @@ var require_permessage_deflate = __commonJS({
               }
               return;
             }
-            this.#inflate[kBuffer].push(data10);
+            this.#inflate[kBuffer].push(data11);
           });
           this.#inflate.on("error", (err) => {
             this.#inflate = null;
@@ -112014,12 +112014,12 @@ var require_receiver = __commonJS({
                 }
                 this.#state = parserStates.INFO;
               } else {
-                this.#extensions.get("permessage-deflate").decompress(body, this.#info.fin, (error, data10) => {
+                this.#extensions.get("permessage-deflate").decompress(body, this.#info.fin, (error, data11) => {
                   if (error) {
                     failWebsocketConnection(this.ws, error.message);
                     return;
                   }
-                  this.#fragments.push(data10);
+                  this.#fragments.push(data11);
                   if (!this.#info.fin) {
                     this.#state = parserStates.INFO;
                     this.#loop = true;
@@ -112074,16 +112074,16 @@ var require_receiver = __commonJS({
         this.#byteOffset -= n;
         return buffer;
       }
-      parseCloseBody(data10) {
-        assert(data10.length !== 1);
+      parseCloseBody(data11) {
+        assert(data11.length !== 1);
         let code;
-        if (data10.length >= 2) {
-          code = data10.readUInt16BE(0);
+        if (data11.length >= 2) {
+          code = data11.readUInt16BE(0);
         }
         if (code !== void 0 && !isValidStatusCode(code)) {
           return { code: 1002, reason: "Invalid status code", error: true };
         }
-        let reason = data10.subarray(2);
+        let reason = data11.subarray(2);
         if (reason[0] === 239 && reason[1] === 187 && reason[2] === 191) {
           reason = reason.subarray(3);
         }
@@ -112224,18 +112224,18 @@ var require_sender = __commonJS({
         this.#running = false;
       }
     };
-    function createFrame(data10, hint) {
-      return new WebsocketFrameSend(toBuffer(data10, hint)).createFrame(hint === sendHints.string ? opcodes.TEXT : opcodes.BINARY);
+    function createFrame(data11, hint) {
+      return new WebsocketFrameSend(toBuffer(data11, hint)).createFrame(hint === sendHints.string ? opcodes.TEXT : opcodes.BINARY);
     }
-    function toBuffer(data10, hint) {
+    function toBuffer(data11, hint) {
       switch (hint) {
         case sendHints.string:
-          return Buffer.from(data10);
+          return Buffer.from(data11);
         case sendHints.arrayBuffer:
         case sendHints.blob:
-          return new FastBuffer(data10);
+          return new FastBuffer(data11);
         case sendHints.typedArray:
-          return new FastBuffer(data10.buffer, data10.byteOffset, data10.byteLength);
+          return new FastBuffer(data11.buffer, data11.byteOffset, data11.byteLength);
       }
     }
     module2.exports = { SendQueue };
@@ -112376,37 +112376,37 @@ var require_websocket = __commonJS({
        * @see https://websockets.spec.whatwg.org/#dom-websocket-send
        * @param {NodeJS.TypedArray|ArrayBuffer|Blob|string} data
        */
-      send(data10) {
+      send(data11) {
         webidl.brandCheck(this, _WebSocket);
         const prefix = "WebSocket.send";
         webidl.argumentLengthCheck(arguments, 1, prefix);
-        data10 = webidl.converters.WebSocketSendData(data10, prefix, "data");
+        data11 = webidl.converters.WebSocketSendData(data11, prefix, "data");
         if (isConnecting(this)) {
           throw new DOMException("Sent before connected.", "InvalidStateError");
         }
         if (!isEstablished(this) || isClosing(this)) {
           return;
         }
-        if (typeof data10 === "string") {
-          const length = Buffer.byteLength(data10);
+        if (typeof data11 === "string") {
+          const length = Buffer.byteLength(data11);
           this.#bufferedAmount += length;
-          this.#sendQueue.add(data10, () => {
+          this.#sendQueue.add(data11, () => {
             this.#bufferedAmount -= length;
           }, sendHints.string);
-        } else if (types.isArrayBuffer(data10)) {
-          this.#bufferedAmount += data10.byteLength;
-          this.#sendQueue.add(data10, () => {
-            this.#bufferedAmount -= data10.byteLength;
+        } else if (types.isArrayBuffer(data11)) {
+          this.#bufferedAmount += data11.byteLength;
+          this.#sendQueue.add(data11, () => {
+            this.#bufferedAmount -= data11.byteLength;
           }, sendHints.arrayBuffer);
-        } else if (ArrayBuffer.isView(data10)) {
-          this.#bufferedAmount += data10.byteLength;
-          this.#sendQueue.add(data10, () => {
-            this.#bufferedAmount -= data10.byteLength;
+        } else if (ArrayBuffer.isView(data11)) {
+          this.#bufferedAmount += data11.byteLength;
+          this.#sendQueue.add(data11, () => {
+            this.#bufferedAmount -= data11.byteLength;
           }, sendHints.typedArray);
-        } else if (isBlobLike(data10)) {
-          this.#bufferedAmount += data10.size;
-          this.#sendQueue.add(data10, () => {
-            this.#bufferedAmount -= data10.size;
+        } else if (isBlobLike(data11)) {
+          this.#bufferedAmount += data11.size;
+          this.#sendQueue.add(data11, () => {
+            this.#bufferedAmount -= data11.size;
           }, sendHints.blob);
         }
       }
@@ -122873,8 +122873,8 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           if (status === 401 && requestData.auth) {
             manager.setToken(null);
           }
-          const data10 = await parseResponse(res);
-          throw new DiscordAPIError(data10, "code" in data10 ? data10.code : data10.error, status, method, url, requestData);
+          const data11 = await parseResponse(res);
+          throw new DiscordAPIError(data11, "code" in data11 ? data11.code : data11.error, status, method, url, requestData);
         }
         return res;
       }
@@ -123763,7 +123763,7 @@ var require_Messages = __commonJS({
       [DjsErrorCodes.ApplicationCommandPermissionsTokenMissing]: "Editing application command permissions requires an OAuth2 bearer token, but none was provided.",
       [DjsErrorCodes.WSCloseRequested]: "WebSocket closed due to user request.",
       [DjsErrorCodes.WSConnectionExists]: "There is already an existing WebSocket connection.",
-      [DjsErrorCodes.WSNotOpen]: (data10 = "data") => `WebSocket not open to send ${data10}`,
+      [DjsErrorCodes.WSNotOpen]: (data11 = "data") => `WebSocket not open to send ${data11}`,
       [DjsErrorCodes.ManagerDestroyed]: "Manager was destroyed.",
       [DjsErrorCodes.BitFieldInvalid]: (bit) => `Invalid bitfield flag or number: ${bit}.`,
       [DjsErrorCodes.ShardingInvalid]: "Invalid shard settings were provided.",
@@ -125008,60 +125008,60 @@ var require_Attachment = __commonJS({
     var AttachmentFlagsBitField = require_AttachmentFlagsBitField();
     var { basename, flatten } = require_Util();
     var Attachment = class {
-      constructor(data10) {
-        this.attachment = data10.url;
-        this.name = data10.filename;
-        this._patch(data10);
+      constructor(data11) {
+        this.attachment = data11.url;
+        this.name = data11.filename;
+        this._patch(data11);
       }
-      _patch(data10) {
-        this.id = data10.id;
-        if ("size" in data10) {
-          this.size = data10.size;
+      _patch(data11) {
+        this.id = data11.id;
+        if ("size" in data11) {
+          this.size = data11.size;
         }
-        if ("url" in data10) {
-          this.url = data10.url;
+        if ("url" in data11) {
+          this.url = data11.url;
         }
-        if ("proxy_url" in data10) {
-          this.proxyURL = data10.proxy_url;
+        if ("proxy_url" in data11) {
+          this.proxyURL = data11.proxy_url;
         }
-        if ("height" in data10) {
-          this.height = data10.height;
+        if ("height" in data11) {
+          this.height = data11.height;
         } else {
           this.height ??= null;
         }
-        if ("width" in data10) {
-          this.width = data10.width;
+        if ("width" in data11) {
+          this.width = data11.width;
         } else {
           this.width ??= null;
         }
-        if ("content_type" in data10) {
-          this.contentType = data10.content_type;
+        if ("content_type" in data11) {
+          this.contentType = data11.content_type;
         } else {
           this.contentType ??= null;
         }
-        if ("description" in data10) {
-          this.description = data10.description;
+        if ("description" in data11) {
+          this.description = data11.description;
         } else {
           this.description ??= null;
         }
-        this.ephemeral = data10.ephemeral ?? false;
-        if ("duration_secs" in data10) {
-          this.duration = data10.duration_secs;
+        this.ephemeral = data11.ephemeral ?? false;
+        if ("duration_secs" in data11) {
+          this.duration = data11.duration_secs;
         } else {
           this.duration ??= null;
         }
-        if ("waveform" in data10) {
-          this.waveform = data10.waveform;
+        if ("waveform" in data11) {
+          this.waveform = data11.waveform;
         } else {
           this.waveform ??= null;
         }
-        if ("flags" in data10) {
-          this.flags = new AttachmentFlagsBitField(data10.flags).freeze();
+        if ("flags" in data11) {
+          this.flags = new AttachmentFlagsBitField(data11.flags).freeze();
         } else {
           this.flags ??= new AttachmentFlagsBitField().freeze();
         }
-        if ("title" in data10) {
-          this.title = data10.title;
+        if ("title" in data11) {
+          this.title = data11.title;
         } else {
           this.title ??= null;
         }
@@ -125734,12 +125734,12 @@ var require_Base = __commonJS({
       _clone() {
         return Object.assign(Object.create(this), this);
       }
-      _patch(data10) {
-        return data10;
+      _patch(data11) {
+        return data11;
       }
-      _update(data10) {
+      _update(data11) {
         const clone = this._clone();
-        this._patch(data10);
+        this._patch(data11);
         return clone;
       }
       toJSON(...props) {
@@ -125877,18 +125877,18 @@ var require_BaseChannel = __commonJS({
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
     var { ThreadChannelTypes } = require_Constants();
     var BaseChannel = class extends Base {
-      constructor(client, data10, immediatePatch = true) {
+      constructor(client, data11, immediatePatch = true) {
         super(client);
-        this.type = data10.type;
-        if (data10 && immediatePatch) this._patch(data10);
+        this.type = data11.type;
+        if (data11 && immediatePatch) this._patch(data11);
       }
-      _patch(data10) {
-        if ("flags" in data10) {
-          this.flags = new ChannelFlagsBitField(data10.flags).freeze();
+      _patch(data11) {
+        if ("flags" in data11) {
+          this.flags = new ChannelFlagsBitField(data11.flags).freeze();
         } else {
           this.flags ??= new ChannelFlagsBitField().freeze();
         }
-        this.id = data10.id;
+        this.id = data11.id;
       }
       /**
        * The timestamp the channel was created at
@@ -126102,18 +126102,18 @@ var require_CachedManager = __commonJS({
       get cache() {
         return this._cache;
       }
-      _add(data10, cache = true, { id, extras = [] } = {}) {
-        const existing = this.cache.get(id ?? data10.id);
+      _add(data11, cache = true, { id, extras = [] } = {}) {
+        const existing = this.cache.get(id ?? data11.id);
         if (existing) {
           if (cache) {
-            existing._patch(data10);
+            existing._patch(data11);
             return existing;
           }
           const clone = existing._clone();
-          clone._patch(data10);
+          clone._patch(data11);
           return clone;
         }
-        const entry = this.holds ? new this.holds(this.client, data10, ...extras) : data10;
+        const entry = this.holds ? new this.holds(this.client, data11, ...extras) : data11;
         if (cache) this.cache.set(id ?? entry.id, entry);
         return entry;
       }
@@ -126242,68 +126242,68 @@ var require_Role = __commonJS({
     var PermissionsBitField2 = require_PermissionsBitField();
     var RoleFlagsBitField = require_RoleFlagsBitField();
     var Role = class extends Base {
-      constructor(client, data10, guild) {
+      constructor(client, data11, guild) {
         super(client);
         this.guild = guild;
         this.icon = null;
         this.unicodeEmoji = null;
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        this.id = data10.id;
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        this.id = data11.id;
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("color" in data10) {
-          this.color = data10.color;
+        if ("color" in data11) {
+          this.color = data11.color;
         }
-        if ("colors" in data10) {
+        if ("colors" in data11) {
           this.colors = {
-            primaryColor: data10.colors.primary_color,
-            secondaryColor: data10.colors.secondary_color,
-            tertiaryColor: data10.colors.tertiary_color
+            primaryColor: data11.colors.primary_color,
+            secondaryColor: data11.colors.secondary_color,
+            tertiaryColor: data11.colors.tertiary_color
           };
         }
-        if ("hoist" in data10) {
-          this.hoist = data10.hoist;
+        if ("hoist" in data11) {
+          this.hoist = data11.hoist;
         }
-        if ("position" in data10) {
-          this.rawPosition = data10.position;
+        if ("position" in data11) {
+          this.rawPosition = data11.position;
         }
-        if ("permissions" in data10) {
-          this.permissions = new PermissionsBitField2(BigInt(data10.permissions)).freeze();
+        if ("permissions" in data11) {
+          this.permissions = new PermissionsBitField2(BigInt(data11.permissions)).freeze();
         }
-        if ("managed" in data10) {
-          this.managed = data10.managed;
+        if ("managed" in data11) {
+          this.managed = data11.managed;
         }
-        if ("mentionable" in data10) {
-          this.mentionable = data10.mentionable;
+        if ("mentionable" in data11) {
+          this.mentionable = data11.mentionable;
         }
-        if ("icon" in data10) this.icon = data10.icon;
-        if ("unicode_emoji" in data10) this.unicodeEmoji = data10.unicode_emoji;
-        if ("flags" in data10) {
-          this.flags = new RoleFlagsBitField(data10.flags).freeze();
+        if ("icon" in data11) this.icon = data11.icon;
+        if ("unicode_emoji" in data11) this.unicodeEmoji = data11.unicode_emoji;
+        if ("flags" in data11) {
+          this.flags = new RoleFlagsBitField(data11.flags).freeze();
         } else {
           this.flags ??= new RoleFlagsBitField().freeze();
         }
-        this.tags = data10.tags ? {} : null;
-        if (data10.tags) {
-          if ("bot_id" in data10.tags) {
-            this.tags.botId = data10.tags.bot_id;
+        this.tags = data11.tags ? {} : null;
+        if (data11.tags) {
+          if ("bot_id" in data11.tags) {
+            this.tags.botId = data11.tags.bot_id;
           }
-          if ("integration_id" in data10.tags) {
-            this.tags.integrationId = data10.tags.integration_id;
+          if ("integration_id" in data11.tags) {
+            this.tags.integrationId = data11.tags.integration_id;
           }
-          if ("premium_subscriber" in data10.tags) {
+          if ("premium_subscriber" in data11.tags) {
             this.tags.premiumSubscriberRole = true;
           }
-          if ("subscription_listing_id" in data10.tags) {
-            this.tags.subscriptionListingId = data10.tags.subscription_listing_id;
+          if ("subscription_listing_id" in data11.tags) {
+            this.tags.subscriptionListingId = data11.tags.subscription_listing_id;
           }
-          if ("available_for_purchase" in data10.tags) {
+          if ("available_for_purchase" in data11.tags) {
             this.tags.availableForPurchase = true;
           }
-          if ("guild_connections" in data10.tags) {
+          if ("guild_connections" in data11.tags) {
             this.tags.guildConnections = true;
           }
         }
@@ -126622,21 +126622,21 @@ var require_PermissionOverwrites = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var PermissionsBitField2 = require_PermissionsBitField();
     var PermissionOverwrites = class extends Base {
-      constructor(client, data10, channel) {
+      constructor(client, data11, channel) {
         super(client);
         Object.defineProperty(this, "channel", { value: channel });
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        this.id = data10.id;
-        if ("type" in data10) {
-          this.type = data10.type;
+      _patch(data11) {
+        this.id = data11.id;
+        if ("type" in data11) {
+          this.type = data11.type;
         }
-        if ("deny" in data10) {
-          this.deny = new PermissionsBitField2(BigInt(data10.deny)).freeze();
+        if ("deny" in data11) {
+          this.deny = new PermissionsBitField2(BigInt(data11.deny)).freeze();
         }
-        if ("allow" in data10) {
-          this.allow = new PermissionsBitField2(BigInt(data10.allow)).freeze();
+        if ("allow" in data11) {
+          this.allow = new PermissionsBitField2(BigInt(data11.allow)).freeze();
         }
       }
       /**
@@ -126801,8 +126801,8 @@ var require_PermissionOverwriteManager = __commonJS({
        * @type {Collection<Snowflake, PermissionOverwrites>}
        * @name PermissionOverwriteManager#cache
        */
-      _add(data10, cache) {
-        return super._add(data10, cache, { extras: [this.channel] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { extras: [this.channel] });
       }
       /**
        * Replaces the permission overwrites in this channel.
@@ -126927,32 +126927,32 @@ var require_GuildChannel = __commonJS({
     var PermissionsBitField2 = require_PermissionsBitField();
     var { getSortableGroupTypes } = require_Util();
     var GuildChannel = class extends BaseChannel {
-      constructor(guild, data10, client, immediatePatch = true) {
-        super(client, data10, false);
+      constructor(guild, data11, client, immediatePatch = true) {
+        super(client, data11, false);
         this.guild = guild;
-        this.guildId = guild?.id ?? data10.guild_id;
+        this.guildId = guild?.id ?? data11.guild_id;
         this.permissionOverwrites = new PermissionOverwriteManager(this);
-        if (data10 && immediatePatch) this._patch(data10);
+        if (data11 && immediatePatch) this._patch(data11);
       }
-      _patch(data10) {
-        super._patch(data10);
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        super._patch(data11);
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("position" in data10) {
-          this.rawPosition = data10.position;
+        if ("position" in data11) {
+          this.rawPosition = data11.position;
         }
-        if ("guild_id" in data10) {
-          this.guildId = data10.guild_id;
+        if ("guild_id" in data11) {
+          this.guildId = data11.guild_id;
         }
-        if ("parent_id" in data10) {
-          this.parentId = data10.parent_id;
+        if ("parent_id" in data11) {
+          this.parentId = data11.parent_id;
         } else {
           this.parentId ??= null;
         }
-        if ("permission_overwrites" in data10) {
+        if ("permission_overwrites" in data11) {
           this.permissionOverwrites.cache.clear();
-          for (const overwrite of data10.permission_overwrites) {
+          for (const overwrite of data11.permission_overwrites) {
             this.permissionOverwrites._add(overwrite);
           }
         }
@@ -127294,14 +127294,14 @@ var require_SKU = __commonJS({
     var Base = require_Base();
     var { SKUFlagsBitField } = require_SKUFlagsBitField();
     var SKU = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.id = data10.id;
-        this.type = data10.type;
-        this.applicationId = data10.application_id;
-        this.name = data10.name;
-        this.slug = data10.slug;
-        this.flags = new SKUFlagsBitField(data10.flags).freeze();
+        this.id = data11.id;
+        this.type = data11.type;
+        this.applicationId = data11.application_id;
+        this.name = data11.name;
+        this.slug = data11.slug;
+        this.flags = new SKUFlagsBitField(data11.flags).freeze();
       }
     };
     exports2.SKU = SKU;
@@ -127416,10 +127416,10 @@ var require_Util = __commonJS({
       }
       return array.indexOf(element);
     }
-    function verifyString(data10, error = Error, errorMessage = `Expected a string, got ${data10} instead.`, allowEmpty = true) {
-      if (typeof data10 !== "string") throw new error(errorMessage);
-      if (!allowEmpty && data10.length === 0) throw new error(errorMessage);
-      return data10;
+    function verifyString(data11, error = Error, errorMessage = `Expected a string, got ${data11} instead.`, allowEmpty = true) {
+      if (typeof data11 !== "string") throw new error(errorMessage);
+      if (!allowEmpty && data11.length === 0) throw new error(errorMessage);
+      return data11;
     }
     function resolveColor(color) {
       let resolvedColor;
@@ -127645,12 +127645,12 @@ var require_Transformers = __commonJS({
         by_month_day: recurrenceRule.byMonthDay
       };
     }
-    function _transformAPIIncidentsData(data10) {
+    function _transformAPIIncidentsData(data11) {
       return {
-        invitesDisabledUntil: data10.invites_disabled_until ? new Date(data10.invites_disabled_until) : null,
-        dmsDisabledUntil: data10.dms_disabled_until ? new Date(data10.dms_disabled_until) : null,
-        dmSpamDetectedAt: data10.dm_spam_detected_at ? new Date(data10.dm_spam_detected_at) : null,
-        raidDetectedAt: data10.raid_detected_at ? new Date(data10.raid_detected_at) : null
+        invitesDisabledUntil: data11.invites_disabled_until ? new Date(data11.invites_disabled_until) : null,
+        dmsDisabledUntil: data11.dms_disabled_until ? new Date(data11.dms_disabled_until) : null,
+        dmSpamDetectedAt: data11.dm_spam_detected_at ? new Date(data11.dm_spam_detected_at) : null,
+        raidDetectedAt: data11.raid_detected_at ? new Date(data11.raid_detected_at) : null
       };
     }
     function _transformCollectibles(collectibles) {
@@ -128727,77 +128727,77 @@ var require_GuildScheduledEvent = __commonJS({
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var GuildScheduledEvent = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.id = data10.id;
-        this.guildId = data10.guild_id;
-        this._patch(data10);
+        this.id = data11.id;
+        this.guildId = data11.guild_id;
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("channel_id" in data10) {
-          this.channelId = data10.channel_id;
+      _patch(data11) {
+        if ("channel_id" in data11) {
+          this.channelId = data11.channel_id;
         } else {
           this.channelId ??= null;
         }
-        if ("creator_id" in data10) {
-          this.creatorId = data10.creator_id;
+        if ("creator_id" in data11) {
+          this.creatorId = data11.creator_id;
         } else {
           this.creatorId ??= null;
         }
-        if ("name" in data10) {
-          this.name = data10.name;
+        if ("name" in data11) {
+          this.name = data11.name;
         } else {
           this.name ??= null;
         }
-        if ("description" in data10) {
-          this.description = data10.description;
+        if ("description" in data11) {
+          this.description = data11.description;
         } else {
           this.description ??= null;
         }
-        if ("scheduled_start_time" in data10) {
-          this.scheduledStartTimestamp = Date.parse(data10.scheduled_start_time);
+        if ("scheduled_start_time" in data11) {
+          this.scheduledStartTimestamp = Date.parse(data11.scheduled_start_time);
         } else {
           this.scheduledStartTimestamp ??= null;
         }
-        if ("scheduled_end_time" in data10) {
-          this.scheduledEndTimestamp = data10.scheduled_end_time ? Date.parse(data10.scheduled_end_time) : null;
+        if ("scheduled_end_time" in data11) {
+          this.scheduledEndTimestamp = data11.scheduled_end_time ? Date.parse(data11.scheduled_end_time) : null;
         } else {
           this.scheduledEndTimestamp ??= null;
         }
-        if ("privacy_level" in data10) {
-          this.privacyLevel = data10.privacy_level;
+        if ("privacy_level" in data11) {
+          this.privacyLevel = data11.privacy_level;
         } else {
           this.privacyLevel ??= null;
         }
-        if ("status" in data10) {
-          this.status = data10.status;
+        if ("status" in data11) {
+          this.status = data11.status;
         } else {
           this.status ??= null;
         }
-        if ("entity_type" in data10) {
-          this.entityType = data10.entity_type;
+        if ("entity_type" in data11) {
+          this.entityType = data11.entity_type;
         } else {
           this.entityType ??= null;
         }
-        if ("entity_id" in data10) {
-          this.entityId = data10.entity_id;
+        if ("entity_id" in data11) {
+          this.entityId = data11.entity_id;
         } else {
           this.entityId ??= null;
         }
-        if ("user_count" in data10) {
-          this.userCount = data10.user_count;
+        if ("user_count" in data11) {
+          this.userCount = data11.user_count;
         } else {
           this.userCount ??= null;
         }
-        if ("creator" in data10) {
-          this.creator = this.client.users._add(data10.creator);
+        if ("creator" in data11) {
+          this.creator = this.client.users._add(data11.creator);
         } else {
           this.creator ??= this.client.users.resolve(this.creatorId);
         }
-        if ("entity_metadata" in data10) {
-          if (data10.entity_metadata) {
+        if ("entity_metadata" in data11) {
+          if (data11.entity_metadata) {
             this.entityMetadata = {
-              location: data10.entity_metadata.location ?? this.entityMetadata?.location ?? null
+              location: data11.entity_metadata.location ?? this.entityMetadata?.location ?? null
             };
           } else {
             this.entityMetadata = null;
@@ -128805,29 +128805,29 @@ var require_GuildScheduledEvent = __commonJS({
         } else {
           this.entityMetadata ??= null;
         }
-        if ("image" in data10) {
-          this.image = data10.image;
+        if ("image" in data11) {
+          this.image = data11.image;
         } else {
           this.image ??= null;
         }
-        if ("recurrence_rule" in data10) {
-          this.recurrenceRule = data10.recurrence_rule && {
-            startTimestamp: Date.parse(data10.recurrence_rule.start),
+        if ("recurrence_rule" in data11) {
+          this.recurrenceRule = data11.recurrence_rule && {
+            startTimestamp: Date.parse(data11.recurrence_rule.start),
             get startAt() {
               return new Date(this.startTimestamp);
             },
-            endTimestamp: data10.recurrence_rule.end && Date.parse(data10.recurrence_rule.end),
+            endTimestamp: data11.recurrence_rule.end && Date.parse(data11.recurrence_rule.end),
             get endAt() {
               return this.endTimestamp && new Date(this.endTimestamp);
             },
-            frequency: data10.recurrence_rule.frequency,
-            interval: data10.recurrence_rule.interval,
-            byWeekday: data10.recurrence_rule.by_weekday,
-            byNWeekday: data10.recurrence_rule.by_n_weekday,
-            byMonth: data10.recurrence_rule.by_month,
-            byMonthDay: data10.recurrence_rule.by_month_day,
-            byYearDay: data10.recurrence_rule.by_year_day,
-            count: data10.recurrence_rule.count
+            frequency: data11.recurrence_rule.frequency,
+            interval: data11.recurrence_rule.interval,
+            byWeekday: data11.recurrence_rule.by_weekday,
+            byNWeekday: data11.recurrence_rule.by_n_weekday,
+            byMonth: data11.recurrence_rule.by_month,
+            byMonthDay: data11.recurrence_rule.by_month_day,
+            byYearDay: data11.recurrence_rule.by_year_day,
+            count: data11.recurrence_rule.count
           };
         } else {
           this.recurrenceRule ??= null;
@@ -129108,49 +129108,49 @@ var require_Application = __commonJS({
     var { DiscordSnowflake } = require_cjs3();
     var Base = require_Base();
     var Application2 = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        this.id = data10.id;
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        this.id = data11.id;
+        if ("name" in data11) {
+          this.name = data11.name;
         } else {
           this.name ??= null;
         }
-        if ("description" in data10) {
-          this.description = data10.description;
+        if ("description" in data11) {
+          this.description = data11.description;
         } else {
           this.description ??= null;
         }
-        if ("icon" in data10) {
-          this.icon = data10.icon;
+        if ("icon" in data11) {
+          this.icon = data11.icon;
         } else {
           this.icon ??= null;
         }
-        if ("terms_of_service_url" in data10) {
-          this.termsOfServiceURL = data10.terms_of_service_url;
+        if ("terms_of_service_url" in data11) {
+          this.termsOfServiceURL = data11.terms_of_service_url;
         } else {
           this.termsOfServiceURL ??= null;
         }
-        if ("privacy_policy_url" in data10) {
-          this.privacyPolicyURL = data10.privacy_policy_url;
+        if ("privacy_policy_url" in data11) {
+          this.privacyPolicyURL = data11.privacy_policy_url;
         } else {
           this.privacyPolicyURL ??= null;
         }
-        if ("rpc_origins" in data10) {
-          this.rpcOrigins = data10.rpc_origins;
+        if ("rpc_origins" in data11) {
+          this.rpcOrigins = data11.rpc_origins;
         } else {
           this.rpcOrigins ??= [];
         }
-        if ("cover_image" in data10) {
-          this.cover = data10.cover_image;
+        if ("cover_image" in data11) {
+          this.cover = data11.cover_image;
         } else {
           this.cover ??= null;
         }
-        if ("verify_key" in data10) {
-          this.verifyKey = data10.verify_key;
+        if ("verify_key" in data11) {
+          this.verifyKey = data11.verify_key;
         } else {
           this.verifyKey ??= null;
         }
@@ -129212,40 +129212,40 @@ var require_IntegrationApplication = __commonJS({
     "use strict";
     var Application2 = require_Application();
     var IntegrationApplication = class extends Application2 {
-      _patch(data10) {
-        super._patch(data10);
-        if ("bot" in data10) {
-          this.bot = this.client.users._add(data10.bot);
+      _patch(data11) {
+        super._patch(data11);
+        if ("bot" in data11) {
+          this.bot = this.client.users._add(data11.bot);
         } else {
           this.bot ??= null;
         }
-        if ("terms_of_service_url" in data10) {
-          this.termsOfServiceURL = data10.terms_of_service_url;
+        if ("terms_of_service_url" in data11) {
+          this.termsOfServiceURL = data11.terms_of_service_url;
         } else {
           this.termsOfServiceURL ??= null;
         }
-        if ("privacy_policy_url" in data10) {
-          this.privacyPolicyURL = data10.privacy_policy_url;
+        if ("privacy_policy_url" in data11) {
+          this.privacyPolicyURL = data11.privacy_policy_url;
         } else {
           this.privacyPolicyURL ??= null;
         }
-        if ("rpc_origins" in data10) {
-          this.rpcOrigins = data10.rpc_origins;
+        if ("rpc_origins" in data11) {
+          this.rpcOrigins = data11.rpc_origins;
         } else {
           this.rpcOrigins ??= [];
         }
-        if ("hook" in data10) {
-          this.hook = data10.hook;
+        if ("hook" in data11) {
+          this.hook = data11.hook;
         } else {
           this.hook ??= null;
         }
-        if ("cover_image" in data10) {
-          this.cover = data10.cover_image;
+        if ("cover_image" in data11) {
+          this.cover = data11.cover_image;
         } else {
           this.cover ??= null;
         }
-        if ("verify_key" in data10) {
-          this.verifyKey = data10.verify_key;
+        if ("verify_key" in data11) {
+          this.verifyKey = data11.verify_key;
         } else {
           this.verifyKey ??= null;
         }
@@ -129262,25 +129262,25 @@ var require_InviteStageInstance = __commonJS({
     var { Collection: Collection3 } = require_dist8();
     var Base = require_Base();
     var InviteStageInstance = class extends Base {
-      constructor(client, data10, channelId, guildId) {
+      constructor(client, data11, channelId, guildId) {
         super(client);
         this.channelId = channelId;
         this.guildId = guildId;
         this.members = new Collection3();
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("topic" in data10) {
-          this.topic = data10.topic;
+      _patch(data11) {
+        if ("topic" in data11) {
+          this.topic = data11.topic;
         }
-        if ("participant_count" in data10) {
-          this.participantCount = data10.participant_count;
+        if ("participant_count" in data11) {
+          this.participantCount = data11.participant_count;
         }
-        if ("speaker_count" in data10) {
-          this.speakerCount = data10.speaker_count;
+        if ("speaker_count" in data11) {
+          this.speakerCount = data11.speaker_count;
         }
         this.members.clear();
-        for (const rawMember of data10.members) {
+        for (const rawMember of data11.members) {
           const member = this.guild.members._add(rawMember);
           this.members.set(member.id, member);
         }
@@ -129334,12 +129334,12 @@ var require_BaseGuild = __commonJS({
     var { Routes: Routes3, GuildFeature } = require_v106();
     var Base = require_Base();
     var BaseGuild = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.id = data10.id;
-        this.name = data10.name;
-        this.icon = data10.icon;
-        this.features = data10.features;
+        this.id = data11.id;
+        this.name = data11.name;
+        this.icon = data11.icon;
+        this.features = data11.features;
       }
       /**
        * The timestamp this guild was created at
@@ -129394,10 +129394,10 @@ var require_BaseGuild = __commonJS({
        * @returns {Promise<Guild>}
        */
       async fetch() {
-        const data10 = await this.client.rest.get(Routes3.guild(this.id), {
+        const data11 = await this.client.rest.get(Routes3.guild(this.id), {
           query: makeURLSearchParams2({ with_counts: true })
         });
-        return this.client.guilds._add(data10);
+        return this.client.guilds._add(data11);
       }
       /**
        * When concatenated with a string, this automatically returns the guild's name instead of the Guild object.
@@ -129417,32 +129417,32 @@ var require_AnonymousGuild = __commonJS({
     "use strict";
     var BaseGuild = require_BaseGuild();
     var AnonymousGuild = class extends BaseGuild {
-      constructor(client, data10, immediatePatch = true) {
-        super(client, data10);
-        if (immediatePatch) this._patch(data10);
+      constructor(client, data11, immediatePatch = true) {
+        super(client, data11);
+        if (immediatePatch) this._patch(data11);
       }
-      _patch(data10) {
-        if ("features" in data10) this.features = data10.features;
-        if ("splash" in data10) {
-          this.splash = data10.splash;
+      _patch(data11) {
+        if ("features" in data11) this.features = data11.features;
+        if ("splash" in data11) {
+          this.splash = data11.splash;
         }
-        if ("banner" in data10) {
-          this.banner = data10.banner;
+        if ("banner" in data11) {
+          this.banner = data11.banner;
         }
-        if ("description" in data10) {
-          this.description = data10.description;
+        if ("description" in data11) {
+          this.description = data11.description;
         }
-        if ("verification_level" in data10) {
-          this.verificationLevel = data10.verification_level;
+        if ("verification_level" in data11) {
+          this.verificationLevel = data11.verification_level;
         }
-        if ("vanity_url_code" in data10) {
-          this.vanityURLCode = data10.vanity_url_code;
+        if ("vanity_url_code" in data11) {
+          this.vanityURLCode = data11.vanity_url_code;
         }
-        if ("nsfw_level" in data10) {
-          this.nsfwLevel = data10.nsfw_level;
+        if ("nsfw_level" in data11) {
+          this.nsfwLevel = data11.nsfw_level;
         }
-        if ("premium_subscription_count" in data10) {
-          this.premiumSubscriptionCount = data10.premium_subscription_count;
+        if ("premium_subscription_count" in data11) {
+          this.premiumSubscriptionCount = data11.premium_subscription_count;
         } else {
           this.premiumSubscriptionCount ??= null;
         }
@@ -129475,15 +129475,15 @@ var require_WelcomeChannel = __commonJS({
     var Base = require_Base();
     var { Emoji } = require_Emoji();
     var WelcomeChannel = class extends Base {
-      constructor(guild, data10) {
+      constructor(guild, data11) {
         super(guild.client);
         this.guild = guild;
-        this.description = data10.description;
+        this.description = data11.description;
         this._emoji = {
-          name: data10.emoji_name,
-          id: data10.emoji_id
+          name: data11.emoji_name,
+          id: data11.emoji_id
         };
-        this.channelId = data10.channel_id;
+        this.channelId = data11.channel_id;
       }
       /**
        * The channel of this welcome channel
@@ -129513,12 +129513,12 @@ var require_WelcomeScreen = __commonJS({
     var Base = require_Base();
     var WelcomeChannel = require_WelcomeChannel();
     var WelcomeScreen = class extends Base {
-      constructor(guild, data10) {
+      constructor(guild, data11) {
         super(guild.client);
         this.guild = guild;
-        this.description = data10.description ?? null;
+        this.description = data11.description ?? null;
         this.welcomeChannels = new Collection3();
-        for (const channel of data10.welcome_channels) {
+        for (const channel of data11.welcome_channels) {
           const welcomeChannel = new WelcomeChannel(this.guild, channel);
           this.welcomeChannels.set(welcomeChannel.channelId, welcomeChannel);
         }
@@ -129542,9 +129542,9 @@ var require_InviteGuild = __commonJS({
     var AnonymousGuild = require_AnonymousGuild();
     var WelcomeScreen = require_WelcomeScreen();
     var InviteGuild = class extends AnonymousGuild {
-      constructor(client, data10) {
-        super(client, data10);
-        this.welcomeScreen = data10.welcome_screen !== void 0 ? new WelcomeScreen(this, data10.welcome_screen) : null;
+      constructor(client, data11) {
+        super(client, data11);
+        this.welcomeScreen = data11.welcome_screen !== void 0 ? new WelcomeScreen(this, data11.welcome_screen) : null;
       }
     };
     module2.exports = InviteGuild;
@@ -129570,103 +129570,103 @@ var require_Invite = __commonJS({
        * @memberof Invite
        */
       static InvitesPattern = /discord(?:(?:app)?\.com\/invite|\.gg(?:\/invite)?)\/(?<code>[\w-]{2,255})/i;
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.type = data10.type;
-        this._patch(data10);
+        this.type = data11.type;
+        this._patch(data11);
       }
-      _patch(data10) {
+      _patch(data11) {
         const InviteGuild = require_InviteGuild();
         this.guild ??= null;
-        if (data10.guild) {
-          this.guild = this.client.guilds.cache.get(data10.guild.id) ?? new InviteGuild(this.client, data10.guild);
+        if (data11.guild) {
+          this.guild = this.client.guilds.cache.get(data11.guild.id) ?? new InviteGuild(this.client, data11.guild);
         }
-        if ("code" in data10) {
-          this.code = data10.code;
+        if ("code" in data11) {
+          this.code = data11.code;
         }
-        if ("approximate_presence_count" in data10) {
-          this.presenceCount = data10.approximate_presence_count;
+        if ("approximate_presence_count" in data11) {
+          this.presenceCount = data11.approximate_presence_count;
         } else {
           this.presenceCount ??= null;
         }
-        if ("approximate_member_count" in data10) {
-          this.memberCount = data10.approximate_member_count;
+        if ("approximate_member_count" in data11) {
+          this.memberCount = data11.approximate_member_count;
         } else {
           this.memberCount ??= null;
         }
-        if ("temporary" in data10) {
-          this.temporary = data10.temporary ?? null;
+        if ("temporary" in data11) {
+          this.temporary = data11.temporary ?? null;
         } else {
           this.temporary ??= null;
         }
-        if ("max_age" in data10) {
-          this.maxAge = data10.max_age;
+        if ("max_age" in data11) {
+          this.maxAge = data11.max_age;
         } else {
           this.maxAge ??= null;
         }
-        if ("uses" in data10) {
-          this.uses = data10.uses;
+        if ("uses" in data11) {
+          this.uses = data11.uses;
         } else {
           this.uses ??= null;
         }
-        if ("max_uses" in data10) {
-          this.maxUses = data10.max_uses;
+        if ("max_uses" in data11) {
+          this.maxUses = data11.max_uses;
         } else {
           this.maxUses ??= null;
         }
-        if ("inviter_id" in data10) {
-          this.inviterId = data10.inviter_id;
+        if ("inviter_id" in data11) {
+          this.inviterId = data11.inviter_id;
         } else {
           this.inviterId ??= null;
         }
-        if ("inviter" in data10) {
-          this.client.users._add(data10.inviter);
-          this.inviterId = data10.inviter.id;
+        if ("inviter" in data11) {
+          this.client.users._add(data11.inviter);
+          this.inviterId = data11.inviter.id;
         }
-        if ("target_user" in data10) {
-          this.targetUser = this.client.users._add(data10.target_user);
+        if ("target_user" in data11) {
+          this.targetUser = this.client.users._add(data11.target_user);
         } else {
           this.targetUser ??= null;
         }
-        if ("target_application" in data10) {
-          this.targetApplication = new IntegrationApplication(this.client, data10.target_application);
+        if ("target_application" in data11) {
+          this.targetApplication = new IntegrationApplication(this.client, data11.target_application);
         } else {
           this.targetApplication ??= null;
         }
-        if ("target_type" in data10) {
-          this.targetType = data10.target_type;
+        if ("target_type" in data11) {
+          this.targetType = data11.target_type;
         } else {
           this.targetType ??= null;
         }
-        if ("channel_id" in data10) {
-          this.channelId = data10.channel_id;
+        if ("channel_id" in data11) {
+          this.channelId = data11.channel_id;
         }
-        if ("channel" in data10) {
-          this.channel = this.client.channels._add(data10.channel, this.guild, { cache: false }) ?? this.client.channels.resolve(this.channelId);
-          this.channelId ??= data10.channel.id;
+        if ("channel" in data11) {
+          this.channel = this.client.channels._add(data11.channel, this.guild, { cache: false }) ?? this.client.channels.resolve(this.channelId);
+          this.channelId ??= data11.channel.id;
         }
-        if ("created_at" in data10) {
-          this.createdTimestamp = Date.parse(data10.created_at);
+        if ("created_at" in data11) {
+          this.createdTimestamp = Date.parse(data11.created_at);
         } else {
           this.createdTimestamp ??= null;
         }
-        if ("expires_at" in data10) {
-          this._expiresTimestamp = data10.expires_at && Date.parse(data10.expires_at);
+        if ("expires_at" in data11) {
+          this._expiresTimestamp = data11.expires_at && Date.parse(data11.expires_at);
         } else {
           this._expiresTimestamp ??= null;
         }
-        if ("stage_instance" in data10) {
-          this.stageInstance = new InviteStageInstance(this.client, data10.stage_instance, this.channel.id, this.guild.id);
+        if ("stage_instance" in data11) {
+          this.stageInstance = new InviteStageInstance(this.client, data11.stage_instance, this.channel.id, this.guild.id);
         } else {
           this.stageInstance ??= null;
         }
-        if ("guild_scheduled_event" in data10) {
-          this.guildScheduledEvent = new GuildScheduledEvent(this.client, data10.guild_scheduled_event);
+        if ("guild_scheduled_event" in data11) {
+          this.guildScheduledEvent = new GuildScheduledEvent(this.client, data11.guild_scheduled_event);
         } else {
           this.guildScheduledEvent ??= null;
         }
-        if ("flags" in data10) {
-          this.flags = new InviteFlagsBitField(data10.flags).freeze();
+        if ("flags" in data11) {
+          this.flags = new InviteFlagsBitField(data11.flags).freeze();
         } else {
           this.flags ??= new InviteFlagsBitField().freeze();
         }
@@ -129780,42 +129780,42 @@ var require_GuildTemplate = __commonJS({
        * @memberof GuildTemplate
        */
       static GuildTemplatesPattern = /discord(?:app)?\.(?:com\/template|new)\/(?<code>[\w-]{2,255})/i;
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("code" in data10) {
-          this.code = data10.code;
+      _patch(data11) {
+        if ("code" in data11) {
+          this.code = data11.code;
         }
-        if ("name" in data10) {
-          this.name = data10.name;
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("description" in data10) {
-          this.description = data10.description;
+        if ("description" in data11) {
+          this.description = data11.description;
         }
-        if ("usage_count" in data10) {
-          this.usageCount = data10.usage_count;
+        if ("usage_count" in data11) {
+          this.usageCount = data11.usage_count;
         }
-        if ("creator_id" in data10) {
-          this.creatorId = data10.creator_id;
+        if ("creator_id" in data11) {
+          this.creatorId = data11.creator_id;
         }
-        if ("creator" in data10) {
-          this.creator = this.client.users._add(data10.creator);
+        if ("creator" in data11) {
+          this.creator = this.client.users._add(data11.creator);
         }
-        if ("created_at" in data10) {
-          this.createdTimestamp = Date.parse(data10.created_at);
+        if ("created_at" in data11) {
+          this.createdTimestamp = Date.parse(data11.created_at);
         }
-        if ("updated_at" in data10) {
-          this.updatedTimestamp = Date.parse(data10.updated_at);
+        if ("updated_at" in data11) {
+          this.updatedTimestamp = Date.parse(data11.updated_at);
         }
-        if ("source_guild_id" in data10) {
-          this.guildId = data10.source_guild_id;
+        if ("source_guild_id" in data11) {
+          this.guildId = data11.source_guild_id;
         }
-        if ("serialized_source_guild" in data10) {
-          this.serializedGuild = data10.serialized_source_guild;
+        if ("serialized_source_guild" in data11) {
+          this.serializedGuild = data11.serialized_source_guild;
         }
-        this.unSynced = "is_dirty" in data10 ? Boolean(data10.is_dirty) : null;
+        this.unSynced = "is_dirty" in data11 ? Boolean(data11.is_dirty) : null;
         return this;
       }
       /**
@@ -129828,13 +129828,13 @@ var require_GuildTemplate = __commonJS({
        */
       async createGuild(name, icon) {
         const { client } = this;
-        const data10 = await client.rest.post(Routes3.template(this.code), {
+        const data11 = await client.rest.post(Routes3.template(this.code), {
           body: {
             name,
             icon: await resolveImage(icon)
           }
         });
-        if (client.guilds.cache.has(data10.id)) return client.guilds.cache.get(data10.id);
+        if (client.guilds.cache.has(data11.id)) return client.guilds.cache.get(data11.id);
         return new Promise((resolve) => {
           const resolveGuild = (guild) => {
             client.off(Events3.GuildCreate, handleGuild);
@@ -129842,14 +129842,14 @@ var require_GuildTemplate = __commonJS({
             resolve(guild);
           };
           const handleGuild = (guild) => {
-            if (guild.id === data10.id) {
+            if (guild.id === data11.id) {
               clearTimeout2(timeout);
               resolveGuild(guild);
             }
           };
           client.incrementMaxListeners();
           client.on(Events3.GuildCreate, handleGuild);
-          const timeout = setTimeout2(() => resolveGuild(client.guilds._add(data10)), 1e4).unref();
+          const timeout = setTimeout2(() => resolveGuild(client.guilds._add(data11)), 1e4).unref();
         });
       }
       /**
@@ -129864,10 +129864,10 @@ var require_GuildTemplate = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async edit({ name, description } = {}) {
-        const data10 = await this.client.rest.patch(Routes3.guildTemplate(this.guildId, this.code), {
+        const data11 = await this.client.rest.patch(Routes3.guildTemplate(this.guildId, this.code), {
           body: { name, description }
         });
-        return this._patch(data10);
+        return this._patch(data11);
       }
       /**
        * Deletes this template.
@@ -129882,8 +129882,8 @@ var require_GuildTemplate = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async sync() {
-        const data10 = await this.client.rest.put(Routes3.guildTemplate(this.guildId, this.code));
-        return this._patch(data10);
+        const data11 = await this.client.rest.put(Routes3.guildTemplate(this.guildId, this.code));
+        return this._patch(data11);
       }
       /**
        * The time when this template was created at
@@ -129942,21 +129942,21 @@ var require_DataResolver = __commonJS({
     var { fetch: fetch2 } = require_undici();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var Invite2 = require_Invite();
-    function resolveCode(data10, regex) {
-      return regex.exec(data10)?.[1] ?? data10;
+    function resolveCode(data11, regex) {
+      return regex.exec(data11)?.[1] ?? data11;
     }
-    function resolveInviteCode2(data10) {
-      return resolveCode(data10, Invite2.InvitesPattern);
+    function resolveInviteCode2(data11) {
+      return resolveCode(data11, Invite2.InvitesPattern);
     }
-    function resolveGuildTemplateCode2(data10) {
+    function resolveGuildTemplateCode2(data11) {
       const GuildTemplate2 = require_GuildTemplate();
-      return resolveCode(data10, GuildTemplate2.GuildTemplatesPattern);
+      return resolveCode(data11, GuildTemplate2.GuildTemplatesPattern);
     }
     async function resolveFile(resource) {
       if (Buffer2.isBuffer(resource)) return { data: resource };
       if (typeof resource[Symbol.asyncIterator] === "function") {
         const buffers = [];
-        for await (const data10 of resource) buffers.push(Buffer2.from(data10));
+        for await (const data11 of resource) buffers.push(Buffer2.from(data11));
         return { data: Buffer2.concat(buffers) };
       }
       if (typeof resource === "string") {
@@ -129971,9 +129971,9 @@ var require_DataResolver = __commonJS({
       }
       throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
     }
-    function resolveBase64(data10, contentType = "image/jpg") {
-      if (Buffer2.isBuffer(data10)) return `data:${contentType};base64,${data10.toString("base64")}`;
-      return data10;
+    function resolveBase64(data11, contentType = "image/jpg") {
+      if (Buffer2.isBuffer(data11)) return `data:${contentType};base64,${data11.toString("base64")}`;
+      return data11;
     }
     async function resolveImage(image) {
       if (!image) return null;
@@ -130017,28 +130017,28 @@ var require_BaseInteraction = __commonJS({
     var { SelectMenuTypes } = require_Constants();
     var PermissionsBitField2 = require_PermissionsBitField();
     var BaseInteraction = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.type = data10.type;
-        this.id = data10.id;
-        Object.defineProperty(this, "token", { value: data10.token });
-        this.applicationId = data10.application_id;
-        this.channelId = data10.channel?.id ?? null;
-        this.guildId = data10.guild_id ?? null;
-        this.user = this.client.users._add(data10.user ?? data10.member.user);
-        this.member = data10.member ? this.guild?.members._add(data10.member) ?? data10.member : null;
-        this.version = data10.version;
-        this.appPermissions = new PermissionsBitField2(data10.app_permissions).freeze();
-        this.memberPermissions = data10.member?.permissions ? new PermissionsBitField2(data10.member.permissions).freeze() : null;
-        this.locale = data10.locale;
-        this.guildLocale = data10.guild_locale ?? null;
-        this.entitlements = data10.entitlements.reduce(
+        this.type = data11.type;
+        this.id = data11.id;
+        Object.defineProperty(this, "token", { value: data11.token });
+        this.applicationId = data11.application_id;
+        this.channelId = data11.channel?.id ?? null;
+        this.guildId = data11.guild_id ?? null;
+        this.user = this.client.users._add(data11.user ?? data11.member.user);
+        this.member = data11.member ? this.guild?.members._add(data11.member) ?? data11.member : null;
+        this.version = data11.version;
+        this.appPermissions = new PermissionsBitField2(data11.app_permissions).freeze();
+        this.memberPermissions = data11.member?.permissions ? new PermissionsBitField2(data11.member.permissions).freeze() : null;
+        this.locale = data11.locale;
+        this.guildLocale = data11.guild_locale ?? null;
+        this.entitlements = data11.entitlements.reduce(
           (coll, entitlement) => coll.set(entitlement.id, this.client.application.entitlements._add(entitlement)),
           new Collection3()
         );
-        this.authorizingIntegrationOwners = data10.authorizing_integration_owners;
-        this.context = data10.context ?? null;
-        this.attachmentSizeLimit = data10.attachment_size_limit;
+        this.authorizingIntegrationOwners = data11.authorizing_integration_owners;
+        this.context = data11.context ?? null;
+        this.attachmentSizeLimit = data11.attachment_size_limit;
       }
       /**
        * The timestamp the interaction was created at
@@ -130234,13 +130234,13 @@ var require_ApplicationRoleConnectionMetadata = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/ApplicationRoleConnectionMetadata.js"(exports2) {
     "use strict";
     var ApplicationRoleConnectionMetadata = class {
-      constructor(data10) {
-        this.name = data10.name;
-        this.nameLocalizations = data10.name_localizations ?? null;
-        this.description = data10.description;
-        this.descriptionLocalizations = data10.description_localizations ?? null;
-        this.key = data10.key;
-        this.type = data10.type;
+      constructor(data11) {
+        this.name = data11.name;
+        this.nameLocalizations = data11.name_localizations ?? null;
+        this.description = data11.description;
+        this.descriptionLocalizations = data11.description_localizations ?? null;
+        this.key = data11.key;
+        this.type = data11.type;
       }
     };
     exports2.ApplicationRoleConnectionMetadata = ApplicationRoleConnectionMetadata;
@@ -130253,25 +130253,25 @@ var require_TeamMember = __commonJS({
     "use strict";
     var Base = require_Base();
     var TeamMember = class extends Base {
-      constructor(team, data10) {
+      constructor(team, data11) {
         super(team.client);
         this.team = team;
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("permissions" in data10) {
-          this.permissions = data10.permissions;
+      _patch(data11) {
+        if ("permissions" in data11) {
+          this.permissions = data11.permissions;
         } else {
           this.permissions ??= [];
         }
-        if ("membership_state" in data10) {
-          this.membershipState = data10.membership_state;
+        if ("membership_state" in data11) {
+          this.membershipState = data11.membership_state;
         }
-        if ("user" in data10) {
-          this.user = this.client.users._add(data10.user);
+        if ("user" in data11) {
+          this.user = this.client.users._add(data11.user);
         }
-        if ("role" in data10) {
-          this.role = data10.role;
+        if ("role" in data11) {
+          this.role = data11.role;
         }
       }
       /**
@@ -130307,27 +130307,27 @@ var require_Team = __commonJS({
     var Base = require_Base();
     var TeamMember = require_TeamMember();
     var Team = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        this.id = data10.id;
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        this.id = data11.id;
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("icon" in data10) {
-          this.icon = data10.icon;
+        if ("icon" in data11) {
+          this.icon = data11.icon;
         } else {
           this.icon ??= null;
         }
-        if ("owner_user_id" in data10) {
-          this.ownerId = data10.owner_user_id;
+        if ("owner_user_id" in data11) {
+          this.ownerId = data11.owner_user_id;
         } else {
           this.ownerId ??= null;
         }
         this.members = new Collection3();
-        for (const memberData of data10.members) {
+        for (const memberData of data11.members) {
           const member = new TeamMember(this, memberData);
           this.members.set(member.id, member);
         }
@@ -130456,11 +130456,11 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
       async fetch({ guild, command } = {}) {
         const { guildId, commandId } = this._validateOptions(guild, command);
         if (commandId) {
-          const data11 = await this.client.rest.get(this.permissionsPath(guildId, commandId));
-          return data11.permissions;
+          const data12 = await this.client.rest.get(this.permissionsPath(guildId, commandId));
+          return data12.permissions;
         }
-        const data10 = await this.client.rest.get(this.permissionsPath(guildId));
-        return data10.reduce((coll, perm) => coll.set(perm.id, perm.permissions), new Collection3());
+        const data11 = await this.client.rest.get(this.permissionsPath(guildId));
+        return data11.reduce((coll, perm) => coll.set(perm.id, perm.permissions), new Collection3());
       }
       /**
        * Options used to set permissions for one or more Application Commands in a guild
@@ -130520,12 +130520,12 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
         if (!commandId) {
           commandId = this.client.user.id;
         }
-        const data10 = await this.client.rest.put(this.permissionsPath(guildId, commandId), {
+        const data11 = await this.client.rest.put(this.permissionsPath(guildId, commandId), {
           body: { permissions },
           auth: false,
           headers: { Authorization: `Bearer ${token}` }
         });
-        return data10.permissions;
+        return data11.permissions;
       }
       /**
        * Add permissions to a command.
@@ -130797,76 +130797,76 @@ var require_ApplicationCommand = __commonJS({
     var ApplicationCommandPermissionsManager = require_ApplicationCommandPermissionsManager();
     var PermissionsBitField2 = require_PermissionsBitField();
     var ApplicationCommand = class extends Base {
-      constructor(client, data10, guild, guildId) {
+      constructor(client, data11, guild, guildId) {
         super(client);
-        this.id = data10.id;
-        this.applicationId = data10.application_id;
+        this.id = data11.id;
+        this.applicationId = data11.application_id;
         this.guild = guild ?? null;
         this.guildId = guild?.id ?? guildId ?? null;
         this.permissions = new ApplicationCommandPermissionsManager(this);
-        this.type = data10.type;
-        this.nsfw = data10.nsfw ?? false;
-        this._patch(data10);
+        this.type = data11.type;
+        this.nsfw = data11.nsfw ?? false;
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("name_localizations" in data10) {
-          this.nameLocalizations = data10.name_localizations;
+        if ("name_localizations" in data11) {
+          this.nameLocalizations = data11.name_localizations;
         } else {
           this.nameLocalizations ??= null;
         }
-        if ("name_localized" in data10) {
-          this.nameLocalized = data10.name_localized;
+        if ("name_localized" in data11) {
+          this.nameLocalized = data11.name_localized;
         } else {
           this.nameLocalized ??= null;
         }
-        if ("description" in data10) {
-          this.description = data10.description;
+        if ("description" in data11) {
+          this.description = data11.description;
         }
-        if ("description_localizations" in data10) {
-          this.descriptionLocalizations = data10.description_localizations;
+        if ("description_localizations" in data11) {
+          this.descriptionLocalizations = data11.description_localizations;
         } else {
           this.descriptionLocalizations ??= null;
         }
-        if ("description_localized" in data10) {
-          this.descriptionLocalized = data10.description_localized;
+        if ("description_localized" in data11) {
+          this.descriptionLocalized = data11.description_localized;
         } else {
           this.descriptionLocalized ??= null;
         }
-        if ("options" in data10) {
-          this.options = data10.options.map((option) => this.constructor.transformOption(option, true));
+        if ("options" in data11) {
+          this.options = data11.options.map((option) => this.constructor.transformOption(option, true));
         } else {
           this.options ??= [];
         }
-        if ("default_member_permissions" in data10) {
-          this.defaultMemberPermissions = data10.default_member_permissions ? new PermissionsBitField2(BigInt(data10.default_member_permissions)).freeze() : null;
+        if ("default_member_permissions" in data11) {
+          this.defaultMemberPermissions = data11.default_member_permissions ? new PermissionsBitField2(BigInt(data11.default_member_permissions)).freeze() : null;
         } else {
           this.defaultMemberPermissions ??= null;
         }
-        if ("dm_permission" in data10) {
-          this.dmPermission = data10.dm_permission;
+        if ("dm_permission" in data11) {
+          this.dmPermission = data11.dm_permission;
         } else {
           this.dmPermission ??= null;
         }
-        if ("integration_types" in data10) {
-          this.integrationTypes = data10.integration_types;
+        if ("integration_types" in data11) {
+          this.integrationTypes = data11.integration_types;
         } else {
           this.integrationTypes ??= null;
         }
-        if ("contexts" in data10) {
-          this.contexts = data10.contexts;
+        if ("contexts" in data11) {
+          this.contexts = data11.contexts;
         } else {
           this.contexts ??= null;
         }
-        if ("handler" in data10) {
-          this.handler = data10.handler;
+        if ("handler" in data11) {
+          this.handler = data11.handler;
         } else {
           this.handler ??= null;
         }
-        if ("version" in data10) {
-          this.version = data10.version;
+        if ("version" in data11) {
+          this.version = data11.version;
         }
       }
       /**
@@ -130961,8 +130961,8 @@ var require_ApplicationCommand = __commonJS({
        *   .then(console.log)
        *   .catch(console.error);
        */
-      edit(data10) {
-        return this.manager.edit(this, data10, this.guildId);
+      edit(data11) {
+        return this.manager.edit(this, data11, this.guildId);
       }
       /**
        * Edits the name of this ApplicationCommand
@@ -131252,8 +131252,8 @@ var require_ApplicationCommandManager = __commonJS({
        * @type {Collection<Snowflake, ApplicationCommand>}
        * @name ApplicationCommandManager#cache
        */
-      _add(data10, cache, guildId) {
-        return super._add(data10, cache, { extras: [this.guild, guildId] });
+      _add(data11, cache, guildId) {
+        return super._add(data11, cache, { extras: [this.guild, guildId] });
       }
       /**
        * The APIRouter path to the commands
@@ -131325,13 +131325,13 @@ var require_ApplicationCommandManager = __commonJS({
           const command = await this.client.rest.get(this.commandPath({ id, guildId }));
           return this._add(command, cache);
         }
-        const data10 = await this.client.rest.get(this.commandPath({ guildId }), {
+        const data11 = await this.client.rest.get(this.commandPath({ guildId }), {
           headers: {
             "X-Discord-Locale": locale
           },
           query: makeURLSearchParams2({ with_localizations: withLocalizations })
         });
-        return data10.reduce((coll, command) => coll.set(command.id, this._add(command, cache, guildId)), new Collection3());
+        return data11.reduce((coll, command) => coll.set(command.id, this._add(command, cache, guildId)), new Collection3());
       }
       /**
        * Creates an application command.
@@ -131349,10 +131349,10 @@ var require_ApplicationCommandManager = __commonJS({
        *   .catch(console.error);
        */
       async create(command, guildId) {
-        const data10 = await this.client.rest.post(this.commandPath({ guildId }), {
+        const data11 = await this.client.rest.post(this.commandPath({ guildId }), {
           body: this.constructor.transformCommand(command)
         });
-        return this._add(data10, true, guildId);
+        return this._add(data11, true, guildId);
       }
       /**
        * Sets all the commands for this application or guild.
@@ -131377,10 +131377,10 @@ var require_ApplicationCommandManager = __commonJS({
        *   .catch(console.error);
        */
       async set(commands2, guildId) {
-        const data10 = await this.client.rest.put(this.commandPath({ guildId }), {
+        const data11 = await this.client.rest.put(this.commandPath({ guildId }), {
           body: commands2.map((command) => this.constructor.transformCommand(command))
         });
-        return data10.reduce(
+        return data11.reduce(
           (collection, command) => collection.set(command.id, this._add(command, true, guildId)),
           new Collection3()
         );
@@ -131400,11 +131400,11 @@ var require_ApplicationCommandManager = __commonJS({
        *   .then(console.log)
        *   .catch(console.error);
        */
-      async edit(command, data10, guildId) {
+      async edit(command, data11, guildId) {
         const id = this.resolveId(command);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "command", "ApplicationCommandResolvable");
         const patched = await this.client.rest.patch(this.commandPath({ id, guildId }), {
-          body: this.constructor.transformCommand(data10)
+          body: this.constructor.transformCommand(data11)
         });
         return this._add(patched, true, guildId);
       }
@@ -131469,24 +131469,24 @@ var require_ApplicationEmoji = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var ApplicationEmoji = class _ApplicationEmoji extends Emoji {
-      constructor(client, data10, application) {
-        super(client, data10);
+      constructor(client, data11, application) {
+        super(client, data11);
         this.application = application;
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("name" in data10) this.name = data10.name;
-        if (data10.user) {
-          this.author = this.client.users._add(data10.user);
+      _patch(data11) {
+        if ("name" in data11) this.name = data11.name;
+        if (data11.user) {
+          this.author = this.client.users._add(data11.user);
         }
-        if ("managed" in data10) {
-          this.managed = data10.managed;
+        if ("managed" in data11) {
+          this.managed = data11.managed;
         }
-        if ("require_colons" in data10) {
-          this.requiresColons = data10.require_colons;
+        if ("require_colons" in data11) {
+          this.requiresColons = data11.require_colons;
         }
-        if ("available" in data10) {
-          this.available = data10.available;
+        if ("available" in data11) {
+          this.available = data11.available;
         }
       }
       /**
@@ -131561,8 +131561,8 @@ var require_ApplicationEmojiManager = __commonJS({
         super(application.client, ApplicationEmoji, iterable);
         this.application = application;
       }
-      _add(data10, cache) {
-        return super._add(data10, cache, { extras: [this.application] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { extras: [this.application] });
       }
       /**
        * Options used for creating an emoji of the application
@@ -131617,9 +131617,9 @@ var require_ApplicationEmojiManager = __commonJS({
           const emoji = await this.client.rest.get(Routes3.applicationEmoji(this.application.id, id));
           return this._add(emoji, cache);
         }
-        const { items: data10 } = await this.client.rest.get(Routes3.applicationEmojis(this.application.id));
+        const { items: data11 } = await this.client.rest.get(Routes3.applicationEmojis(this.application.id));
         const emojis = new Collection3();
-        for (const emoji of data10) emojis.set(emoji.id, this._add(emoji, cache));
+        for (const emoji of data11) emojis.set(emoji.id, this._add(emoji, cache));
         return emojis;
       }
       /**
@@ -131661,8 +131661,8 @@ var require_ApplicationEmojiManager = __commonJS({
       async fetchAuthor(emoji) {
         const id = this.resolveId(emoji);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "emoji", "EmojiResolvable", true);
-        const data10 = await this.client.rest.get(Routes3.applicationEmoji(this.application.id, id));
-        return this._add(data10).author;
+        const data11 = await this.client.rest.get(Routes3.applicationEmoji(this.application.id, id));
+        return this._add(data11).author;
       }
     };
     module2.exports = ApplicationEmojiManager;
@@ -131675,44 +131675,44 @@ var require_Entitlement = __commonJS({
     "use strict";
     var Base = require_Base();
     var Entitlement = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.id = data10.id;
-        this._patch(data10);
+        this.id = data11.id;
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("sku_id" in data10) {
-          this.skuId = data10.sku_id;
+      _patch(data11) {
+        if ("sku_id" in data11) {
+          this.skuId = data11.sku_id;
         }
-        if ("user_id" in data10) {
-          this.userId = data10.user_id;
+        if ("user_id" in data11) {
+          this.userId = data11.user_id;
         }
-        if ("guild_id" in data10) {
-          this.guildId = data10.guild_id;
+        if ("guild_id" in data11) {
+          this.guildId = data11.guild_id;
         } else {
           this.guildId ??= null;
         }
-        if ("application_id" in data10) {
-          this.applicationId = data10.application_id;
+        if ("application_id" in data11) {
+          this.applicationId = data11.application_id;
         }
-        if ("type" in data10) {
-          this.type = data10.type;
+        if ("type" in data11) {
+          this.type = data11.type;
         }
-        if ("deleted" in data10) {
-          this.deleted = data10.deleted;
+        if ("deleted" in data11) {
+          this.deleted = data11.deleted;
         }
-        if ("starts_at" in data10) {
-          this.startsTimestamp = data10.starts_at ? Date.parse(data10.starts_at) : null;
+        if ("starts_at" in data11) {
+          this.startsTimestamp = data11.starts_at ? Date.parse(data11.starts_at) : null;
         } else {
           this.startsTimestamp ??= null;
         }
-        if ("ends_at" in data10) {
-          this.endsTimestamp = data10.ends_at ? Date.parse(data10.ends_at) : null;
+        if ("ends_at" in data11) {
+          this.endsTimestamp = data11.ends_at ? Date.parse(data11.ends_at) : null;
         } else {
           this.endsTimestamp ??= null;
         }
-        if ("consumed" in data10) {
-          this.consumed = data10.consumed;
+        if ("consumed" in data11) {
+          this.consumed = data11.consumed;
         } else {
           this.consumed ??= false;
         }
@@ -131860,8 +131860,8 @@ var require_EntitlementManager = __commonJS({
             return existing;
           }
         }
-        const data10 = await this.client.rest.get(Routes3.entitlement(this.client.application.id, entitlement));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.entitlement(this.client.application.id, entitlement));
+        return this._add(data11, cache);
       }
       async _fetchMany({ limit, guild, user, skus, excludeEnded, excludeDeleted, cache, before, after } = {}) {
         const query = makeURLSearchParams2({
@@ -131944,28 +131944,28 @@ var require_Subscription = __commonJS({
     "use strict";
     var Base = require_Base();
     var Subscription = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.id = data10.id;
-        this.userId = data10.user_id;
-        this._patch(data10);
+        this.id = data11.id;
+        this.userId = data11.user_id;
+        this._patch(data11);
       }
-      _patch(data10) {
-        this.skuIds = data10.sku_ids;
-        this.entitlementIds = data10.entitlement_ids;
-        this.currentPeriodStartTimestamp = Date.parse(data10.current_period_start);
-        this.currentPeriodEndTimestamp = Date.parse(data10.current_period_end);
-        this.status = data10.status;
-        if ("renewal_sku_ids" in data10) {
-          this.renewalSkuIds = data10.renewal_sku_ids;
+      _patch(data11) {
+        this.skuIds = data11.sku_ids;
+        this.entitlementIds = data11.entitlement_ids;
+        this.currentPeriodStartTimestamp = Date.parse(data11.current_period_start);
+        this.currentPeriodEndTimestamp = Date.parse(data11.current_period_end);
+        this.status = data11.status;
+        if ("renewal_sku_ids" in data11) {
+          this.renewalSkuIds = data11.renewal_sku_ids;
         }
-        if ("canceled_at" in data10) {
-          this.canceledTimestamp = data10.canceled_at ? Date.parse(data10.canceled_at) : null;
+        if ("canceled_at" in data11) {
+          this.canceledTimestamp = data11.canceled_at ? Date.parse(data11.canceled_at) : null;
         } else {
           this.canceledTimestamp ??= null;
         }
-        if ("country" in data10) {
-          this.country = data10.country;
+        if ("country" in data11) {
+          this.country = data11.country;
         } else {
           this.country ??= null;
         }
@@ -132103,27 +132103,27 @@ var require_ClientApplication = __commonJS({
     var { resolveImage } = require_DataResolver();
     var PermissionsBitField2 = require_PermissionsBitField();
     var ClientApplication = class extends Application2 {
-      constructor(client, data10) {
-        super(client, data10);
+      constructor(client, data11) {
+        super(client, data11);
         this.commands = new ApplicationCommandManager(this.client);
         this.emojis = new ApplicationEmojiManager(this);
         this.entitlements = new EntitlementManager(this.client);
         this.subscriptions = new SubscriptionManager(this.client);
       }
-      _patch(data10) {
-        super._patch(data10);
-        this.tags = data10.tags ?? [];
-        if ("install_params" in data10) {
+      _patch(data11) {
+        super._patch(data11);
+        this.tags = data11.tags ?? [];
+        if ("install_params" in data11) {
           this.installParams = {
-            scopes: data10.install_params.scopes,
-            permissions: new PermissionsBitField2(data10.install_params.permissions).freeze()
+            scopes: data11.install_params.scopes,
+            permissions: new PermissionsBitField2(data11.install_params.permissions).freeze()
           };
         } else {
           this.installParams ??= null;
         }
-        if ("integration_types_config" in data10) {
+        if ("integration_types_config" in data11) {
           this.integrationTypesConfig = Object.fromEntries(
-            Object.entries(data10.integration_types_config).map(([key, config]) => {
+            Object.entries(data11.integration_types_config).map(([key, config]) => {
               let oauth2InstallParams = null;
               if (config.oauth2_install_params) {
                 oauth2InstallParams = {
@@ -132140,75 +132140,75 @@ var require_ClientApplication = __commonJS({
         } else {
           this.integrationTypesConfig ??= null;
         }
-        if ("custom_install_url" in data10) {
-          this.customInstallURL = data10.custom_install_url;
+        if ("custom_install_url" in data11) {
+          this.customInstallURL = data11.custom_install_url;
         } else {
           this.customInstallURL = null;
         }
-        if ("flags" in data10) {
-          this.flags = new ApplicationFlagsBitField(data10.flags).freeze();
+        if ("flags" in data11) {
+          this.flags = new ApplicationFlagsBitField(data11.flags).freeze();
         }
-        if ("approximate_guild_count" in data10) {
-          this.approximateGuildCount = data10.approximate_guild_count;
+        if ("approximate_guild_count" in data11) {
+          this.approximateGuildCount = data11.approximate_guild_count;
         } else {
           this.approximateGuildCount ??= null;
         }
-        if ("approximate_user_install_count" in data10) {
-          this.approximateUserInstallCount = data10.approximate_user_install_count;
+        if ("approximate_user_install_count" in data11) {
+          this.approximateUserInstallCount = data11.approximate_user_install_count;
         } else {
           this.approximateUserInstallCount ??= null;
         }
-        if ("approximate_user_authorization_count" in data10) {
-          this.approximateUserAuthorizationCount = data10.approximate_user_authorization_count;
+        if ("approximate_user_authorization_count" in data11) {
+          this.approximateUserAuthorizationCount = data11.approximate_user_authorization_count;
         } else {
           this.approximateUserAuthorizationCount ??= null;
         }
-        if ("guild_id" in data10) {
-          this.guildId = data10.guild_id;
+        if ("guild_id" in data11) {
+          this.guildId = data11.guild_id;
         } else {
           this.guildId ??= null;
         }
-        if ("bot_require_code_grant" in data10) {
-          this.botRequireCodeGrant = data10.bot_require_code_grant;
+        if ("bot_require_code_grant" in data11) {
+          this.botRequireCodeGrant = data11.bot_require_code_grant;
         } else {
           this.botRequireCodeGrant ??= null;
         }
-        if ("bot" in data10) {
-          this.bot = this.client.users._add(data10.bot);
+        if ("bot" in data11) {
+          this.bot = this.client.users._add(data11.bot);
         } else {
           this.bot ??= null;
         }
-        if ("bot_public" in data10) {
-          this.botPublic = data10.bot_public;
+        if ("bot_public" in data11) {
+          this.botPublic = data11.bot_public;
         } else {
           this.botPublic ??= null;
         }
-        if ("interactions_endpoint_url" in data10) {
-          this.interactionsEndpointURL = data10.interactions_endpoint_url;
+        if ("interactions_endpoint_url" in data11) {
+          this.interactionsEndpointURL = data11.interactions_endpoint_url;
         } else {
           this.interactionsEndpointURL ??= null;
         }
-        if ("role_connections_verification_url" in data10) {
-          this.roleConnectionsVerificationURL = data10.role_connections_verification_url;
+        if ("role_connections_verification_url" in data11) {
+          this.roleConnectionsVerificationURL = data11.role_connections_verification_url;
         } else {
           this.roleConnectionsVerificationURL ??= null;
         }
-        if ("event_webhooks_url" in data10) {
-          this.eventWebhooksURL = data10.event_webhooks_url;
+        if ("event_webhooks_url" in data11) {
+          this.eventWebhooksURL = data11.event_webhooks_url;
         } else {
           this.eventWebhooksURL ??= null;
         }
-        if ("event_webhooks_status" in data10) {
-          this.eventWebhooksStatus = data10.event_webhooks_status;
+        if ("event_webhooks_status" in data11) {
+          this.eventWebhooksStatus = data11.event_webhooks_status;
         } else {
           this.eventWebhooksStatus ??= null;
         }
-        if ("event_webhooks_types" in data10) {
-          this.eventWebhooksTypes = data10.event_webhooks_types;
+        if ("event_webhooks_types" in data11) {
+          this.eventWebhooksTypes = data11.event_webhooks_types;
         } else {
           this.eventWebhooksTypes ??= null;
         }
-        this.owner = data10.team ? new Team(this.client, data10.team) : data10.owner ? this.client.users._add(data10.owner) : this.owner ?? null;
+        this.owner = data11.team ? new Team(this.client, data11.team) : data11.owner ? this.client.users._add(data11.owner) : this.owner ?? null;
       }
       /**
        * The guild associated with this application.
@@ -132263,7 +132263,7 @@ var require_ClientApplication = __commonJS({
         eventWebhooksTypes,
         tags
       } = {}) {
-        const data10 = await this.client.rest.patch(Routes3.currentApplication(), {
+        const data11 = await this.client.rest.patch(Routes3.currentApplication(), {
           body: {
             custom_install_url: customInstallURL,
             description,
@@ -132279,7 +132279,7 @@ var require_ClientApplication = __commonJS({
             tags
           }
         });
-        this._patch(data10);
+        this._patch(data11);
         return this;
       }
       /**
@@ -132287,8 +132287,8 @@ var require_ClientApplication = __commonJS({
        * @returns {Promise<ClientApplication>}
        */
       async fetch() {
-        const data10 = await this.client.rest.get(Routes3.currentApplication());
-        this._patch(data10);
+        const data11 = await this.client.rest.get(Routes3.currentApplication());
+        this._patch(data11);
         return this;
       }
       /**
@@ -132297,7 +132297,7 @@ var require_ClientApplication = __commonJS({
        */
       async fetchRoleConnectionMetadataRecords() {
         const metadata = await this.client.rest.get(Routes3.applicationRoleConnectionMetadata(this.client.user.id));
-        return metadata.map((data10) => new ApplicationRoleConnectionMetadata(data10));
+        return metadata.map((data11) => new ApplicationRoleConnectionMetadata(data11));
       }
       /**
        * Data for creating or editing an application role connection metadata.
@@ -132325,7 +132325,7 @@ var require_ClientApplication = __commonJS({
             description_localizations: record.descriptionLocalizations
           }))
         });
-        return newRecords.map((data10) => new ApplicationRoleConnectionMetadata(data10));
+        return newRecords.map((data11) => new ApplicationRoleConnectionMetadata(data11));
       }
       /**
        * Gets this application's SKUs
@@ -132647,12 +132647,12 @@ var require_hashGet = __commonJS({
     var objectProto = Object.prototype;
     var hasOwnProperty = objectProto.hasOwnProperty;
     function hashGet(key) {
-      var data10 = this.__data__;
+      var data11 = this.__data__;
       if (nativeCreate) {
-        var result = data10[key];
+        var result = data11[key];
         return result === HASH_UNDEFINED ? void 0 : result;
       }
-      return hasOwnProperty.call(data10, key) ? data10[key] : void 0;
+      return hasOwnProperty.call(data11, key) ? data11[key] : void 0;
     }
     module2.exports = hashGet;
   }
@@ -132665,8 +132665,8 @@ var require_hashHas = __commonJS({
     var objectProto = Object.prototype;
     var hasOwnProperty = objectProto.hasOwnProperty;
     function hashHas(key) {
-      var data10 = this.__data__;
-      return nativeCreate ? data10[key] !== void 0 : hasOwnProperty.call(data10, key);
+      var data11 = this.__data__;
+      return nativeCreate ? data11[key] !== void 0 : hasOwnProperty.call(data11, key);
     }
     module2.exports = hashHas;
   }
@@ -132678,9 +132678,9 @@ var require_hashSet = __commonJS({
     var nativeCreate = require_nativeCreate();
     var HASH_UNDEFINED = "__lodash_hash_undefined__";
     function hashSet(key, value) {
-      var data10 = this.__data__;
+      var data11 = this.__data__;
       this.size += this.has(key) ? 0 : 1;
-      data10[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED : value;
+      data11[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED : value;
       return this;
     }
     module2.exports = hashSet;
@@ -132757,15 +132757,15 @@ var require_listCacheDelete = __commonJS({
     var arrayProto = Array.prototype;
     var splice = arrayProto.splice;
     function listCacheDelete(key) {
-      var data10 = this.__data__, index = assocIndexOf(data10, key);
+      var data11 = this.__data__, index = assocIndexOf(data11, key);
       if (index < 0) {
         return false;
       }
-      var lastIndex = data10.length - 1;
+      var lastIndex = data11.length - 1;
       if (index == lastIndex) {
-        data10.pop();
+        data11.pop();
       } else {
-        splice.call(data10, index, 1);
+        splice.call(data11, index, 1);
       }
       --this.size;
       return true;
@@ -132779,8 +132779,8 @@ var require_listCacheGet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_listCacheGet.js"(exports2, module2) {
     var assocIndexOf = require_assocIndexOf();
     function listCacheGet(key) {
-      var data10 = this.__data__, index = assocIndexOf(data10, key);
-      return index < 0 ? void 0 : data10[index][1];
+      var data11 = this.__data__, index = assocIndexOf(data11, key);
+      return index < 0 ? void 0 : data11[index][1];
     }
     module2.exports = listCacheGet;
   }
@@ -132802,12 +132802,12 @@ var require_listCacheSet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_listCacheSet.js"(exports2, module2) {
     var assocIndexOf = require_assocIndexOf();
     function listCacheSet(key, value) {
-      var data10 = this.__data__, index = assocIndexOf(data10, key);
+      var data11 = this.__data__, index = assocIndexOf(data11, key);
       if (index < 0) {
         ++this.size;
-        data10.push([key, value]);
+        data11.push([key, value]);
       } else {
-        data10[index][1] = value;
+        data11[index][1] = value;
       }
       return this;
     }
@@ -132884,8 +132884,8 @@ var require_getMapData = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_getMapData.js"(exports2, module2) {
     var isKeyable = require_isKeyable();
     function getMapData(map, key) {
-      var data10 = map.__data__;
-      return isKeyable(key) ? data10[typeof key == "string" ? "string" : "hash"] : data10.map;
+      var data11 = map.__data__;
+      return isKeyable(key) ? data11[typeof key == "string" ? "string" : "hash"] : data11.map;
     }
     module2.exports = getMapData;
   }
@@ -132931,9 +132931,9 @@ var require_mapCacheSet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_mapCacheSet.js"(exports2, module2) {
     var getMapData = require_getMapData();
     function mapCacheSet(key, value) {
-      var data10 = getMapData(this, key), size = data10.size;
-      data10.set(key, value);
-      this.size += data10.size == size ? 0 : 1;
+      var data11 = getMapData(this, key), size = data11.size;
+      data11.set(key, value);
+      this.size += data11.size == size ? 0 : 1;
       return this;
     }
     module2.exports = mapCacheSet;
@@ -136999,7 +136999,7 @@ var require_dist10 = __commonJS({
       ContextMenuCommandAssertions: () => Assertions_exports11,
       ContextMenuCommandBuilder: () => ContextMenuCommandBuilder,
       EmbedAssertions: () => Assertions_exports,
-      EmbedBuilder: () => EmbedBuilder11,
+      EmbedBuilder: () => EmbedBuilder12,
       FileBuilder: () => FileBuilder,
       FileUploadAssertions: () => Assertions_exports4,
       FileUploadBuilder: () => FileUploadBuilder,
@@ -137025,7 +137025,7 @@ var require_dist10 = __commonJS({
       SlashCommandAssertions: () => Assertions_exports10,
       SlashCommandAttachmentOption: () => SlashCommandAttachmentOption,
       SlashCommandBooleanOption: () => SlashCommandBooleanOption,
-      SlashCommandBuilder: () => SlashCommandBuilder10,
+      SlashCommandBuilder: () => SlashCommandBuilder11,
       SlashCommandChannelOption: () => SlashCommandChannelOption,
       SlashCommandIntegerOption: () => SlashCommandIntegerOption,
       SlashCommandMentionableOption: () => SlashCommandMentionableOption,
@@ -137128,7 +137128,7 @@ var require_dist10 = __commonJS({
       return arr;
     }
     __name(normalizeArray, "normalizeArray");
-    var EmbedBuilder11 = class {
+    var EmbedBuilder12 = class {
       static {
         __name(this, "EmbedBuilder");
       }
@@ -137141,9 +137141,9 @@ var require_dist10 = __commonJS({
        *
        * @param data - The API data to create this embed with
        */
-      constructor(data10 = {}) {
-        this.data = { ...data10 };
-        if (data10.timestamp) this.data.timestamp = new Date(data10.timestamp).toISOString();
+      constructor(data11 = {}) {
+        this.data = { ...data11 };
+        if (data11.timestamp) this.data.timestamp = new Date(data11.timestamp).toISOString();
       }
       /**
        * Appends fields to the embed.
@@ -137389,8 +137389,8 @@ var require_dist10 = __commonJS({
        * 	.setLabel('woah');
        * ```
        */
-      constructor(data10 = {}) {
-        this.data = data10;
+      constructor(data11 = {}) {
+        this.data = data11;
       }
       static {
         __name(this, "StringSelectMenuOptionBuilder");
@@ -137530,8 +137530,8 @@ var require_dist10 = __commonJS({
        *
        * @param data - The data to construct a component out of
        */
-      constructor(data10) {
-        this.data = data10;
+      constructor(data11) {
+        this.data = data11;
       }
       /**
        * Sets the id (not the custom id) for this component.
@@ -137584,8 +137584,8 @@ var require_dist10 = __commonJS({
        * 	.setCustomId('another cool button');
        * ```
        */
-      constructor(data10) {
-        super({ type: import_v102.ComponentType.Button, ...data10 });
+      constructor(data11) {
+        super({ type: import_v102.ComponentType.Button, ...data11 });
       }
       /**
        * Sets the style of this button.
@@ -137704,29 +137704,29 @@ var require_dist10 = __commonJS({
       min_values: import_shapeshift3.s.number().int().greaterThanOrEqual(0).lessThanOrEqual(10).optional(),
       max_values: import_shapeshift3.s.number().int().greaterThanOrEqual(1).lessThanOrEqual(10).optional(),
       required: import_shapeshift3.s.boolean().optional()
-    }).reshape((data10) => {
-      if (data10.min_values !== void 0 && data10.max_values !== void 0 && data10.min_values > data10.max_values) {
+    }).reshape((data11) => {
+      if (data11.min_values !== void 0 && data11.max_values !== void 0 && data11.min_values > data11.max_values) {
         return import_shapeshift3.Result.err(new RangeError("min_values cannot be greater than max_values"));
       }
-      if (data10.max_values !== void 0 && data10.max_values > data10.options.length) {
+      if (data11.max_values !== void 0 && data11.max_values > data11.options.length) {
         return import_shapeshift3.Result.err(new RangeError("max_values cannot be greater than the number of options"));
       }
-      if (data10.min_values !== void 0 && data10.min_values > data10.options.length) {
+      if (data11.min_values !== void 0 && data11.min_values > data11.options.length) {
         return import_shapeshift3.Result.err(new RangeError("min_values cannot be greater than the number of options"));
       }
-      if (data10.required === true && data10.min_values === 0) {
+      if (data11.required === true && data11.min_values === 0) {
         return import_shapeshift3.Result.err(new RangeError("If required is true, min_values must be at least 1"));
       }
-      const defaultCount = data10.options.filter((option) => option.default === true).length;
-      if (data10.max_values !== void 0 && defaultCount > data10.max_values) {
+      const defaultCount = data11.options.filter((option) => option.default === true).length;
+      if (data11.max_values !== void 0 && defaultCount > data11.max_values) {
         return import_shapeshift3.Result.err(new RangeError("The number of default options cannot be greater than max_values"));
       }
-      const values = data10.options.map((option) => option.value);
+      const values = data11.options.map((option) => option.value);
       const uniqueValues = new Set(values);
       if (uniqueValues.size !== values.length) {
         return import_shapeshift3.Result.err(new RangeError("Each option in a checkbox group must have a unique value"));
       }
-      return import_shapeshift3.Result.ok(data10);
+      return import_shapeshift3.Result.ok(data11);
     }).setValidationEnabled(isValidationEnabled);
     var radioGroupOptionPredicate = checkboxGroupOptionPredicate;
     var radioGroupPredicate = import_shapeshift3.s.object({
@@ -137735,17 +137735,17 @@ var require_dist10 = __commonJS({
       id: idValidator.optional(),
       options: import_shapeshift3.s.array(radioGroupOptionPredicate).lengthGreaterThanOrEqual(2).lengthLessThanOrEqual(10),
       required: import_shapeshift3.s.boolean().optional()
-    }).reshape((data10) => {
-      const defaultCount = data10.options.filter((option) => option.default === true).length;
+    }).reshape((data11) => {
+      const defaultCount = data11.options.filter((option) => option.default === true).length;
       if (defaultCount > 1) {
         return import_shapeshift3.Result.err(new RangeError("There can be at most one default option in a radio group"));
       }
-      const values = data10.options.map((option) => option.value);
+      const values = data11.options.map((option) => option.value);
       const uniqueValues = new Set(values);
       if (uniqueValues.size !== values.length) {
         return import_shapeshift3.Result.err(new RangeError("Each option in a radio group must have a unique value"));
       }
-      return import_shapeshift3.Result.ok(data10);
+      return import_shapeshift3.Result.ok(data11);
     }).setValidationEnabled(isValidationEnabled);
     var CheckboxBuilder = class extends ComponentBuilder {
       static {
@@ -137771,8 +137771,8 @@ var require_dist10 = __commonJS({
        * 	.setDefault(true);
        * ```
        */
-      constructor(data10) {
-        super({ type: import_v104.ComponentType.Checkbox, ...data10 });
+      constructor(data11) {
+        super({ type: import_v104.ComponentType.Checkbox, ...data11 });
       }
       /**
        * Sets the custom id of this checkbox.
@@ -137824,8 +137824,8 @@ var require_dist10 = __commonJS({
        * 	.setValue('option_2');
        * ```
        */
-      constructor(data10 = {}) {
-        this.data = data10;
+      constructor(data11 = {}) {
+        this.data = data11;
       }
       static {
         __name(this, "CheckboxGroupOptionBuilder");
@@ -137912,8 +137912,8 @@ var require_dist10 = __commonJS({
        * 	.setMaxValues(2);
        * ```
        */
-      constructor(data10) {
-        const { options, ...initData } = data10 ?? {};
+      constructor(data11) {
+        const { options, ...initData } = data11 ?? {};
         super({ ...initData, type: import_v105.ComponentType.CheckboxGroup });
         this.options = options?.map((option) => new CheckboxGroupOptionBuilder(option)) ?? [];
       }
@@ -138009,12 +138009,12 @@ var require_dist10 = __commonJS({
        * {@inheritDoc ComponentBuilder.toJSON}
        */
       toJSON() {
-        const data10 = {
+        const data11 = {
           ...this.data,
           options: this.options.map((option) => option.toJSON())
         };
-        checkboxGroupPredicate.parse(data10);
-        return data10;
+        checkboxGroupPredicate.parse(data11);
+        return data11;
       }
     };
     var import_v106 = require_v106();
@@ -138039,8 +138039,8 @@ var require_dist10 = __commonJS({
        * 	.setValue('option_2');
        * ```
        */
-      constructor(data10 = {}) {
-        this.data = data10;
+      constructor(data11 = {}) {
+        this.data = data11;
       }
       static {
         __name(this, "RadioGroupOptionBuilder");
@@ -138125,8 +138125,8 @@ var require_dist10 = __commonJS({
        * 	])
        * ```
        */
-      constructor(data10) {
-        const { options, ...initData } = data10 ?? {};
+      constructor(data11) {
+        const { options, ...initData } = data11 ?? {};
         super({ ...initData, type: import_v106.ComponentType.RadioGroup });
         this.options = options?.map((option) => new RadioGroupOptionBuilder(option)) ?? [];
       }
@@ -138204,12 +138204,12 @@ var require_dist10 = __commonJS({
        * {@inheritDoc ComponentBuilder.toJSON}
        */
       toJSON() {
-        const data10 = {
+        const data11 = {
           ...this.data,
           options: this.options.map((option) => option.toJSON())
         };
-        radioGroupPredicate.parse(data10);
-        return data10;
+        radioGroupPredicate.parse(data11);
+        return data11;
       }
     };
     var import_v108 = require_v106();
@@ -138254,8 +138254,8 @@ var require_dist10 = __commonJS({
        * }).setRequired();
        * ```
        */
-      constructor(data10 = {}) {
-        super({ type: import_v108.ComponentType.FileUpload, ...data10 });
+      constructor(data11 = {}) {
+        super({ type: import_v108.ComponentType.FileUpload, ...data11 });
       }
       /**
        * Sets the custom id for this file upload.
@@ -138450,8 +138450,8 @@ var require_dist10 = __commonJS({
        * 	.setMinValues(2);
        * ```
        */
-      constructor(data10) {
-        super({ ...data10, type: import_v1010.ComponentType.ChannelSelect });
+      constructor(data11) {
+        super({ ...data11, type: import_v1010.ComponentType.ChannelSelect });
       }
       /**
        * Adds channel types to this select menu.
@@ -138543,8 +138543,8 @@ var require_dist10 = __commonJS({
        * 	.setMinValues(1);
        * ```
        */
-      constructor(data10) {
-        super({ ...data10, type: import_v1011.ComponentType.MentionableSelect });
+      constructor(data11) {
+        super({ ...data11, type: import_v1011.ComponentType.MentionableSelect });
       }
       /**
        * Adds default roles to this auto populated select menu.
@@ -138631,8 +138631,8 @@ var require_dist10 = __commonJS({
        * 	.setMinValues(1);
        * ```
        */
-      constructor(data10) {
-        super({ ...data10, type: import_v1012.ComponentType.RoleSelect });
+      constructor(data11) {
+        super({ ...data11, type: import_v1012.ComponentType.RoleSelect });
       }
       /**
        * Adds default roles to this auto populated select menu.
@@ -138766,8 +138766,8 @@ var require_dist10 = __commonJS({
        * 	});
        * ```
        */
-      constructor(data10) {
-        const { options, ...initData } = data10 ?? {};
+      constructor(data11) {
+        const { options, ...initData } = data11 ?? {};
         super({ ...initData, type: import_v1014.ComponentType.StringSelect });
         this.options = options?.map((option) => new StringSelectMenuOptionBuilder3(option)) ?? [];
       }
@@ -138873,8 +138873,8 @@ var require_dist10 = __commonJS({
        * 	.setMinValues(1);
        * ```
        */
-      constructor(data10) {
-        super({ ...data10, type: import_v1015.ComponentType.UserSelect });
+      constructor(data11) {
+        super({ ...data11, type: import_v1015.ComponentType.UserSelect });
       }
       /**
        * Adds default users to this auto populated select menu.
@@ -138938,8 +138938,8 @@ var require_dist10 = __commonJS({
        * 	.setStyle(TextInputStyle.Paragraph);
        * ```
        */
-      constructor(data10) {
-        super({ type: import_v1016.ComponentType.TextInput, ...data10 });
+      constructor(data11) {
+        super({ type: import_v1016.ComponentType.TextInput, ...data11 });
       }
       /**
        * Sets the custom id for this text input.
@@ -139086,9 +139086,9 @@ var require_dist10 = __commonJS({
        * }).setLabel('new text');
        * ```
        */
-      constructor(data10 = {}) {
+      constructor(data11 = {}) {
         super({ type: import_v1018.ComponentType.Label });
-        const { component, ...rest } = data10;
+        const { component, ...rest } = data11;
         this.data = {
           ...rest,
           component: component ? createComponentBuilder(component) : void 0,
@@ -139215,13 +139215,13 @@ var require_dist10 = __commonJS({
        */
       toJSON() {
         const { component, ...rest } = this.data;
-        const data10 = {
+        const data11 = {
           ...rest,
           // The label predicate validates the component.
           component: component?.toJSON()
         };
-        labelPredicate.parse(data10);
-        return data10;
+        labelPredicate.parse(data11);
+        return data11;
       }
     };
     var import_v1024 = require_v106();
@@ -139271,11 +139271,11 @@ var require_dist10 = __commonJS({
        * 	.setDescription('alt text');
        * ```
        */
-      constructor(data10 = {}) {
+      constructor(data11 = {}) {
         super({
           type: import_v1019.ComponentType.Thumbnail,
-          ...data10,
-          media: data10.media ? { url: data10.media.url } : void 0
+          ...data11,
+          media: data11.media ? { url: data11.media.url } : void 0
         });
       }
       /**
@@ -139374,8 +139374,8 @@ var require_dist10 = __commonJS({
        * 	.setSpoiler(false);
        * ```
        */
-      constructor(data10 = {}) {
-        super({ type: import_v1021.ComponentType.File, ...data10, file: data10.file ? { url: data10.file.url } : void 0 });
+      constructor(data11 = {}) {
+        super({ type: import_v1021.ComponentType.File, ...data11, file: data11.file ? { url: data11.file.url } : void 0 });
       }
       /**
        * Sets the spoiler status of this file.
@@ -139429,10 +139429,10 @@ var require_dist10 = __commonJS({
        * 	.setDivider(false);
        * ```
        */
-      constructor(data10 = {}) {
+      constructor(data11 = {}) {
         super({
           type: import_v1022.ComponentType.Separator,
-          ...data10
+          ...data11
         });
       }
       /**
@@ -139492,10 +139492,10 @@ var require_dist10 = __commonJS({
        * 	.setContent('new text');
        * ```
        */
-      constructor(data10 = {}) {
+      constructor(data11 = {}) {
         super({
           type: import_v1023.ComponentType.TextDisplay,
-          ...data10
+          ...data11
         });
       }
       /**
@@ -139554,8 +139554,8 @@ var require_dist10 = __commonJS({
        *  .addSectionComponents(section);
        * ```
        */
-      constructor({ components, ...data10 } = {}) {
-        super({ type: import_v1024.ComponentType.Container, ...data10 });
+      constructor({ components, ...data11 } = {}) {
+        super({ type: import_v1024.ComponentType.Container, ...data11 });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
       }
       /**
@@ -139710,8 +139710,8 @@ var require_dist10 = __commonJS({
        * 	.setDescription("alt text");
        * ```
        */
-      constructor(data10 = {}) {
-        this.data = data10;
+      constructor(data11 = {}) {
+        this.data = data11;
       }
       /**
        * Sets the description of this media gallery item.
@@ -139801,8 +139801,8 @@ var require_dist10 = __commonJS({
        * 	.addItems(item2, item3);
        * ```
        */
-      constructor({ items, ...data10 } = {}) {
-        super({ type: import_v1025.ComponentType.MediaGallery, ...data10 });
+      constructor({ items, ...data11 } = {}) {
+        super({ type: import_v1025.ComponentType.MediaGallery, ...data11 });
         this.items = items?.map((item) => new MediaGalleryItemBuilder(item)) ?? [];
       }
       /**
@@ -139898,8 +139898,8 @@ var require_dist10 = __commonJS({
        * 	.setPrimaryButtonAccessory(button);
        * ```
        */
-      constructor({ components, accessory, ...data10 } = {}) {
-        super({ type: import_v1026.ComponentType.Section, ...data10 });
+      constructor({ components, accessory, ...data11 } = {}) {
+        super({ type: import_v1026.ComponentType.Section, ...data11 });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
         this.accessory = accessory ? createComponentBuilder(accessory) : void 0;
       }
@@ -139967,53 +139967,53 @@ var require_dist10 = __commonJS({
         };
       }
     };
-    function createComponentBuilder(data10) {
-      if (data10 instanceof ComponentBuilder) {
-        return data10;
+    function createComponentBuilder(data11) {
+      if (data11 instanceof ComponentBuilder) {
+        return data11;
       }
-      switch (data10.type) {
+      switch (data11.type) {
         case import_v1027.ComponentType.ActionRow:
-          return new ActionRowBuilder5(data10);
+          return new ActionRowBuilder5(data11);
         case import_v1027.ComponentType.Button:
-          return new ButtonBuilder4(data10);
+          return new ButtonBuilder4(data11);
         case import_v1027.ComponentType.StringSelect:
-          return new StringSelectMenuBuilder3(data10);
+          return new StringSelectMenuBuilder3(data11);
         case import_v1027.ComponentType.TextInput:
-          return new TextInputBuilder3(data10);
+          return new TextInputBuilder3(data11);
         case import_v1027.ComponentType.UserSelect:
-          return new UserSelectMenuBuilder(data10);
+          return new UserSelectMenuBuilder(data11);
         case import_v1027.ComponentType.RoleSelect:
-          return new RoleSelectMenuBuilder(data10);
+          return new RoleSelectMenuBuilder(data11);
         case import_v1027.ComponentType.MentionableSelect:
-          return new MentionableSelectMenuBuilder(data10);
+          return new MentionableSelectMenuBuilder(data11);
         case import_v1027.ComponentType.ChannelSelect:
-          return new ChannelSelectMenuBuilder(data10);
+          return new ChannelSelectMenuBuilder(data11);
         case import_v1027.ComponentType.File:
-          return new FileBuilder(data10);
+          return new FileBuilder(data11);
         case import_v1027.ComponentType.Container:
-          return new ContainerBuilder(data10);
+          return new ContainerBuilder(data11);
         case import_v1027.ComponentType.Section:
-          return new SectionBuilder(data10);
+          return new SectionBuilder(data11);
         case import_v1027.ComponentType.Separator:
-          return new SeparatorBuilder(data10);
+          return new SeparatorBuilder(data11);
         case import_v1027.ComponentType.TextDisplay:
-          return new TextDisplayBuilder(data10);
+          return new TextDisplayBuilder(data11);
         case import_v1027.ComponentType.Thumbnail:
-          return new ThumbnailBuilder(data10);
+          return new ThumbnailBuilder(data11);
         case import_v1027.ComponentType.MediaGallery:
-          return new MediaGalleryBuilder(data10);
+          return new MediaGalleryBuilder(data11);
         case import_v1027.ComponentType.Label:
-          return new LabelBuilder(data10);
+          return new LabelBuilder(data11);
         case import_v1027.ComponentType.FileUpload:
-          return new FileUploadBuilder(data10);
+          return new FileUploadBuilder(data11);
         case import_v1027.ComponentType.Checkbox:
-          return new CheckboxBuilder(data10);
+          return new CheckboxBuilder(data11);
         case import_v1027.ComponentType.CheckboxGroup:
-          return new CheckboxGroupBuilder(data10);
+          return new CheckboxGroupBuilder(data11);
         case import_v1027.ComponentType.RadioGroup:
-          return new RadioGroupBuilder(data10);
+          return new RadioGroupBuilder(data11);
         default:
-          throw new Error(`Cannot properly serialize component type: ${data10.type}`);
+          throw new Error(`Cannot properly serialize component type: ${data11.type}`);
       }
     }
     __name(createComponentBuilder, "createComponentBuilder");
@@ -140073,8 +140073,8 @@ var require_dist10 = __commonJS({
        * 	.addComponents(button2, button3);
        * ```
        */
-      constructor({ components, ...data10 } = {}) {
-        super({ type: import_v1028.ComponentType.ActionRow, ...data10 });
+      constructor({ components, ...data11 } = {}) {
+        super({ type: import_v1028.ComponentType.ActionRow, ...data11 });
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
       }
       /**
@@ -140138,8 +140138,8 @@ var require_dist10 = __commonJS({
        *
        * @param data - The API data to create this modal with
        */
-      constructor({ components, ...data10 } = {}) {
-        this.data = { ...data10 };
+      constructor({ components, ...data11 } = {}) {
+        this.data = { ...data11 };
         this.components = components?.map((component) => createComponentBuilder(component)) ?? [];
       }
       /**
@@ -141241,7 +141241,7 @@ var require_dist10 = __commonJS({
         return this;
       }
     };
-    var SlashCommandBuilder10 = class {
+    var SlashCommandBuilder11 = class {
       /**
        * The name of this command.
        */
@@ -141294,10 +141294,10 @@ var require_dist10 = __commonJS({
        */
       nsfw = void 0;
     };
-    __name(SlashCommandBuilder10, "SlashCommandBuilder");
-    SlashCommandBuilder10 = __decorateClass([
+    __name(SlashCommandBuilder11, "SlashCommandBuilder");
+    SlashCommandBuilder11 = __decorateClass([
       (0, import_ts_mixer6.mix)(SharedSlashCommandOptions, SharedNameAndDescription, SharedSlashCommandSubcommands, SharedSlashCommand)
-    ], SlashCommandBuilder10);
+    ], SlashCommandBuilder11);
     var Assertions_exports11 = {};
     __export2(Assertions_exports11, {
       contextsPredicate: () => contextsPredicate2,
@@ -141520,8 +141520,8 @@ var require_dist10 = __commonJS({
         return { ...this };
       }
     };
-    function embedLength(data10) {
-      return (data10.title?.length ?? 0) + (data10.description?.length ?? 0) + (data10.fields?.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0) ?? 0) + (data10.footer?.text.length ?? 0) + (data10.author?.name.length ?? 0);
+    function embedLength(data11) {
+      return (data11.title?.length ?? 0) + (data11.description?.length ?? 0) + (data11.fields?.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0) ?? 0) + (data11.footer?.text.length ?? 0) + (data11.author?.name.length ?? 0);
     }
     __name(embedLength, "embedLength");
     var version = "1.14.1";
@@ -141535,8 +141535,8 @@ var require_Embed = __commonJS({
     var { embedLength } = require_dist10();
     var isEqual = require_fast_deep_equal();
     var Embed = class _Embed {
-      constructor(data10) {
-        this.data = { ...data10 };
+      constructor(data11) {
+        this.data = { ...data11 };
       }
       /**
        * An array of fields of this embed.
@@ -141893,20 +141893,20 @@ var require_MessageMentions = __commonJS({
        * @param {MessageMentionsHasOptions} [options] The options for the check
        * @returns {boolean}
        */
-      has(data10, { ignoreDirect = false, ignoreRoles = false, ignoreRepliedUser = false, ignoreEveryone = false } = {}) {
-        const user = this.client.users.resolve(data10);
+      has(data11, { ignoreDirect = false, ignoreRoles = false, ignoreRepliedUser = false, ignoreEveryone = false } = {}) {
+        const user = this.client.users.resolve(data11);
         if (!ignoreEveryone && user && this.everyone) return true;
         const userWasRepliedTo = user && this.repliedUser?.id === user.id;
         if (!ignoreRepliedUser && userWasRepliedTo && this.users.has(user.id)) return true;
         if (!ignoreDirect) {
           if (user && (!ignoreRepliedUser || this.parsedUsers.has(user.id)) && this.users.has(user.id)) return true;
-          const role = this.guild?.roles.resolve(data10);
+          const role = this.guild?.roles.resolve(data11);
           if (role && this.roles.has(role.id)) return true;
-          const channel = this.client.channels.resolve(data10);
+          const channel = this.client.channels.resolve(data11);
           if (channel && this.channels.has(channel.id)) return true;
         }
         if (!ignoreRoles) {
-          const member = this.guild?.members.resolve(data10);
+          const member = this.guild?.members.resolve(data11);
           if (member) {
             for (const mentionedRole of this.roles.values()) if (member.roles.cache.has(mentionedRole.id)) return true;
           }
@@ -142192,8 +142192,8 @@ var require_Sticker = __commonJS({
        * @returns {Promise<Sticker>}
        */
       async fetch() {
-        const data10 = await this.client.rest.get(Routes3.sticker(this.id));
-        this._patch(data10);
+        const data11 = await this.client.rest.get(Routes3.sticker(this.id));
+        this._patch(data11);
         return this;
       }
       /**
@@ -142271,24 +142271,24 @@ var require_BaseGuildEmoji = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var BaseGuildEmoji = class extends Emoji {
-      constructor(client, data10, guild) {
-        super(client, data10);
+      constructor(client, data11, guild) {
+        super(client, data11);
         this.guild = guild;
         this.requiresColons = null;
         this.managed = null;
         this.available = null;
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("name" in data10) this.name = data10.name;
-        if ("require_colons" in data10) {
-          this.requiresColons = data10.require_colons;
+      _patch(data11) {
+        if ("name" in data11) this.name = data11.name;
+        if ("require_colons" in data11) {
+          this.requiresColons = data11.require_colons;
         }
-        if ("managed" in data10) {
-          this.managed = data10.managed;
+        if ("managed" in data11) {
+          this.managed = data11.managed;
         }
-        if ("available" in data10) {
-          this.available = data10.available;
+        if ("available" in data11) {
+          this.available = data11.available;
         }
       }
     };
@@ -142409,11 +142409,11 @@ var require_GuildEmoji = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var GuildEmojiRoleManager = require_GuildEmojiRoleManager();
     var GuildEmoji = class _GuildEmoji extends BaseGuildEmoji {
-      constructor(client, data10, guild) {
-        super(client, data10, guild);
+      constructor(client, data11, guild) {
+        super(client, data11, guild);
         this.author = null;
         Object.defineProperty(this, "_roles", { value: [], writable: true });
-        this._patch(data10);
+        this._patch(data11);
       }
       /**
        * The guild this emoji is part of
@@ -142425,10 +142425,10 @@ var require_GuildEmoji = __commonJS({
         clone._roles = this._roles.slice();
         return clone;
       }
-      _patch(data10) {
-        super._patch(data10);
-        if (data10.user) this.author = this.client.users._add(data10.user);
-        if (data10.roles) this._roles = data10.roles;
+      _patch(data11) {
+        super._patch(data11);
+        if (data11.user) this.author = this.client.users._add(data11.user);
+        if (data11.roles) this._roles = data11.roles;
       }
       /**
        * Whether the emoji is deletable by the client user
@@ -142566,12 +142566,12 @@ var require_ReactionUserManager = __commonJS({
       async fetch({ type = ReactionType.Normal, limit = 100, after } = {}) {
         const message = this.reaction.message;
         const query = makeURLSearchParams2({ limit, after, type });
-        const data10 = await this.client.rest.get(
+        const data11 = await this.client.rest.get(
           Routes3.channelMessageReaction(message.channelId, message.id, this.reaction.emoji.identifier),
           { query }
         );
         const users = new Collection3();
-        for (const rawUser of data10) {
+        for (const rawUser of data11) {
           const user = this.client.users._add(rawUser);
           this.cache.set(user.id, user);
           users.set(user.id, user);
@@ -142607,27 +142607,27 @@ var require_MessageReaction = __commonJS({
     var ReactionUserManager = require_ReactionUserManager();
     var { flatten } = require_Util();
     var MessageReaction = class {
-      constructor(client, data10, message) {
+      constructor(client, data11, message) {
         Object.defineProperty(this, "client", { value: client });
         this.message = message;
-        this.me = data10.me;
-        this.meBurst = Boolean(data10.me_burst);
+        this.me = data11.me;
+        this.meBurst = Boolean(data11.me_burst);
         this.users = new ReactionUserManager(this, this.me ? [client.user] : []);
-        this._emoji = new ReactionEmoji(this, data10.emoji);
+        this._emoji = new ReactionEmoji(this, data11.emoji);
         this.burstColors = null;
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if (data10.burst_colors) {
-          this.burstColors = data10.burst_colors;
+      _patch(data11) {
+        if (data11.burst_colors) {
+          this.burstColors = data11.burst_colors;
         }
-        if ("count" in data10) {
-          this.count ??= data10.count;
+        if ("count" in data11) {
+          this.count ??= data11.count;
         }
-        if ("count_details" in data10) {
+        if ("count_details" in data11) {
           this.countDetails = {
-            burst: data10.count_details.burst,
-            normal: data10.count_details.normal
+            burst: data11.count_details.burst,
+            normal: data11.count_details.normal
           };
         } else {
           this.countDetails ??= { burst: 0, normal: 0 };
@@ -142747,8 +142747,8 @@ var require_ReactionManager = __commonJS({
         super(message.client, MessageReaction, iterable);
         this.message = message;
       }
-      _add(data10, cache) {
-        return super._add(data10, cache, { id: data10.emoji.id ?? data10.emoji.name, extras: [this.message] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { id: data11.emoji.id ?? data11.emoji.name, extras: [this.message] });
       }
       /**
        * The reaction cache of this manager
@@ -142797,8 +142797,8 @@ var require_Component = __commonJS({
     "use strict";
     var isEqual = require_fast_deep_equal();
     var Component = class _Component {
-      constructor(data10) {
-        this.data = data10;
+      constructor(data11) {
+        this.data = data11;
       }
       /**
        * The id of this component
@@ -142848,8 +142848,8 @@ var require_ActionRow = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var ActionRow = class extends Component {
-      constructor({ components, ...data10 }) {
-        super(data10);
+      constructor({ components, ...data11 }) {
+        super(data11);
         this.components = components.map((component) => createComponent(component));
       }
       /**
@@ -142885,9 +142885,9 @@ var require_ActionRowBuilder = __commonJS({
     var { createComponentBuilder } = require_Components();
     var { toSnakeCase } = require_Transformers();
     var ActionRowBuilder5 = class extends BuildersActionRow {
-      constructor({ components, ...data10 } = {}) {
+      constructor({ components, ...data11 } = {}) {
         super({
-          ...toSnakeCase(data10),
+          ...toSnakeCase(data11),
           components: components?.map((component) => createComponentBuilder(component))
         });
       }
@@ -142913,8 +142913,8 @@ var require_ButtonBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var ButtonBuilder4 = class extends BuildersButton {
-      constructor({ emoji, ...data10 } = {}) {
-        super(toSnakeCase({ ...data10, emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji }));
+      constructor({ emoji, ...data11 } = {}) {
+        super(toSnakeCase({ ...data11, emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji }));
       }
       /**
        * Sets the emoji to display on this button
@@ -143007,8 +143007,8 @@ var require_ChannelSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var ChannelSelectMenuBuilder = class extends BuildersChannelSelectMenu {
-      constructor(data10 = {}) {
-        super(toSnakeCase(data10));
+      constructor(data11 = {}) {
+        super(toSnakeCase(data11));
       }
       /**
        * Creates a new select menu builder from JSON data
@@ -143100,8 +143100,8 @@ var require_ContainerComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var ContainerComponent = class extends Component {
-      constructor({ components, ...data10 }) {
-        super(data10);
+      constructor({ components, ...data11 }) {
+        super(data11);
         this.components = components.map((component) => createComponent(component));
       }
       /**
@@ -143145,8 +143145,8 @@ var require_UnfurledMediaItem = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/UnfurledMediaItem.js"(exports2, module2) {
     "use strict";
     var UnfurledMediaItem = class {
-      constructor(data10) {
-        this.data = data10;
+      constructor(data11) {
+        this.data = data11;
       }
       /**
        * The URL of this media gallery item
@@ -143175,8 +143175,8 @@ var require_FileComponent = __commonJS({
     var Component = require_Component();
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var FileComponent = class extends Component {
-      constructor({ file, ...data10 }) {
-        super(data10);
+      constructor({ file, ...data11 }) {
+        super(data11);
         this.file = new UnfurledMediaItem(file);
       }
       /**
@@ -143206,8 +143206,8 @@ var require_LabelComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var LabelComponent = class extends Component {
-      constructor({ component, ...data10 }) {
-        super(data10);
+      constructor({ component, ...data11 }) {
+        super(data11);
         this.component = createComponent(component);
       }
       /**
@@ -143247,8 +143247,8 @@ var require_MediaGalleryItem = __commonJS({
     "use strict";
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var MediaGalleryItem = class {
-      constructor({ media, ...data10 }) {
-        this.data = data10;
+      constructor({ media, ...data11 }) {
+        this.data = data11;
         this.media = new UnfurledMediaItem(media);
       }
       /**
@@ -143286,8 +143286,8 @@ var require_MediaGalleryComponent = __commonJS({
     var Component = require_Component();
     var MediaGalleryItem = require_MediaGalleryItem();
     var MediaGalleryComponent = class extends Component {
-      constructor({ items, ...data10 }) {
-        super(data10);
+      constructor({ items, ...data11 }) {
+        super(data11);
         this.items = items.map((item) => new MediaGalleryItem(item));
       }
       /**
@@ -143310,8 +143310,8 @@ var require_MentionableSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var MentionableSelectMenuBuilder = class extends BuildersMentionableSelectMenu {
-      constructor(data10 = {}) {
-        super(toSnakeCase(data10));
+      constructor(data11 = {}) {
+        super(toSnakeCase(data11));
       }
       /**
        * Creates a new select menu builder from JSON data
@@ -143346,8 +143346,8 @@ var require_RoleSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var RoleSelectMenuBuilder = class extends BuildersRoleSelectMenu {
-      constructor(data10 = {}) {
-        super(toSnakeCase(data10));
+      constructor(data11 = {}) {
+        super(toSnakeCase(data11));
       }
       /**
        * Creates a new select menu builder from JSON data
@@ -143380,8 +143380,8 @@ var require_SectionComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var SectionComponent = class extends Component {
-      constructor({ accessory, components, ...data10 }) {
-        super(data10);
+      constructor({ accessory, components, ...data11 }) {
+        super(data11);
         this.components = components.map((component) => createComponent(component));
         this.accessory = createComponent(accessory);
       }
@@ -143438,10 +143438,10 @@ var require_StringSelectMenuBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var StringSelectMenuBuilder3 = class _StringSelectMenuBuilder extends BuildersSelectMenu {
-      constructor({ options, ...data10 } = {}) {
+      constructor({ options, ...data11 } = {}) {
         super(
           toSnakeCase({
-            ...data10,
+            ...data11,
             options: options?.map(({ emoji, ...option }) => ({
               ...option,
               emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji
@@ -143543,8 +143543,8 @@ var require_TextInputBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var TextInputBuilder3 = class extends BuildersTextInput {
-      constructor(data10) {
-        super(toSnakeCase(data10));
+      constructor(data11) {
+        super(toSnakeCase(data11));
       }
       /**
        * Creates a new text input builder from JSON data
@@ -143593,8 +143593,8 @@ var require_ThumbnailComponent = __commonJS({
     var Component = require_Component();
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var ThumbnailComponent = class extends Component {
-      constructor({ media, ...data10 }) {
-        super(data10);
+      constructor({ media, ...data11 }) {
+        super(data11);
         this.media = new UnfurledMediaItem(media);
       }
       /**
@@ -143633,8 +143633,8 @@ var require_UserSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var UserSelectMenuBuilder = class extends BuildersUserSelectMenu {
-      constructor(data10 = {}) {
-        super(toSnakeCase(data10));
+      constructor(data11 = {}) {
+        super(toSnakeCase(data11));
       }
       /**
        * Creates a new select menu builder from JSON data
@@ -143666,11 +143666,11 @@ var require_Components = __commonJS({
     "use strict";
     var { ComponentBuilder } = require_dist10();
     var { ComponentType } = require_v106();
-    function createComponent(data10) {
-      return data10 instanceof Component ? data10 : new (ComponentTypeToComponent[data10.type] ?? Component)(data10);
+    function createComponent(data11) {
+      return data11 instanceof Component ? data11 : new (ComponentTypeToComponent[data11.type] ?? Component)(data11);
     }
-    function createComponentBuilder(data10) {
-      return data10 instanceof ComponentBuilder ? data10 : new (ComponentTypeToBuilder[data10.type] ?? ComponentBuilder)(data10);
+    function createComponentBuilder(data11) {
+      return data11 instanceof ComponentBuilder ? data11 : new (ComponentTypeToBuilder[data11.type] ?? ComponentBuilder)(data11);
     }
     function extractInteractiveComponents(component) {
       switch (component.type) {
@@ -143778,106 +143778,106 @@ var require_Message = __commonJS({
     var { _transformAPIMessageInteractionMetadata } = require_Transformers();
     var { cleanContent, resolvePartialEmoji, transformResolved } = require_Util();
     var Message2 = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.channelId = data10.channel_id;
-        this.guildId = data10.guild_id ?? this.channel?.guild?.id ?? null;
-        this._patch(data10);
+        this.channelId = data11.channel_id;
+        this.guildId = data11.guild_id ?? this.channel?.guild?.id ?? null;
+        this._patch(data11);
       }
-      _patch(data10) {
-        this.id = data10.id;
+      _patch(data11) {
+        this.id = data11.id;
         this.createdTimestamp = DiscordSnowflake.timestampFrom(this.id);
-        if ("type" in data10) {
-          this.type = data10.type;
+        if ("type" in data11) {
+          this.type = data11.type;
           this.system = !NonSystemMessageTypes.includes(this.type);
         } else {
           this.system ??= null;
           this.type ??= null;
         }
-        if ("content" in data10) {
-          this.content = data10.content;
+        if ("content" in data11) {
+          this.content = data11.content;
         } else {
           this.content ??= null;
         }
-        if ("author" in data10) {
-          this.author = this.client.users._add(data10.author, !data10.webhook_id);
+        if ("author" in data11) {
+          this.author = this.client.users._add(data11.author, !data11.webhook_id);
         } else {
           this.author ??= null;
         }
-        if ("pinned" in data10) {
-          this.pinned = Boolean(data10.pinned);
+        if ("pinned" in data11) {
+          this.pinned = Boolean(data11.pinned);
         } else {
           this.pinned ??= null;
         }
-        if ("tts" in data10) {
-          this.tts = data10.tts;
+        if ("tts" in data11) {
+          this.tts = data11.tts;
         } else {
           this.tts ??= null;
         }
-        if ("nonce" in data10) {
-          this.nonce = data10.nonce;
+        if ("nonce" in data11) {
+          this.nonce = data11.nonce;
         } else {
           this.nonce ??= null;
         }
-        if ("embeds" in data10) {
-          this.embeds = data10.embeds.map((embed) => new Embed(embed));
+        if ("embeds" in data11) {
+          this.embeds = data11.embeds.map((embed) => new Embed(embed));
         } else {
           this.embeds = this.embeds?.slice() ?? [];
         }
-        if ("components" in data10) {
-          this.components = data10.components.map((component) => createComponent(component));
+        if ("components" in data11) {
+          this.components = data11.components.map((component) => createComponent(component));
         } else {
           this.components = this.components?.slice() ?? [];
         }
-        if ("attachments" in data10) {
+        if ("attachments" in data11) {
           this.attachments = new Collection3();
-          if (data10.attachments) {
-            for (const attachment of data10.attachments) {
+          if (data11.attachments) {
+            for (const attachment of data11.attachments) {
               this.attachments.set(attachment.id, new Attachment(attachment));
             }
           }
         } else {
           this.attachments = new Collection3(this.attachments);
         }
-        if ("sticker_items" in data10 || "stickers" in data10) {
+        if ("sticker_items" in data11 || "stickers" in data11) {
           this.stickers = new Collection3(
-            (data10.sticker_items ?? data10.stickers)?.map((sticker) => [sticker.id, new Sticker2(this.client, sticker)])
+            (data11.sticker_items ?? data11.stickers)?.map((sticker) => [sticker.id, new Sticker2(this.client, sticker)])
           );
         } else {
           this.stickers = new Collection3(this.stickers);
         }
-        if ("position" in data10) {
-          this.position = data10.position;
+        if ("position" in data11) {
+          this.position = data11.position;
         } else {
           this.position ??= null;
         }
-        if ("role_subscription_data" in data10) {
+        if ("role_subscription_data" in data11) {
           this.roleSubscriptionData = {
-            roleSubscriptionListingId: data10.role_subscription_data.role_subscription_listing_id,
-            tierName: data10.role_subscription_data.tier_name,
-            totalMonthsSubscribed: data10.role_subscription_data.total_months_subscribed,
-            isRenewal: data10.role_subscription_data.is_renewal
+            roleSubscriptionListingId: data11.role_subscription_data.role_subscription_listing_id,
+            tierName: data11.role_subscription_data.tier_name,
+            totalMonthsSubscribed: data11.role_subscription_data.total_months_subscribed,
+            isRenewal: data11.role_subscription_data.is_renewal
           };
         } else {
           this.roleSubscriptionData ??= null;
         }
-        if ("resolved" in data10) {
+        if ("resolved" in data11) {
           this.resolved = transformResolved(
             { client: this.client, guild: this.guild, channel: this.channel },
-            data10.resolved
+            data11.resolved
           );
         } else {
           this.resolved ??= null;
         }
-        if (data10.edited_timestamp) {
-          this.editedTimestamp = Date.parse(data10.edited_timestamp);
+        if (data11.edited_timestamp) {
+          this.editedTimestamp = Date.parse(data11.edited_timestamp);
         } else {
           this.editedTimestamp ??= null;
         }
-        if ("reactions" in data10) {
+        if ("reactions" in data11) {
           this.reactions = new ReactionManager(this);
-          if (data10.reactions?.length > 0) {
-            for (const reaction of data10.reactions) {
+          if (data11.reactions?.length > 0) {
+            for (const reaction of data11.reactions) {
               this.reactions._add(reaction);
             }
           }
@@ -143887,97 +143887,97 @@ var require_Message = __commonJS({
         if (!this.mentions) {
           this.mentions = new Mentions(
             this,
-            data10.mentions,
-            data10.mention_roles,
-            data10.mention_everyone,
-            data10.mention_channels,
-            data10.referenced_message?.author
+            data11.mentions,
+            data11.mention_roles,
+            data11.mention_everyone,
+            data11.mention_channels,
+            data11.referenced_message?.author
           );
         } else {
           this.mentions = new Mentions(
             this,
-            data10.mentions ?? this.mentions.users,
-            data10.mention_roles ?? this.mentions.roles,
-            data10.mention_everyone ?? this.mentions.everyone,
-            data10.mention_channels ?? this.mentions.crosspostedChannels,
-            data10.referenced_message?.author ?? this.mentions.repliedUser
+            data11.mentions ?? this.mentions.users,
+            data11.mention_roles ?? this.mentions.roles,
+            data11.mention_everyone ?? this.mentions.everyone,
+            data11.mention_channels ?? this.mentions.crosspostedChannels,
+            data11.referenced_message?.author ?? this.mentions.repliedUser
           );
         }
-        if ("webhook_id" in data10) {
-          this.webhookId = data10.webhook_id;
+        if ("webhook_id" in data11) {
+          this.webhookId = data11.webhook_id;
         } else {
           this.webhookId ??= null;
         }
-        if ("application" in data10) {
-          this.groupActivityApplication = new ClientApplication(this.client, data10.application);
+        if ("application" in data11) {
+          this.groupActivityApplication = new ClientApplication(this.client, data11.application);
         } else {
           this.groupActivityApplication ??= null;
         }
-        if ("application_id" in data10) {
-          this.applicationId = data10.application_id;
+        if ("application_id" in data11) {
+          this.applicationId = data11.application_id;
         } else {
           this.applicationId ??= null;
         }
-        if ("activity" in data10) {
+        if ("activity" in data11) {
           this.activity = {
-            partyId: data10.activity.party_id,
-            type: data10.activity.type
+            partyId: data11.activity.party_id,
+            type: data11.activity.type
           };
         } else {
           this.activity ??= null;
         }
-        if ("thread" in data10) {
-          this.client.channels._add(data10.thread, this.guild);
+        if ("thread" in data11) {
+          this.client.channels._add(data11.thread, this.guild);
         }
-        if (this.member && data10.member) {
-          this.member._patch(data10.member);
-        } else if (data10.member && this.guild && this.author) {
-          this.guild.members._add(Object.assign(data10.member, { user: this.author }));
+        if (this.member && data11.member) {
+          this.member._patch(data11.member);
+        } else if (data11.member && this.guild && this.author) {
+          this.guild.members._add(Object.assign(data11.member, { user: this.author }));
         }
-        if ("flags" in data10) {
-          this.flags = new MessageFlagsBitField(data10.flags).freeze();
+        if ("flags" in data11) {
+          this.flags = new MessageFlagsBitField(data11.flags).freeze();
         } else {
           this.flags = new MessageFlagsBitField(this.flags).freeze();
         }
-        if ("message_reference" in data10) {
+        if ("message_reference" in data11) {
           this.reference = {
-            channelId: data10.message_reference.channel_id,
-            guildId: data10.message_reference.guild_id,
-            messageId: data10.message_reference.message_id,
-            type: data10.message_reference.type
+            channelId: data11.message_reference.channel_id,
+            guildId: data11.message_reference.guild_id,
+            messageId: data11.message_reference.message_id,
+            type: data11.message_reference.type
           };
         } else {
           this.reference ??= null;
         }
-        if (data10.referenced_message) {
-          this.channel?.messages._add({ guild_id: data10.message_reference?.guild_id, ...data10.referenced_message });
+        if (data11.referenced_message) {
+          this.channel?.messages._add({ guild_id: data11.message_reference?.guild_id, ...data11.referenced_message });
         }
-        if (data10.interaction_metadata) {
-          this.interactionMetadata = _transformAPIMessageInteractionMetadata(this.client, data10.interaction_metadata);
+        if (data11.interaction_metadata) {
+          this.interactionMetadata = _transformAPIMessageInteractionMetadata(this.client, data11.interaction_metadata);
         } else {
           this.interactionMetadata ??= null;
         }
-        if (data10.interaction) {
+        if (data11.interaction) {
           this.interaction = {
-            id: data10.interaction.id,
-            type: data10.interaction.type,
-            commandName: data10.interaction.name,
-            user: this.client.users._add(data10.interaction.user)
+            id: data11.interaction.id,
+            type: data11.interaction.type,
+            commandName: data11.interaction.name,
+            user: this.client.users._add(data11.interaction.user)
           };
         } else {
           this.interaction ??= null;
         }
-        if (data10.poll) {
+        if (data11.poll) {
           if (this.poll) {
-            this.poll._patch(data10.poll);
+            this.poll._patch(data11.poll);
           } else {
-            this.poll = new Poll(this.client, data10.poll, this, this.channel);
+            this.poll = new Poll(this.client, data11.poll, this, this.channel);
           }
         } else {
           this.poll ??= null;
         }
-        if (data10.message_snapshots) {
-          this.messageSnapshots = data10.message_snapshots.reduce((coll, snapshot) => {
+        if (data11.message_snapshots) {
+          this.messageSnapshots = data11.message_snapshots.reduce((coll, snapshot) => {
             const channel = this.client.channels.resolve(this.reference.channelId);
             const snapshotData = {
               ...snapshot.message,
@@ -143993,10 +143993,10 @@ var require_Message = __commonJS({
         } else {
           this.messageSnapshots ??= new Collection3();
         }
-        if (data10.call) {
+        if (data11.call) {
           this.call = {
-            endedTimestamp: data10.call.ended_timestamp ? Date.parse(data10.call.ended_timestamp) : null,
-            participants: data10.call.participants,
+            endedTimestamp: data11.call.ended_timestamp ? Date.parse(data11.call.ended_timestamp) : null,
+            participants: data11.call.participants,
             get endedAt() {
               return this.endedTimestamp && new Date(this.endedTimestamp);
             }
@@ -144392,18 +144392,18 @@ var require_Message = __commonJS({
        */
       async reply(options) {
         if (!this.channel) throw new DiscordjsError2(ErrorCodes2.ChannelNotCached);
-        let data10;
+        let data11;
         if (options instanceof MessagePayload) {
-          data10 = options;
+          data11 = options;
         } else {
-          data10 = MessagePayload.create(this, options, {
+          data11 = MessagePayload.create(this, options, {
             reply: {
               messageReference: this,
               failIfNotExists: options?.failIfNotExists ?? this.client.options.failIfNotExists
             }
           });
         }
-        return this.channel.send(data10);
+        return this.channel.send(data11);
       }
       /**
        * Forwards this message
@@ -144556,49 +144556,49 @@ var require_Webhook = __commonJS({
     var { resolveImage } = require_DataResolver();
     var getMessage = lazy(() => require_Message().Message);
     var Webhook2 = class _Webhook {
-      constructor(client, data10) {
+      constructor(client, data11) {
         Object.defineProperty(this, "client", { value: client });
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        if ("name" in data11) {
+          this.name = data11.name;
         }
         Object.defineProperty(this, "token", {
-          value: data10.token ?? null,
+          value: data11.token ?? null,
           writable: true,
           configurable: true
         });
-        if ("avatar" in data10) {
-          this.avatar = data10.avatar;
+        if ("avatar" in data11) {
+          this.avatar = data11.avatar;
         }
-        this.id = data10.id;
-        if ("type" in data10) {
-          this.type = data10.type;
+        this.id = data11.id;
+        if ("type" in data11) {
+          this.type = data11.type;
         }
-        if ("guild_id" in data10) {
-          this.guildId = data10.guild_id;
+        if ("guild_id" in data11) {
+          this.guildId = data11.guild_id;
         }
-        if ("channel_id" in data10) {
-          this.channelId = data10.channel_id;
+        if ("channel_id" in data11) {
+          this.channelId = data11.channel_id;
         }
-        if ("user" in data10) {
-          this.owner = this.client.users?._add(data10.user) ?? data10.user;
+        if ("user" in data11) {
+          this.owner = this.client.users?._add(data11.user) ?? data11.user;
         } else {
           this.owner ??= null;
         }
-        if ("application_id" in data10) {
-          this.applicationId = data10.application_id;
+        if ("application_id" in data11) {
+          this.applicationId = data11.application_id;
         } else {
           this.applicationId ??= null;
         }
-        if ("source_guild" in data10) {
-          this.sourceGuild = this.client.guilds?.cache.get(data10.source_guild.id) ?? data10.source_guild;
+        if ("source_guild" in data11) {
+          this.sourceGuild = this.client.guilds?.cache.get(data11.source_guild.id) ?? data11.source_guild;
         } else {
           this.sourceGuild ??= null;
         }
-        if ("source_channel" in data10) {
-          this.sourceChannel = this.client.channels?.cache.get(data10.source_channel?.id) ?? data10.source_channel;
+        if ("source_channel" in data11) {
+          this.sourceChannel = this.client.channels?.cache.get(data11.source_channel?.id) ?? data11.source_channel;
         } else {
           this.sourceChannel ??= null;
         }
@@ -144724,12 +144724,12 @@ var require_Webhook = __commonJS({
        */
       async sendSlackMessage(body) {
         if (!this.token) throw new DiscordjsError2(ErrorCodes2.WebhookTokenUnavailable);
-        const data10 = await this.client.rest.post(Routes3.webhookPlatform(this.id, this.token, "slack"), {
+        const data11 = await this.client.rest.post(Routes3.webhookPlatform(this.id, this.token, "slack"), {
           query: makeURLSearchParams2({ wait: true }),
           auth: false,
           body
         });
-        return data10.toString() === "ok";
+        return data11.toString() === "ok";
       }
       /**
        * Options used to edit a {@link Webhook}.
@@ -144750,14 +144750,14 @@ var require_Webhook = __commonJS({
           avatar = await resolveImage(avatar);
         }
         channel &&= channel.id ?? channel;
-        const data10 = await this.client.rest.patch(Routes3.webhook(this.id, channel ? void 0 : this.token), {
+        const data11 = await this.client.rest.patch(Routes3.webhook(this.id, channel ? void 0 : this.token), {
           body: { name, avatar, channel_id: channel },
           reason,
           auth: !this.token || Boolean(channel)
         });
-        this.name = data10.name;
-        this.avatar = data10.avatar;
-        this.channelId = data10.channel_id;
+        this.name = data11.name;
+        this.avatar = data11.avatar;
+        this.channelId = data11.channel_id;
         return this;
       }
       /**
@@ -144777,12 +144777,12 @@ var require_Webhook = __commonJS({
        */
       async fetchMessage(message, { threadId } = {}) {
         if (!this.token) throw new DiscordjsError2(ErrorCodes2.WebhookTokenUnavailable);
-        const data10 = await this.client.rest.get(Routes3.webhookMessage(this.id, this.token, message), {
+        const data11 = await this.client.rest.get(Routes3.webhookMessage(this.id, this.token, message), {
           query: threadId ? makeURLSearchParams2({ thread_id: threadId }) : void 0,
           auth: false
         });
-        if (!this.client.channels) return data10;
-        return this.client.channels.cache.get(data10.channel_id)?.messages._add(data10, false) ?? new (getMessage())(this.client, data10);
+        if (!this.client.channels) return data11;
+        return this.client.channels.cache.get(data11.channel_id)?.messages._add(data11, false) ?? new (getMessage())(this.client, data11);
       }
       /**
        * Edits a message that was sent by this webhook.
@@ -144959,12 +144959,12 @@ var require_WebhookClient = __commonJS({
        * @param {WebhookClientData} data The data of the webhook
        * @param {WebhookClientOptions} [options] Options for the webhook client
        */
-      constructor(data10, options) {
+      constructor(data11, options) {
         super(options);
         Object.defineProperty(this, "client", { value: this });
-        let { id, token } = data10;
-        if ("url" in data10) {
-          const parsed = parseWebhookURL(data10.url);
+        let { id, token } = data11;
+        if ("url" in data11) {
+          const parsed = parseWebhookURL(data11.url);
           if (!parsed) {
             throw new DiscordjsError2(ErrorCodes2.WebhookURLInvalid);
           }
@@ -145031,60 +145031,60 @@ var require_VoiceState = __commonJS({
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var VoiceState = class extends Base {
-      constructor(guild, data10) {
+      constructor(guild, data11) {
         super(guild.client);
         this.guild = guild;
-        this.id = data10.user_id;
-        this._patch(data10);
+        this.id = data11.user_id;
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("deaf" in data10) {
-          this.serverDeaf = data10.deaf;
+      _patch(data11) {
+        if ("deaf" in data11) {
+          this.serverDeaf = data11.deaf;
         } else {
           this.serverDeaf ??= null;
         }
-        if ("mute" in data10) {
-          this.serverMute = data10.mute;
+        if ("mute" in data11) {
+          this.serverMute = data11.mute;
         } else {
           this.serverMute ??= null;
         }
-        if ("self_deaf" in data10) {
-          this.selfDeaf = data10.self_deaf;
+        if ("self_deaf" in data11) {
+          this.selfDeaf = data11.self_deaf;
         } else {
           this.selfDeaf ??= null;
         }
-        if ("self_mute" in data10) {
-          this.selfMute = data10.self_mute;
+        if ("self_mute" in data11) {
+          this.selfMute = data11.self_mute;
         } else {
           this.selfMute ??= null;
         }
-        if ("self_video" in data10) {
-          this.selfVideo = data10.self_video;
+        if ("self_video" in data11) {
+          this.selfVideo = data11.self_video;
         } else {
           this.selfVideo ??= null;
         }
-        if ("session_id" in data10) {
-          this.sessionId = data10.session_id;
+        if ("session_id" in data11) {
+          this.sessionId = data11.session_id;
         } else {
           this.sessionId ??= null;
         }
-        if ("self_video" in data10) {
-          this.streaming = data10.self_stream ?? false;
+        if ("self_video" in data11) {
+          this.streaming = data11.self_stream ?? false;
         } else {
           this.streaming ??= null;
         }
-        if ("channel_id" in data10) {
-          this.channelId = data10.channel_id;
+        if ("channel_id" in data11) {
+          this.channelId = data11.channel_id;
         } else {
           this.channelId ??= null;
         }
-        if ("suppress" in data10) {
-          this.suppress = data10.suppress;
+        if ("suppress" in data11) {
+          this.suppress = data11.suppress;
         } else {
           this.suppress ??= null;
         }
-        if ("request_to_speak_timestamp" in data10) {
-          this.requestToSpeakTimestamp = data10.request_to_speak_timestamp && Date.parse(data10.request_to_speak_timestamp);
+        if ("request_to_speak_timestamp" in data11) {
+          this.requestToSpeakTimestamp = data11.request_to_speak_timestamp && Date.parse(data11.request_to_speak_timestamp);
         } else {
           this.requestToSpeakTimestamp ??= null;
         }
@@ -145469,7 +145469,7 @@ var require_GuildMember = __commonJS({
     var { GuildMemberFlagsBitField } = require_GuildMemberFlagsBitField();
     var PermissionsBitField2 = require_PermissionsBitField();
     var GuildMember = class extends Base {
-      constructor(client, data10, guild) {
+      constructor(client, data11, guild) {
         super(client);
         this.guild = guild;
         this.premiumSinceTimestamp = null;
@@ -145477,49 +145477,49 @@ var require_GuildMember = __commonJS({
         this.pending = null;
         this.communicationDisabledUntilTimestamp = null;
         Object.defineProperty(this, "_roles", { value: [], writable: true });
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("user" in data10) {
-          this.user = this.client.users._add(data10.user, true);
+      _patch(data11) {
+        if ("user" in data11) {
+          this.user = this.client.users._add(data11.user, true);
         }
-        if ("nick" in data10) this.nickname = data10.nick;
-        if ("avatar" in data10) {
-          this.avatar = data10.avatar;
+        if ("nick" in data11) this.nickname = data11.nick;
+        if ("avatar" in data11) {
+          this.avatar = data11.avatar;
         } else if (typeof this.avatar !== "string") {
           this.avatar = null;
         }
-        if ("banner" in data10) {
-          this.banner = data10.banner;
+        if ("banner" in data11) {
+          this.banner = data11.banner;
         } else {
           this.banner ??= null;
         }
-        if ("joined_at" in data10) {
-          this.joinedTimestamp = data10.joined_at && Date.parse(data10.joined_at);
+        if ("joined_at" in data11) {
+          this.joinedTimestamp = data11.joined_at && Date.parse(data11.joined_at);
         } else {
           this.joinedTimestamp ??= null;
         }
-        if ("premium_since" in data10) {
-          this.premiumSinceTimestamp = data10.premium_since ? Date.parse(data10.premium_since) : null;
+        if ("premium_since" in data11) {
+          this.premiumSinceTimestamp = data11.premium_since ? Date.parse(data11.premium_since) : null;
         }
-        if ("roles" in data10) this._roles = data10.roles;
-        if ("pending" in data10) {
-          this.pending = data10.pending;
+        if ("roles" in data11) this._roles = data11.roles;
+        if ("pending" in data11) {
+          this.pending = data11.pending;
         } else if (!this.partial) {
           this.pending ??= false;
         }
-        if ("communication_disabled_until" in data10) {
-          this.communicationDisabledUntilTimestamp = data10.communication_disabled_until && Date.parse(data10.communication_disabled_until);
+        if ("communication_disabled_until" in data11) {
+          this.communicationDisabledUntilTimestamp = data11.communication_disabled_until && Date.parse(data11.communication_disabled_until);
         }
-        if ("flags" in data10) {
-          this.flags = new GuildMemberFlagsBitField(data10.flags).freeze();
+        if ("flags" in data11) {
+          this.flags = new GuildMemberFlagsBitField(data11.flags).freeze();
         } else {
           this.flags ??= new GuildMemberFlagsBitField().freeze();
         }
-        if (data10.avatar_decoration_data) {
+        if (data11.avatar_decoration_data) {
           this.avatarDecorationData = {
-            asset: data10.avatar_decoration_data.asset,
-            skuId: data10.avatar_decoration_data.sku_id
+            asset: data11.avatar_decoration_data.asset,
+            skuId: data11.avatar_decoration_data.sku_id
           };
         } else {
           this.avatarDecorationData = null;
@@ -145924,8 +145924,8 @@ var require_MessageManager = __commonJS({
        * @type {Collection<Snowflake, Message>}
        * @name MessageManager#cache
        */
-      _add(data10, cache) {
-        return super._add(data10, cache);
+      _add(data11, cache) {
+        return super._add(data11, cache);
       }
       /**
        * Data that can be resolved to a Message object. This can be:
@@ -145988,14 +145988,14 @@ var require_MessageManager = __commonJS({
           const existing = this.cache.get(message);
           if (existing && !existing.partial) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.channelMessage(this.channel.id, message));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.channelMessage(this.channel.id, message));
+        return this._add(data11, cache);
       }
       async _fetchMany({ cache, ...apiOptions } = {}) {
-        const data10 = await this.client.rest.get(Routes3.channelMessages(this.channel.id), {
+        const data11 = await this.client.rest.get(Routes3.channelMessages(this.channel.id), {
           query: makeURLSearchParams2(apiOptions)
         });
-        return data10.reduce((_data, message) => _data.set(message.id, this._add(message, cache)), new Collection3());
+        return data11.reduce((_data, message) => _data.set(message.id, this._add(message, cache)), new Collection3());
       }
       /**
        * Options used to fetch pinned messages.
@@ -146034,21 +146034,21 @@ var require_MessageManager = __commonJS({
        *   .catch(console.error);
        */
       async fetchPins({ cache, ...apiOptions } = {}) {
-        const data10 = await this.client.rest.get(Routes3.channelMessagesPins(this.channel.id), {
+        const data11 = await this.client.rest.get(Routes3.channelMessagesPins(this.channel.id), {
           query: makeURLSearchParams2({
             ...apiOptions,
             before: apiOptions.before && new Date(apiOptions.before).toISOString()
           })
         });
         return {
-          items: data10.items.map((item) => ({
+          items: data11.items.map((item) => ({
             pinnedTimestamp: Date.parse(item.pinned_at),
             get pinnedAt() {
               return new Date(this.pinnedTimestamp);
             },
             message: this._add(item.message, cache)
           })),
-          hasMore: data10.has_more
+          hasMore: data11.has_more
         };
       }
       /**
@@ -146067,9 +146067,9 @@ var require_MessageManager = __commonJS({
           );
           deprecationEmittedForFetchPinned = true;
         }
-        const data10 = await this.client.rest.get(Routes3.channelPins(this.channel.id));
+        const data11 = await this.client.rest.get(Routes3.channelPins(this.channel.id));
         const messages = new Collection3();
-        for (const message of data10) messages.set(message.id, this._add(message, cache));
+        for (const message of data11) messages.set(message.id, this._add(message, cache));
         return messages;
       }
       /**
@@ -146128,8 +146128,8 @@ var require_MessageManager = __commonJS({
       async crosspost(message) {
         message = this.resolveId(message);
         if (!message) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        const data10 = await this.client.rest.post(Routes3.channelMessageCrosspost(this.channel.id, message));
-        return this.cache.get(data10.id) ?? this._add(data10);
+        const data11 = await this.client.rest.post(Routes3.channelMessageCrosspost(this.channel.id, message));
+        return this.cache.get(data11.id) ?? this._add(data11);
       }
       /**
        * Pins a message to the channel's pinned messages, even if it's not cached.
@@ -146503,8 +146503,8 @@ var require_MessagePayload = __commonJS({
           attachment = fileLike.attachment;
           name = fileLike.name ?? findName(attachment);
         }
-        const { data: data10, contentType } = await resolveFile(attachment);
-        return { data: data10, name, contentType };
+        const { data: data11, contentType } = await resolveFile(attachment);
+        return { data: data11, name, contentType };
       }
       /**
        * Creates a {@link MessagePayload} from user-level arguments.
@@ -146967,68 +146967,68 @@ var require_User = __commonJS({
     var UserFlagsBitField = require_UserFlagsBitField();
     var { emitDeprecationWarningForUserFetchFlags } = require_Util();
     var User = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.id = data10.id;
+        this.id = data11.id;
         this.bot = null;
         this.system = null;
         this.flags = null;
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("username" in data10) {
-          this.username = data10.username;
+      _patch(data11) {
+        if ("username" in data11) {
+          this.username = data11.username;
         } else {
           this.username ??= null;
         }
-        if ("global_name" in data10) {
-          this.globalName = data10.global_name;
+        if ("global_name" in data11) {
+          this.globalName = data11.global_name;
         } else {
           this.globalName ??= null;
         }
-        if ("bot" in data10) {
-          this.bot = Boolean(data10.bot);
+        if ("bot" in data11) {
+          this.bot = Boolean(data11.bot);
         } else if (!this.partial && typeof this.bot !== "boolean") {
           this.bot = false;
         }
-        if ("discriminator" in data10) {
-          this.discriminator = data10.discriminator;
+        if ("discriminator" in data11) {
+          this.discriminator = data11.discriminator;
         } else {
           this.discriminator ??= null;
         }
-        if ("avatar" in data10) {
-          this.avatar = data10.avatar;
+        if ("avatar" in data11) {
+          this.avatar = data11.avatar;
         } else {
           this.avatar ??= null;
         }
-        if ("banner" in data10) {
-          this.banner = data10.banner;
+        if ("banner" in data11) {
+          this.banner = data11.banner;
         } else if (this.banner !== null) {
           this.banner ??= void 0;
         }
-        if ("accent_color" in data10) {
-          this.accentColor = data10.accent_color;
+        if ("accent_color" in data11) {
+          this.accentColor = data11.accent_color;
         } else if (this.accentColor !== null) {
           this.accentColor ??= void 0;
         }
-        if ("system" in data10) {
-          this.system = Boolean(data10.system);
+        if ("system" in data11) {
+          this.system = Boolean(data11.system);
         } else if (!this.partial && typeof this.system !== "boolean") {
           this.system = false;
         }
-        if ("public_flags" in data10) {
-          this.flags = new UserFlagsBitField(data10.public_flags);
+        if ("public_flags" in data11) {
+          this.flags = new UserFlagsBitField(data11.public_flags);
         }
-        if ("avatar_decoration" in data10) {
-          this.avatarDecoration = data10.avatar_decoration;
+        if ("avatar_decoration" in data11) {
+          this.avatarDecoration = data11.avatar_decoration;
         } else {
           this.avatarDecoration ??= null;
         }
-        if ("avatar_decoration_data" in data10) {
-          if (data10.avatar_decoration_data) {
+        if ("avatar_decoration_data" in data11) {
+          if (data11.avatar_decoration_data) {
             this.avatarDecorationData = {
-              asset: data10.avatar_decoration_data.asset,
-              skuId: data10.avatar_decoration_data.sku_id
+              asset: data11.avatar_decoration_data.asset,
+              skuId: data11.avatar_decoration_data.sku_id
             };
           } else {
             this.avatarDecorationData = null;
@@ -147036,18 +147036,18 @@ var require_User = __commonJS({
         } else {
           this.avatarDecorationData ??= null;
         }
-        if (data10.collectibles) {
-          this.collectibles = _transformCollectibles(data10.collectibles);
+        if (data11.collectibles) {
+          this.collectibles = _transformCollectibles(data11.collectibles);
         } else {
           this.collectibles = null;
         }
-        if ("primary_guild" in data10) {
-          if (data10.primary_guild) {
+        if ("primary_guild" in data11) {
+          if (data11.primary_guild) {
             this.primaryGuild = {
-              identityGuildId: data10.primary_guild.identity_guild_id,
-              identityEnabled: data10.primary_guild.identity_enabled,
-              tag: data10.primary_guild.tag,
-              badge: data10.primary_guild.badge
+              identityGuildId: data11.primary_guild.identity_guild_id,
+              identityEnabled: data11.primary_guild.identity_enabled,
+              tag: data11.primary_guild.tag,
+              badge: data11.primary_guild.badge
             };
           } else {
             this.primaryGuild = null;
@@ -147282,10 +147282,10 @@ var require_PollAnswerVoterManager = __commonJS({
       async fetch({ after, limit } = {}) {
         const poll = this.answer.poll;
         const query = makeURLSearchParams2({ limit, after });
-        const data10 = await this.client.rest.get(Routes3.pollAnswerVoters(poll.channelId, poll.messageId, this.answer.id), {
+        const data11 = await this.client.rest.get(Routes3.pollAnswerVoters(poll.channelId, poll.messageId, this.answer.id), {
           query
         });
-        return data10.users.reduce((coll, rawUser) => {
+        return data11.users.reduce((coll, rawUser) => {
           const user = this.client.users._add(rawUser);
           this.cache.set(user.id, user);
           return coll.set(user.id, user);
@@ -147306,23 +147306,23 @@ var require_PollAnswer = __commonJS({
     var { PollAnswerVoterManager } = require_PollAnswerVoterManager();
     var deprecationEmittedForFetchVoters = false;
     var PollAnswer = class extends Base {
-      constructor(client, data10, poll) {
+      constructor(client, data11, poll) {
         super(client);
         Object.defineProperty(this, "poll", { value: poll });
-        this.id = data10.answer_id;
+        this.id = data11.answer_id;
         this.voters = new PollAnswerVoterManager(this);
         Object.defineProperty(this, "_emoji", { value: null, writable: true });
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("count" in data10) {
-          this.voteCount = data10.count;
+      _patch(data11) {
+        if ("count" in data11) {
+          this.voteCount = data11.count;
         } else {
           this.voteCount ??= this.voters.cache.size;
         }
-        this.text ??= data10.poll_media?.text ?? null;
-        if (data10.poll_media?.emoji) {
-          this._emoji = data10.poll_media.emoji;
+        this.text ??= data11.poll_media?.text ?? null;
+        if (data11.poll_media?.emoji) {
+          this._emoji = data11.poll_media.emoji;
         }
       }
       /**
@@ -147375,18 +147375,18 @@ var require_Poll = __commonJS({
     var { DiscordjsError: DiscordjsError2 } = require_DJSError();
     var { ErrorCodes: ErrorCodes2 } = require_errors4();
     var Poll = class extends Base {
-      constructor(client, data10, message, channel) {
+      constructor(client, data11, message, channel) {
         super(client);
-        this.channelId = data10.channel_id ?? channel.id;
+        this.channelId = data11.channel_id ?? channel.id;
         Object.defineProperty(this, "channel", { value: channel });
-        this.messageId = data10.message_id ?? message.id;
+        this.messageId = data11.message_id ?? message.id;
         Object.defineProperty(this, "message", { value: message });
         this.answers = new Collection3();
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if (data10.answers) {
-          for (const answer of data10.answers) {
+      _patch(data11) {
+        if (data11.answers) {
+          for (const answer of data11.answers) {
             const existing = this.answers.get(answer.answer_id);
             if (existing) {
               existing._patch(answer);
@@ -147395,33 +147395,33 @@ var require_Poll = __commonJS({
             }
           }
         }
-        if (data10.results) {
-          this.resultsFinalized = data10.results.is_finalized;
-          for (const answerResult of data10.results.answer_counts) {
+        if (data11.results) {
+          this.resultsFinalized = data11.results.is_finalized;
+          for (const answerResult of data11.results.answer_counts) {
             const answer = this.answers.get(answerResult.id);
             answer?._patch(answerResult);
           }
         } else {
           this.resultsFinalized ??= false;
         }
-        if ("allow_multiselect" in data10) {
-          this.allowMultiselect = data10.allow_multiselect;
+        if ("allow_multiselect" in data11) {
+          this.allowMultiselect = data11.allow_multiselect;
         } else {
           this.allowMultiselect ??= null;
         }
-        if ("layout_type" in data10) {
-          this.layoutType = data10.layout_type;
+        if ("layout_type" in data11) {
+          this.layoutType = data11.layout_type;
         } else {
           this.layoutType ??= null;
         }
-        if ("expiry" in data10) {
-          this.expiresTimestamp = data10.expiry && Date.parse(data10.expiry);
+        if ("expiry" in data11) {
+          this.expiresTimestamp = data11.expiry && Date.parse(data11.expiry);
         } else {
           this.expiresTimestamp ??= null;
         }
-        if (data10.question) {
+        if (data11.question) {
           this.question = {
-            text: data10.question.text
+            text: data11.question.text
           };
         } else {
           this.question ??= {
@@ -147517,34 +147517,34 @@ var require_Action = __commonJS({
       constructor(client) {
         this.client = client;
       }
-      handle(data10) {
-        return data10;
+      handle(data11) {
+        return data11;
       }
-      getPayload(data10, manager, id, partialType, cache) {
-        return this.client.options.partials.includes(partialType) ? manager._add(data10, cache) : manager.cache.get(id);
+      getPayload(data11, manager, id, partialType, cache) {
+        return this.client.options.partials.includes(partialType) ? manager._add(data11, cache) : manager.cache.get(id);
       }
-      getChannel(data10) {
+      getChannel(data11) {
         const payloadData = {};
-        const id = data10.channel_id ?? data10.id;
-        if ("recipients" in data10) {
-          const recipient = data10.author ?? data10.user ?? { id: data10.user_id };
-          if (!data10.recipients.some((existingRecipient) => recipient.id === existingRecipient.id)) {
-            payloadData.recipients = [...data10.recipients, recipient];
+        const id = data11.channel_id ?? data11.id;
+        if ("recipients" in data11) {
+          const recipient = data11.author ?? data11.user ?? { id: data11.user_id };
+          if (!data11.recipients.some((existingRecipient) => recipient.id === existingRecipient.id)) {
+            payloadData.recipients = [...data11.recipients, recipient];
           }
-        } else if (data10.type === ChannelType4.DM || data10.type === ChannelType4.GroupDM) {
-          const recipient = data10.author ?? data10.user ?? { id: data10.user_id };
+        } else if (data11.type === ChannelType4.DM || data11.type === ChannelType4.GroupDM) {
+          const recipient = data11.author ?? data11.user ?? { id: data11.user_id };
           payloadData.recipients = [recipient];
         }
         if (id !== void 0) payloadData.id = id;
-        return data10[this.client.actions.injectedChannel] ?? this.getPayload({ ...data10, ...payloadData }, this.client.channels, id, Partials2.Channel);
+        return data11[this.client.actions.injectedChannel] ?? this.getPayload({ ...data11, ...payloadData }, this.client.channels, id, Partials2.Channel);
       }
-      getMessage(data10, channel, cache) {
-        const id = data10.message_id ?? data10.id;
-        return data10[this.client.actions.injectedMessage] ?? this.getPayload(
+      getMessage(data11, channel, cache) {
+        const id = data11.message_id ?? data11.id;
+        return data11[this.client.actions.injectedMessage] ?? this.getPayload(
           {
             id,
             channel_id: channel.id,
-            guild_id: data10.guild_id ?? channel.guild?.id
+            guild_id: data11.guild_id ?? channel.guild?.id
           },
           channel.messages,
           id,
@@ -147552,24 +147552,24 @@ var require_Action = __commonJS({
           cache
         );
       }
-      getPoll(data10, message, channel) {
+      getPoll(data11, message, channel) {
         const includePollPartial = this.client.options.partials.includes(Partials2.Poll);
         const includePollAnswerPartial = this.client.options.partials.includes(Partials2.PollAnswer);
         if (message.partial && (!includePollPartial || !includePollAnswerPartial)) return null;
         if (!message.poll && includePollPartial) {
-          message.poll = new Poll(this.client, data10, message, channel);
+          message.poll = new Poll(this.client, data11, message, channel);
         }
-        if (message.poll && !message.poll.answers.has(data10.answer_id) && includePollAnswerPartial) {
-          const pollAnswer = new PollAnswer(this.client, data10, message.poll);
-          message.poll.answers.set(data10.answer_id, pollAnswer);
+        if (message.poll && !message.poll.answers.has(data11.answer_id) && includePollAnswerPartial) {
+          const pollAnswer = new PollAnswer(this.client, data11, message.poll);
+          message.poll.answers.set(data11.answer_id, pollAnswer);
         }
         return message.poll;
       }
-      getReaction(data10, message, user) {
-        const id = data10.emoji.id ?? decodeURIComponent(data10.emoji.name);
+      getReaction(data11, message, user) {
+        const id = data11.emoji.id ?? decodeURIComponent(data11.emoji.name);
         return this.getPayload(
           {
-            emoji: data10.emoji,
+            emoji: data11.emoji,
             count: message.partial ? null : 0,
             me: user?.id === this.client.user.id
           },
@@ -147578,28 +147578,28 @@ var require_Action = __commonJS({
           Partials2.Reaction
         );
       }
-      getMember(data10, guild) {
-        return this.getPayload(data10, guild.members, data10.user.id, Partials2.GuildMember);
+      getMember(data11, guild) {
+        return this.getPayload(data11, guild.members, data11.user.id, Partials2.GuildMember);
       }
-      getUser(data10) {
-        const id = data10.user_id;
-        return data10[this.client.actions.injectedUser] ?? this.getPayload({ id }, this.client.users, id, Partials2.User);
+      getUser(data11) {
+        const id = data11.user_id;
+        return data11[this.client.actions.injectedUser] ?? this.getPayload({ id }, this.client.users, id, Partials2.User);
       }
-      getUserFromMember(data10) {
-        if (data10.guild_id && data10.member?.user) {
-          const guild = this.client.guilds.cache.get(data10.guild_id);
+      getUserFromMember(data11) {
+        if (data11.guild_id && data11.member?.user) {
+          const guild = this.client.guilds.cache.get(data11.guild_id);
           if (guild) {
-            return guild.members._add(data10.member).user;
+            return guild.members._add(data11.member).user;
           } else {
-            return this.client.users._add(data10.member.user);
+            return this.client.users._add(data11.member.user);
           }
         }
-        return this.getUser(data10);
+        return this.getUser(data11);
       }
-      getScheduledEvent(data10, guild) {
-        const id = data10.guild_scheduled_event_id ?? data10.id;
+      getScheduledEvent(data11, guild) {
+        const id = data11.guild_scheduled_event_id ?? data11.id;
         return this.getPayload(
-          { id, guild_id: data10.guild_id ?? guild.id },
+          { id, guild_id: data11.guild_id ?? guild.id },
           guild.scheduledEvents,
           id,
           Partials2.GuildScheduledEvent
@@ -147608,11 +147608,11 @@ var require_Action = __commonJS({
       getThreadMember(id, manager) {
         return this.getPayload({ user_id: id }, manager, id, Partials2.ThreadMember, false);
       }
-      getSoundboardSound(data10, guild) {
-        return this.getPayload(data10, guild.soundboardSounds, data10.sound_id, Partials2.SoundboardSound);
+      getSoundboardSound(data11, guild) {
+        return this.getPayload(data11, guild.soundboardSounds, data11.sound_id, Partials2.SoundboardSound);
       }
-      spreadInjectedData(data10) {
-        return Object.fromEntries(Object.getOwnPropertySymbols(data10).map((symbol) => [symbol, data10[symbol]]));
+      spreadInjectedData(data11) {
+        return Object.fromEntries(Object.getOwnPropertySymbols(data11).map((symbol) => [symbol, data11[symbol]]));
       }
     };
     module2.exports = GenericAction;
@@ -147626,13 +147626,13 @@ var require_ApplicationCommandPermissionsUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ApplicationCommandPermissionsUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
         client.emit(Events3.ApplicationCommandPermissionsUpdate, {
-          permissions: data10.permissions,
-          id: data10.id,
-          guildId: data10.guild_id,
-          applicationId: data10.application_id
+          permissions: data11.permissions,
+          id: data11.id,
+          guildId: data11.guild_id,
+          applicationId: data11.application_id
         });
       }
     };
@@ -147646,18 +147646,18 @@ var require_AutoModerationActionExecution = __commonJS({
     "use strict";
     var { _transformAPIAutoModerationAction } = require_Transformers();
     var AutoModerationActionExecution = class {
-      constructor(data10, guild) {
+      constructor(data11, guild) {
         this.guild = guild;
-        this.action = _transformAPIAutoModerationAction(data10.action);
-        this.ruleId = data10.rule_id;
-        this.ruleTriggerType = data10.rule_trigger_type;
-        this.userId = data10.user_id;
-        this.channelId = data10.channel_id ?? null;
-        this.messageId = data10.message_id ?? null;
-        this.alertSystemMessageId = data10.alert_system_message_id ?? null;
-        this.content = data10.content;
-        this.matchedKeyword = data10.matched_keyword ?? null;
-        this.matchedContent = data10.matched_content ?? null;
+        this.action = _transformAPIAutoModerationAction(data11.action);
+        this.ruleId = data11.rule_id;
+        this.ruleTriggerType = data11.rule_trigger_type;
+        this.userId = data11.user_id;
+        this.channelId = data11.channel_id ?? null;
+        this.messageId = data11.message_id ?? null;
+        this.alertSystemMessageId = data11.alert_system_message_id ?? null;
+        this.content = data11.content;
+        this.matchedKeyword = data11.matched_keyword ?? null;
+        this.matchedContent = data11.matched_content ?? null;
       }
       /**
        * The auto moderation rule this action belongs to.
@@ -147704,11 +147704,11 @@ var require_AutoModerationActionExecution2 = __commonJS({
     var AutoModerationActionExecution = require_AutoModerationActionExecution();
     var Events3 = require_Events();
     var AutoModerationActionExecutionAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const { client } = this;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          client.emit(Events3.AutoModerationActionExecution, new AutoModerationActionExecution(data10, guild));
+          client.emit(Events3.AutoModerationActionExecution, new AutoModerationActionExecution(data11, guild));
         }
         return {};
       }
@@ -147724,11 +147724,11 @@ var require_AutoModerationRuleCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var AutoModerationRuleCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const { client } = this;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const autoModerationRule = guild.autoModerationRules._add(data10);
+          const autoModerationRule = guild.autoModerationRules._add(data11);
           client.emit(Events3.AutoModerationRuleCreate, autoModerationRule);
         }
         return {};
@@ -147745,11 +147745,11 @@ var require_AutoModerationRuleDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var AutoModerationRuleDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const { client } = this;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const autoModerationRule = guild.autoModerationRules.cache.get(data10.id);
+          const autoModerationRule = guild.autoModerationRules.cache.get(data11.id);
           if (autoModerationRule) {
             guild.autoModerationRules.cache.delete(autoModerationRule.id);
             client.emit(Events3.AutoModerationRuleDelete, autoModerationRule);
@@ -147769,12 +147769,12 @@ var require_AutoModerationRuleUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var AutoModerationRuleUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const { client } = this;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const oldAutoModerationRule = guild.autoModerationRules.cache.get(data10.id)?._clone() ?? null;
-          const newAutoModerationRule = guild.autoModerationRules._add(data10);
+          const oldAutoModerationRule = guild.autoModerationRules.cache.get(data11.id)?._clone() ?? null;
+          const newAutoModerationRule = guild.autoModerationRules._add(data11);
           client.emit(Events3.AutoModerationRuleUpdate, oldAutoModerationRule, newAutoModerationRule);
         }
         return {};
@@ -147791,10 +147791,10 @@ var require_ChannelCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ChannelCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const existing = client.channels.cache.has(data10.id);
-        const channel = client.channels._add(data10);
+        const existing = client.channels.cache.has(data11.id);
+        const channel = client.channels._add(data11);
         if (!existing && channel) {
           client.emit(Events3.ChannelCreate, channel);
         }
@@ -147812,9 +147812,9 @@ var require_ChannelDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ChannelDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = client.channels.cache.get(data10.id);
+        const channel = client.channels.cache.get(data11.id);
         if (channel) {
           client.channels._remove(channel.id);
           client.emit(Events3.ChannelDelete, channel);
@@ -147963,28 +147963,28 @@ var require_DMChannel = __commonJS({
     var DMMessageManager = require_DMMessageManager();
     var Partials2 = require_Partials();
     var DMChannel = class extends BaseChannel {
-      constructor(client, data10) {
-        super(client, data10);
+      constructor(client, data11) {
+        super(client, data11);
         this.type = ChannelType4.DM;
         this.messages = new DMMessageManager(this);
       }
-      _patch(data10) {
-        super._patch(data10);
-        if (data10.recipients) {
+      _patch(data11) {
+        super._patch(data11);
+        if (data11.recipients) {
           this.recipientIds = [
-            .../* @__PURE__ */ new Set([...this.recipientIds ?? [], ...data10.recipients.map((recipient) => recipient.id)])
+            .../* @__PURE__ */ new Set([...this.recipientIds ?? [], ...data11.recipients.map((recipient) => recipient.id)])
           ];
-          for (const recipient of data10.recipients) {
+          for (const recipient of data11.recipients) {
             if ("username" in recipient || this.client.options.partials.includes(Partials2.User)) {
               this.client.users._add(recipient);
             }
           }
         }
-        if ("last_message_id" in data10) {
-          this.lastMessageId = data10.last_message_id;
+        if ("last_message_id" in data11) {
+          this.lastMessageId = data11.last_message_id;
         }
-        if ("last_pin_timestamp" in data10) {
-          this.lastPinTimestamp = Date.parse(data10.last_pin_timestamp);
+        if ("last_pin_timestamp" in data11) {
+          this.lastPinTimestamp = Date.parse(data11.last_pin_timestamp);
         } else {
           this.lastPinTimestamp ??= null;
         }
@@ -148125,7 +148125,7 @@ var require_GuildForumThreadManager = __commonJS({
           throw new DiscordjsTypeError2(ErrorCodes2.GuildForumMessageRequired);
         }
         const { body, files } = await (message instanceof MessagePayload ? message : MessagePayload.create(this, message)).resolveBody().resolveFiles();
-        const data10 = await this.client.rest.post(Routes3.threads(this.channel.id), {
+        const data11 = await this.client.rest.post(Routes3.threads(this.channel.id), {
           body: {
             name,
             auto_archive_duration: autoArchiveDuration,
@@ -148136,7 +148136,7 @@ var require_GuildForumThreadManager = __commonJS({
           files,
           reason
         });
-        return this.client.actions.ThreadCreate.handle(data10).thread;
+        return this.client.actions.ThreadCreate.handle(data11).thread;
       }
     };
     module2.exports = GuildForumThreadManager;
@@ -148152,48 +148152,48 @@ var require_ThreadOnlyChannel = __commonJS({
     var GuildForumThreadManager = require_GuildForumThreadManager();
     var { transformAPIGuildForumTag, transformAPIGuildDefaultReaction } = require_Channels();
     var ThreadOnlyChannel = class extends GuildChannel {
-      constructor(guild, data10, client) {
-        super(guild, data10, client, false);
+      constructor(guild, data11, client) {
+        super(guild, data11, client, false);
         this.threads = new GuildForumThreadManager(this);
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        super._patch(data10);
-        if ("available_tags" in data10) {
-          this.availableTags = data10.available_tags.map((tag) => transformAPIGuildForumTag(tag));
+      _patch(data11) {
+        super._patch(data11);
+        if ("available_tags" in data11) {
+          this.availableTags = data11.available_tags.map((tag) => transformAPIGuildForumTag(tag));
         } else {
           this.availableTags ??= [];
         }
-        if ("default_reaction_emoji" in data10) {
-          this.defaultReactionEmoji = data10.default_reaction_emoji ? transformAPIGuildDefaultReaction(data10.default_reaction_emoji) : null;
+        if ("default_reaction_emoji" in data11) {
+          this.defaultReactionEmoji = data11.default_reaction_emoji ? transformAPIGuildDefaultReaction(data11.default_reaction_emoji) : null;
         } else {
           this.defaultReactionEmoji ??= null;
         }
-        if ("default_thread_rate_limit_per_user" in data10) {
-          this.defaultThreadRateLimitPerUser = data10.default_thread_rate_limit_per_user;
+        if ("default_thread_rate_limit_per_user" in data11) {
+          this.defaultThreadRateLimitPerUser = data11.default_thread_rate_limit_per_user;
         } else {
           this.defaultThreadRateLimitPerUser ??= null;
         }
-        if ("rate_limit_per_user" in data10) {
-          this.rateLimitPerUser = data10.rate_limit_per_user;
+        if ("rate_limit_per_user" in data11) {
+          this.rateLimitPerUser = data11.rate_limit_per_user;
         } else {
           this.rateLimitPerUser ??= null;
         }
-        if ("default_auto_archive_duration" in data10) {
-          this.defaultAutoArchiveDuration = data10.default_auto_archive_duration;
+        if ("default_auto_archive_duration" in data11) {
+          this.defaultAutoArchiveDuration = data11.default_auto_archive_duration;
         } else {
           this.defaultAutoArchiveDuration ??= null;
         }
-        if ("nsfw" in data10) {
-          this.nsfw = data10.nsfw;
+        if ("nsfw" in data11) {
+          this.nsfw = data11.nsfw;
         } else {
           this.nsfw ??= false;
         }
-        if ("topic" in data10) {
-          this.topic = data10.topic;
+        if ("topic" in data11) {
+          this.topic = data11.topic;
         }
-        if ("default_sort_order" in data10) {
-          this.defaultSortOrder = data10.default_sort_order;
+        if ("default_sort_order" in data11) {
+          this.defaultSortOrder = data11.default_sort_order;
         } else {
           this.defaultSortOrder ??= null;
         }
@@ -148331,19 +148331,19 @@ var require_ThreadMember = __commonJS({
     var ThreadMemberFlagsBitField = require_ThreadMemberFlagsBitField();
     var { emitDeprecationWarningForRemoveThreadMember } = require_Util();
     var ThreadMember = class extends Base {
-      constructor(thread, data10, extra = {}) {
+      constructor(thread, data11, extra = {}) {
         super(thread.client);
         this.thread = thread;
         this.joinedTimestamp = null;
         this.flags = null;
-        this.id = data10.user_id;
-        this._patch(data10, extra);
+        this.id = data11.user_id;
+        this._patch(data11, extra);
       }
-      _patch(data10, extra = {}) {
-        if ("join_timestamp" in data10) this.joinedTimestamp = Date.parse(data10.join_timestamp);
-        if ("flags" in data10) this.flags = new ThreadMemberFlagsBitField(data10.flags).freeze();
-        if ("member" in data10) {
-          this.member = this.thread.guild.members._add(data10.member, extra.cache);
+      _patch(data11, extra = {}) {
+        if ("join_timestamp" in data11) this.joinedTimestamp = Date.parse(data11.join_timestamp);
+        if ("flags" in data11) this.flags = new ThreadMemberFlagsBitField(data11.flags).freeze();
+        if ("member" in data11) {
+          this.member = this.thread.guild.members._add(data11.member, extra.cache);
         } else {
           this.member ??= null;
         }
@@ -148429,12 +148429,12 @@ var require_ThreadMemberManager = __commonJS({
        * @type {Collection<Snowflake, ThreadMember>}
        * @name ThreadMemberManager#cache
        */
-      _add(data10, cache = true) {
-        const existing = this.cache.get(data10.user_id);
-        if (cache) existing?._patch(data10, { cache });
+      _add(data11, cache = true) {
+        const existing = this.cache.get(data11.user_id);
+        if (cache) existing?._patch(data11, { cache });
         if (existing) return existing;
-        const member = new ThreadMember(this.thread, data10, { cache });
-        if (cache) this.cache.set(data10.user_id, member);
+        const member = new ThreadMember(this.thread, data11, { cache });
+        if (cache) this.cache.set(data11.user_id, member);
         return member;
       }
       /**
@@ -148564,16 +148564,16 @@ var require_ThreadMemberManager = __commonJS({
           const existing = this.cache.get(member);
           if (existing) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.threadMembers(this.thread.id, member), {
+        const data11 = await this.client.rest.get(Routes3.threadMembers(this.thread.id, member), {
           query: makeURLSearchParams2({ with_member: withMember })
         });
-        return this._add(data10, cache);
+        return this._add(data11, cache);
       }
       async _fetchMany({ withMember, after, limit, cache } = {}) {
-        const data10 = await this.client.rest.get(Routes3.threadMembers(this.thread.id), {
+        const data11 = await this.client.rest.get(Routes3.threadMembers(this.thread.id), {
           query: makeURLSearchParams2({ with_member: withMember, after, limit })
         });
-        return data10.reduce((col, member) => col.set(member.user_id, this._add(member, cache)), new Collection3());
+        return data11.reduce((col, member) => col.set(member.user_id, this._add(member, cache)), new Collection3());
       }
     };
     module2.exports = ThreadMemberManager;
@@ -148595,37 +148595,37 @@ var require_ThreadChannel = __commonJS({
     var ThreadMemberManager = require_ThreadMemberManager();
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
     var ThreadChannel = class extends BaseChannel {
-      constructor(guild, data10, client) {
-        super(guild?.client ?? client, data10, false);
+      constructor(guild, data11, client) {
+        super(guild?.client ?? client, data11, false);
         this.guild = guild;
-        this.guildId = guild?.id ?? data10.guild_id;
-        this.ownerId = data10.owner_id;
+        this.guildId = guild?.id ?? data11.guild_id;
+        this.ownerId = data11.owner_id;
         this.messages = new GuildMessageManager(this);
         this.members = new ThreadMemberManager(this);
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        super._patch(data10);
-        if ("message" in data10) this.messages._add(data10.message);
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        super._patch(data11);
+        if ("message" in data11) this.messages._add(data11.message);
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("guild_id" in data10) {
-          this.guildId = data10.guild_id;
+        if ("guild_id" in data11) {
+          this.guildId = data11.guild_id;
         }
-        if ("parent_id" in data10) {
-          this.parentId = data10.parent_id;
+        if ("parent_id" in data11) {
+          this.parentId = data11.parent_id;
         } else {
           this.parentId ??= null;
         }
-        if ("thread_metadata" in data10) {
-          this.locked = data10.thread_metadata.locked ?? false;
-          this.invitable = this.type === ChannelType4.PrivateThread ? data10.thread_metadata.invitable ?? false : null;
-          this.archived = data10.thread_metadata.archived;
-          this.autoArchiveDuration = data10.thread_metadata.auto_archive_duration;
-          this.archiveTimestamp = Date.parse(data10.thread_metadata.archive_timestamp);
-          if ("create_timestamp" in data10.thread_metadata) {
-            this._createdTimestamp = Date.parse(data10.thread_metadata.create_timestamp);
+        if ("thread_metadata" in data11) {
+          this.locked = data11.thread_metadata.locked ?? false;
+          this.invitable = this.type === ChannelType4.PrivateThread ? data11.thread_metadata.invitable ?? false : null;
+          this.archived = data11.thread_metadata.archived;
+          this.autoArchiveDuration = data11.thread_metadata.auto_archive_duration;
+          this.archiveTimestamp = Date.parse(data11.thread_metadata.archive_timestamp);
+          if ("create_timestamp" in data11.thread_metadata) {
+            this._createdTimestamp = Date.parse(data11.thread_metadata.create_timestamp);
           }
         } else {
           this.locked ??= null;
@@ -148635,40 +148635,40 @@ var require_ThreadChannel = __commonJS({
           this.invitable ??= null;
         }
         this._createdTimestamp ??= this.type === ChannelType4.PrivateThread ? super.createdTimestamp : null;
-        if ("last_message_id" in data10) {
-          this.lastMessageId = data10.last_message_id;
+        if ("last_message_id" in data11) {
+          this.lastMessageId = data11.last_message_id;
         } else {
           this.lastMessageId ??= null;
         }
-        if ("last_pin_timestamp" in data10) {
-          this.lastPinTimestamp = data10.last_pin_timestamp ? Date.parse(data10.last_pin_timestamp) : null;
+        if ("last_pin_timestamp" in data11) {
+          this.lastPinTimestamp = data11.last_pin_timestamp ? Date.parse(data11.last_pin_timestamp) : null;
         } else {
           this.lastPinTimestamp ??= null;
         }
-        if ("rate_limit_per_user" in data10) {
-          this.rateLimitPerUser = data10.rate_limit_per_user ?? 0;
+        if ("rate_limit_per_user" in data11) {
+          this.rateLimitPerUser = data11.rate_limit_per_user ?? 0;
         } else {
           this.rateLimitPerUser ??= null;
         }
-        if ("message_count" in data10) {
-          this.messageCount = data10.message_count;
+        if ("message_count" in data11) {
+          this.messageCount = data11.message_count;
         } else {
           this.messageCount ??= null;
         }
-        if ("member_count" in data10) {
-          this.memberCount = data10.member_count;
+        if ("member_count" in data11) {
+          this.memberCount = data11.member_count;
         } else {
           this.memberCount ??= null;
         }
-        if ("total_message_sent" in data10) {
-          this.totalMessageSent = data10.total_message_sent;
+        if ("total_message_sent" in data11) {
+          this.totalMessageSent = data11.total_message_sent;
         } else {
           this.totalMessageSent ??= null;
         }
-        if (data10.member && this.client.user) this.members._add({ user_id: this.client.user.id, ...data10.member });
-        if (data10.messages) for (const message of data10.messages) this.messages._add(message);
-        if ("applied_tags" in data10) {
-          this.appliedTags = data10.applied_tags;
+        if (data11.member && this.client.user) this.members._add({ user_id: this.client.user.id, ...data11.member });
+        if (data11.messages) for (const message of data11.messages) this.messages._add(message);
+        if ("applied_tags" in data11) {
+          this.appliedTags = data11.applied_tags;
         } else {
           this.appliedTags ??= [];
         }
@@ -149178,8 +149178,8 @@ var require_ThreadManager = __commonJS({
        * @returns {Promise<FetchedThreads>}
        */
       async fetchActive(cache = true) {
-        const data10 = await this.channel.guild.channels.rawFetchGuildActiveThreads();
-        return this.constructor._mapThreads(data10, this.client, { parent: this.channel, cache });
+        const data11 = await this.channel.guild.channels.rawFetchGuildActiveThreads();
+        return this.constructor._mapThreads(data11, this.client, { parent: this.channel, cache });
       }
       static _mapThreads(rawThreads, client, { parent, guild, cache }) {
         const threads = rawThreads.threads.reduce((coll, raw) => {
@@ -149268,7 +149268,7 @@ var require_GuildTextThreadManager = __commonJS({
         } else if (this.channel.type !== ChannelType4.GuildAnnouncement) {
           resolvedType = type ?? resolvedType;
         }
-        const data10 = await this.client.rest.post(Routes3.threads(this.channel.id, startMessageId), {
+        const data11 = await this.client.rest.post(Routes3.threads(this.channel.id, startMessageId), {
           body: {
             name,
             auto_archive_duration: autoArchiveDuration,
@@ -149278,7 +149278,7 @@ var require_GuildTextThreadManager = __commonJS({
           },
           reason
         });
-        return this.client.actions.ThreadCreate.handle(data10).thread;
+        return this.client.actions.ThreadCreate.handle(data11).thread;
       }
     };
     module2.exports = GuildTextThreadManager;
@@ -149294,37 +149294,37 @@ var require_BaseGuildTextChannel = __commonJS({
     var GuildMessageManager = require_GuildMessageManager();
     var GuildTextThreadManager = require_GuildTextThreadManager();
     var BaseGuildTextChannel = class extends GuildChannel {
-      constructor(guild, data10, client) {
-        super(guild, data10, client, false);
+      constructor(guild, data11, client) {
+        super(guild, data11, client, false);
         this.messages = new GuildMessageManager(this);
         this.threads = new GuildTextThreadManager(this);
-        this.nsfw = Boolean(data10.nsfw);
-        this._patch(data10);
+        this.nsfw = Boolean(data11.nsfw);
+        this._patch(data11);
       }
-      _patch(data10) {
-        super._patch(data10);
-        if ("topic" in data10) {
-          this.topic = data10.topic;
+      _patch(data11) {
+        super._patch(data11);
+        if ("topic" in data11) {
+          this.topic = data11.topic;
         }
-        if ("nsfw" in data10) {
-          this.nsfw = Boolean(data10.nsfw);
+        if ("nsfw" in data11) {
+          this.nsfw = Boolean(data11.nsfw);
         }
-        if ("last_message_id" in data10) {
-          this.lastMessageId = data10.last_message_id;
+        if ("last_message_id" in data11) {
+          this.lastMessageId = data11.last_message_id;
         }
-        if ("last_pin_timestamp" in data10) {
-          this.lastPinTimestamp = data10.last_pin_timestamp ? Date.parse(data10.last_pin_timestamp) : null;
+        if ("last_pin_timestamp" in data11) {
+          this.lastPinTimestamp = data11.last_pin_timestamp ? Date.parse(data11.last_pin_timestamp) : null;
         }
-        if ("default_auto_archive_duration" in data10) {
-          this.defaultAutoArchiveDuration = data10.default_auto_archive_duration;
+        if ("default_auto_archive_duration" in data11) {
+          this.defaultAutoArchiveDuration = data11.default_auto_archive_duration;
         }
-        if ("default_thread_rate_limit_per_user" in data10) {
-          this.defaultThreadRateLimitPerUser = data10.default_thread_rate_limit_per_user;
+        if ("default_thread_rate_limit_per_user" in data11) {
+          this.defaultThreadRateLimitPerUser = data11.default_thread_rate_limit_per_user;
         } else {
           this.defaultThreadRateLimitPerUser ??= null;
         }
-        if ("messages" in data10) {
-          for (const message of data10.messages) this.messages._add(message);
+        if ("messages" in data11) {
+          for (const message of data11.messages) this.messages._add(message);
         }
       }
       /**
@@ -149480,39 +149480,39 @@ var require_BaseGuildVoiceChannel = __commonJS({
     var TextBasedChannel = require_TextBasedChannel();
     var GuildMessageManager = require_GuildMessageManager();
     var BaseGuildVoiceChannel = class extends GuildChannel {
-      constructor(guild, data10, client) {
-        super(guild, data10, client, false);
+      constructor(guild, data11, client) {
+        super(guild, data11, client, false);
         this.messages = new GuildMessageManager(this);
-        this.nsfw = Boolean(data10.nsfw);
-        this._patch(data10);
+        this.nsfw = Boolean(data11.nsfw);
+        this._patch(data11);
       }
-      _patch(data10) {
-        super._patch(data10);
-        if ("rtc_region" in data10) {
-          this.rtcRegion = data10.rtc_region;
+      _patch(data11) {
+        super._patch(data11);
+        if ("rtc_region" in data11) {
+          this.rtcRegion = data11.rtc_region;
         }
-        if ("bitrate" in data10) {
-          this.bitrate = data10.bitrate;
+        if ("bitrate" in data11) {
+          this.bitrate = data11.bitrate;
         }
-        if ("user_limit" in data10) {
-          this.userLimit = data10.user_limit;
+        if ("user_limit" in data11) {
+          this.userLimit = data11.user_limit;
         }
-        if ("video_quality_mode" in data10) {
-          this.videoQualityMode = data10.video_quality_mode;
+        if ("video_quality_mode" in data11) {
+          this.videoQualityMode = data11.video_quality_mode;
         } else {
           this.videoQualityMode ??= null;
         }
-        if ("last_message_id" in data10) {
-          this.lastMessageId = data10.last_message_id;
+        if ("last_message_id" in data11) {
+          this.lastMessageId = data11.last_message_id;
         }
-        if ("messages" in data10) {
-          for (const message of data10.messages) this.messages._add(message);
+        if ("messages" in data11) {
+          for (const message of data11.messages) this.messages._add(message);
         }
-        if ("rate_limit_per_user" in data10) {
-          this.rateLimitPerUser = data10.rate_limit_per_user;
+        if ("rate_limit_per_user" in data11) {
+          this.rateLimitPerUser = data11.rate_limit_per_user;
         }
-        if ("nsfw" in data10) {
-          this.nsfw = data10.nsfw;
+        if ("nsfw" in data11) {
+          this.nsfw = data11.nsfw;
         }
       }
       /**
@@ -149660,10 +149660,10 @@ var require_StageChannel = __commonJS({
     "use strict";
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
     var StageChannel = class extends BaseGuildVoiceChannel {
-      _patch(data10) {
-        super._patch(data10);
-        if ("topic" in data10) {
-          this.topic = data10.topic;
+      _patch(data11) {
+        super._patch(data11);
+        if ("topic" in data11) {
+          this.topic = data11.topic;
         }
       }
       /**
@@ -149707,10 +149707,10 @@ var require_TextChannel = __commonJS({
     "use strict";
     var BaseGuildTextChannel = require_BaseGuildTextChannel();
     var TextChannel6 = class extends BaseGuildTextChannel {
-      _patch(data10) {
-        super._patch(data10);
-        if ("rate_limit_per_user" in data10) {
-          this.rateLimitPerUser = data10.rate_limit_per_user;
+      _patch(data11) {
+        super._patch(data11);
+        if ("rate_limit_per_user" in data11) {
+          this.rateLimitPerUser = data11.rate_limit_per_user;
         }
       }
       /**
@@ -149784,14 +149784,14 @@ var require_DirectoryChannel = __commonJS({
     "use strict";
     var { BaseChannel } = require_BaseChannel();
     var DirectoryChannel = class extends BaseChannel {
-      constructor(guild, data10, client) {
-        super(client, data10);
+      constructor(guild, data11, client) {
+        super(client, data11);
         this.guild = guild;
         this.guildId = guild.id;
       }
-      _patch(data10) {
-        super._patch(data10);
-        this.name = data10.name;
+      _patch(data11) {
+        super._patch(data11);
+        this.name = data11.name;
       }
     };
     module2.exports = DirectoryChannel;
@@ -149823,25 +149823,25 @@ var require_PartialGroupDMChannel = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var PartialGroupDMMessageManager = require_PartialGroupDMMessageManager();
     var PartialGroupDMChannel = class extends BaseChannel {
-      constructor(client, data10) {
-        super(client, data10);
+      constructor(client, data11) {
+        super(client, data11);
         this.flags = null;
-        this.name = data10.name;
-        this.icon = data10.icon ?? null;
-        this.recipients = data10.recipients ?? [];
+        this.name = data11.name;
+        this.icon = data11.icon ?? null;
+        this.recipients = data11.recipients ?? [];
         this.messages = new PartialGroupDMMessageManager(this);
-        if ("owner_id" in data10) {
-          this.ownerId = data10.owner_id;
+        if ("owner_id" in data11) {
+          this.ownerId = data11.owner_id;
         } else {
           this.ownerId ??= null;
         }
-        if ("last_message_id" in data10) {
-          this.lastMessageId = data10.last_message_id;
+        if ("last_message_id" in data11) {
+          this.lastMessageId = data11.last_message_id;
         } else {
           this.lastMessageId ??= null;
         }
-        if ("last_pin_timestamp" in data10) {
-          this.lastPinTimestamp = data10.last_pin_timestamp ? Date.parse(data10.last_pin_timestamp) : null;
+        if ("last_pin_timestamp" in data11) {
+          this.lastPinTimestamp = data11.last_pin_timestamp ? Date.parse(data11.last_pin_timestamp) : null;
         } else {
           this.lastPinTimestamp ??= null;
         }
@@ -149903,9 +149903,9 @@ var require_ForumChannel = __commonJS({
     "use strict";
     var ThreadOnlyChannel = require_ThreadOnlyChannel();
     var ForumChannel = class extends ThreadOnlyChannel {
-      _patch(data10) {
-        super._patch(data10);
-        this.defaultForumLayout = data10.default_forum_layout;
+      _patch(data11) {
+        super._patch(data11);
+        this.defaultForumLayout = data11.default_forum_layout;
       }
       /**
        * Sets the default forum layout type used to display posts
@@ -149949,53 +149949,53 @@ var require_Channels = __commonJS({
     var getPartialGroupDMChannel = lazy(() => require_PartialGroupDMChannel());
     var getForumChannel = lazy(() => require_ForumChannel());
     var getMediaChannel = lazy(() => require_MediaChannel());
-    function createChannel(client, data10, guild, { allowUnknownGuild } = {}) {
+    function createChannel(client, data11, guild, { allowUnknownGuild } = {}) {
       let channel;
-      if (!data10.guild_id && !guild) {
-        if (data10.recipients && data10.type !== ChannelType4.GroupDM || data10.type === ChannelType4.DM) {
-          channel = new (getDMChannel())(client, data10);
-        } else if (data10.type === ChannelType4.GroupDM) {
-          channel = new (getPartialGroupDMChannel())(client, data10);
+      if (!data11.guild_id && !guild) {
+        if (data11.recipients && data11.type !== ChannelType4.GroupDM || data11.type === ChannelType4.DM) {
+          channel = new (getDMChannel())(client, data11);
+        } else if (data11.type === ChannelType4.GroupDM) {
+          channel = new (getPartialGroupDMChannel())(client, data11);
         }
       } else {
-        guild ??= client.guilds.cache.get(data10.guild_id);
+        guild ??= client.guilds.cache.get(data11.guild_id);
         if (guild || allowUnknownGuild) {
-          switch (data10.type) {
+          switch (data11.type) {
             case ChannelType4.GuildText: {
-              channel = new (getTextChannel())(guild, data10, client);
+              channel = new (getTextChannel())(guild, data11, client);
               break;
             }
             case ChannelType4.GuildVoice: {
-              channel = new (getVoiceChannel())(guild, data10, client);
+              channel = new (getVoiceChannel())(guild, data11, client);
               break;
             }
             case ChannelType4.GuildCategory: {
-              channel = new (getCategoryChannel())(guild, data10, client);
+              channel = new (getCategoryChannel())(guild, data11, client);
               break;
             }
             case ChannelType4.GuildAnnouncement: {
-              channel = new (getNewsChannel())(guild, data10, client);
+              channel = new (getNewsChannel())(guild, data11, client);
               break;
             }
             case ChannelType4.GuildStageVoice: {
-              channel = new (getStageChannel())(guild, data10, client);
+              channel = new (getStageChannel())(guild, data11, client);
               break;
             }
             case ChannelType4.AnnouncementThread:
             case ChannelType4.PublicThread:
             case ChannelType4.PrivateThread: {
-              channel = new (getThreadChannel())(guild, data10, client);
+              channel = new (getThreadChannel())(guild, data11, client);
               if (!allowUnknownGuild) channel.parent?.threads.cache.set(channel.id, channel);
               break;
             }
             case ChannelType4.GuildDirectory:
-              channel = new (getDirectoryChannel())(guild, data10, client);
+              channel = new (getDirectoryChannel())(guild, data11, client);
               break;
             case ChannelType4.GuildForum:
-              channel = new (getForumChannel())(guild, data10, client);
+              channel = new (getForumChannel())(guild, data11, client);
               break;
             case ChannelType4.GuildMedia:
-              channel = new (getMediaChannel())(guild, data10, client);
+              channel = new (getMediaChannel())(guild, data11, client);
               break;
           }
           if (channel && !allowUnknownGuild) guild.channels?.cache.set(channel.id, channel);
@@ -150052,13 +150052,13 @@ var require_ChannelUpdate = __commonJS({
     var Action = require_Action();
     var { createChannel } = require_Channels();
     var ChannelUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        let channel = client.channels.cache.get(data10.id);
+        let channel = client.channels.cache.get(data11.id);
         if (channel) {
-          const old = channel._update(data10);
-          if (channel.type !== data10.type) {
-            const newChannel = createChannel(this.client, data10, channel.guild);
+          const old = channel._update(data11);
+          if (channel.type !== data11.type) {
+            const newChannel = createChannel(this.client, data11, channel.guild);
             if (!newChannel) {
               this.client.channels.cache.delete(channel.id);
               return {};
@@ -150074,7 +150074,7 @@ var require_ChannelUpdate = __commonJS({
             updated: channel
           };
         } else {
-          client.channels._add(data10);
+          client.channels._add(data11);
         }
         return {};
       }
@@ -150090,9 +150090,9 @@ var require_EntitlementCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var EntitlementCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const entitlement = client.application.entitlements._add(data10);
+        const entitlement = client.application.entitlements._add(data11);
         client.emit(Events3.EntitlementCreate, entitlement);
         return {};
       }
@@ -150108,9 +150108,9 @@ var require_EntitlementDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var EntitlementDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const entitlement = client.application.entitlements._add(data10, false);
+        const entitlement = client.application.entitlements._add(data11, false);
         client.application.entitlements.cache.delete(entitlement.id);
         client.emit(Events3.EntitlementDelete, entitlement);
         return {};
@@ -150127,10 +150127,10 @@ var require_EntitlementUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var EntitlementUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const oldEntitlement = client.application.entitlements.cache.get(data10.id)?._clone() ?? null;
-        const newEntitlement = client.application.entitlements._add(data10);
+        const oldEntitlement = client.application.entitlements.cache.get(data11.id)?._clone() ?? null;
+        const newEntitlement = client.application.entitlements._add(data11);
         client.emit(Events3.EntitlementUpdate, oldEntitlement, newEntitlement);
         return {};
       }
@@ -150147,45 +150147,45 @@ var require_AutoModerationRule = __commonJS({
     var Base = require_Base();
     var { _transformAPIAutoModerationAction } = require_Transformers();
     var AutoModerationRule = class extends Base {
-      constructor(client, data10, guild) {
+      constructor(client, data11, guild) {
         super(client);
-        this.id = data10.id;
+        this.id = data11.id;
         this.guild = guild;
-        this.creatorId = data10.creator_id;
-        this.triggerType = data10.trigger_type;
-        this._patch(data10);
+        this.creatorId = data11.creator_id;
+        this.triggerType = data11.trigger_type;
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("event_type" in data10) {
-          this.eventType = data10.event_type;
+        if ("event_type" in data11) {
+          this.eventType = data11.event_type;
         }
-        if ("trigger_metadata" in data10) {
+        if ("trigger_metadata" in data11) {
           this.triggerMetadata = {
-            keywordFilter: data10.trigger_metadata.keyword_filter ?? [],
-            regexPatterns: data10.trigger_metadata.regex_patterns ?? [],
-            presets: data10.trigger_metadata.presets ?? [],
-            allowList: data10.trigger_metadata.allow_list ?? [],
-            mentionTotalLimit: data10.trigger_metadata.mention_total_limit ?? null,
-            mentionRaidProtectionEnabled: data10.trigger_metadata.mention_raid_protection_enabled ?? false
+            keywordFilter: data11.trigger_metadata.keyword_filter ?? [],
+            regexPatterns: data11.trigger_metadata.regex_patterns ?? [],
+            presets: data11.trigger_metadata.presets ?? [],
+            allowList: data11.trigger_metadata.allow_list ?? [],
+            mentionTotalLimit: data11.trigger_metadata.mention_total_limit ?? null,
+            mentionRaidProtectionEnabled: data11.trigger_metadata.mention_raid_protection_enabled ?? false
           };
         }
-        if ("actions" in data10) {
-          this.actions = data10.actions.map((action) => _transformAPIAutoModerationAction(action));
+        if ("actions" in data11) {
+          this.actions = data11.actions.map((action) => _transformAPIAutoModerationAction(action));
         }
-        if ("enabled" in data10) {
-          this.enabled = data10.enabled;
+        if ("enabled" in data11) {
+          this.enabled = data11.enabled;
         }
-        if ("exempt_roles" in data10) {
+        if ("exempt_roles" in data11) {
           this.exemptRoles = new Collection3(
-            data10.exempt_roles.map((exemptRole) => [exemptRole, this.guild.roles.cache.get(exemptRole)])
+            data11.exempt_roles.map((exemptRole) => [exemptRole, this.guild.roles.cache.get(exemptRole)])
           );
         }
-        if ("exempt_channels" in data10) {
+        if ("exempt_channels" in data11) {
           this.exemptChannels = new Collection3(
-            data10.exempt_channels.map((exemptChannel) => [exemptChannel, this.guild.channels.cache.get(exemptChannel)])
+            data11.exempt_channels.map((exemptChannel) => [exemptChannel, this.guild.channels.cache.get(exemptChannel)])
           );
         }
       }
@@ -150333,22 +150333,22 @@ var require_GuildOnboardingPromptOption = __commonJS({
     var Base = require_Base();
     var { Emoji } = require_Emoji();
     var GuildOnboardingPromptOption = class extends Base {
-      constructor(client, data10, guildId) {
+      constructor(client, data11, guildId) {
         super(client);
         this.guildId = guildId;
         const guild = this.guild;
-        this.id = data10.id;
-        this.channels = data10.channel_ids.reduce(
+        this.id = data11.id;
+        this.channels = data11.channel_ids.reduce(
           (channels, channelId) => channels.set(channelId, guild.channels.cache.get(channelId)),
           new Collection3()
         );
-        this.roles = data10.role_ids.reduce(
+        this.roles = data11.role_ids.reduce(
           (roles, roleId) => roles.set(roleId, guild.roles.cache.get(roleId)),
           new Collection3()
         );
-        this._emoji = data10.emoji;
-        this.title = data10.title;
-        this.description = data10.description;
+        this._emoji = data11.emoji;
+        this.title = data11.title;
+        this.description = data11.description;
       }
       /**
        * The guild this onboarding prompt option is from
@@ -150379,19 +150379,19 @@ var require_GuildOnboardingPrompt = __commonJS({
     var Base = require_Base();
     var { GuildOnboardingPromptOption } = require_GuildOnboardingPromptOption();
     var GuildOnboardingPrompt = class extends Base {
-      constructor(client, data10, guildId) {
+      constructor(client, data11, guildId) {
         super(client);
         this.guildId = guildId;
-        this.id = data10.id;
-        this.options = data10.options.reduce(
+        this.id = data11.id;
+        this.options = data11.options.reduce(
           (options, option) => options.set(option.id, new GuildOnboardingPromptOption(client, option, guildId)),
           new Collection3()
         );
-        this.title = data10.title;
-        this.singleSelect = data10.single_select;
-        this.required = data10.required;
-        this.inOnboarding = data10.in_onboarding;
-        this.type = data10.type;
+        this.title = data11.title;
+        this.singleSelect = data11.single_select;
+        this.required = data11.required;
+        this.inOnboarding = data11.in_onboarding;
+        this.type = data11.type;
       }
       /**
        * The guild this onboarding prompt is from
@@ -150414,46 +150414,46 @@ var require_Integration = __commonJS({
     var Base = require_Base();
     var IntegrationApplication = require_IntegrationApplication();
     var Integration = class extends Base {
-      constructor(client, data10, guild) {
+      constructor(client, data11, guild) {
         super(client);
         this.guild = guild;
-        this.id = data10.id;
-        this.name = data10.name;
-        this.type = data10.type;
-        this.enabled = data10.enabled ?? null;
-        if ("syncing" in data10) {
-          this.syncing = data10.syncing;
+        this.id = data11.id;
+        this.name = data11.name;
+        this.type = data11.type;
+        this.enabled = data11.enabled ?? null;
+        if ("syncing" in data11) {
+          this.syncing = data11.syncing;
         } else {
           this.syncing ??= null;
         }
-        this.role = this.guild.roles.resolve(data10.role_id);
-        if ("enable_emoticons" in data10) {
-          this.enableEmoticons = data10.enable_emoticons;
+        this.role = this.guild.roles.resolve(data11.role_id);
+        if ("enable_emoticons" in data11) {
+          this.enableEmoticons = data11.enable_emoticons;
         } else {
           this.enableEmoticons ??= null;
         }
-        if (data10.user) {
-          this.user = this.client.users._add(data10.user);
+        if (data11.user) {
+          this.user = this.client.users._add(data11.user);
         } else {
           this.user ??= null;
         }
-        this.account = data10.account;
-        if ("synced_at" in data10) {
-          this.syncedTimestamp = Date.parse(data10.synced_at);
+        this.account = data11.account;
+        if ("synced_at" in data11) {
+          this.syncedTimestamp = Date.parse(data11.synced_at);
         } else {
           this.syncedTimestamp ??= null;
         }
-        if ("subscriber_count" in data10) {
-          this.subscriberCount = data10.subscriber_count;
+        if ("subscriber_count" in data11) {
+          this.subscriberCount = data11.subscriber_count;
         } else {
           this.subscriberCount ??= null;
         }
-        if ("revoked" in data10) {
-          this.revoked = data10.revoked;
+        if ("revoked" in data11) {
+          this.revoked = data11.revoked;
         } else {
           this.revoked ??= null;
         }
-        this._patch(data10);
+        this._patch(data11);
       }
       /**
        * The date at which this integration was last synced at
@@ -150472,28 +150472,28 @@ var require_Integration = __commonJS({
         const roles = this.guild.roles.cache;
         return roles.filter((role) => role.tags?.integrationId === this.id);
       }
-      _patch(data10) {
-        if ("expire_behavior" in data10) {
-          this.expireBehavior = data10.expire_behavior;
+      _patch(data11) {
+        if ("expire_behavior" in data11) {
+          this.expireBehavior = data11.expire_behavior;
         } else {
           this.expireBehavior ??= null;
         }
-        if ("expire_grace_period" in data10) {
-          this.expireGracePeriod = data10.expire_grace_period;
+        if ("expire_grace_period" in data11) {
+          this.expireGracePeriod = data11.expire_grace_period;
         } else {
           this.expireGracePeriod ??= null;
         }
-        if ("application" in data10) {
+        if ("application" in data11) {
           if (this.application) {
-            this.application._patch(data10.application);
+            this.application._patch(data11.application);
           } else {
-            this.application = new IntegrationApplication(this.client, data10.application);
+            this.application = new IntegrationApplication(this.client, data11.application);
           }
         } else {
           this.application ??= null;
         }
-        if ("scopes" in data10) {
-          this.scopes = data10.scopes;
+        if ("scopes" in data11) {
+          this.scopes = data11.scopes;
         } else {
           this.scopes ??= [];
         }
@@ -150526,31 +150526,31 @@ var require_StageInstance = __commonJS({
     var { DiscordSnowflake } = require_cjs3();
     var Base = require_Base();
     var StageInstance = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.id = data10.id;
-        this._patch(data10);
+        this.id = data11.id;
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("guild_id" in data10) {
-          this.guildId = data10.guild_id;
+      _patch(data11) {
+        if ("guild_id" in data11) {
+          this.guildId = data11.guild_id;
         }
-        if ("channel_id" in data10) {
-          this.channelId = data10.channel_id;
+        if ("channel_id" in data11) {
+          this.channelId = data11.channel_id;
         }
-        if ("topic" in data10) {
-          this.topic = data10.topic;
+        if ("topic" in data11) {
+          this.topic = data11.topic;
         }
-        if ("privacy_level" in data10) {
-          this.privacyLevel = data10.privacy_level;
+        if ("privacy_level" in data11) {
+          this.privacyLevel = data11.privacy_level;
         }
-        if ("discoverable_disabled" in data10) {
-          this.discoverableDisabled = data10.discoverable_disabled;
+        if ("discoverable_disabled" in data11) {
+          this.discoverableDisabled = data11.discoverable_disabled;
         } else {
           this.discoverableDisabled ??= null;
         }
-        if ("guild_scheduled_event_id" in data10) {
-          this.guildScheduledEventId = data10.guild_scheduled_event_id;
+        if ("guild_scheduled_event_id" in data11) {
+          this.guildScheduledEventId = data11.guild_scheduled_event_id;
         } else {
           this.guildScheduledEventId ??= null;
         }
@@ -150691,62 +150691,62 @@ var require_GuildAuditLogsEntry = __commonJS({
        * @memberof GuildAuditLogsEntry
        */
       static Targets = Targets;
-      constructor(guild, data10, logs) {
-        this.targetType = _GuildAuditLogsEntry.targetType(data10.action_type);
+      constructor(guild, data11, logs) {
+        this.targetType = _GuildAuditLogsEntry.targetType(data11.action_type);
         const targetType = this.targetType;
-        this.actionType = _GuildAuditLogsEntry.actionType(data10.action_type);
-        this.action = data10.action_type;
-        this.reason = data10.reason ?? null;
-        this.executorId = data10.user_id;
-        this.executor = data10.user_id ? guild.client.options.partials.includes(Partials2.User) ? guild.client.users._add({ id: data10.user_id }) : guild.client.users.cache.get(data10.user_id) ?? null : null;
-        this.changes = data10.changes?.map((change) => ({
+        this.actionType = _GuildAuditLogsEntry.actionType(data11.action_type);
+        this.action = data11.action_type;
+        this.reason = data11.reason ?? null;
+        this.executorId = data11.user_id;
+        this.executor = data11.user_id ? guild.client.options.partials.includes(Partials2.User) ? guild.client.users._add({ id: data11.user_id }) : guild.client.users.cache.get(data11.user_id) ?? null : null;
+        this.changes = data11.changes?.map((change) => ({
           key: change.key,
           ..."old_value" in change ? { old: change.old_value } : {},
           ..."new_value" in change ? { new: change.new_value } : {}
         })) ?? [];
-        this.id = data10.id;
+        this.id = data11.id;
         this.extra = null;
-        switch (data10.action_type) {
+        switch (data11.action_type) {
           case AuditLogEvent.MemberPrune:
             this.extra = {
-              removed: Number(data10.options.members_removed),
-              days: Number(data10.options.delete_member_days)
+              removed: Number(data11.options.members_removed),
+              days: Number(data11.options.delete_member_days)
             };
             break;
           case AuditLogEvent.MemberMove:
           case AuditLogEvent.MessageDelete:
             this.extra = {
-              channel: guild.channels.cache.get(data10.options.channel_id) ?? { id: data10.options.channel_id },
-              count: Number(data10.options.count)
+              channel: guild.channels.cache.get(data11.options.channel_id) ?? { id: data11.options.channel_id },
+              count: Number(data11.options.count)
             };
             break;
           case AuditLogEvent.MessagePin:
           case AuditLogEvent.MessageUnpin:
             this.extra = {
-              channel: guild.client.channels.cache.get(data10.options.channel_id) ?? { id: data10.options.channel_id },
-              messageId: data10.options.message_id
+              channel: guild.client.channels.cache.get(data11.options.channel_id) ?? { id: data11.options.channel_id },
+              messageId: data11.options.message_id
             };
             break;
           case AuditLogEvent.MessageBulkDelete:
           case AuditLogEvent.MemberDisconnect:
             this.extra = {
-              count: Number(data10.options.count)
+              count: Number(data11.options.count)
             };
             break;
           case AuditLogEvent.ChannelOverwriteCreate:
           case AuditLogEvent.ChannelOverwriteUpdate:
           case AuditLogEvent.ChannelOverwriteDelete:
-            switch (data10.options.type) {
+            switch (data11.options.type) {
               case AuditLogOptionsType.Role:
-                this.extra = guild.roles.cache.get(data10.options.id) ?? {
-                  id: data10.options.id,
-                  name: data10.options.role_name,
+                this.extra = guild.roles.cache.get(data11.options.id) ?? {
+                  id: data11.options.id,
+                  name: data11.options.role_name,
                   type: AuditLogOptionsType.Role
                 };
                 break;
               case AuditLogOptionsType.Member:
-                this.extra = guild.members.cache.get(data10.options.id) ?? {
-                  id: data10.options.id,
+                this.extra = guild.members.cache.get(data11.options.id) ?? {
+                  id: data11.options.id,
                   type: AuditLogOptionsType.Member
                 };
                 break;
@@ -150758,28 +150758,28 @@ var require_GuildAuditLogsEntry = __commonJS({
           case AuditLogEvent.StageInstanceDelete:
           case AuditLogEvent.StageInstanceUpdate:
             this.extra = {
-              channel: guild.client.channels.cache.get(data10.options?.channel_id) ?? { id: data10.options?.channel_id }
+              channel: guild.client.channels.cache.get(data11.options?.channel_id) ?? { id: data11.options?.channel_id }
             };
             break;
           case AuditLogEvent.ApplicationCommandPermissionUpdate:
             this.extra = {
-              applicationId: data10.options.application_id
+              applicationId: data11.options.application_id
             };
             break;
           case AuditLogEvent.AutoModerationBlockMessage:
           case AuditLogEvent.AutoModerationFlagToChannel:
           case AuditLogEvent.AutoModerationUserCommunicationDisabled:
             this.extra = {
-              autoModerationRuleName: data10.options.auto_moderation_rule_name,
-              autoModerationRuleTriggerType: data10.options.auto_moderation_rule_trigger_type,
-              channel: guild.client.channels.cache.get(data10.options?.channel_id) ?? { id: data10.options?.channel_id }
+              autoModerationRuleName: data11.options.auto_moderation_rule_name,
+              autoModerationRuleTriggerType: data11.options.auto_moderation_rule_trigger_type,
+              channel: guild.client.channels.cache.get(data11.options?.channel_id) ?? { id: data11.options?.channel_id }
             };
             break;
           case AuditLogEvent.MemberKick:
           case AuditLogEvent.MemberRoleUpdate: {
-            if (data10.integration_type) {
+            if (data11.integration_type) {
               this.extra = {
-                integrationType: data10.integration_type
+                integrationType: data11.integration_type
               };
             }
             break;
@@ -150787,20 +150787,20 @@ var require_GuildAuditLogsEntry = __commonJS({
           default:
             break;
         }
-        this.targetId = data10.target_id;
+        this.targetId = data11.target_id;
         this.target = null;
         if (targetType === Targets.Unknown) {
           this.target = changesReduce(this.changes);
-          this.target.id = data10.target_id;
-        } else if (targetType === Targets.User && data10.target_id) {
-          this.target = guild.client.options.partials.includes(Partials2.User) ? guild.client.users._add({ id: data10.target_id }) : guild.client.users.cache.get(data10.target_id) ?? null;
+          this.target.id = data11.target_id;
+        } else if (targetType === Targets.User && data11.target_id) {
+          this.target = guild.client.options.partials.includes(Partials2.User) ? guild.client.users._add({ id: data11.target_id }) : guild.client.users.cache.get(data11.target_id) ?? null;
         } else if (targetType === Targets.Guild) {
-          this.target = guild.client.guilds.cache.get(data10.target_id);
+          this.target = guild.client.guilds.cache.get(data11.target_id);
         } else if (targetType === Targets.Webhook) {
-          this.target = logs?.webhooks.get(data10.target_id) ?? new Webhook2(
+          this.target = logs?.webhooks.get(data11.target_id) ?? new Webhook2(
             guild.client,
             changesReduce(this.changes, {
-              id: data10.target_id,
+              id: data11.target_id,
               guild_id: guild.id
             })
           );
@@ -150808,42 +150808,42 @@ var require_GuildAuditLogsEntry = __commonJS({
           const inviteChange = this.changes.find(({ key }) => key === "code");
           this.target = guild.invites.cache.get(inviteChange.new ?? inviteChange.old) ?? new Invite2(guild.client, changesReduce(this.changes, { guild }));
         } else if (targetType === Targets.Message) {
-          this.target = data10.action_type === AuditLogEvent.MessageBulkDelete ? guild.channels.cache.get(data10.target_id) ?? { id: data10.target_id } : guild.client.users.cache.get(data10.target_id) ?? null;
+          this.target = data11.action_type === AuditLogEvent.MessageBulkDelete ? guild.channels.cache.get(data11.target_id) ?? { id: data11.target_id } : guild.client.users.cache.get(data11.target_id) ?? null;
         } else if (targetType === Targets.Integration) {
-          this.target = logs?.integrations.get(data10.target_id) ?? new Integration(guild.client, changesReduce(this.changes, { id: data10.target_id }), guild);
+          this.target = logs?.integrations.get(data11.target_id) ?? new Integration(guild.client, changesReduce(this.changes, { id: data11.target_id }), guild);
         } else if (targetType === Targets.Channel || targetType === Targets.Thread) {
-          this.target = guild.channels.cache.get(data10.target_id) ?? changesReduce(this.changes, { id: data10.target_id });
+          this.target = guild.channels.cache.get(data11.target_id) ?? changesReduce(this.changes, { id: data11.target_id });
         } else if (targetType === Targets.StageInstance) {
-          this.target = guild.stageInstances.cache.get(data10.target_id) ?? new StageInstance(
+          this.target = guild.stageInstances.cache.get(data11.target_id) ?? new StageInstance(
             guild.client,
             changesReduce(this.changes, {
-              id: data10.target_id,
-              channel_id: data10.options?.channel_id,
+              id: data11.target_id,
+              channel_id: data11.options?.channel_id,
               guild_id: guild.id
             })
           );
         } else if (targetType === Targets.Sticker) {
-          this.target = guild.stickers.cache.get(data10.target_id) ?? new Sticker2(guild.client, changesReduce(this.changes, { id: data10.target_id }));
+          this.target = guild.stickers.cache.get(data11.target_id) ?? new Sticker2(guild.client, changesReduce(this.changes, { id: data11.target_id }));
         } else if (targetType === Targets.GuildScheduledEvent) {
-          this.target = guild.scheduledEvents.cache.get(data10.target_id) ?? new GuildScheduledEvent(guild.client, changesReduce(this.changes, { id: data10.target_id, guild_id: guild.id }));
+          this.target = guild.scheduledEvents.cache.get(data11.target_id) ?? new GuildScheduledEvent(guild.client, changesReduce(this.changes, { id: data11.target_id, guild_id: guild.id }));
         } else if (targetType === Targets.ApplicationCommand) {
-          this.target = logs?.applicationCommands.get(data10.target_id) ?? { id: data10.target_id };
+          this.target = logs?.applicationCommands.get(data11.target_id) ?? { id: data11.target_id };
         } else if (targetType === Targets.AutoModeration) {
-          this.target = guild.autoModerationRules.cache.get(data10.target_id) ?? new AutoModerationRule(
+          this.target = guild.autoModerationRules.cache.get(data11.target_id) ?? new AutoModerationRule(
             guild.client,
-            changesReduce(this.changes, { id: data10.target_id, guild_id: guild.id }),
+            changesReduce(this.changes, { id: data11.target_id, guild_id: guild.id }),
             guild
           );
         } else if (targetType === Targets.GuildOnboardingPrompt) {
-          this.target = data10.action_type === AuditLogEvent.OnboardingPromptCreate ? new GuildOnboardingPrompt(guild.client, changesReduce(this.changes, { id: data10.target_id }), guild.id) : changesReduce(this.changes, { id: data10.target_id });
+          this.target = data11.action_type === AuditLogEvent.OnboardingPromptCreate ? new GuildOnboardingPrompt(guild.client, changesReduce(this.changes, { id: data11.target_id }), guild.id) : changesReduce(this.changes, { id: data11.target_id });
         } else if (targetType === Targets.Role) {
-          this.target = guild.roles.cache.get(data10.target_id) ?? { id: data10.target_id };
+          this.target = guild.roles.cache.get(data11.target_id) ?? { id: data11.target_id };
         } else if (targetType === Targets.Emoji) {
-          this.target = guild.emojis.cache.get(data10.target_id) ?? { id: data10.target_id };
+          this.target = guild.emojis.cache.get(data11.target_id) ?? { id: data11.target_id };
         } else if (targetType === Targets.SoundboardSound) {
-          this.target = guild.soundboardSounds.cache.get(data10.target_id) ?? { id: data10.target_id };
-        } else if (data10.target_id) {
-          this.target = { id: data10.target_id };
+          this.target = guild.soundboardSounds.cache.get(data11.target_id) ?? { id: data11.target_id };
+        } else if (data11.target_id) {
+          this.target = { id: data11.target_id };
         }
       }
       /**
@@ -150988,12 +150988,12 @@ var require_GuildAuditLogEntryCreate = __commonJS({
     var GuildAuditLogsEntry = require_GuildAuditLogsEntry();
     var Events3 = require_Events();
     var GuildAuditLogEntryCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         let auditLogEntry;
         if (guild) {
-          auditLogEntry = new GuildAuditLogsEntry(guild, data10);
+          auditLogEntry = new GuildAuditLogsEntry(guild, data11);
           client.emit(Events3.GuildAuditLogEntryCreate, auditLogEntry, guild);
         }
         return { auditLogEntry };
@@ -151010,10 +151010,10 @@ var require_GuildBanAdd = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildBanAdd = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
-        if (guild) client.emit(Events3.GuildBanAdd, guild.bans._add(data10));
+        const guild = client.guilds.cache.get(data11.guild_id);
+        if (guild) client.emit(Events3.GuildBanAdd, guild.bans._add(data11));
       }
     };
     module2.exports = GuildBanAdd;
@@ -151026,17 +151026,17 @@ var require_GuildBan = __commonJS({
     "use strict";
     var Base = require_Base();
     var GuildBan = class extends Base {
-      constructor(client, data10, guild) {
+      constructor(client, data11, guild) {
         super(client);
         this.guild = guild;
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("user" in data10) {
-          this.user = this.client.users._add(data10.user, true);
+      _patch(data11) {
+        if ("user" in data11) {
+          this.user = this.client.users._add(data11.user, true);
         }
-        if ("reason" in data10) {
-          this.reason = data10.reason;
+        if ("reason" in data11) {
+          this.reason = data11.reason;
         }
       }
       /**
@@ -151068,11 +151068,11 @@ var require_GuildBanRemove = __commonJS({
     var GuildBan = require_GuildBan();
     var Events3 = require_Events();
     var GuildBanRemove = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const ban = guild.bans.cache.get(data10.user.id) ?? new GuildBan(client, data10, guild);
+          const ban = guild.bans.cache.get(data11.user.id) ?? new GuildBan(client, data11, guild);
           guild.bans.cache.delete(ban.user.id);
           client.emit(Events3.GuildBanRemove, ban);
         }
@@ -151088,11 +151088,11 @@ var require_GuildChannelsPositionUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildChannelsPositionUpdate = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          for (const partialChannel of data10.channels) {
+          for (const partialChannel of data11.channels) {
             const channel = guild.channels.cache.get(partialChannel.id);
             if (channel) channel.rawPosition = partialChannel.position;
           }
@@ -151111,17 +151111,17 @@ var require_GuildDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        let guild = client.guilds.cache.get(data10.id);
+        let guild = client.guilds.cache.get(data11.id);
         if (guild) {
-          if (data10.unavailable) {
+          if (data11.unavailable) {
             guild.available = false;
             client.emit(Events3.GuildUnavailable, guild);
             return;
           }
           for (const channel of guild.channels.cache.values()) this.client.channels._remove(channel.id);
-          client.voice.adapters.get(data10.id)?.destroy();
+          client.voice.adapters.get(data11.id)?.destroy();
           client.guilds.cache.delete(guild.id);
           client.emit(Events3.GuildDelete, guild);
         }
@@ -151173,8 +151173,8 @@ var require_GuildEmojiUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildEmojiUpdateAction = class extends Action {
-      handle(current, data10) {
-        const old = current._update(data10);
+      handle(current, data11) {
+        const old = current._update(data11);
         this.client.emit(Events3.GuildEmojiUpdate, old, current);
         return { emoji: current };
       }
@@ -151189,11 +151189,11 @@ var require_GuildEmojisUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildEmojisUpdateAction = class extends Action {
-      handle(data10) {
-        const guild = this.client.guilds.cache.get(data10.guild_id);
+      handle(data11) {
+        const guild = this.client.guilds.cache.get(data11.guild_id);
         if (!guild?.emojis) return;
         const deletions = new Map(guild.emojis.cache);
-        for (const emoji of data10.emojis) {
+        for (const emoji of data11.emojis) {
           const cachedEmoji = guild.emojis.cache.get(emoji.id);
           if (cachedEmoji) {
             deletions.delete(emoji.id);
@@ -151220,9 +151220,9 @@ var require_GuildIntegrationsUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildIntegrationsUpdate = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) client.emit(Events3.GuildIntegrationsUpdate, guild);
       }
     };
@@ -151257,19 +151257,19 @@ var require_GuildMemberRemove = __commonJS({
     var Events3 = require_Events();
     var Status2 = require_Status();
     var GuildMemberRemoveAction = class extends Action {
-      handle(data10, shard) {
+      handle(data11, shard) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         let member = null;
         if (guild) {
-          member = this.getMember({ user: data10.user }, guild);
+          member = this.getMember({ user: data11.user }, guild);
           guild.memberCount--;
           if (member) {
             guild.members.cache.delete(member.id);
             if (shard.status === Status2.Ready) client.emit(Events3.GuildMemberRemove, member);
           }
-          guild.presences.cache.delete(data10.user.id);
-          guild.voiceStates.cache.delete(data10.user.id);
+          guild.presences.cache.delete(data11.user.id);
+          guild.voiceStates.cache.delete(data11.user.id);
         }
         return { guild, member };
       }
@@ -151286,24 +151286,24 @@ var require_GuildMemberUpdate = __commonJS({
     var Events3 = require_Events();
     var Status2 = require_Status();
     var GuildMemberUpdateAction = class extends Action {
-      handle(data10, shard) {
+      handle(data11, shard) {
         const { client } = this;
-        if (data10.user.username) {
-          const user = client.users.cache.get(data10.user.id);
+        if (data11.user.username) {
+          const user = client.users.cache.get(data11.user.id);
           if (!user) {
-            client.users._add(data10.user);
-          } else if (!user._equals(data10.user)) {
-            client.actions.UserUpdate.handle(data10.user);
+            client.users._add(data11.user);
+          } else if (!user._equals(data11.user)) {
+            client.actions.UserUpdate.handle(data11.user);
           }
         }
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const member = this.getMember({ user: data10.user }, guild);
+          const member = this.getMember({ user: data11.user }, guild);
           if (member) {
-            const old = member._update(data10);
+            const old = member._update(data11);
             if (shard.status === Status2.Ready && !member.equals(old)) client.emit(Events3.GuildMemberUpdate, old, member);
           } else {
-            const newMember = guild.members._add(data10);
+            const newMember = guild.members._add(data11);
             this.client.emit(Events3.GuildMemberAvailable, newMember);
           }
         }
@@ -151320,13 +151320,13 @@ var require_GuildRoleCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildRoleCreate = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         let role;
         if (guild) {
-          const already = guild.roles.cache.has(data10.role.id);
-          role = guild.roles._add(data10.role);
+          const already = guild.roles.cache.has(data11.role.id);
+          role = guild.roles._add(data11.role);
           if (!already) client.emit(Events3.GuildRoleCreate, role);
         }
         return { role };
@@ -151343,14 +151343,14 @@ var require_GuildRoleDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildRoleDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         let role;
         if (guild) {
-          role = guild.roles.cache.get(data10.role_id);
+          role = guild.roles.cache.get(data11.role_id);
           if (role) {
-            guild.roles.cache.delete(data10.role_id);
+            guild.roles.cache.delete(data11.role_id);
             client.emit(Events3.GuildRoleDelete, role);
           }
         }
@@ -151368,14 +151368,14 @@ var require_GuildRoleUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildRoleUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
           let old = null;
-          const role = guild.roles.cache.get(data10.role.id);
+          const role = guild.roles.cache.get(data11.role.id);
           if (role) {
-            old = role._update(data10.role);
+            old = role._update(data11.role);
             client.emit(Events3.GuildRoleUpdate, old, role);
           }
           return {
@@ -151399,11 +151399,11 @@ var require_GuildRolesPositionUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildRolesPositionUpdate = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          for (const partialRole of data10.roles) {
+          for (const partialRole of data11.roles) {
             const role = guild.roles.cache.get(partialRole.id);
             if (role) role.rawPosition = partialRole.position;
           }
@@ -151422,11 +151422,11 @@ var require_GuildScheduledEventCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const guildScheduledEvent = guild.scheduledEvents._add(data10);
+          const guildScheduledEvent = guild.scheduledEvents._add(data11);
           client.emit(Events3.GuildScheduledEventCreate, guildScheduledEvent);
           return { guildScheduledEvent };
         }
@@ -151444,11 +151444,11 @@ var require_GuildScheduledEventDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const guildScheduledEvent = this.getScheduledEvent(data10, guild);
+          const guildScheduledEvent = this.getScheduledEvent(data11, guild);
           if (guildScheduledEvent) {
             guild.scheduledEvents.cache.delete(guildScheduledEvent.id);
             client.emit(Events3.GuildScheduledEventDelete, guildScheduledEvent);
@@ -151469,12 +151469,12 @@ var require_GuildScheduledEventUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const oldGuildScheduledEvent = guild.scheduledEvents.cache.get(data10.id)?._clone() ?? null;
-          const newGuildScheduledEvent = guild.scheduledEvents._add(data10);
+          const oldGuildScheduledEvent = guild.scheduledEvents.cache.get(data11.id)?._clone() ?? null;
+          const newGuildScheduledEvent = guild.scheduledEvents._add(data11);
           client.emit(Events3.GuildScheduledEventUpdate, oldGuildScheduledEvent, newGuildScheduledEvent);
           return { oldGuildScheduledEvent, newGuildScheduledEvent };
         }
@@ -151492,12 +151492,12 @@ var require_GuildScheduledEventUserAdd = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventUserAddAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const guildScheduledEvent = this.getScheduledEvent(data10, guild);
-          const user = this.getUser(data10);
+          const guildScheduledEvent = this.getScheduledEvent(data11, guild);
+          const user = this.getUser(data11);
           if (guildScheduledEvent && user) {
             client.emit(Events3.GuildScheduledEventUserAdd, guildScheduledEvent, user);
             return { guildScheduledEvent, user };
@@ -151517,12 +151517,12 @@ var require_GuildScheduledEventUserRemove = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildScheduledEventUserRemoveAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const guildScheduledEvent = this.getScheduledEvent(data10, guild);
-          const user = this.getUser(data10);
+          const guildScheduledEvent = this.getScheduledEvent(data11, guild);
+          const user = this.getUser(data11);
           if (guildScheduledEvent && user) {
             client.emit(Events3.GuildScheduledEventUserRemove, guildScheduledEvent, user);
             return { guildScheduledEvent, user };
@@ -151542,10 +151542,10 @@ var require_GuildSoundboardSoundDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildSoundboardSoundDeleteAction = class extends Action {
-      handle(data10) {
-        const guild = this.client.guilds.cache.get(data10.guild_id);
+      handle(data11) {
+        const guild = this.client.guilds.cache.get(data11.guild_id);
         if (!guild) return {};
-        const soundboardSound = this.getSoundboardSound(data10, guild);
+        const soundboardSound = this.getSoundboardSound(data11, guild);
         if (soundboardSound) {
           guild.soundboardSounds.cache.delete(soundboardSound.soundId);
           this.client.emit(Events3.GuildSoundboardSoundDelete, soundboardSound);
@@ -151599,8 +151599,8 @@ var require_GuildStickerUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildStickerUpdateAction = class extends Action {
-      handle(current, data10) {
-        const old = current._update(data10);
+      handle(current, data11) {
+        const old = current._update(data11);
         this.client.emit(Events3.GuildStickerUpdate, old, current);
         return { sticker: current };
       }
@@ -151615,11 +151615,11 @@ var require_GuildStickersUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildStickersUpdateAction = class extends Action {
-      handle(data10) {
-        const guild = this.client.guilds.cache.get(data10.guild_id);
+      handle(data11) {
+        const guild = this.client.guilds.cache.get(data11.guild_id);
         if (!guild?.stickers) return;
         const deletions = new Map(guild.stickers.cache);
-        for (const sticker of data10.stickers) {
+        for (const sticker of data11.stickers) {
           const cachedSticker = guild.stickers.cache.get(sticker.id);
           if (cachedSticker) {
             deletions.delete(sticker.id);
@@ -151646,11 +151646,11 @@ var require_GuildUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var GuildUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.id);
+        const guild = client.guilds.cache.get(data11.id);
         if (guild) {
-          const old = guild._update(data10);
+          const old = guild._update(data11);
           client.emit(Events3.GuildUpdate, old, guild);
           return {
             old,
@@ -151924,14 +151924,14 @@ var require_AutocompleteInteraction = __commonJS({
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var AutocompleteInteraction = class extends BaseInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        this.commandId = data10.data.id;
-        this.commandName = data10.data.name;
-        this.commandType = data10.data.type;
-        this.commandGuildId = data10.data.guild_id ?? null;
+      constructor(client, data11) {
+        super(client, data11);
+        this.commandId = data11.data.id;
+        this.commandName = data11.data.name;
+        this.commandType = data11.data.type;
+        this.commandGuildId = data11.data.guild_id ?? null;
         this.responded = false;
-        this.options = new CommandInteractionOptionResolver(this.client, data10.data.options ?? []);
+        this.options = new CommandInteractionOptionResolver(this.client, data11.data.options ?? []);
       }
       /**
        * The invoked application command, if it was fetched before
@@ -151983,14 +151983,14 @@ var require_InteractionCallback = __commonJS({
     "use strict";
     var { DiscordSnowflake } = require_cjs3();
     var InteractionCallback = class {
-      constructor(client, data10) {
+      constructor(client, data11) {
         Object.defineProperty(this, "client", { value: client });
-        this.id = data10.id;
-        this.type = data10.type;
-        this.activityInstanceId = data10.activity_instance_id ?? null;
-        this.responseMessageId = data10.response_message_id ?? null;
-        this.responseMessageLoading = data10.response_message_loading ?? null;
-        this.responseMessageEphemeral = data10.response_message_ephemeral ?? null;
+        this.id = data11.id;
+        this.type = data11.type;
+        this.activityInstanceId = data11.activity_instance_id ?? null;
+        this.responseMessageId = data11.response_message_id ?? null;
+        this.responseMessageLoading = data11.response_message_loading ?? null;
+        this.responseMessageEphemeral = data11.response_message_ephemeral ?? null;
       }
       /**
        * The timestamp the original interaction was created at
@@ -152020,12 +152020,12 @@ var require_InteractionCallbackResource = __commonJS({
     var { lazy } = require_dist3();
     var getMessage = lazy(() => require_Message().Message);
     var InteractionCallbackResource = class {
-      constructor(client, data10) {
+      constructor(client, data11) {
         Object.defineProperty(this, "client", { value: client });
-        this.type = data10.type;
-        this.activityInstance = data10.activity_instance ?? null;
-        if ("message" in data10) {
-          this.message = this.client.channels.cache.get(data10.message.channel_id)?.messages._add(data10.message) ?? new (getMessage())(client, data10.message);
+        this.type = data11.type;
+        this.activityInstance = data11.activity_instance ?? null;
+        if ("message" in data11) {
+          this.message = this.client.channels.cache.get(data11.message.channel_id)?.messages._add(data11.message) ?? new (getMessage())(client, data11.message);
         } else {
           this.message = null;
         }
@@ -152042,10 +152042,10 @@ var require_InteractionCallbackResponse = __commonJS({
     var InteractionCallback = require_InteractionCallback();
     var InteractionCallbackResource = require_InteractionCallbackResource();
     var InteractionCallbackResponse = class {
-      constructor(client, data10) {
+      constructor(client, data11) {
         Object.defineProperty(this, "client", { value: client });
-        this.interaction = new InteractionCallback(client, data10.interaction);
-        this.resource = data10.resource ? new InteractionCallbackResource(client, data10.resource) : null;
+        this.interaction = new InteractionCallback(client, data11.interaction);
+        this.resource = data11.resource ? new InteractionCallbackResource(client, data11.resource) : null;
       }
     };
     module2.exports = InteractionCallbackResponse;
@@ -152298,17 +152298,17 @@ var require_InteractionResponses = __commonJS({
         let messagePayload;
         if (options instanceof MessagePayload) messagePayload = options;
         else messagePayload = MessagePayload.create(this, options);
-        const { body: data10, files } = await messagePayload.resolveBody().resolveFiles();
+        const { body: data11, files } = await messagePayload.resolveBody().resolveFiles();
         const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.ChannelMessageWithSource,
-            data: data10
+            data: data11
           },
           files,
           auth: false,
           query: makeURLSearchParams2({ with_response: options.withResponse ?? false })
         });
-        this.ephemeral = Boolean(data10.flags & MessageFlags.Ephemeral);
+        this.ephemeral = Boolean(data11.flags & MessageFlags.Ephemeral);
         this.replied = true;
         return options.withResponse ? new InteractionCallbackResponse(this.client, response) : options.fetchReply ? this.fetchReply() : new InteractionResponse(this);
       }
@@ -152432,11 +152432,11 @@ var require_InteractionResponses = __commonJS({
         let messagePayload;
         if (options instanceof MessagePayload) messagePayload = options;
         else messagePayload = MessagePayload.create(this, options);
-        const { body: data10, files } = await messagePayload.resolveBody().resolveFiles();
+        const { body: data11, files } = await messagePayload.resolveBody().resolveFiles();
         const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.UpdateMessage,
-            data: data10
+            data: data11
           },
           files,
           auth: false,
@@ -152572,11 +152572,11 @@ var require_MessageComponentInteraction = __commonJS({
     var { findComponentByCustomId } = require_Components();
     var getMessage = lazy(() => require_Message().Message);
     var MessageComponentInteraction = class extends BaseInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        this.message = this.channel?.messages._add(data10.message) ?? new (getMessage())(client, data10.message);
-        this.customId = data10.data.custom_id;
-        this.componentType = data10.data.component_type;
+      constructor(client, data11) {
+        super(client, data11);
+        this.message = this.channel?.messages._add(data11.message) ?? new (getMessage())(client, data11.message);
+        this.customId = data11.data.custom_id;
+        this.componentType = data11.data.component_type;
         this.deferred = false;
         this.ephemeral = null;
         this.replied = false;
@@ -152651,9 +152651,9 @@ var require_ChannelSelectMenuInteraction = __commonJS({
     var { Collection: Collection3 } = require_dist8();
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var ChannelSelectMenuInteraction = class extends MessageComponentInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        const { resolved, values } = data10.data;
+      constructor(client, data11) {
+        super(client, data11);
+        const { resolved, values } = data11.data;
         this.values = values ?? [];
         this.channels = new Collection3();
         for (const channel of Object.values(resolved?.channels ?? {})) {
@@ -152674,12 +152674,12 @@ var require_CommandInteraction = __commonJS({
     var InteractionWebhook = require_InteractionWebhook();
     var InteractionResponses = require_InteractionResponses();
     var CommandInteraction = class extends BaseInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        this.commandId = data10.data.id;
-        this.commandName = data10.data.name;
-        this.commandType = data10.data.type;
-        this.commandGuildId = data10.data.guild_id ?? null;
+      constructor(client, data11) {
+        super(client, data11);
+        this.commandId = data11.data.id;
+        this.commandName = data11.data.name;
+        this.commandType = data11.data.type;
+        this.commandGuildId = data11.data.guild_id ?? null;
         this.deferred = false;
         this.replied = false;
         this.ephemeral = null;
@@ -152787,13 +152787,13 @@ var require_ChatInputCommandInteraction = __commonJS({
     var CommandInteraction = require_CommandInteraction();
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { transformResolved } = require_Util();
-    var ChatInputCommandInteraction12 = class extends CommandInteraction {
-      constructor(client, data10) {
-        super(client, data10);
+    var ChatInputCommandInteraction13 = class extends CommandInteraction {
+      constructor(client, data11) {
+        super(client, data11);
         this.options = new CommandInteractionOptionResolver(
           this.client,
-          data10.data.options?.map((option) => this.transformOption(option, data10.data.resolved)) ?? [],
-          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data10.data.resolved)
+          data11.data.options?.map((option) => this.transformOption(option, data11.data.resolved)) ?? [],
+          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data11.data.resolved)
         );
       }
       /**
@@ -152811,7 +152811,7 @@ var require_ChatInputCommandInteraction = __commonJS({
         return `/${properties.filter(Boolean).join(" ")}`;
       }
     };
-    module2.exports = ChatInputCommandInteraction12;
+    module2.exports = ChatInputCommandInteraction13;
   }
 });
 
@@ -152823,9 +152823,9 @@ var require_MentionableSelectMenuInteraction = __commonJS({
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var Events3 = require_Events();
     var MentionableSelectMenuInteraction = class extends MessageComponentInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        const { resolved, values } = data10.data;
+      constructor(client, data11) {
+        super(client, data11);
+        const { resolved, values } = data11.data;
         const { members, users, roles } = resolved ?? {};
         this.values = values ?? [];
         this.users = new Collection3();
@@ -152871,14 +152871,14 @@ var require_ContextMenuCommandInteraction = __commonJS({
     var { transformResolved } = require_Util();
     var getMessage = lazy(() => require_Message().Message);
     var ContextMenuCommandInteraction = class extends CommandInteraction {
-      constructor(client, data10) {
-        super(client, data10);
+      constructor(client, data11) {
+        super(client, data11);
         this.options = new CommandInteractionOptionResolver(
           this.client,
-          this.resolveContextMenuOptions(data10.data),
-          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data10.data.resolved)
+          this.resolveContextMenuOptions(data11.data),
+          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data11.data.resolved)
         );
-        this.targetId = data10.data.target_id;
+        this.targetId = data11.data.target_id;
       }
       /**
        * Resolves and transforms options received from the API for a context menu interaction.
@@ -153157,23 +153157,23 @@ var require_ModalSubmitInteraction = __commonJS({
     var getMessage = lazy(() => require_Message().Message);
     var getAttachment = lazy(() => require_Attachment());
     var ModalSubmitInteraction3 = class _ModalSubmitInteraction extends BaseInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        this.customId = data10.data.custom_id;
-        if ("message" in data10) {
-          this.message = this.channel?.messages._add(data10.message) ?? new (getMessage())(this.client, data10.message);
+      constructor(client, data11) {
+        super(client, data11);
+        this.customId = data11.data.custom_id;
+        if ("message" in data11) {
+          this.message = this.channel?.messages._add(data11.message) ?? new (getMessage())(this.client, data11.message);
         } else {
           this.message = null;
         }
-        this.components = data10.data.components?.map(
-          (component) => _ModalSubmitInteraction.transformComponent(component, data10.data.resolved, {
+        this.components = data11.data.components?.map(
+          (component) => _ModalSubmitInteraction.transformComponent(component, data11.data.resolved, {
             client: this.client,
             guild: this.guild
           })
         );
         this.fields = new ModalSubmitFields(
           this.components,
-          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data10.data.resolved)
+          transformResolved({ client: this.client, guild: this.guild, channel: this.channel }, data11.data.resolved)
         );
         this.deferred = false;
         this.replied = false;
@@ -153204,61 +153204,61 @@ var require_ModalSubmitInteraction = __commonJS({
             component: this.transformComponent(rawComponent.component, resolved, { client, guild })
           };
         }
-        const data10 = {
+        const data11 = {
           type: rawComponent.type,
           id: rawComponent.id
         };
-        if ("custom_id" in rawComponent) data10.customId = rawComponent.custom_id;
-        if ("value" in rawComponent) data10.value = rawComponent.value;
+        if ("custom_id" in rawComponent) data11.customId = rawComponent.custom_id;
+        if ("value" in rawComponent) data11.value = rawComponent.value;
         if (rawComponent.values) {
-          data10.values = rawComponent.values;
+          data11.values = rawComponent.values;
           if (resolved) {
             const { members, users, channels, roles, attachments } = resolved;
             const valueSet = new Set(rawComponent.values);
             if (users) {
-              data10.users = new Collection3();
+              data11.users = new Collection3();
               for (const [id, user] of Object.entries(users)) {
                 if (valueSet.has(id)) {
-                  data10.users.set(id, client.users._add(user));
+                  data11.users.set(id, client.users._add(user));
                 }
               }
             }
             if (channels) {
-              data10.channels = new Collection3();
+              data11.channels = new Collection3();
               for (const [id, apiChannel] of Object.entries(channels)) {
                 if (valueSet.has(id)) {
-                  data10.channels.set(id, client.channels._add(apiChannel, guild) ?? apiChannel);
+                  data11.channels.set(id, client.channels._add(apiChannel, guild) ?? apiChannel);
                 }
               }
             }
             if (members) {
-              data10.members = new Collection3();
+              data11.members = new Collection3();
               for (const [id, member] of Object.entries(members)) {
                 if (valueSet.has(id)) {
                   const user = users?.[id];
-                  data10.members.set(id, guild?.members._add({ user, ...member }) ?? member);
+                  data11.members.set(id, guild?.members._add({ user, ...member }) ?? member);
                 }
               }
             }
             if (roles) {
-              data10.roles = new Collection3();
+              data11.roles = new Collection3();
               for (const [id, role] of Object.entries(roles)) {
                 if (valueSet.has(id)) {
-                  data10.roles.set(id, guild?.roles._add(role) ?? role);
+                  data11.roles.set(id, guild?.roles._add(role) ?? role);
                 }
               }
             }
             if (attachments) {
-              data10.attachments = new Collection3();
+              data11.attachments = new Collection3();
               for (const [id, attachment] of Object.entries(attachments)) {
                 if (valueSet.has(id)) {
-                  data10.attachments.set(id, new (getAttachment())(attachment));
+                  data11.attachments.set(id, new (getAttachment())(attachment));
                 }
               }
             }
           }
         }
-        return data10;
+        return data11;
       }
       /**
        * Whether this is from a {@link MessageComponentInteraction}.
@@ -153313,9 +153313,9 @@ var require_RoleSelectMenuInteraction = __commonJS({
     var { Collection: Collection3 } = require_dist8();
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var RoleSelectMenuInteraction = class extends MessageComponentInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        const { resolved, values } = data10.data;
+      constructor(client, data11) {
+        super(client, data11);
+        const { resolved, values } = data11.data;
         this.values = values ?? [];
         this.roles = new Collection3();
         for (const role of Object.values(resolved?.roles ?? {})) {
@@ -153333,9 +153333,9 @@ var require_StringSelectMenuInteraction = __commonJS({
     "use strict";
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var StringSelectMenuInteraction3 = class extends MessageComponentInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        this.values = data10.data.values ?? [];
+      constructor(client, data11) {
+        super(client, data11);
+        this.values = data11.data.values ?? [];
       }
     };
     module2.exports = StringSelectMenuInteraction3;
@@ -153377,9 +153377,9 @@ var require_UserSelectMenuInteraction = __commonJS({
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var Events3 = require_Events();
     var UserSelectMenuInteraction = class extends MessageComponentInteraction {
-      constructor(client, data10) {
-        super(client, data10);
-        const { resolved, values } = data10.data;
+      constructor(client, data11) {
+        super(client, data11);
+        const { resolved, values } = data11.data;
         this.values = values ?? [];
         this.users = new Collection3();
         this.members = new Collection3();
@@ -153409,7 +153409,7 @@ var require_InteractionCreate = __commonJS({
     var AutocompleteInteraction = require_AutocompleteInteraction();
     var ButtonInteraction3 = require_ButtonInteraction();
     var ChannelSelectMenuInteraction = require_ChannelSelectMenuInteraction();
-    var ChatInputCommandInteraction12 = require_ChatInputCommandInteraction();
+    var ChatInputCommandInteraction13 = require_ChatInputCommandInteraction();
     var MentionableSelectMenuInteraction = require_MentionableSelectMenuInteraction();
     var MessageContextMenuCommandInteraction = require_MessageContextMenuCommandInteraction();
     var ModalSubmitInteraction3 = require_ModalSubmitInteraction();
@@ -153420,15 +153420,15 @@ var require_InteractionCreate = __commonJS({
     var UserSelectMenuInteraction = require_UserSelectMenuInteraction();
     var Events3 = require_Events();
     var InteractionCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = data10.channel && this.getChannel({ ...data10.channel, ..."recipients" in data10.channel ? { user: data10.user } : void 0 });
+        const channel = data11.channel && this.getChannel({ ...data11.channel, ..."recipients" in data11.channel ? { user: data11.user } : void 0 });
         let InteractionClass;
-        switch (data10.type) {
+        switch (data11.type) {
           case InteractionType.ApplicationCommand:
-            switch (data10.data.type) {
+            switch (data11.data.type) {
               case ApplicationCommandType.ChatInput:
-                InteractionClass = ChatInputCommandInteraction12;
+                InteractionClass = ChatInputCommandInteraction13;
                 break;
               case ApplicationCommandType.User:
                 InteractionClass = UserContextMenuCommandInteraction;
@@ -153443,14 +153443,14 @@ var require_InteractionCreate = __commonJS({
               default:
                 client.emit(
                   Events3.Debug,
-                  `[INTERACTION] Received application command interaction with unknown type: ${data10.data.type}`
+                  `[INTERACTION] Received application command interaction with unknown type: ${data11.data.type}`
                 );
                 return;
             }
             break;
           case InteractionType.MessageComponent:
             if (channel && !channel.isTextBased()) return;
-            switch (data10.data.component_type) {
+            switch (data11.data.component_type) {
               case ComponentType.Button:
                 InteractionClass = ButtonInteraction3;
                 break;
@@ -153472,7 +153472,7 @@ var require_InteractionCreate = __commonJS({
               default:
                 client.emit(
                   Events3.Debug,
-                  `[INTERACTION] Received component interaction with unknown type: ${data10.data.component_type}`
+                  `[INTERACTION] Received component interaction with unknown type: ${data11.data.component_type}`
                 );
                 return;
             }
@@ -153484,10 +153484,10 @@ var require_InteractionCreate = __commonJS({
             InteractionClass = ModalSubmitInteraction3;
             break;
           default:
-            client.emit(Events3.Debug, `[INTERACTION] Received interaction with unknown type: ${data10.type}`);
+            client.emit(Events3.Debug, `[INTERACTION] Received interaction with unknown type: ${data11.type}`);
             return;
         }
-        const interaction = new InteractionClass(client, data10);
+        const interaction = new InteractionClass(client, data11);
         client.emit(Events3.InteractionCreate, interaction);
       }
     };
@@ -153502,12 +153502,12 @@ var require_InviteCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var InviteCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = client.channels.cache.get(data10.channel_id);
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const channel = client.channels.cache.get(data11.channel_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (!channel) return false;
-        const inviteData = Object.assign(data10, { channel, guild });
+        const inviteData = Object.assign(data11, { channel, guild });
         const invite = guild.invites._add(inviteData);
         client.emit(Events3.InviteCreate, invite);
         return { invite };
@@ -153525,12 +153525,12 @@ var require_InviteDelete = __commonJS({
     var Invite2 = require_Invite();
     var Events3 = require_Events();
     var InviteDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = client.channels.cache.get(data10.channel_id);
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const channel = client.channels.cache.get(data11.channel_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (!channel) return false;
-        const inviteData = Object.assign(data10, { channel, guild });
+        const inviteData = Object.assign(data11, { channel, guild });
         const invite = new Invite2(client, inviteData);
         guild.invites.cache.delete(invite.code);
         client.emit(Events3.InviteDelete, invite);
@@ -153548,13 +153548,13 @@ var require_MessageCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
         const channel = this.getChannel({
-          id: data10.channel_id,
-          author: data10.author,
-          ..."guild_id" in data10 && { guild_id: data10.guild_id },
-          ..."channel_type" in data10 && { type: data10.channel_type }
+          id: data11.channel_id,
+          author: data11.author,
+          ..."guild_id" in data11 && { guild_id: data11.guild_id },
+          ..."channel_type" in data11 && { type: data11.channel_type }
         });
         if (channel) {
           if (!channel.isTextBased()) return {};
@@ -153562,10 +153562,10 @@ var require_MessageCreate = __commonJS({
             channel.messageCount++;
             channel.totalMessageSent++;
           }
-          const existing = channel.messages.cache.get(data10.id);
+          const existing = channel.messages.cache.get(data11.id);
           if (existing && existing.author?.id !== this.client.user.id) return { message: existing };
-          const message = existing ?? channel.messages._add(data10);
-          channel.lastMessageId = data10.id;
+          const message = existing ?? channel.messages._add(data11);
+          channel.lastMessageId = data11.id;
           client.emit(Events3.MessageCreate, message);
           return { message };
         }
@@ -153583,14 +153583,14 @@ var require_MessageDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
+        const channel = this.getChannel({ id: data11.channel_id, ..."guild_id" in data11 && { guild_id: data11.guild_id } });
         let message;
         if (channel) {
           if (!channel.isTextBased()) return {};
           if (channel.isThread()) channel.messageCount--;
-          message = this.getMessage(data10, channel);
+          message = this.getMessage(data11, channel);
           if (message) {
             channel.messages.cache.delete(message.id);
             client.emit(Events3.MessageDelete, message);
@@ -153611,19 +153611,19 @@ var require_MessageDeleteBulk = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageDeleteBulkAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = client.channels.cache.get(data10.channel_id);
+        const channel = client.channels.cache.get(data11.channel_id);
         if (channel) {
           if (!channel.isTextBased()) return {};
-          if (channel.isThread()) channel.messageCount -= data10.ids.length;
-          const ids = data10.ids;
+          if (channel.isThread()) channel.messageCount -= data11.ids.length;
+          const ids = data11.ids;
           const messages = new Collection3();
           for (const id of ids) {
             const message = this.getMessage(
               {
                 id,
-                guild_id: data10.guild_id
+                guild_id: data11.guild_id
               },
               channel,
               false
@@ -153650,21 +153650,21 @@ var require_MessagePollVoteAdd = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessagePollVoteAddAction = class extends Action {
-      handle(data10) {
-        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
+      handle(data11) {
+        const channel = this.getChannel({ id: data11.channel_id, ..."guild_id" in data11 && { guild_id: data11.guild_id } });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data10, channel);
+        const message = this.getMessage(data11, channel);
         if (!message) return false;
-        const poll = this.getPoll(data10, message, channel);
+        const poll = this.getPoll(data11, message, channel);
         if (!poll) return false;
-        const answer = poll.answers.get(data10.answer_id);
+        const answer = poll.answers.get(data11.answer_id);
         if (!answer) return false;
-        const user = this.getUser(data10);
+        const user = this.getUser(data11);
         if (user) {
           answer.voters._add(user);
         }
         answer.voteCount++;
-        this.client.emit(Events3.MessagePollVoteAdd, answer, data10.user_id);
+        this.client.emit(Events3.MessagePollVoteAdd, answer, data11.user_id);
         return { poll };
       }
     };
@@ -153679,20 +153679,20 @@ var require_MessagePollVoteRemove = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessagePollVoteRemoveAction = class extends Action {
-      handle(data10) {
-        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
+      handle(data11) {
+        const channel = this.getChannel({ id: data11.channel_id, ..."guild_id" in data11 && { guild_id: data11.guild_id } });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data10, channel);
+        const message = this.getMessage(data11, channel);
         if (!message) return false;
-        const poll = this.getPoll(data10, message, channel);
+        const poll = this.getPoll(data11, message, channel);
         if (!poll) return false;
-        const answer = poll.answers.get(data10.answer_id);
+        const answer = poll.answers.get(data11.answer_id);
         if (!answer) return false;
-        answer.voters.cache.delete(data10.user_id);
+        answer.voters.cache.delete(data11.user_id);
         if (answer.voteCount > 0) {
           answer.voteCount--;
         }
-        this.client.emit(Events3.MessagePollVoteRemove, answer, data10.user_id);
+        this.client.emit(Events3.MessagePollVoteRemove, answer, data11.user_id);
         return { poll };
       }
     };
@@ -153708,31 +153708,31 @@ var require_MessageReactionAdd = __commonJS({
     var Events3 = require_Events();
     var Partials2 = require_Partials();
     var MessageReactionAdd = class extends Action {
-      handle(data10, fromStructure = false) {
-        if (!data10.emoji) return false;
-        const user = this.getUserFromMember(data10);
+      handle(data11, fromStructure = false) {
+        if (!data11.emoji) return false;
+        const user = this.getUserFromMember(data11);
         if (!user) return false;
         const channel = this.getChannel({
-          id: data10.channel_id,
-          ..."guild_id" in data10 && { guild_id: data10.guild_id },
-          user_id: data10.user_id,
-          ...this.spreadInjectedData(data10)
+          id: data11.channel_id,
+          ..."guild_id" in data11 && { guild_id: data11.guild_id },
+          user_id: data11.user_id,
+          ...this.spreadInjectedData(data11)
         });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data10, channel);
+        const message = this.getMessage(data11, channel);
         if (!message) return false;
         const includePartial = this.client.options.partials.includes(Partials2.Reaction);
         if (message.partial && !includePartial) return false;
         const reaction = message.reactions._add({
-          emoji: data10.emoji,
+          emoji: data11.emoji,
           count: message.partial ? null : 0,
           me: user.id === this.client.user.id,
-          burst_colors: data10.burst_colors
+          burst_colors: data11.burst_colors
         });
         if (!reaction) return false;
-        reaction._add(user, data10.burst);
+        reaction._add(user, data11.burst);
         if (fromStructure) return { message, reaction, user };
-        this.client.emit(Events3.MessageReactionAdd, reaction, user, { type: data10.type, burst: data10.burst });
+        this.client.emit(Events3.MessageReactionAdd, reaction, user, { type: data11.type, burst: data11.burst });
         return { message, reaction, user };
       }
     };
@@ -153747,22 +153747,22 @@ var require_MessageReactionRemove = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageReactionRemove = class extends Action {
-      handle(data10) {
-        if (!data10.emoji) return false;
-        const user = this.getUser(data10);
+      handle(data11) {
+        if (!data11.emoji) return false;
+        const user = this.getUser(data11);
         if (!user) return false;
         const channel = this.getChannel({
-          id: data10.channel_id,
-          ..."guild_id" in data10 && { guild_id: data10.guild_id },
-          user_id: data10.user_id
+          id: data11.channel_id,
+          ..."guild_id" in data11 && { guild_id: data11.guild_id },
+          user_id: data11.user_id
         });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data10, channel);
+        const message = this.getMessage(data11, channel);
         if (!message) return false;
-        const reaction = this.getReaction(data10, message, user);
+        const reaction = this.getReaction(data11, message, user);
         if (!reaction) return false;
-        reaction._remove(user, data10.burst);
-        this.client.emit(Events3.MessageReactionRemove, reaction, user, { type: data10.type, burst: data10.burst });
+        reaction._remove(user, data11.burst);
+        this.client.emit(Events3.MessageReactionRemove, reaction, user, { type: data11.type, burst: data11.burst });
         return { message, reaction, user };
       }
     };
@@ -153777,10 +153777,10 @@ var require_MessageReactionRemoveAll = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageReactionRemoveAll = class extends Action {
-      handle(data10) {
-        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
+      handle(data11) {
+        const channel = this.getChannel({ id: data11.channel_id, ..."guild_id" in data11 && { guild_id: data11.guild_id } });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data10, channel);
+        const message = this.getMessage(data11, channel);
         if (!message) return false;
         const removed = message.reactions.cache.clone();
         message.reactions.cache.clear();
@@ -153799,12 +153799,12 @@ var require_MessageReactionRemoveEmoji = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var MessageReactionRemoveEmoji = class extends Action {
-      handle(data10) {
-        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
+      handle(data11) {
+        const channel = this.getChannel({ id: data11.channel_id, ..."guild_id" in data11 && { guild_id: data11.guild_id } });
         if (!channel?.isTextBased()) return false;
-        const message = this.getMessage(data10, channel);
+        const message = this.getMessage(data11, channel);
         if (!message) return false;
-        const reaction = this.getReaction(data10, message);
+        const reaction = this.getReaction(data11, message);
         if (!reaction) return false;
         if (!message.partial) message.reactions.cache.delete(reaction.emoji.id ?? reaction.emoji.name);
         this.client.emit(Events3.MessageReactionRemoveEmoji, reaction);
@@ -153821,14 +153821,14 @@ var require_MessageUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var MessageUpdateAction = class extends Action {
-      handle(data10) {
-        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
+      handle(data11) {
+        const channel = this.getChannel({ id: data11.channel_id, ..."guild_id" in data11 && { guild_id: data11.guild_id } });
         if (channel) {
           if (!channel.isTextBased()) return {};
-          const { id, channel_id, guild_id, author, timestamp, type } = data10;
+          const { id, channel_id, guild_id, author, timestamp, type } = data11;
           const message = this.getMessage({ id, channel_id, guild_id, author, timestamp, type }, channel);
           if (message) {
-            const old = message._update(data10);
+            const old = message._update(data11);
             return {
               old,
               updated: message
@@ -153850,20 +153850,20 @@ var require_PresenceUpdate = __commonJS({
     var Events3 = require_Events();
     var Partials2 = require_Partials();
     var PresenceUpdateAction = class extends Action {
-      handle(data10) {
-        let user = this.client.users.cache.get(data10.user.id);
-        if (!user && ("username" in data10.user || this.client.options.partials.includes(Partials2.User))) {
-          user = this.client.users._add(data10.user);
+      handle(data11) {
+        let user = this.client.users.cache.get(data11.user.id);
+        if (!user && ("username" in data11.user || this.client.options.partials.includes(Partials2.User))) {
+          user = this.client.users._add(data11.user);
         }
         if (!user) return;
-        if (data10.user.username) {
-          if (!user._equals(data10.user)) this.client.actions.UserUpdate.handle(data10.user);
+        if (data11.user.username) {
+          if (!user._equals(data11.user)) this.client.actions.UserUpdate.handle(data11.user);
         }
-        const guild = this.client.guilds.cache.get(data10.guild_id);
+        const guild = this.client.guilds.cache.get(data11.guild_id);
         if (!guild) return;
         const oldPresence = guild.presences.cache.get(user.id)?._clone() ?? null;
         let member = guild.members.cache.get(user.id);
-        if (!member && data10.status !== "offline") {
+        if (!member && data11.status !== "offline") {
           member = guild.members._add({
             user,
             deaf: false,
@@ -153871,7 +153871,7 @@ var require_PresenceUpdate = __commonJS({
           });
           this.client.emit(Events3.GuildMemberAvailable, member);
         }
-        const newPresence = guild.presences._add(Object.assign(data10, { guild }));
+        const newPresence = guild.presences._add(Object.assign(data11, { guild }));
         if (this.client.listenerCount(Events3.PresenceUpdate) && !newPresence.equals(oldPresence)) {
           this.client.emit(Events3.PresenceUpdate, oldPresence, newPresence);
         }
@@ -153888,11 +153888,11 @@ var require_StageInstanceCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var StageInstanceCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = this.getChannel({ id: data10.channel_id, guild_id: data10.guild_id });
+        const channel = this.getChannel({ id: data11.channel_id, guild_id: data11.guild_id });
         if (channel) {
-          const stageInstance = channel.guild.stageInstances._add(data10);
+          const stageInstance = channel.guild.stageInstances._add(data11);
           client.emit(Events3.StageInstanceCreate, stageInstance);
           return { stageInstance };
         }
@@ -153910,11 +153910,11 @@ var require_StageInstanceDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var StageInstanceDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = this.getChannel({ id: data10.channel_id, guild_id: data10.guild_id });
+        const channel = this.getChannel({ id: data11.channel_id, guild_id: data11.guild_id });
         if (channel) {
-          const stageInstance = channel.guild.stageInstances._add(data10);
+          const stageInstance = channel.guild.stageInstances._add(data11);
           if (stageInstance) {
             channel.guild.stageInstances.cache.delete(stageInstance.id);
             client.emit(Events3.StageInstanceDelete, stageInstance);
@@ -153935,12 +153935,12 @@ var require_StageInstanceUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var StageInstanceUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = this.getChannel({ id: data10.channel_id, guild_id: data10.guild_id });
+        const channel = this.getChannel({ id: data11.channel_id, guild_id: data11.guild_id });
         if (channel) {
-          const oldStageInstance = channel.guild.stageInstances.cache.get(data10.id)?._clone() ?? null;
-          const newStageInstance = channel.guild.stageInstances._add(data10);
+          const oldStageInstance = channel.guild.stageInstances.cache.get(data11.id)?._clone() ?? null;
+          const newStageInstance = channel.guild.stageInstances._add(data11);
           client.emit(Events3.StageInstanceUpdate, oldStageInstance, newStageInstance);
           return { oldStageInstance, newStageInstance };
         }
@@ -153958,12 +153958,12 @@ var require_ThreadCreate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadCreateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const existing = client.channels.cache.has(data10.id);
-        const thread = client.channels._add(data10);
+        const existing = client.channels.cache.has(data11.id);
+        const thread = client.channels._add(data11);
         if (!existing && thread) {
-          client.emit(Events3.ThreadCreate, thread, data10.newly_created ?? false);
+          client.emit(Events3.ThreadCreate, thread, data11.newly_created ?? false);
         }
         return { thread };
       }
@@ -153979,9 +153979,9 @@ var require_ThreadDelete = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadDeleteAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const thread = client.channels.cache.get(data10.id);
+        const thread = client.channels.cache.get(data11.id);
         if (thread) {
           client.channels._remove(thread.id);
           client.emit(Events3.ThreadDelete, thread);
@@ -154001,12 +154001,12 @@ var require_ThreadListSync = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadListSyncAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (!guild) return {};
-        if (data10.channel_ids) {
-          for (const id of data10.channel_ids) {
+        if (data11.channel_ids) {
+          for (const id of data11.channel_ids) {
             const channel = client.channels.cache.get(id);
             if (channel) this.removeStale(channel);
           }
@@ -154015,11 +154015,11 @@ var require_ThreadListSync = __commonJS({
             this.removeStale(channel);
           }
         }
-        const syncedThreads = data10.threads.reduce((coll, rawThread) => {
+        const syncedThreads = data11.threads.reduce((coll, rawThread) => {
           const thread = client.channels._add(rawThread);
           return coll.set(thread.id, thread);
         }, new Collection3());
-        for (const rawMember of Object.values(data10.members)) {
+        for (const rawMember of Object.values(data11.members)) {
           const thread = client.channels.cache.get(rawMember.id);
           if (thread) {
             thread.members._add(rawMember);
@@ -154049,16 +154049,16 @@ var require_ThreadMemberUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadMemberUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const thread = client.channels.cache.get(data10.id);
+        const thread = client.channels.cache.get(data11.id);
         if (thread) {
-          const member = thread.members.cache.get(data10.user_id);
+          const member = thread.members.cache.get(data11.user_id);
           if (!member) {
-            const newMember = thread.members._add(data10);
+            const newMember = thread.members._add(data11);
             return { newMember };
           }
-          const old = member._update(data10);
+          const old = member._update(data11);
           client.emit(Events3.ThreadMemberUpdate, old, member);
         }
         return {};
@@ -154076,18 +154076,18 @@ var require_ThreadMembersUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var ThreadMembersUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const thread = client.channels.cache.get(data10.id);
+        const thread = client.channels.cache.get(data11.id);
         if (thread) {
-          thread.memberCount = data10.member_count;
+          thread.memberCount = data11.member_count;
           const addedMembers = new Collection3();
           const removedMembers = new Collection3();
-          data10.added_members?.reduce(
+          data11.added_members?.reduce(
             (_addedMembers, addedMember) => _addedMembers.set(addedMember.user_id, thread.members._add(addedMember)),
             addedMembers
           );
-          data10.removed_member_ids?.reduce((removedMembersIds, removedMembersId) => {
+          data11.removed_member_ids?.reduce((removedMembersIds, removedMembersId) => {
             const threadMember = this.getThreadMember(removedMembersId, thread.members);
             if (threadMember) removedMembersIds.set(threadMember.id, threadMember);
             thread.members.cache.delete(removedMembersId);
@@ -154111,15 +154111,15 @@ var require_Typing = __commonJS({
     "use strict";
     var Base = require_Base();
     var Typing = class extends Base {
-      constructor(channel, user, data10) {
+      constructor(channel, user, data11) {
         super(channel.client);
         this.channel = channel;
         this.user = user;
-        this._patch(data10);
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("timestamp" in data10) {
-          this.startedTimestamp = data10.timestamp * 1e3;
+      _patch(data11) {
+        if ("timestamp" in data11) {
+          this.startedTimestamp = data11.timestamp * 1e3;
         }
       }
       /**
@@ -154166,16 +154166,16 @@ var require_TypingStart = __commonJS({
     var Typing = require_Typing();
     var Events3 = require_Events();
     var TypingStart = class extends Action {
-      handle(data10) {
-        const channel = this.getChannel({ id: data10.channel_id, ..."guild_id" in data10 && { guild_id: data10.guild_id } });
+      handle(data11) {
+        const channel = this.getChannel({ id: data11.channel_id, ..."guild_id" in data11 && { guild_id: data11.guild_id } });
         if (!channel) return;
         if (!channel.isTextBased()) {
           this.client.emit(Events3.Warn, `Discord sent a typing packet to a ${channel.type} channel ${channel.id}`);
           return;
         }
-        const user = this.getUserFromMember(data10);
+        const user = this.getUserFromMember(data11);
         if (user) {
-          this.client.emit(Events3.TypingStart, new Typing(channel, user, data10));
+          this.client.emit(Events3.TypingStart, new Typing(channel, user, data11));
         }
       }
     };
@@ -154190,10 +154190,10 @@ var require_UserUpdate = __commonJS({
     var Action = require_Action();
     var Events3 = require_Events();
     var UserUpdateAction = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const newUser = data10.id === client.user.id ? client.user : client.users.cache.get(data10.id);
-        const oldUser = newUser._update(data10);
+        const newUser = data11.id === client.user.id ? client.user : client.users.cache.get(data11.id);
+        const oldUser = newUser._update(data11);
         if (!oldUser.equals(newUser)) {
           client.emit(Events3.UserUpdate, oldUser, newUser);
           return {
@@ -154219,21 +154219,21 @@ var require_VoiceStateUpdate = __commonJS({
     var VoiceState = require_VoiceState();
     var Events3 = require_Events();
     var VoiceStateUpdate = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const guild = client.guilds.cache.get(data10.guild_id);
+        const guild = client.guilds.cache.get(data11.guild_id);
         if (guild) {
-          const oldState = guild.voiceStates.cache.get(data10.user_id)?._clone() ?? new VoiceState(guild, { user_id: data10.user_id });
-          const newState = guild.voiceStates._add(data10);
-          let member = guild.members.cache.get(data10.user_id);
-          if (member && data10.member) {
-            member._patch(data10.member);
-          } else if (data10.member?.user && data10.member.joined_at) {
-            member = guild.members._add(data10.member);
+          const oldState = guild.voiceStates.cache.get(data11.user_id)?._clone() ?? new VoiceState(guild, { user_id: data11.user_id });
+          const newState = guild.voiceStates._add(data11);
+          let member = guild.members.cache.get(data11.user_id);
+          if (member && data11.member) {
+            member._patch(data11.member);
+          } else if (data11.member?.user && data11.member.joined_at) {
+            member = guild.members._add(data11.member);
           }
           if (member?.user.id === client.user.id) {
-            client.emit("debug", `[VOICE] received voice state update: ${JSON.stringify(data10)}`);
-            client.voice.onVoiceStateUpdate(data10);
+            client.emit("debug", `[VOICE] received voice state update: ${JSON.stringify(data11)}`);
+            client.voice.onVoiceStateUpdate(data11);
           }
           client.emit(Events3.VoiceStateUpdate, oldState, newState);
         }
@@ -154251,9 +154251,9 @@ var require_WebhooksUpdate = __commonJS({
     var Action = require_Action();
     var deprecationEmitted = false;
     var WebhooksUpdate = class extends Action {
-      handle(data10) {
+      handle(data11) {
         const client = this.client;
-        const channel = client.channels.cache.get(data10.channel_id);
+        const channel = client.channels.cache.get(data11.channel_id);
         if (!channel) return;
         client.emit("webhooksUpdate", channel);
         if (client.emit("webhookUpdate", channel) && !deprecationEmitted) {
@@ -154442,16 +154442,16 @@ var require_buffer_util = __commonJS({
       }
       return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.length);
     }
-    function toBuffer(data10) {
+    function toBuffer(data11) {
       toBuffer.readOnly = true;
-      if (Buffer.isBuffer(data10)) return data10;
+      if (Buffer.isBuffer(data11)) return data11;
       let buf;
-      if (data10 instanceof ArrayBuffer) {
-        buf = new FastBuffer(data10);
-      } else if (ArrayBuffer.isView(data10)) {
-        buf = new FastBuffer(data10.buffer, data10.byteOffset, data10.byteLength);
+      if (data11 instanceof ArrayBuffer) {
+        buf = new FastBuffer(data11);
+      } else if (ArrayBuffer.isView(data11)) {
+        buf = new FastBuffer(data11.buffer, data11.byteOffset, data11.byteLength);
       } else {
-        buf = Buffer.from(data10);
+        buf = Buffer.from(data11);
         toBuffer.readOnly = false;
       }
       return buf;
@@ -154765,9 +154765,9 @@ var require_permessage_deflate2 = __commonJS({
        * @param {Function} callback Callback
        * @public
        */
-      decompress(data10, fin, callback) {
+      decompress(data11, fin, callback) {
         zlibLimiter.add((done) => {
-          this._decompress(data10, fin, (err, result) => {
+          this._decompress(data11, fin, (err, result) => {
             done();
             callback(err, result);
           });
@@ -154781,9 +154781,9 @@ var require_permessage_deflate2 = __commonJS({
        * @param {Function} callback Callback
        * @public
        */
-      compress(data10, fin, callback) {
+      compress(data11, fin, callback) {
         zlibLimiter.add((done) => {
-          this._compress(data10, fin, (err, result) => {
+          this._compress(data11, fin, (err, result) => {
             done();
             callback(err, result);
           });
@@ -154797,7 +154797,7 @@ var require_permessage_deflate2 = __commonJS({
        * @param {Function} callback Callback
        * @private
        */
-      _decompress(data10, fin, callback) {
+      _decompress(data11, fin, callback) {
         const endpoint = this._isServer ? "client" : "server";
         if (!this._inflate) {
           const key = `${endpoint}_max_window_bits`;
@@ -154813,7 +154813,7 @@ var require_permessage_deflate2 = __commonJS({
           this._inflate.on("data", inflateOnData);
         }
         this._inflate[kCallback] = callback;
-        this._inflate.write(data10);
+        this._inflate.write(data11);
         if (fin) this._inflate.write(TRAILER);
         this._inflate.flush(() => {
           const err = this._inflate[kError];
@@ -154823,7 +154823,7 @@ var require_permessage_deflate2 = __commonJS({
             callback(err);
             return;
           }
-          const data11 = bufferUtil.concat(
+          const data12 = bufferUtil.concat(
             this._inflate[kBuffers],
             this._inflate[kTotalLength]
           );
@@ -154837,7 +154837,7 @@ var require_permessage_deflate2 = __commonJS({
               this._inflate.reset();
             }
           }
-          callback(null, data11);
+          callback(null, data12);
         });
       }
       /**
@@ -154848,7 +154848,7 @@ var require_permessage_deflate2 = __commonJS({
        * @param {Function} callback Callback
        * @private
        */
-      _compress(data10, fin, callback) {
+      _compress(data11, fin, callback) {
         const endpoint = this._isServer ? "server" : "client";
         if (!this._deflate) {
           const key = `${endpoint}_max_window_bits`;
@@ -154862,17 +154862,17 @@ var require_permessage_deflate2 = __commonJS({
           this._deflate.on("data", deflateOnData);
         }
         this._deflate[kCallback] = callback;
-        this._deflate.write(data10);
+        this._deflate.write(data11);
         this._deflate.flush(zlib.Z_SYNC_FLUSH, () => {
           if (!this._deflate) {
             return;
           }
-          let data11 = bufferUtil.concat(
+          let data12 = bufferUtil.concat(
             this._deflate[kBuffers],
             this._deflate[kTotalLength]
           );
           if (fin) {
-            data11 = new FastBuffer(data11.buffer, data11.byteOffset, data11.length - 4);
+            data12 = new FastBuffer(data12.buffer, data12.byteOffset, data12.length - 4);
           }
           this._deflate[kCallback] = null;
           this._deflate[kTotalLength] = 0;
@@ -154880,7 +154880,7 @@ var require_permessage_deflate2 = __commonJS({
           if (fin && this.params[`${endpoint}_no_context_takeover`]) {
             this._deflate.reset();
           }
-          callback(null, data11);
+          callback(null, data12);
         });
       }
     };
@@ -155514,27 +155514,27 @@ var require_receiver2 = __commonJS({
        * @private
        */
       getData(cb) {
-        let data10 = EMPTY_BUFFER;
+        let data11 = EMPTY_BUFFER;
         if (this._payloadLength) {
           if (this._bufferedBytes < this._payloadLength) {
             this._loop = false;
             return;
           }
-          data10 = this.consume(this._payloadLength);
+          data11 = this.consume(this._payloadLength);
           if (this._masked && (this._mask[0] | this._mask[1] | this._mask[2] | this._mask[3]) !== 0) {
-            unmask(data10, this._mask);
+            unmask(data11, this._mask);
           }
         }
         if (this._opcode > 7) {
-          this.controlMessage(data10, cb);
+          this.controlMessage(data11, cb);
           return;
         }
         if (this._compressed) {
           this._state = INFLATING;
-          this.decompress(data10, cb);
+          this.decompress(data11, cb);
           return;
         }
-        if (data10.length) {
+        if (data11.length) {
           if (this._maxFragments > 0 && this._fragments.length >= this._maxFragments) {
             const error = this.createError(
               RangeError,
@@ -155547,7 +155547,7 @@ var require_receiver2 = __commonJS({
             return;
           }
           this._messageLength = this._totalPayloadLength;
-          this._fragments.push(data10);
+          this._fragments.push(data11);
         }
         this.dataMessage(cb);
       }
@@ -155558,9 +155558,9 @@ var require_receiver2 = __commonJS({
        * @param {Function} cb Callback
        * @private
        */
-      decompress(data10, cb) {
+      decompress(data11, cb) {
         const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
-        perMessageDeflate.decompress(data10, this._fin, (err, buf) => {
+        perMessageDeflate.decompress(data11, this._fin, (err, buf) => {
           if (err) return cb(err);
           if (buf.length) {
             this._messageLength += buf.length;
@@ -155610,23 +155610,23 @@ var require_receiver2 = __commonJS({
         this._fragmented = 0;
         this._fragments = [];
         if (this._opcode === 2) {
-          let data10;
+          let data11;
           if (this._binaryType === "nodebuffer") {
-            data10 = concat(fragments, messageLength);
+            data11 = concat(fragments, messageLength);
           } else if (this._binaryType === "arraybuffer") {
-            data10 = toArrayBuffer(concat(fragments, messageLength));
+            data11 = toArrayBuffer(concat(fragments, messageLength));
           } else if (this._binaryType === "blob") {
-            data10 = new Blob(fragments);
+            data11 = new Blob(fragments);
           } else {
-            data10 = fragments;
+            data11 = fragments;
           }
           if (this._allowSynchronousEvents) {
-            this.emit("message", data10, true);
+            this.emit("message", data11, true);
             this._state = GET_INFO;
           } else {
             this._state = DEFER_EVENT;
             setImmediate(() => {
-              this.emit("message", data10, true);
+              this.emit("message", data11, true);
               this._state = GET_INFO;
               this.startLoop(cb);
             });
@@ -155664,14 +155664,14 @@ var require_receiver2 = __commonJS({
        * @return {(Error|RangeError|undefined)} A possible error
        * @private
        */
-      controlMessage(data10, cb) {
+      controlMessage(data11, cb) {
         if (this._opcode === 8) {
-          if (data10.length === 0) {
+          if (data11.length === 0) {
             this._loop = false;
             this.emit("conclude", 1005, EMPTY_BUFFER);
             this.end();
           } else {
-            const code = data10.readUInt16BE(0);
+            const code = data11.readUInt16BE(0);
             if (!isValidStatusCode(code)) {
               const error = this.createError(
                 RangeError,
@@ -155684,9 +155684,9 @@ var require_receiver2 = __commonJS({
               return;
             }
             const buf = new FastBuffer(
-              data10.buffer,
-              data10.byteOffset + 2,
-              data10.length - 2
+              data11.buffer,
+              data11.byteOffset + 2,
+              data11.length - 2
             );
             if (!this._skipUTF8Validation && !isValidUTF8(buf)) {
               const error = this.createError(
@@ -155707,12 +155707,12 @@ var require_receiver2 = __commonJS({
           return;
         }
         if (this._allowSynchronousEvents) {
-          this.emit(this._opcode === 9 ? "ping" : "pong", data10);
+          this.emit(this._opcode === 9 ? "ping" : "pong", data11);
           this._state = GET_INFO;
         } else {
           this._state = DEFER_EVENT;
           setImmediate(() => {
-            this.emit(this._opcode === 9 ? "ping" : "pong", data10);
+            this.emit(this._opcode === 9 ? "ping" : "pong", data11);
             this._state = GET_INFO;
             this.startLoop(cb);
           });
@@ -155812,7 +155812,7 @@ var require_sender2 = __commonJS({
        * @return {(Buffer|String)[]} The framed data
        * @public
        */
-      static frame(data10, options) {
+      static frame(data11, options) {
         let mask;
         let merge = false;
         let offset = 2;
@@ -155838,15 +155838,15 @@ var require_sender2 = __commonJS({
           offset = 6;
         }
         let dataLength;
-        if (typeof data10 === "string") {
+        if (typeof data11 === "string") {
           if ((!options.mask || skipMasking) && options[kByteLength] !== void 0) {
             dataLength = options[kByteLength];
           } else {
-            data10 = Buffer.from(data10);
-            dataLength = data10.length;
+            data11 = Buffer.from(data11);
+            dataLength = data11.length;
           }
         } else {
-          dataLength = data10.length;
+          dataLength = data11.length;
           merge = options.mask && options.readOnly && !skipMasking;
         }
         let payloadLength = dataLength;
@@ -155867,19 +155867,19 @@ var require_sender2 = __commonJS({
           target[2] = target[3] = 0;
           target.writeUIntBE(dataLength, 4, 6);
         }
-        if (!options.mask) return [target, data10];
+        if (!options.mask) return [target, data11];
         target[1] |= 128;
         target[offset - 4] = mask[0];
         target[offset - 3] = mask[1];
         target[offset - 2] = mask[2];
         target[offset - 1] = mask[3];
-        if (skipMasking) return [target, data10];
+        if (skipMasking) return [target, data11];
         if (merge) {
-          applyMask(data10, mask, target, offset, dataLength);
+          applyMask(data11, mask, target, offset, dataLength);
           return [target];
         }
-        applyMask(data10, mask, data10, 0, dataLength);
-        return [target, data10];
+        applyMask(data11, mask, data11, 0, dataLength);
+        return [target, data11];
       }
       /**
        * Sends a close message to the other peer.
@@ -155890,26 +155890,26 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @public
        */
-      close(code, data10, mask, cb) {
+      close(code, data11, mask, cb) {
         let buf;
         if (code === void 0) {
           buf = EMPTY_BUFFER;
         } else if (typeof code !== "number" || !isValidStatusCode(code)) {
           throw new TypeError("First argument must be a valid error code number");
-        } else if (data10 === void 0 || !data10.length) {
+        } else if (data11 === void 0 || !data11.length) {
           buf = Buffer.allocUnsafe(2);
           buf.writeUInt16BE(code, 0);
         } else {
-          const length = Buffer.byteLength(data10);
+          const length = Buffer.byteLength(data11);
           if (length > 123) {
             throw new RangeError("The message must not be greater than 123 bytes");
           }
           buf = Buffer.allocUnsafe(2 + length);
           buf.writeUInt16BE(code, 0);
-          if (typeof data10 === "string") {
-            buf.write(data10, 2);
-          } else if (isUint8Array(data10)) {
-            buf.set(data10, 2);
+          if (typeof data11 === "string") {
+            buf.write(data11, 2);
+          } else if (isUint8Array(data11)) {
+            buf.set(data11, 2);
           } else {
             throw new TypeError("Second argument must be a string or a Uint8Array");
           }
@@ -155938,18 +155938,18 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @public
        */
-      ping(data10, mask, cb) {
+      ping(data11, mask, cb) {
         let byteLength;
         let readOnly;
-        if (typeof data10 === "string") {
-          byteLength = Buffer.byteLength(data10);
+        if (typeof data11 === "string") {
+          byteLength = Buffer.byteLength(data11);
           readOnly = false;
-        } else if (isBlob(data10)) {
-          byteLength = data10.size;
+        } else if (isBlob(data11)) {
+          byteLength = data11.size;
           readOnly = false;
         } else {
-          data10 = toBuffer(data10);
-          byteLength = data10.length;
+          data11 = toBuffer(data11);
+          byteLength = data11.length;
           readOnly = toBuffer.readOnly;
         }
         if (byteLength > 125) {
@@ -155965,16 +155965,16 @@ var require_sender2 = __commonJS({
           readOnly,
           rsv1: false
         };
-        if (isBlob(data10)) {
+        if (isBlob(data11)) {
           if (this._state !== DEFAULT) {
-            this.enqueue([this.getBlobData, data10, false, options, cb]);
+            this.enqueue([this.getBlobData, data11, false, options, cb]);
           } else {
-            this.getBlobData(data10, false, options, cb);
+            this.getBlobData(data11, false, options, cb);
           }
         } else if (this._state !== DEFAULT) {
-          this.enqueue([this.dispatch, data10, false, options, cb]);
+          this.enqueue([this.dispatch, data11, false, options, cb]);
         } else {
-          this.sendFrame(_Sender.frame(data10, options), cb);
+          this.sendFrame(_Sender.frame(data11, options), cb);
         }
       }
       /**
@@ -155985,18 +155985,18 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @public
        */
-      pong(data10, mask, cb) {
+      pong(data11, mask, cb) {
         let byteLength;
         let readOnly;
-        if (typeof data10 === "string") {
-          byteLength = Buffer.byteLength(data10);
+        if (typeof data11 === "string") {
+          byteLength = Buffer.byteLength(data11);
           readOnly = false;
-        } else if (isBlob(data10)) {
-          byteLength = data10.size;
+        } else if (isBlob(data11)) {
+          byteLength = data11.size;
           readOnly = false;
         } else {
-          data10 = toBuffer(data10);
-          byteLength = data10.length;
+          data11 = toBuffer(data11);
+          byteLength = data11.length;
           readOnly = toBuffer.readOnly;
         }
         if (byteLength > 125) {
@@ -156012,16 +156012,16 @@ var require_sender2 = __commonJS({
           readOnly,
           rsv1: false
         };
-        if (isBlob(data10)) {
+        if (isBlob(data11)) {
           if (this._state !== DEFAULT) {
-            this.enqueue([this.getBlobData, data10, false, options, cb]);
+            this.enqueue([this.getBlobData, data11, false, options, cb]);
           } else {
-            this.getBlobData(data10, false, options, cb);
+            this.getBlobData(data11, false, options, cb);
           }
         } else if (this._state !== DEFAULT) {
-          this.enqueue([this.dispatch, data10, false, options, cb]);
+          this.enqueue([this.dispatch, data11, false, options, cb]);
         } else {
-          this.sendFrame(_Sender.frame(data10, options), cb);
+          this.sendFrame(_Sender.frame(data11, options), cb);
         }
       }
       /**
@@ -156040,21 +156040,21 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @public
        */
-      send(data10, options, cb) {
+      send(data11, options, cb) {
         const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
         let opcode = options.binary ? 2 : 1;
         let rsv1 = options.compress;
         let byteLength;
         let readOnly;
-        if (typeof data10 === "string") {
-          byteLength = Buffer.byteLength(data10);
+        if (typeof data11 === "string") {
+          byteLength = Buffer.byteLength(data11);
           readOnly = false;
-        } else if (isBlob(data10)) {
-          byteLength = data10.size;
+        } else if (isBlob(data11)) {
+          byteLength = data11.size;
           readOnly = false;
         } else {
-          data10 = toBuffer(data10);
-          byteLength = data10.length;
+          data11 = toBuffer(data11);
+          byteLength = data11.length;
           readOnly = toBuffer.readOnly;
         }
         if (this._firstFragment) {
@@ -156078,16 +156078,16 @@ var require_sender2 = __commonJS({
           readOnly,
           rsv1
         };
-        if (isBlob(data10)) {
+        if (isBlob(data11)) {
           if (this._state !== DEFAULT) {
-            this.enqueue([this.getBlobData, data10, this._compress, opts, cb]);
+            this.enqueue([this.getBlobData, data11, this._compress, opts, cb]);
           } else {
-            this.getBlobData(data10, this._compress, opts, cb);
+            this.getBlobData(data11, this._compress, opts, cb);
           }
         } else if (this._state !== DEFAULT) {
-          this.enqueue([this.dispatch, data10, this._compress, opts, cb]);
+          this.enqueue([this.dispatch, data11, this._compress, opts, cb]);
         } else {
-          this.dispatch(data10, this._compress, opts, cb);
+          this.dispatch(data11, this._compress, opts, cb);
         }
       }
       /**
@@ -156125,13 +156125,13 @@ var require_sender2 = __commonJS({
             return;
           }
           this._bufferedBytes -= options[kByteLength];
-          const data10 = toBuffer(arrayBuffer);
+          const data11 = toBuffer(arrayBuffer);
           if (!compress) {
             this._state = DEFAULT;
-            this.sendFrame(_Sender.frame(data10, options), cb);
+            this.sendFrame(_Sender.frame(data11, options), cb);
             this.dequeue();
           } else {
-            this.dispatch(data10, compress, options, cb);
+            this.dispatch(data11, compress, options, cb);
           }
         }).catch((err) => {
           process.nextTick(onError, this, err, cb);
@@ -156160,15 +156160,15 @@ var require_sender2 = __commonJS({
        * @param {Function} [cb] Callback
        * @private
        */
-      dispatch(data10, compress, options, cb) {
+      dispatch(data11, compress, options, cb) {
         if (!compress) {
-          this.sendFrame(_Sender.frame(data10, options), cb);
+          this.sendFrame(_Sender.frame(data11, options), cb);
           return;
         }
         const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
         this._bufferedBytes += options[kByteLength];
         this._state = DEFLATING;
-        perMessageDeflate.compress(data10, options.fin, (_, buf) => {
+        perMessageDeflate.compress(data11, options.fin, (_, buf) => {
           if (this._socket.destroyed) {
             const err = new Error(
               "The socket was closed while data was being compressed"
@@ -156392,9 +156392,9 @@ var require_event_target = __commonJS({
         }
         let wrapper;
         if (type === "message") {
-          wrapper = function onMessage(data10, isBinary) {
+          wrapper = function onMessage(data11, isBinary) {
             const event = new MessageEvent("message", {
-              data: isBinary ? data10 : data10.toString()
+              data: isBinary ? data11 : data11.toString()
             });
             event[kTarget] = this;
             callListener(handler, this, event);
@@ -156874,7 +156874,7 @@ var require_websocket2 = __commonJS({
        *     closing
        * @public
        */
-      close(code, data10) {
+      close(code, data11) {
         if (this.readyState === _WebSocket.CLOSED) return;
         if (this.readyState === _WebSocket.CONNECTING) {
           const msg = "WebSocket was closed before the connection was established";
@@ -156888,7 +156888,7 @@ var require_websocket2 = __commonJS({
           return;
         }
         this._readyState = _WebSocket.CLOSING;
-        this._sender.close(code, data10, !this._isServer, (err) => {
+        this._sender.close(code, data11, !this._isServer, (err) => {
           if (err) return;
           this._closeFrameSent = true;
           if (this._closeFrameReceived || this._receiver._writableState.errorEmitted) {
@@ -156917,24 +156917,24 @@ var require_websocket2 = __commonJS({
        * @param {Function} [cb] Callback which is executed when the ping is sent
        * @public
        */
-      ping(data10, mask, cb) {
+      ping(data11, mask, cb) {
         if (this.readyState === _WebSocket.CONNECTING) {
           throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
         }
-        if (typeof data10 === "function") {
-          cb = data10;
-          data10 = mask = void 0;
+        if (typeof data11 === "function") {
+          cb = data11;
+          data11 = mask = void 0;
         } else if (typeof mask === "function") {
           cb = mask;
           mask = void 0;
         }
-        if (typeof data10 === "number") data10 = data10.toString();
+        if (typeof data11 === "number") data11 = data11.toString();
         if (this.readyState !== _WebSocket.OPEN) {
-          sendAfterClose(this, data10, cb);
+          sendAfterClose(this, data11, cb);
           return;
         }
         if (mask === void 0) mask = !this._isServer;
-        this._sender.ping(data10 || EMPTY_BUFFER, mask, cb);
+        this._sender.ping(data11 || EMPTY_BUFFER, mask, cb);
       }
       /**
        * Send a pong.
@@ -156944,24 +156944,24 @@ var require_websocket2 = __commonJS({
        * @param {Function} [cb] Callback which is executed when the pong is sent
        * @public
        */
-      pong(data10, mask, cb) {
+      pong(data11, mask, cb) {
         if (this.readyState === _WebSocket.CONNECTING) {
           throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
         }
-        if (typeof data10 === "function") {
-          cb = data10;
-          data10 = mask = void 0;
+        if (typeof data11 === "function") {
+          cb = data11;
+          data11 = mask = void 0;
         } else if (typeof mask === "function") {
           cb = mask;
           mask = void 0;
         }
-        if (typeof data10 === "number") data10 = data10.toString();
+        if (typeof data11 === "number") data11 = data11.toString();
         if (this.readyState !== _WebSocket.OPEN) {
-          sendAfterClose(this, data10, cb);
+          sendAfterClose(this, data11, cb);
           return;
         }
         if (mask === void 0) mask = !this._isServer;
-        this._sender.pong(data10 || EMPTY_BUFFER, mask, cb);
+        this._sender.pong(data11 || EMPTY_BUFFER, mask, cb);
       }
       /**
        * Resume the socket.
@@ -156990,7 +156990,7 @@ var require_websocket2 = __commonJS({
        * @param {Function} [cb] Callback which is executed when data is written out
        * @public
        */
-      send(data10, options, cb) {
+      send(data11, options, cb) {
         if (this.readyState === _WebSocket.CONNECTING) {
           throw new Error("WebSocket is not open: readyState 0 (CONNECTING)");
         }
@@ -156998,13 +156998,13 @@ var require_websocket2 = __commonJS({
           cb = options;
           options = {};
         }
-        if (typeof data10 === "number") data10 = data10.toString();
+        if (typeof data11 === "number") data11 = data11.toString();
         if (this.readyState !== _WebSocket.OPEN) {
-          sendAfterClose(this, data10, cb);
+          sendAfterClose(this, data11, cb);
           return;
         }
         const opts = {
-          binary: typeof data10 !== "string",
+          binary: typeof data11 !== "string",
           mask: !this._isServer,
           compress: true,
           fin: true,
@@ -157013,7 +157013,7 @@ var require_websocket2 = __commonJS({
         if (!this._extensions[PerMessageDeflate.extensionName]) {
           opts.compress = false;
         }
-        this._sender.send(data10 || EMPTY_BUFFER, opts, cb);
+        this._sender.send(data11 || EMPTY_BUFFER, opts, cb);
       }
       /**
        * Forcibly close the connection.
@@ -157398,9 +157398,9 @@ var require_websocket2 = __commonJS({
         stream.once("close", websocket.emitClose.bind(websocket));
       }
     }
-    function sendAfterClose(websocket, data10, cb) {
-      if (data10) {
-        const length = isBlob(data10) ? data10.size : toBuffer(data10).length;
+    function sendAfterClose(websocket, data11, cb) {
+      if (data11) {
+        const length = isBlob(data11) ? data11.size : toBuffer(data11).length;
         if (websocket._socket) websocket._sender._bufferedBytes += length;
         else websocket._bufferedAmount += length;
       }
@@ -157441,16 +157441,16 @@ var require_websocket2 = __commonJS({
     function receiverOnFinish() {
       this[kWebSocket].emitClose();
     }
-    function receiverOnMessage(data10, isBinary) {
-      this[kWebSocket].emit("message", data10, isBinary);
+    function receiverOnMessage(data11, isBinary) {
+      this[kWebSocket].emit("message", data11, isBinary);
     }
-    function receiverOnPing(data10) {
+    function receiverOnPing(data11) {
       const websocket = this[kWebSocket];
-      if (websocket._autoPong) websocket.pong(data10, !this._isServer, NOOP);
-      websocket.emit("ping", data10);
+      if (websocket._autoPong) websocket.pong(data11, !this._isServer, NOOP);
+      websocket.emit("ping", data11);
     }
-    function receiverOnPong(data10) {
-      this[kWebSocket].emit("pong", data10);
+    function receiverOnPong(data11) {
+      this[kWebSocket].emit("pong", data11);
     }
     function resume(stream) {
       stream.resume();
@@ -157548,8 +157548,8 @@ var require_stream = __commonJS({
         writableObjectMode: false
       });
       ws.on("message", function message(msg, isBinary) {
-        const data10 = !isBinary && duplex._readableState.objectMode ? msg.toString() : msg;
-        if (!duplex.push(data10)) ws.pause();
+        const data11 = !isBinary && duplex._readableState.objectMode ? msg.toString() : msg;
+        if (!duplex.push(data11)) ws.pause();
       });
       ws.once("error", function error(err) {
         if (duplex.destroyed) return;
@@ -158296,7 +158296,7 @@ var require_dist11 = __commonJS({
       /**
        * {@inheritDoc IShardingStrategy.send}
        */
-      send(shardId, data10) {
+      send(shardId, data11) {
         const worker = this.#workerByShardId.get(shardId);
         if (!worker) {
           throw new Error(`No worker found for shard ${shardId}`);
@@ -158304,7 +158304,7 @@ var require_dist11 = __commonJS({
         const payload = {
           op: 2,
           shardId,
-          payload: data10
+          payload: data11
         };
         worker.postMessage(payload);
       }
@@ -158990,15 +158990,15 @@ var require_dist11 = __commonJS({
         this.lastHeartbeatAt = Date.now();
         this.isAck = false;
       }
-      async unpackMessage(data10, isBinary) {
+      async unpackMessage(data11, isBinary) {
         if (!isBinary) {
           try {
-            return JSON.parse(data10);
+            return JSON.parse(data11);
           } catch {
             return null;
           }
         }
-        const decompressable = new Uint8Array(data10);
+        const decompressable = new Uint8Array(data11);
         if (this.useIdentifyCompress) {
           return new Promise((resolve2, reject) => {
             (0, import_node_zlib.inflate)(decompressable, { chunkSize: 65535 }, (err, result) => {
@@ -159037,8 +159037,8 @@ var require_dist11 = __commonJS({
         ]);
         return null;
       }
-      async onMessage(data10, isBinary) {
-        const payload = await this.unpackMessage(data10, isBinary);
+      async onMessage(data11, isBinary) {
+        const payload = await this.unpackMessage(data11, isBinary);
         if (!payload) {
           return;
         }
@@ -159449,11 +159449,11 @@ var require_dist11 = __commonJS({
         for (const shardId of this.data.shardIds) {
           const shard = new WebSocketShard(new WorkerContextFetchingStrategy(this.data), shardId);
           for (const event of options.forwardEvents ?? Object.values(WebSocketShardEvents)) {
-            shard.on(event, (data10) => {
+            shard.on(event, (data11) => {
               const payload = {
                 op: 2,
                 event,
-                data: data10,
+                data: data11,
                 shardId
               };
               import_node_worker_threads3.parentPort.postMessage(payload);
@@ -159515,8 +159515,8 @@ var require_dist11 = __commonJS({
             return this.gatewayInformation.data;
           }
         }
-        const data10 = await this.options.rest.get(import_v103.Routes.gatewayBot());
-        this.gatewayInformation = { data: data10, expiresAt: Date.now() + (data10.session_start_limit.reset_after || 5e3) };
+        const data11 = await this.options.rest.get(import_v103.Routes.gatewayBot());
+        this.gatewayInformation = { data: data11, expiresAt: Date.now() + (data11.session_start_limit.reset_after || 5e3) };
         return this.gatewayInformation.data;
       }
       /**
@@ -159557,8 +159557,8 @@ var require_dist11 = __commonJS({
             shardIds = [...(0, import_util32.range)({ start, end: end + 1 })];
           }
         } else {
-          const data10 = await this.fetchGatewayInformation();
-          shardIds = [...(0, import_util32.range)(this.options.shardCount ?? data10.shards)];
+          const data11 = await this.fetchGatewayInformation();
+          shardIds = [...(0, import_util32.range)(this.options.shardCount ?? data11.shards)];
         }
         this.shardIds = shardIds;
         return shardIds;
@@ -159567,10 +159567,10 @@ var require_dist11 = __commonJS({
         const shardCount = await this.getShardCount();
         await this.updateShardCount(shardCount);
         const shardIds = await this.getShardIds();
-        const data10 = await this.fetchGatewayInformation();
-        if (data10.session_start_limit.remaining < shardIds.length) {
+        const data11 = await this.fetchGatewayInformation();
+        if (data11.session_start_limit.remaining < shardIds.length) {
           throw new Error(
-            `Not enough sessions remaining to spawn ${shardIds.length} shards; only ${data10.session_start_limit.remaining} remaining; resets at ${new Date(Date.now() + data10.session_start_limit.reset_after).toISOString()}`
+            `Not enough sessions remaining to spawn ${shardIds.length} shards; only ${data11.session_start_limit.remaining} remaining; resets at ${new Date(Date.now() + data11.session_start_limit.reset_after).toISOString()}`
           );
         }
         await this.strategy.connect();
@@ -159725,7 +159725,7 @@ var require_WebSocketShard = __commonJS({
        * @param {boolean} [important=false] If this packet should be added first in queue
        * <warn>This parameter is **deprecated**. Important payloads are determined by their opcode instead.</warn>
        */
-      send(data10, important = false) {
+      send(data11, important = false) {
         if (important && !deprecationEmittedForImportant) {
           process2.emitWarning(
             "Sending important payloads explicitly is deprecated. They are determined by their opcode implicitly now.",
@@ -159733,7 +159733,7 @@ var require_WebSocketShard = __commonJS({
           );
           deprecationEmittedForImportant = true;
         }
-        this.manager._ws.send(this.id, data10);
+        this.manager._ws.send(this.id, data11);
       }
     };
     module2.exports = WebSocketShard;
@@ -159815,9 +159815,9 @@ var require_CHANNEL_PINS_UPDATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/CHANNEL_PINS_UPDATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const channel = client.channels.cache.get(data10.channel_id);
-      const time = data10.last_pin_timestamp ? Date.parse(data10.last_pin_timestamp) : null;
+    module2.exports = (client, { d: data11 }) => {
+      const channel = client.channels.cache.get(data11.channel_id);
+      const time = data11.last_pin_timestamp ? Date.parse(data11.last_pin_timestamp) : null;
       if (channel) {
         channel.lastPinTimestamp = time;
         client.emit(Events3.ChannelPinsUpdate, channel, time);
@@ -159906,16 +159906,16 @@ var require_GUILD_CREATE = __commonJS({
     "use strict";
     var Events3 = require_Events();
     var Status2 = require_Status();
-    module2.exports = (client, { d: data10 }, shard) => {
-      let guild = client.guilds.cache.get(data10.id);
+    module2.exports = (client, { d: data11 }, shard) => {
+      let guild = client.guilds.cache.get(data11.id);
       if (guild) {
-        if (!guild.available && !data10.unavailable) {
-          guild._patch(data10);
+        if (!guild.available && !data11.unavailable) {
+          guild._patch(data11);
           client.emit(Events3.GuildAvailable, guild);
         }
       } else {
-        data10.shardId = shard.id;
-        guild = client.guilds._add(data10);
+        data11.shardId = shard.id;
+        guild = client.guilds._add(data11);
         if (client.ws.status === Status2.Ready) {
           client.emit(Events3.GuildCreate, guild);
         }
@@ -159960,19 +159960,19 @@ var require_GUILD_MEMBERS_CHUNK = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist8();
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const guild = client.guilds.cache.get(data10.guild_id);
+    module2.exports = (client, { d: data11 }) => {
+      const guild = client.guilds.cache.get(data11.guild_id);
       if (!guild) return;
       const members = new Collection3();
-      for (const member of data10.members) members.set(member.user.id, guild.members._add(member));
-      if (data10.presences) {
-        for (const presence of data10.presences) guild.presences._add(Object.assign(presence, { guild }));
+      for (const member of data11.members) members.set(member.user.id, guild.members._add(member));
+      if (data11.presences) {
+        for (const presence of data11.presences) guild.presences._add(Object.assign(presence, { guild }));
       }
       client.emit(Events3.GuildMembersChunk, members, guild, {
-        index: data10.chunk_index,
-        count: data10.chunk_count,
-        notFound: data10.not_found,
-        nonce: data10.nonce
+        index: data11.chunk_index,
+        count: data11.chunk_count,
+        notFound: data11.not_found,
+        nonce: data11.nonce
       });
     };
   }
@@ -159984,11 +159984,11 @@ var require_GUILD_MEMBER_ADD = __commonJS({
     "use strict";
     var Events3 = require_Events();
     var Status2 = require_Status();
-    module2.exports = (client, { d: data10 }, shard) => {
-      const guild = client.guilds.cache.get(data10.guild_id);
+    module2.exports = (client, { d: data11 }, shard) => {
+      const guild = client.guilds.cache.get(data11.guild_id);
       if (guild) {
         guild.memberCount++;
-        const member = guild.members._add(data10);
+        const member = guild.members._add(data11);
         if (shard.status === Status2.Ready) {
           client.emit(Events3.GuildMemberAdd, member);
         }
@@ -160103,11 +160103,11 @@ var require_GUILD_SOUNDBOARD_SOUNDS_UPDATE = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist8();
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const guild = client.guilds.cache.get(data10.guild_id);
+    module2.exports = (client, { d: data11 }) => {
+      const guild = client.guilds.cache.get(data11.guild_id);
       if (!guild) return;
       const soundboardSounds = new Collection3();
-      for (const soundboardSound of data10.soundboard_sounds) {
+      for (const soundboardSound of data11.soundboard_sounds) {
         soundboardSounds.set(soundboardSound.sound_id, guild.soundboardSounds._add(soundboardSound));
       }
       client.emit(Events3.GuildSoundboardSoundsUpdate, soundboardSounds, guild);
@@ -160120,10 +160120,10 @@ var require_GUILD_SOUNDBOARD_SOUND_CREATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/GUILD_SOUNDBOARD_SOUND_CREATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const guild = client.guilds.cache.get(data10.guild_id);
+    module2.exports = (client, { d: data11 }) => {
+      const guild = client.guilds.cache.get(data11.guild_id);
       if (!guild) return;
-      const soundboardSound = guild.soundboardSounds._add(data10);
+      const soundboardSound = guild.soundboardSounds._add(data11);
       client.emit(Events3.GuildSoundboardSoundCreate, soundboardSound);
     };
   }
@@ -160133,8 +160133,8 @@ var require_GUILD_SOUNDBOARD_SOUND_CREATE = __commonJS({
 var require_GUILD_SOUNDBOARD_SOUND_DELETE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/GUILD_SOUNDBOARD_SOUND_DELETE.js"(exports2, module2) {
     "use strict";
-    module2.exports = (client, { d: data10 }) => {
-      client.actions.GuildSoundboardSoundDelete.handle(data10);
+    module2.exports = (client, { d: data11 }) => {
+      client.actions.GuildSoundboardSoundDelete.handle(data11);
     };
   }
 });
@@ -160144,11 +160144,11 @@ var require_GUILD_SOUNDBOARD_SOUND_UPDATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/GUILD_SOUNDBOARD_SOUND_UPDATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const guild = client.guilds.cache.get(data10.guild_id);
+    module2.exports = (client, { d: data11 }) => {
+      const guild = client.guilds.cache.get(data11.guild_id);
       if (!guild) return;
-      const oldGuildSoundboardSound = guild.soundboardSounds.cache.get(data10.sound_id)?._clone() ?? null;
-      const newGuildSoundboardSound = guild.soundboardSounds._add(data10);
+      const oldGuildSoundboardSound = guild.soundboardSounds.cache.get(data11.sound_id)?._clone() ?? null;
+      const newGuildSoundboardSound = guild.soundboardSounds._add(data11);
       client.emit(Events3.GuildSoundboardSoundUpdate, oldGuildSoundboardSound, newGuildSoundboardSound);
     };
   }
@@ -160325,18 +160325,18 @@ var require_RATE_LIMITED = __commonJS({
     var process2 = __require("node:process");
     var { GatewayOpcodes } = require_v106();
     var emittedFor = /* @__PURE__ */ new Set();
-    module2.exports = (_, { d: data10 }) => {
-      switch (data10.opcode) {
+    module2.exports = (_, { d: data11 }) => {
+      switch (data11.opcode) {
         case GatewayOpcodes.RequestGuildMembers: {
           break;
         }
         default: {
-          if (!emittedFor.has(data10.opcode)) {
+          if (!emittedFor.has(data11.opcode)) {
             process2.emitWarning(
               // eslint-disable-next-line max-len
-              `Hit a gateway rate limit on opcode ${data10.opcode} (${GatewayOpcodes[data10.opcode]}). If the discord.js version you're using is up-to-date, please open an issue on GitHub.`
+              `Hit a gateway rate limit on opcode ${data11.opcode} (${GatewayOpcodes[data11.opcode]}). If the discord.js version you're using is up-to-date, please open an issue on GitHub.`
             );
-            emittedFor.add(data10.opcode);
+            emittedFor.add(data11.opcode);
           }
         }
       }
@@ -160352,17 +160352,17 @@ var require_ClientUser = __commonJS({
     var User = require_User();
     var { resolveImage } = require_DataResolver();
     var ClientUser = class extends User {
-      _patch(data10) {
-        super._patch(data10);
-        if ("verified" in data10) {
-          this.verified = data10.verified;
+      _patch(data11) {
+        super._patch(data11);
+        if ("verified" in data11) {
+          this.verified = data11.verified;
         }
-        if ("mfa_enabled" in data10) {
-          this.mfaEnabled = typeof data10.mfa_enabled === "boolean" ? data10.mfa_enabled : null;
+        if ("mfa_enabled" in data11) {
+          this.mfaEnabled = typeof data11.mfa_enabled === "boolean" ? data11.mfa_enabled : null;
         } else {
           this.mfaEnabled ??= null;
         }
-        if ("token" in data10) this.client.token = data10.token;
+        if ("token" in data11) this.client.token = data11.token;
       }
       /**
        * Represents the client user's presence
@@ -160385,14 +160385,14 @@ var require_ClientUser = __commonJS({
        * @returns {Promise<ClientUser>}
        */
       async edit({ username, avatar, banner }) {
-        const data10 = await this.client.rest.patch(Routes3.user(), {
+        const data11 = await this.client.rest.patch(Routes3.user(), {
           body: {
             username,
             avatar: avatar && await resolveImage(avatar),
             banner: banner && await resolveImage(banner)
           }
         });
-        const { updated } = this.client.actions.UserUpdate.handle(data10);
+        const { updated } = this.client.actions.UserUpdate.handle(data11);
         return updated ?? this;
       }
       /**
@@ -160460,8 +160460,8 @@ var require_ClientUser = __commonJS({
        * // Set the client user's presence
        * client.user.setPresence({ activities: [{ name: 'with discord.js' }], status: 'idle' });
        */
-      setPresence(data10) {
-        return this.client.presence.set(data10);
+      setPresence(data11) {
+        return this.client.presence.set(data11);
       }
       /**
        * A user's status. Must be one of:
@@ -160526,22 +160526,22 @@ var require_READY = __commonJS({
     "use strict";
     var ClientApplication = require_ClientApplication();
     var ClientUser;
-    module2.exports = (client, { d: data10 }, shard) => {
+    module2.exports = (client, { d: data11 }, shard) => {
       if (client.user) {
-        client.user._patch(data10.user);
+        client.user._patch(data11.user);
       } else {
         ClientUser ??= require_ClientUser();
-        client.user = new ClientUser(client, data10.user);
+        client.user = new ClientUser(client, data11.user);
         client.users.cache.set(client.user.id, client.user);
       }
-      for (const guild of data10.guilds) {
+      for (const guild of data11.guilds) {
         guild.shardId = shard.id;
         client.guilds._add(guild);
       }
       if (client.application) {
-        client.application._patch(data10.application);
+        client.application._patch(data11.application);
       } else {
-        client.application = new ClientApplication(client, data10.application);
+        client.application = new ClientApplication(client, data11.application);
       }
       shard.checkReady();
     };
@@ -160566,11 +160566,11 @@ var require_SOUNDBOARD_SOUNDS = __commonJS({
     "use strict";
     var { Collection: Collection3 } = require_dist8();
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const guild = client.guilds.cache.get(data10.guild_id);
+    module2.exports = (client, { d: data11 }) => {
+      const guild = client.guilds.cache.get(data11.guild_id);
       if (!guild) return;
       const soundboardSounds = new Collection3();
-      for (const soundboardSound of data10.soundboard_sounds) {
+      for (const soundboardSound of data11.soundboard_sounds) {
         soundboardSounds.set(soundboardSound.sound_id, guild.soundboardSounds._add(soundboardSound));
       }
       client.emit(Events3.SoundboardSounds, soundboardSounds, guild);
@@ -160613,8 +160613,8 @@ var require_SUBSCRIPTION_CREATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/SUBSCRIPTION_CREATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const subscription = client.application.subscriptions._add(data10);
+    module2.exports = (client, { d: data11 }) => {
+      const subscription = client.application.subscriptions._add(data11);
       client.emit(Events3.SubscriptionCreate, subscription);
     };
   }
@@ -160625,8 +160625,8 @@ var require_SUBSCRIPTION_DELETE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/SUBSCRIPTION_DELETE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const subscription = client.application.subscriptions._add(data10, false);
+    module2.exports = (client, { d: data11 }) => {
+      const subscription = client.application.subscriptions._add(data11, false);
       client.application.subscriptions.cache.delete(subscription.id);
       client.emit(Events3.SubscriptionDelete, subscription);
     };
@@ -160638,9 +160638,9 @@ var require_SUBSCRIPTION_UPDATE = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/websocket/handlers/SUBSCRIPTION_UPDATE.js"(exports2, module2) {
     "use strict";
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const oldSubscription = client.application.subscriptions.cache.get(data10.id)?._clone() ?? null;
-      const newSubscription = client.application.subscriptions._add(data10);
+    module2.exports = (client, { d: data11 }) => {
+      const oldSubscription = client.application.subscriptions.cache.get(data11.id)?._clone() ?? null;
+      const newSubscription = client.application.subscriptions._add(data11);
       client.emit(Events3.SubscriptionUpdate, oldSubscription, newSubscription);
     };
   }
@@ -160736,15 +160736,15 @@ var require_VoiceChannelEffect = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var VoiceChannelEffect = class {
-      constructor(data10, guild) {
+      constructor(data11, guild) {
         this.guild = guild;
-        this.channelId = data10.channel_id;
-        this.userId = data10.user_id;
-        this.emoji = data10.emoji ? new Emoji(guild.client, data10.emoji) : null;
-        this.animationType = data10.animation_type ?? null;
-        this.animationId = data10.animation_id ?? null;
-        this.soundId = data10.sound_id ?? null;
-        this.soundVolume = data10.sound_volume ?? null;
+        this.channelId = data11.channel_id;
+        this.userId = data11.user_id;
+        this.emoji = data11.emoji ? new Emoji(guild.client, data11.emoji) : null;
+        this.animationType = data11.animation_type ?? null;
+        this.animationId = data11.animation_id ?? null;
+        this.soundId = data11.sound_id ?? null;
+        this.soundVolume = data11.sound_volume ?? null;
       }
       /**
        * The channel the effect was sent in.
@@ -160773,10 +160773,10 @@ var require_VOICE_CHANNEL_EFFECT_SEND = __commonJS({
     "use strict";
     var VoiceChannelEffect = require_VoiceChannelEffect();
     var Events3 = require_Events();
-    module2.exports = (client, { d: data10 }) => {
-      const guild = client.guilds.cache.get(data10.guild_id);
+    module2.exports = (client, { d: data11 }) => {
+      const guild = client.guilds.cache.get(data11.guild_id);
       if (!guild) return;
-      client.emit(Events3.VoiceChannelEffectSend, new VoiceChannelEffect(data10, guild));
+      client.emit(Events3.VoiceChannelEffectSend, new VoiceChannelEffect(data11, guild));
     };
   }
 });
@@ -161056,17 +161056,17 @@ var require_WebSocketManager = __commonJS({
        */
       attachEvents() {
         this._ws.on(WSWebSocketShardEvents.Debug, ({ message, shardId }) => this.debug([message], shardId));
-        this._ws.on(WSWebSocketShardEvents.Dispatch, ({ data: data10, shardId }) => {
-          this.client.emit(Events3.Raw, data10, shardId);
-          this.emit(data10.t, data10.d, shardId);
+        this._ws.on(WSWebSocketShardEvents.Dispatch, ({ data: data11, shardId }) => {
+          this.client.emit(Events3.Raw, data11, shardId);
+          this.emit(data11.t, data11.d, shardId);
           const shard = this.shards.get(shardId);
-          this.handlePacket(data10, shard);
-          if (shard.status === Status2.WaitingForGuilds && WaitingForGuildEvents.includes(data10.t)) {
-            shard.gotGuild(data10.d.id);
+          this.handlePacket(data11, shard);
+          if (shard.status === Status2.WaitingForGuilds && WaitingForGuildEvents.includes(data11.t)) {
+            shard.gotGuild(data11.d.id);
           }
         });
-        this._ws.on(WSWebSocketShardEvents.Ready, ({ data: data10, shardId }) => {
-          this.shards.get(shardId).onReadyPacket(data10);
+        this._ws.on(WSWebSocketShardEvents.Ready, ({ data: data11, shardId }) => {
+          this.shards.get(shardId).onReadyPacket(data11);
         });
         this._ws.on(WSWebSocketShardEvents.Closed, ({ code, shardId }) => {
           const shard = this.shards.get(shardId);
@@ -161288,19 +161288,19 @@ var require_ChannelManager = __commonJS({
        * @type {Collection<Snowflake, BaseChannel>}
        * @name ChannelManager#cache
        */
-      _add(data10, guild, { cache = true, allowUnknownGuild = false } = {}) {
-        const existing = this.cache.get(data10.id);
+      _add(data11, guild, { cache = true, allowUnknownGuild = false } = {}) {
+        const existing = this.cache.get(data11.id);
         if (existing) {
-          if (cache) existing._patch(data10);
+          if (cache) existing._patch(data11);
           guild?.channels?._add(existing);
           if (ThreadChannelTypes.includes(existing.type)) {
             existing.parent?.threads?._add(existing);
           }
           return existing;
         }
-        const channel = createChannel(this.client, data10, guild, { allowUnknownGuild });
+        const channel = createChannel(this.client, data11, guild, { allowUnknownGuild });
         if (!channel) {
-          this.client.emit(Events3.Debug, `Failed to find guild, or unknown type for channel ${data10.id} ${data10.type}`);
+          this.client.emit(Events3.Debug, `Failed to find guild, or unknown type for channel ${data11.id} ${data11.type}`);
           return null;
         }
         if (cache && !allowUnknownGuild) this.cache.set(channel.id, channel);
@@ -161365,8 +161365,8 @@ var require_ChannelManager = __commonJS({
           const existing = this.cache.get(id);
           if (existing && !existing.partial) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.channel(id));
-        return this._add(data10, null, { cache, allowUnknownGuild });
+        const data11 = await this.client.rest.get(Routes3.channel(id));
+        return this._add(data11, null, { cache, allowUnknownGuild });
       }
     };
     module2.exports = ChannelManager2;
@@ -161636,37 +161636,37 @@ var require_GuildAuditLogs = __commonJS({
     var Webhook2 = require_Webhook();
     var { flatten } = require_Util();
     var GuildAuditLogs = class {
-      constructor(guild, data10) {
-        if (data10.users) for (const user of data10.users) guild.client.users._add(user);
-        if (data10.threads) for (const thread of data10.threads) guild.client.channels._add(thread, guild);
+      constructor(guild, data11) {
+        if (data11.users) for (const user of data11.users) guild.client.users._add(user);
+        if (data11.threads) for (const thread of data11.threads) guild.client.channels._add(thread, guild);
         this.webhooks = new Collection3();
-        if (data10.webhooks) {
-          for (const hook of data10.webhooks) {
+        if (data11.webhooks) {
+          for (const hook of data11.webhooks) {
             this.webhooks.set(hook.id, new Webhook2(guild.client, hook));
           }
         }
         this.integrations = new Collection3();
-        if (data10.integrations) {
-          for (const integration of data10.integrations) {
+        if (data11.integrations) {
+          for (const integration of data11.integrations) {
             this.integrations.set(integration.id, new Integration(guild.client, integration, guild));
           }
         }
-        this.guildScheduledEvents = data10.guild_scheduled_events.reduce(
+        this.guildScheduledEvents = data11.guild_scheduled_events.reduce(
           (guildScheduledEvents, guildScheduledEvent) => guildScheduledEvents.set(guildScheduledEvent.id, guild.scheduledEvents._add(guildScheduledEvent)),
           new Collection3()
         );
         this.applicationCommands = new Collection3();
-        if (data10.application_commands) {
-          for (const command of data10.application_commands) {
+        if (data11.application_commands) {
+          for (const command of data11.application_commands) {
             this.applicationCommands.set(command.id, new ApplicationCommand(guild.client, command, guild));
           }
         }
-        this.autoModerationRules = data10.auto_moderation_rules.reduce(
+        this.autoModerationRules = data11.auto_moderation_rules.reduce(
           (autoModerationRules, autoModerationRule) => autoModerationRules.set(autoModerationRule.id, guild.autoModerationRules._add(autoModerationRule)),
           new Collection3()
         );
         this.entries = new Collection3();
-        for (const item of data10.audit_log_entries) {
+        for (const item of data11.audit_log_entries) {
           const entry = new GuildAuditLogsEntry(guild, item, this);
           this.entries.set(entry.id, entry);
         }
@@ -161687,20 +161687,20 @@ var require_GuildOnboarding = __commonJS({
     var Base = require_Base();
     var { GuildOnboardingPrompt } = require_GuildOnboardingPrompt();
     var GuildOnboarding = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.guildId = data10.guild_id;
+        this.guildId = data11.guild_id;
         const guild = this.guild;
-        this.prompts = data10.prompts.reduce(
+        this.prompts = data11.prompts.reduce(
           (prompts, prompt) => prompts.set(prompt.id, new GuildOnboardingPrompt(client, prompt, this.guildId)),
           new Collection3()
         );
-        this.defaultChannels = data10.default_channel_ids.reduce(
+        this.defaultChannels = data11.default_channel_ids.reduce(
           (channels, channelId) => channels.set(channelId, guild.channels.cache.get(channelId)),
           new Collection3()
         );
-        this.enabled = data10.enabled;
-        this.mode = data10.mode;
+        this.enabled = data11.enabled;
+        this.mode = data11.mode;
       }
       /**
        * The guild this onboarding is from
@@ -161726,9 +161726,9 @@ var require_GuildPreviewEmoji = __commonJS({
        * @type {GuildPreview}
        * @name GuildPreviewEmoji#guild
        */
-      constructor(client, data10, guild) {
-        super(client, data10, guild);
-        this.roles = data10.roles;
+      constructor(client, data11, guild) {
+        super(client, data11, guild);
+        this.roles = data11.roles;
       }
     };
     module2.exports = GuildPreviewEmoji;
@@ -161746,36 +161746,36 @@ var require_GuildPreview = __commonJS({
     var GuildPreviewEmoji = require_GuildPreviewEmoji();
     var { Sticker: Sticker2 } = require_Sticker();
     var GuildPreview2 = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        if (!data10) return;
-        this._patch(data10);
+        if (!data11) return;
+        this._patch(data11);
       }
-      _patch(data10) {
-        this.id = data10.id;
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        this.id = data11.id;
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("icon" in data10) {
-          this.icon = data10.icon;
+        if ("icon" in data11) {
+          this.icon = data11.icon;
         }
-        if ("splash" in data10) {
-          this.splash = data10.splash;
+        if ("splash" in data11) {
+          this.splash = data11.splash;
         }
-        if ("discovery_splash" in data10) {
-          this.discoverySplash = data10.discovery_splash;
+        if ("discovery_splash" in data11) {
+          this.discoverySplash = data11.discovery_splash;
         }
-        if ("features" in data10) {
-          this.features = data10.features;
+        if ("features" in data11) {
+          this.features = data11.features;
         }
-        if ("approximate_member_count" in data10) {
-          this.approximateMemberCount = data10.approximate_member_count;
+        if ("approximate_member_count" in data11) {
+          this.approximateMemberCount = data11.approximate_member_count;
         }
-        if ("approximate_presence_count" in data10) {
-          this.approximatePresenceCount = data10.approximate_presence_count;
+        if ("approximate_presence_count" in data11) {
+          this.approximatePresenceCount = data11.approximate_presence_count;
         }
-        if ("description" in data10) {
-          this.description = data10.description;
+        if ("description" in data11) {
+          this.description = data11.description;
         } else {
           this.description ??= null;
         }
@@ -161784,10 +161784,10 @@ var require_GuildPreview = __commonJS({
         } else {
           this.emojis.clear();
         }
-        for (const emoji of data10.emojis) {
+        for (const emoji of data11.emojis) {
           this.emojis.set(emoji.id, new GuildPreviewEmoji(this.client, emoji, this));
         }
-        this.stickers = data10.stickers.reduce(
+        this.stickers = data11.stickers.reduce(
           (stickers, sticker) => stickers.set(sticker.id, new Sticker2(this.client, sticker)),
           new Collection3()
         );
@@ -161837,8 +161837,8 @@ var require_GuildPreview = __commonJS({
        * @returns {Promise<GuildPreview>}
        */
       async fetch() {
-        const data10 = await this.client.rest.get(Routes3.guildPreview(this.id));
-        this._patch(data10);
+        const data11 = await this.client.rest.get(Routes3.guildPreview(this.id));
+        this._patch(data11);
         return this;
       }
       /**
@@ -161896,8 +161896,8 @@ var require_AutoModerationRuleManager = __commonJS({
        * @param {AutoModerationRuleResolvable} autoModerationRule The AutoModerationRule resolvable to resolve
        * @returns {?Snowflake}
        */
-      _add(data10, cache) {
-        return super._add(data10, cache, { extras: [this.guild] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { extras: [this.guild] });
       }
       /**
        * Options used to set the trigger metadata of an auto moderation rule.
@@ -161966,7 +161966,7 @@ var require_AutoModerationRuleManager = __commonJS({
         exemptChannels,
         reason
       }) {
-        const data10 = await this.client.rest.post(Routes3.guildAutoModerationRules(this.guild.id), {
+        const data11 = await this.client.rest.post(Routes3.guildAutoModerationRules(this.guild.id), {
           body: {
             name,
             event_type: eventType,
@@ -161993,7 +161993,7 @@ var require_AutoModerationRuleManager = __commonJS({
           },
           reason
         });
-        return this._add(data10);
+        return this._add(data11);
       }
       /**
        * Options used to edit an auto moderation rule.
@@ -162018,7 +162018,7 @@ var require_AutoModerationRuleManager = __commonJS({
        */
       async edit(autoModerationRule, { name, eventType, triggerMetadata, actions, enabled, exemptRoles, exemptChannels, reason }) {
         const autoModerationRuleId = this.resolveId(autoModerationRule);
-        const data10 = await this.client.rest.patch(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRuleId), {
+        const data11 = await this.client.rest.patch(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRuleId), {
           body: {
             name,
             event_type: eventType,
@@ -162044,7 +162044,7 @@ var require_AutoModerationRuleManager = __commonJS({
           },
           reason
         });
-        return this._add(data10);
+        return this._add(data11);
       }
       /**
        * Data that can be resolved to give an AutoModerationRule object. This can be:
@@ -162097,12 +162097,12 @@ var require_AutoModerationRuleManager = __commonJS({
           const existing = this.cache.get(autoModerationRule);
           if (existing) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRule));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRule));
+        return this._add(data11, cache);
       }
       async _fetchMany(options = {}) {
-        const data10 = await this.client.rest.get(Routes3.guildAutoModerationRules(this.guild.id));
-        return data10.reduce(
+        const data11 = await this.client.rest.get(Routes3.guildAutoModerationRules(this.guild.id));
+        return data11.reduce(
           (col, autoModerationRule) => col.set(autoModerationRule.id, this._add(autoModerationRule, options.cache)),
           new Collection3()
         );
@@ -162162,8 +162162,8 @@ var require_GuildBanManager = __commonJS({
        * @type {Collection<Snowflake, GuildBan>}
        * @name GuildBanManager#cache
        */
-      _add(data10, cache) {
-        return super._add(data10, cache, { id: data10.user.id, extras: [this.guild] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { id: data11.user.id, extras: [this.guild] });
       }
       /**
        * Data that resolves to give a GuildBan object. This can be:
@@ -162237,14 +162237,14 @@ var require_GuildBanManager = __commonJS({
           const existing = this.cache.get(user);
           if (existing && !existing.partial) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.guildBan(this.guild.id, user));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.guildBan(this.guild.id, user));
+        return this._add(data11, cache);
       }
       async _fetchMany({ cache, ...apiOptions } = {}) {
-        const data10 = await this.client.rest.get(Routes3.guildBans(this.guild.id), {
+        const data11 = await this.client.rest.get(Routes3.guildBans(this.guild.id), {
           query: makeURLSearchParams2(apiOptions)
         });
-        return data10.reduce((col, ban) => col.set(ban.user.id, this._add(ban, cache)), new Collection3());
+        return data11.reduce((col, ban) => col.set(ban.user.id, this._add(ban, cache)), new Collection3());
       }
       /**
        * Options used to ban a user from a guild.
@@ -162514,7 +162514,7 @@ var require_GuildChannelManager = __commonJS({
       }) {
         parent &&= this.client.channels.resolveId(parent);
         permissionOverwrites &&= permissionOverwrites.map((overwrite) => PermissionOverwrites.resolve(overwrite, this.guild));
-        const data10 = await this.client.rest.post(Routes3.guildChannels(this.guild.id), {
+        const data11 = await this.client.rest.post(Routes3.guildChannels(this.guild.id), {
           body: {
             name,
             topic,
@@ -162537,7 +162537,7 @@ var require_GuildChannelManager = __commonJS({
           },
           reason
         });
-        return this.client.actions.ChannelCreate.handle(data10).channel;
+        return this.client.actions.ChannelCreate.handle(data11).channel;
       }
       /**
        * @typedef {ChannelWebhookCreateOptions} WebhookCreateOptions
@@ -162563,14 +162563,14 @@ var require_GuildChannelManager = __commonJS({
         const id = this.resolveId(channel);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "channel", "GuildChannelResolvable");
         const resolvedImage = await resolveImage(avatar);
-        const data10 = await this.client.rest.post(Routes3.channelWebhooks(id), {
+        const data11 = await this.client.rest.post(Routes3.channelWebhooks(id), {
           body: {
             name,
             avatar: resolvedImage
           },
           reason
         });
-        return new Webhook2(this.client, data10);
+        return new Webhook2(this.client, data11);
       }
       /**
        * Options used to edit a guild channel.
@@ -162713,13 +162713,13 @@ var require_GuildChannelManager = __commonJS({
           if (existing) return existing;
         }
         if (id) {
-          const data11 = await this.client.rest.get(Routes3.channel(id));
-          if (this.guild.id !== data11.guild_id) throw new DiscordjsError2(ErrorCodes2.GuildChannelUnowned);
-          return this.client.channels._add(data11, this.guild, { cache });
+          const data12 = await this.client.rest.get(Routes3.channel(id));
+          if (this.guild.id !== data12.guild_id) throw new DiscordjsError2(ErrorCodes2.GuildChannelUnowned);
+          return this.client.channels._add(data12, this.guild, { cache });
         }
-        const data10 = await this.client.rest.get(Routes3.guildChannels(this.guild.id));
+        const data11 = await this.client.rest.get(Routes3.guildChannels(this.guild.id));
         const channels = new Collection3();
-        for (const channel of data10) channels.set(channel.id, this.client.channels._add(channel, this.guild, { cache }));
+        for (const channel of data11) channels.set(channel.id, this.client.channels._add(channel, this.guild, { cache }));
         return channels;
       }
       /**
@@ -162735,8 +162735,8 @@ var require_GuildChannelManager = __commonJS({
       async fetchWebhooks(channel) {
         const id = this.resolveId(channel);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "channel", "GuildChannelResolvable");
-        const data10 = await this.client.rest.get(Routes3.channelWebhooks(id));
-        return data10.reduce((hooks, hook) => hooks.set(hook.id, new Webhook2(this.client, hook)), new Collection3());
+        const data11 = await this.client.rest.get(Routes3.channelWebhooks(id));
+        return data11.reduce((hooks, hook) => hooks.set(hook.id, new Webhook2(this.client, hook)), new Collection3());
       }
       /**
        * Data that can be resolved to give a Category Channel object. This can be:
@@ -162792,8 +162792,8 @@ var require_GuildChannelManager = __commonJS({
        *   .catch(console.error);
        */
       async fetchActiveThreads(cache = true) {
-        const data10 = await this.rawFetchGuildActiveThreads();
-        return GuildTextThreadManager._mapThreads(data10, this.client, { guild: this.guild, cache });
+        const data11 = await this.rawFetchGuildActiveThreads();
+        return GuildTextThreadManager._mapThreads(data11, this.client, { guild: this.guild, cache });
       }
       /**
        * `GET /guilds/{guild.id}/threads/active`
@@ -162839,8 +162839,8 @@ var require_GuildEmojiManager = __commonJS({
         super(guild.client, iterable);
         this.guild = guild;
       }
-      _add(data10, cache) {
-        return super._add(data10, cache, { extras: [this.guild] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { extras: [this.guild] });
       }
       /**
        * Options used for creating an emoji in a guild.
@@ -162915,9 +162915,9 @@ var require_GuildEmojiManager = __commonJS({
           const emoji = await this.client.rest.get(Routes3.guildEmoji(this.guild.id, id));
           return this._add(emoji, cache);
         }
-        const data10 = await this.client.rest.get(Routes3.guildEmojis(this.guild.id));
+        const data11 = await this.client.rest.get(Routes3.guildEmojis(this.guild.id));
         const emojis = new Collection3();
-        for (const emoji of data10) emojis.set(emoji.id, this._add(emoji, cache));
+        for (const emoji of data11) emojis.set(emoji.id, this._add(emoji, cache));
         return emojis;
       }
       /**
@@ -162972,8 +162972,8 @@ var require_GuildEmojiManager = __commonJS({
         if (!me.permissions.any(PermissionFlagsBits5.CreateGuildExpressions | PermissionFlagsBits5.ManageGuildExpressions)) {
           throw new DiscordjsError2(ErrorCodes2.MissingManageGuildExpressionsPermission, this.guild);
         }
-        const data10 = await this.client.rest.get(Routes3.guildEmoji(this.guild.id, emoji.id));
-        emoji._patch(data10);
+        const data11 = await this.client.rest.get(Routes3.guildEmoji(this.guild.id, emoji.id));
+        emoji._patch(data11);
         return emoji.author;
       }
     };
@@ -163001,8 +163001,8 @@ var require_GuildInviteManager = __commonJS({
        * @type {Collection<string, Invite>}
        * @name GuildInviteManager#cache
        */
-      _add(data10, cache) {
-        return super._add(data10, cache, { id: data10.code, extras: [this.guild] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { id: data11.code, extras: [this.guild] });
       }
       /**
        * Data that resolves to give an Invite object. This can be:
@@ -163119,12 +163119,12 @@ var require_GuildInviteManager = __commonJS({
         return invite;
       }
       async _fetchMany(cache) {
-        const data10 = await this.client.rest.get(Routes3.guildInvites(this.guild.id));
-        return data10.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection3());
+        const data11 = await this.client.rest.get(Routes3.guildInvites(this.guild.id));
+        return data11.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection3());
       }
       async _fetchChannelMany(channelId, cache) {
-        const data10 = await this.client.rest.get(Routes3.channelInvites(channelId));
-        return data10.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection3());
+        const data11 = await this.client.rest.get(Routes3.channelInvites(channelId));
+        return data11.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection3());
       }
       /**
        * Create an invite to the guild from the provided channel.
@@ -163200,8 +163200,8 @@ var require_GuildMemberManager = __commonJS({
        * @type {Collection<Snowflake, GuildMember>}
        * @name GuildMemberManager#cache
        */
-      _add(data10, cache = true) {
-        return super._add(data10, cache, { id: data10.user.id, extras: [this.guild] });
+      _add(data11, cache = true) {
+        return super._add(data11, cache, { id: data11.user.id, extras: [this.guild] });
       }
       /**
        * Data that resolves to give a GuildMember object. This can be:
@@ -163287,8 +163287,8 @@ var require_GuildMemberManager = __commonJS({
           }
           resolvedOptions.roles = resolvedRoles;
         }
-        const data10 = await this.client.rest.put(Routes3.guildMember(this.guild.id, userId), { body: resolvedOptions });
-        return data10 instanceof ArrayBuffer ? options.fetchWhenExisting === false ? null : this.fetch(userId) : this._add(data10);
+        const data11 = await this.client.rest.put(Routes3.guildMember(this.guild.id, userId), { body: resolvedOptions });
+        return data11 instanceof ArrayBuffer ? options.fetchWhenExisting === false ? null : this.fetch(userId) : this._add(data11);
       }
       /**
        * The client user as a GuildMember of this guild
@@ -163362,8 +163362,8 @@ var require_GuildMemberManager = __commonJS({
           const existing = this.cache.get(user);
           if (existing && !existing.partial) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.guildMember(this.guild.id, user));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.guildMember(this.guild.id, user));
+        return this._add(data11, cache);
       }
       async _fetchMany({
         limit = 0,
@@ -163446,10 +163446,10 @@ var require_GuildMemberManager = __commonJS({
        * @returns {Promise<Collection<Snowflake, GuildMember>>}
        */
       async search({ query, limit, cache = true } = {}) {
-        const data10 = await this.client.rest.get(Routes3.guildMembersSearch(this.guild.id), {
+        const data11 = await this.client.rest.get(Routes3.guildMembersSearch(this.guild.id), {
           query: makeURLSearchParams2({ query, limit })
         });
-        return data10.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection3());
+        return data11.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection3());
       }
       /**
        * Options used for listing guild members.
@@ -163465,8 +163465,8 @@ var require_GuildMemberManager = __commonJS({
        */
       async list({ after, limit, cache = true } = {}) {
         const query = makeURLSearchParams2({ limit, after });
-        const data10 = await this.client.rest.get(Routes3.guildMembers(this.guild.id), { query });
-        return data10.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection3());
+        const data11 = await this.client.rest.get(Routes3.guildMembers(this.guild.id), { query });
+        return data11.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection3());
       }
       /**
        * The data for editing a guild member.
@@ -163549,7 +163549,7 @@ var require_GuildMemberManager = __commonJS({
        * @returns {Promise<GuildMember>}
        */
       async editMe({ reason, ...options }) {
-        const data10 = await this.client.rest.patch(Routes3.guildMember(this.guild.id, "@me"), {
+        const data11 = await this.client.rest.patch(Routes3.guildMember(this.guild.id, "@me"), {
           body: {
             ...options,
             banner: options.banner && await resolveImage(options.banner),
@@ -163558,8 +163558,8 @@ var require_GuildMemberManager = __commonJS({
           reason
         });
         const clone = this.me?._clone();
-        clone?._patch(data10);
-        return clone ?? this._add(data10, false);
+        clone?._patch(data11);
+        return clone ?? this._add(data11, false);
       }
       /**
        * Options used for pruning guild members.
@@ -163810,7 +163810,7 @@ var require_GuildScheduledEventManager = __commonJS({
           if (!channel_id) throw new DiscordjsError2(ErrorCodes2.GuildVoiceChannelResolve);
           entity_metadata = entityMetadata === void 0 ? entityMetadata : null;
         }
-        const data10 = await this.client.rest.post(Routes3.guildScheduledEvents(this.guild.id), {
+        const data11 = await this.client.rest.post(Routes3.guildScheduledEvents(this.guild.id), {
           body: {
             channel_id,
             name,
@@ -163825,7 +163825,7 @@ var require_GuildScheduledEventManager = __commonJS({
           },
           reason
         });
-        return this._add(data10);
+        return this._add(data11);
       }
       /**
        * Options used to fetch a single guild scheduled event from a guild.
@@ -163853,15 +163853,15 @@ var require_GuildScheduledEventManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const data11 = await this.client.rest.get(Routes3.guildScheduledEvent(this.guild.id, id), {
+          const data12 = await this.client.rest.get(Routes3.guildScheduledEvent(this.guild.id, id), {
             query: makeURLSearchParams2({ with_user_count: options.withUserCount ?? true })
           });
-          return this._add(data11, options.cache);
+          return this._add(data12, options.cache);
         }
-        const data10 = await this.client.rest.get(Routes3.guildScheduledEvents(this.guild.id), {
+        const data11 = await this.client.rest.get(Routes3.guildScheduledEvents(this.guild.id), {
           query: makeURLSearchParams2({ with_user_count: options.withUserCount ?? true })
         });
-        return data10.reduce(
+        return data11.reduce(
           (coll, rawGuildScheduledEventData) => coll.set(rawGuildScheduledEventData.id, this._add(rawGuildScheduledEventData, options.cache)),
           new Collection3()
         );
@@ -163916,7 +163916,7 @@ var require_GuildScheduledEventManager = __commonJS({
             location: entityMetadata.location
           };
         }
-        const data10 = await this.client.rest.patch(Routes3.guildScheduledEvent(this.guild.id, guildScheduledEventId), {
+        const data11 = await this.client.rest.patch(Routes3.guildScheduledEvent(this.guild.id, guildScheduledEventId), {
           body: {
             channel_id: channel === void 0 ? channel : this.guild.channels.resolveId(channel),
             name,
@@ -163932,7 +163932,7 @@ var require_GuildScheduledEventManager = __commonJS({
           },
           reason
         });
-        return this._add(data10);
+        return this._add(data11);
       }
       /**
        * Deletes a guild scheduled event.
@@ -163975,10 +163975,10 @@ var require_GuildScheduledEventManager = __commonJS({
           before: options.before,
           after: options.after
         });
-        const data10 = await this.client.rest.get(Routes3.guildScheduledEventUsers(this.guild.id, guildScheduledEventId), {
+        const data11 = await this.client.rest.get(Routes3.guildScheduledEventUsers(this.guild.id, guildScheduledEventId), {
           query
         });
-        return data10.reduce(
+        return data11.reduce(
           (coll, rawData) => coll.set(rawData.user.id, {
             guildScheduledEventId: rawData.guild_scheduled_event_id,
             user: this.client.users._add(rawData.user),
@@ -164001,42 +164001,42 @@ var require_SoundboardSound = __commonJS({
     var { Emoji } = require_Emoji();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var SoundboardSound2 = class _SoundboardSound extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.soundId = data10.sound_id;
-        this._patch(data10);
+        this.soundId = data11.sound_id;
+        this._patch(data11);
       }
-      _patch(data10) {
-        if ("available" in data10) {
-          this.available = data10.available;
+      _patch(data11) {
+        if ("available" in data11) {
+          this.available = data11.available;
         } else {
           this.available ??= null;
         }
-        if ("name" in data10) {
-          this.name = data10.name;
+        if ("name" in data11) {
+          this.name = data11.name;
         } else {
           this.name ??= null;
         }
-        if ("volume" in data10) {
-          this.volume = data10.volume;
+        if ("volume" in data11) {
+          this.volume = data11.volume;
         } else {
           this.volume ??= null;
         }
-        if ("emoji_id" in data10) {
+        if ("emoji_id" in data11) {
           this._emoji = {
-            id: data10.emoji_id,
-            name: data10.emoji_name
+            id: data11.emoji_id,
+            name: data11.emoji_name
           };
         } else {
           this._emoji ??= null;
         }
-        if ("guild_id" in data10) {
-          this.guildId = data10.guild_id;
+        if ("guild_id" in data11) {
+          this.guildId = data11.guild_id;
         } else {
           this.guildId ??= null;
         }
-        if ("user" in data10) {
-          this.user = this.client.users._add(data10.user);
+        if ("user" in data11) {
+          this.user = this.client.users._add(data11.user);
         } else {
           this.user ??= null;
         }
@@ -164149,8 +164149,8 @@ var require_GuildSoundboardSoundManager = __commonJS({
        * @type {Collection<Snowflake, SoundboardSound>}
        * @name GuildSoundboardSoundManager#cache
        */
-      _add(data10, cache) {
-        return super._add(data10, cache, { extras: [this.guild], id: data10.sound_id });
+      _add(data11, cache) {
+        return super._add(data11, cache, { extras: [this.guild], id: data11.sound_id });
       }
       /**
        * Data that resolves to give a SoundboardSound object. This can be:
@@ -164228,17 +164228,17 @@ var require_GuildSoundboardSoundManager = __commonJS({
         if (!soundId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "soundboardSound", "SoundboardSoundResolvable");
         const { emojiId, emojiName, name, reason, volume } = options;
         const body = { emoji_id: emojiId, emoji_name: emojiName, name, volume };
-        const data10 = await this.client.rest.patch(Routes3.guildSoundboardSound(this.guild.id, soundId), {
+        const data11 = await this.client.rest.patch(Routes3.guildSoundboardSound(this.guild.id, soundId), {
           body,
           reason
         });
         const existing = this.cache.get(soundId);
         if (existing) {
           const clone = existing._clone();
-          clone._patch(data10);
+          clone._patch(data11);
           return clone;
         }
-        return this._add(data10);
+        return this._add(data11);
       }
       /**
        * Deletes a soundboard sound.
@@ -164290,12 +164290,12 @@ var require_GuildSoundboardSoundManager = __commonJS({
           const existing = this.cache.get(soundboardSound);
           if (existing) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.guildSoundboardSound(this.guild.id, soundboardSound));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.guildSoundboardSound(this.guild.id, soundboardSound));
+        return this._add(data11, cache);
       }
       async _fetchMany({ cache } = {}) {
-        const data10 = await this.client.rest.get(Routes3.guildSoundboardSounds(this.guild.id));
-        return data10.items.reduce((coll, sound) => coll.set(sound.sound_id, this._add(sound, cache)), new Collection3());
+        const data11 = await this.client.rest.get(Routes3.guildSoundboardSounds(this.guild.id));
+        return data11.items.reduce((coll, sound) => coll.set(sound.sound_id, this._add(sound, cache)), new Collection3());
       }
     };
     exports2.GuildSoundboardSoundManager = GuildSoundboardSoundManager;
@@ -164322,8 +164322,8 @@ var require_GuildStickerManager = __commonJS({
        * @type {Collection<Snowflake, Sticker>}
        * @name GuildStickerManager#cache
        */
-      _add(data10, cache) {
-        return super._add(data10, cache, { extras: [this.guild] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { extras: [this.guild] });
       }
       /**
        * Options used to create a guild sticker.
@@ -164441,8 +164441,8 @@ var require_GuildStickerManager = __commonJS({
           const sticker = await this.client.rest.get(Routes3.guildSticker(this.guild.id, id));
           return this._add(sticker, cache);
         }
-        const data10 = await this.client.rest.get(Routes3.guildStickers(this.guild.id));
-        return new Collection3(data10.map((sticker) => [sticker.id, this._add(sticker, cache)]));
+        const data11 = await this.client.rest.get(Routes3.guildStickers(this.guild.id));
+        return new Collection3(data11.map((sticker) => [sticker.id, this._add(sticker, cache)]));
       }
       /**
        * Fetches the user who uploaded this sticker, if this is a guild sticker.
@@ -164452,8 +164452,8 @@ var require_GuildStickerManager = __commonJS({
       async fetchUser(sticker) {
         sticker = this.resolve(sticker);
         if (!sticker) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "sticker", "StickerResolvable");
-        const data10 = await this.client.rest.get(Routes3.guildSticker(this.guild.id, sticker.id));
-        sticker._patch(data10);
+        const data11 = await this.client.rest.get(Routes3.guildSticker(this.guild.id, sticker.id));
+        sticker._patch(data11);
         return sticker.user;
       }
     };
@@ -164488,11 +164488,11 @@ var require_Presence = __commonJS({
     var ActivityFlagsBitField = require_ActivityFlagsBitField();
     var { flatten } = require_Util();
     var Presence = class extends Base {
-      constructor(client, data10 = {}) {
+      constructor(client, data11 = {}) {
         super(client);
-        this.userId = data10.user.id;
-        this.guild = data10.guild ?? null;
-        this._patch(data10);
+        this.userId = data11.user.id;
+        this.guild = data11.guild ?? null;
+        this._patch(data11);
       }
       /**
        * The user of this presence
@@ -164510,19 +164510,19 @@ var require_Presence = __commonJS({
       get member() {
         return this.guild.members.resolve(this.userId);
       }
-      _patch(data10) {
-        if ("status" in data10) {
-          this.status = data10.status;
+      _patch(data11) {
+        if ("status" in data11) {
+          this.status = data11.status;
         } else {
           this.status ??= "offline";
         }
-        if ("activities" in data10) {
-          this.activities = data10.activities.map((activity) => new Activity(this, activity));
+        if ("activities" in data11) {
+          this.activities = data11.activities.map((activity) => new Activity(this, activity));
         } else {
           this.activities ??= [];
         }
-        if ("client_status" in data10) {
-          this.clientStatus = data10.client_status;
+        if ("client_status" in data11) {
+          this.clientStatus = data11.client_status;
         } else {
           this.clientStatus ??= null;
         }
@@ -164546,25 +164546,25 @@ var require_Presence = __commonJS({
       }
     };
     var Activity = class {
-      constructor(presence, data10) {
+      constructor(presence, data11) {
         Object.defineProperty(this, "presence", { value: presence });
-        this.name = data10.name;
-        this.type = data10.type;
-        this.url = data10.url ?? null;
-        this.details = data10.details ?? null;
-        this.state = data10.state ?? null;
-        this.applicationId = data10.application_id ?? null;
-        this.timestamps = data10.timestamps ? {
-          start: data10.timestamps.start ? new Date(Number(data10.timestamps.start)) : null,
-          end: data10.timestamps.end ? new Date(Number(data10.timestamps.end)) : null
+        this.name = data11.name;
+        this.type = data11.type;
+        this.url = data11.url ?? null;
+        this.details = data11.details ?? null;
+        this.state = data11.state ?? null;
+        this.applicationId = data11.application_id ?? null;
+        this.timestamps = data11.timestamps ? {
+          start: data11.timestamps.start ? new Date(Number(data11.timestamps.start)) : null,
+          end: data11.timestamps.end ? new Date(Number(data11.timestamps.end)) : null
         } : null;
-        this.party = data10.party ?? null;
-        this.syncId = data10.sync_id ?? null;
-        this.assets = data10.assets ? new RichPresenceAssets(this, data10.assets) : null;
-        this.flags = new ActivityFlagsBitField(data10.flags).freeze();
-        this.emoji = data10.emoji ? new Emoji(presence.client, data10.emoji) : null;
-        this.buttons = data10.buttons ?? [];
-        this.createdTimestamp = data10.created_at;
+        this.party = data11.party ?? null;
+        this.syncId = data11.sync_id ?? null;
+        this.assets = data11.assets ? new RichPresenceAssets(this, data11.assets) : null;
+        this.flags = new ActivityFlagsBitField(data11.flags).freeze();
+        this.emoji = data11.emoji ? new Emoji(presence.client, data11.emoji) : null;
+        this.buttons = data11.buttons ?? [];
+        this.createdTimestamp = data11.created_at;
       }
       /**
        * Whether this activity is equal to another activity.
@@ -164665,8 +164665,8 @@ var require_PresenceManager = __commonJS({
        * @type {Collection<Snowflake, Presence>}
        * @name PresenceManager#cache
        */
-      _add(data10, cache) {
-        return super._add(data10, cache, { id: data10.user.id });
+      _add(data11, cache) {
+        return super._add(data11, cache, { id: data11.user.id });
       }
       /**
        * Data that can be resolved to a Presence object. This can be:
@@ -164736,8 +164736,8 @@ var require_RoleManager = __commonJS({
        * @type {Collection<Snowflake, Role>}
        * @name RoleManager#cache
        */
-      _add(data10, cache) {
-        return super._add(data10, cache, { extras: [this.guild] });
+      _add(data11, cache) {
+        return super._add(data11, cache, { extras: [this.guild] });
       }
       /**
        * Obtains a role from Discord, or the role cache if they're already available.
@@ -164757,9 +164757,9 @@ var require_RoleManager = __commonJS({
        */
       async fetch(id, { cache = true, force = false } = {}) {
         if (!id) {
-          const data10 = await this.client.rest.get(Routes3.guildRoles(this.guild.id));
+          const data11 = await this.client.rest.get(Routes3.guildRoles(this.guild.id));
           const roles = new Collection3();
-          for (const role of data10) roles.set(role.id, this._add(role, cache));
+          for (const role of data11) roles.set(role.id, this._add(role, cache));
           return roles;
         }
         if (!force) {
@@ -164767,8 +164767,8 @@ var require_RoleManager = __commonJS({
           if (existing) return existing;
         }
         try {
-          const data10 = await this.client.rest.get(Routes3.guildRole(this.guild.id, id));
-          return this._add(data10, cache);
+          const data11 = await this.client.rest.get(Routes3.guildRole(this.guild.id, id));
+          return this._add(data11, cache);
         } catch (error) {
           if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownRole) {
             return null;
@@ -164885,7 +164885,7 @@ var require_RoleManager = __commonJS({
             tertiary_color: null
           };
         }
-        const data10 = await this.client.rest.post(Routes3.guildRoles(this.guild.id), {
+        const data11 = await this.client.rest.post(Routes3.guildRoles(this.guild.id), {
           body: {
             name,
             colors,
@@ -164899,7 +164899,7 @@ var require_RoleManager = __commonJS({
         });
         const { role } = this.client.actions.GuildRoleCreate.handle({
           guild_id: this.guild.id,
-          role: data10
+          role: data11
         });
         if (position) return this.setPosition(role, position, { reason });
         return role;
@@ -165147,7 +165147,7 @@ var require_StageInstanceManager = __commonJS({
         if (typeof options !== "object") throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "options", "object", true);
         const { guildScheduledEvent, topic, privacyLevel, sendStartNotification } = options;
         const guildScheduledEventId = guildScheduledEvent && this.resolveId(guildScheduledEvent);
-        const data10 = await this.client.rest.post(Routes3.stageInstances(), {
+        const data11 = await this.client.rest.post(Routes3.stageInstances(), {
           body: {
             channel_id: channelId,
             topic,
@@ -165156,7 +165156,7 @@ var require_StageInstanceManager = __commonJS({
             guild_scheduled_event_id: guildScheduledEventId
           }
         });
-        return this._add(data10);
+        return this._add(data11);
       }
       /**
        * Fetches the stage instance associated with a stage channel, if it exists.
@@ -165176,8 +165176,8 @@ var require_StageInstanceManager = __commonJS({
           const existing = this.cache.find((stageInstance) => stageInstance.channelId === channelId);
           if (existing) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.stageInstance(channelId));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.stageInstance(channelId));
+        return this._add(data11, cache);
       }
       /**
        * Options used to edit an existing stage instance.
@@ -165201,18 +165201,18 @@ var require_StageInstanceManager = __commonJS({
         const channelId = this.guild.channels.resolveId(channel);
         if (!channelId) throw new DiscordjsError2(ErrorCodes2.StageChannelResolve);
         let { topic, privacyLevel } = options;
-        const data10 = await this.client.rest.patch(Routes3.stageInstance(channelId), {
+        const data11 = await this.client.rest.patch(Routes3.stageInstance(channelId), {
           body: {
             topic,
             privacy_level: privacyLevel
           }
         });
-        if (this.cache.has(data10.id)) {
-          const clone = this.cache.get(data10.id)._clone();
-          clone._patch(data10);
+        if (this.cache.has(data11.id)) {
+          const clone = this.cache.get(data11.id)._clone();
+          clone._patch(data11);
           return clone;
         }
-        return this._add(data10);
+        return this._add(data11);
       }
       /**
        * Deletes an existing stage instance.
@@ -165246,11 +165246,11 @@ var require_VoiceStateManager = __commonJS({
        * @type {Collection<Snowflake, VoiceState>}
        * @name VoiceStateManager#cache
        */
-      _add(data10, cache = true) {
-        const existing = this.cache.get(data10.user_id);
-        if (existing) return existing._patch(data10);
-        const entry = new this.holds(this.guild, data10);
-        if (cache) this.cache.set(data10.user_id, entry);
+      _add(data11, cache = true) {
+        const existing = this.cache.get(data11.user_id);
+        if (existing) return existing._patch(data11);
+        const entry = new this.holds(this.guild, data11);
+        if (cache) this.cache.set(data11.user_id, entry);
         return entry;
       }
       /**
@@ -165270,8 +165270,8 @@ var require_VoiceStateManager = __commonJS({
           const existing = this.cache.get(id === "@me" ? this.client.user.id : id);
           if (existing) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.guildVoiceState(this.guild.id, id));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.guildVoiceState(this.guild.id, id));
+        return this._add(data11, cache);
       }
     };
     module2.exports = VoiceStateManager;
@@ -165333,8 +165333,8 @@ var require_Guild = __commonJS({
     var { _transformAPIIncidentsData } = require_Transformers();
     var { discordSort, getSortableGroupTypes, resolvePartialEmoji } = require_Util();
     var Guild = class extends AnonymousGuild {
-      constructor(client, data10) {
-        super(client, data10, false);
+      constructor(client, data11) {
+        super(client, data11, false);
         this.commands = new GuildApplicationCommandManager(this);
         this.members = new GuildMemberManager(this);
         this.channels = new GuildChannelManager(this);
@@ -165347,14 +165347,14 @@ var require_Guild = __commonJS({
         this.scheduledEvents = new GuildScheduledEventManager(this);
         this.autoModerationRules = new AutoModerationRuleManager(this);
         this.soundboardSounds = new GuildSoundboardSoundManager(this);
-        if (!data10) return;
-        if (data10.unavailable) {
+        if (!data11) return;
+        if (data11.unavailable) {
           this.available = false;
         } else {
-          this._patch(data10);
-          if (!data10.channels) this.available = false;
+          this._patch(data11);
+          if (!data11.channels) this.available = false;
         }
-        this.shardId = data10.shardId;
+        this.shardId = data11.shardId;
       }
       /**
        * The Shard this Guild belongs to.
@@ -165364,184 +165364,184 @@ var require_Guild = __commonJS({
       get shard() {
         return this.client.ws.shards.get(this.shardId);
       }
-      _patch(data10) {
-        super._patch(data10);
-        this.id = data10.id;
-        if ("name" in data10) this.name = data10.name;
-        if ("icon" in data10) this.icon = data10.icon;
-        if ("unavailable" in data10) {
-          this.available = !data10.unavailable;
+      _patch(data11) {
+        super._patch(data11);
+        this.id = data11.id;
+        if ("name" in data11) this.name = data11.name;
+        if ("icon" in data11) this.icon = data11.icon;
+        if ("unavailable" in data11) {
+          this.available = !data11.unavailable;
         } else {
           this.available ??= true;
         }
-        if ("discovery_splash" in data10) {
-          this.discoverySplash = data10.discovery_splash;
+        if ("discovery_splash" in data11) {
+          this.discoverySplash = data11.discovery_splash;
         }
-        if ("member_count" in data10) {
-          this.memberCount = data10.member_count;
+        if ("member_count" in data11) {
+          this.memberCount = data11.member_count;
         }
-        if ("large" in data10) {
-          this.large = Boolean(data10.large);
+        if ("large" in data11) {
+          this.large = Boolean(data11.large);
         }
-        if ("premium_progress_bar_enabled" in data10) {
-          this.premiumProgressBarEnabled = data10.premium_progress_bar_enabled;
+        if ("premium_progress_bar_enabled" in data11) {
+          this.premiumProgressBarEnabled = data11.premium_progress_bar_enabled;
         }
-        if ("application_id" in data10) {
-          this.applicationId = data10.application_id;
+        if ("application_id" in data11) {
+          this.applicationId = data11.application_id;
         }
-        if ("afk_timeout" in data10) {
-          this.afkTimeout = data10.afk_timeout;
+        if ("afk_timeout" in data11) {
+          this.afkTimeout = data11.afk_timeout;
         }
-        if ("afk_channel_id" in data10) {
-          this.afkChannelId = data10.afk_channel_id;
+        if ("afk_channel_id" in data11) {
+          this.afkChannelId = data11.afk_channel_id;
         }
-        if ("system_channel_id" in data10) {
-          this.systemChannelId = data10.system_channel_id;
+        if ("system_channel_id" in data11) {
+          this.systemChannelId = data11.system_channel_id;
         }
-        if ("premium_tier" in data10) {
-          this.premiumTier = data10.premium_tier;
+        if ("premium_tier" in data11) {
+          this.premiumTier = data11.premium_tier;
         }
-        if ("widget_enabled" in data10) {
-          this.widgetEnabled = data10.widget_enabled;
+        if ("widget_enabled" in data11) {
+          this.widgetEnabled = data11.widget_enabled;
         } else {
           this.widgetEnabled ??= null;
         }
-        if ("widget_channel_id" in data10) {
-          this.widgetChannelId = data10.widget_channel_id;
+        if ("widget_channel_id" in data11) {
+          this.widgetChannelId = data11.widget_channel_id;
         } else {
           this.widgetChannelId ??= null;
         }
-        if ("explicit_content_filter" in data10) {
-          this.explicitContentFilter = data10.explicit_content_filter;
+        if ("explicit_content_filter" in data11) {
+          this.explicitContentFilter = data11.explicit_content_filter;
         }
-        if ("mfa_level" in data10) {
-          this.mfaLevel = data10.mfa_level;
+        if ("mfa_level" in data11) {
+          this.mfaLevel = data11.mfa_level;
         }
-        if ("joined_at" in data10) {
-          this.joinedTimestamp = Date.parse(data10.joined_at);
+        if ("joined_at" in data11) {
+          this.joinedTimestamp = Date.parse(data11.joined_at);
         }
-        if ("default_message_notifications" in data10) {
-          this.defaultMessageNotifications = data10.default_message_notifications;
+        if ("default_message_notifications" in data11) {
+          this.defaultMessageNotifications = data11.default_message_notifications;
         }
-        if ("system_channel_flags" in data10) {
-          this.systemChannelFlags = new SystemChannelFlagsBitField(data10.system_channel_flags).freeze();
+        if ("system_channel_flags" in data11) {
+          this.systemChannelFlags = new SystemChannelFlagsBitField(data11.system_channel_flags).freeze();
         }
-        if ("max_members" in data10) {
-          this.maximumMembers = data10.max_members;
+        if ("max_members" in data11) {
+          this.maximumMembers = data11.max_members;
         } else {
           this.maximumMembers ??= null;
         }
-        if ("max_presences" in data10) {
-          this.maximumPresences = data10.max_presences;
+        if ("max_presences" in data11) {
+          this.maximumPresences = data11.max_presences;
         } else {
           this.maximumPresences ??= null;
         }
-        if ("max_video_channel_users" in data10) {
-          this.maxVideoChannelUsers = data10.max_video_channel_users;
+        if ("max_video_channel_users" in data11) {
+          this.maxVideoChannelUsers = data11.max_video_channel_users;
         } else {
           this.maxVideoChannelUsers ??= null;
         }
-        if ("max_stage_video_channel_users" in data10) {
-          this.maxStageVideoChannelUsers = data10.max_stage_video_channel_users;
+        if ("max_stage_video_channel_users" in data11) {
+          this.maxStageVideoChannelUsers = data11.max_stage_video_channel_users;
         } else {
           this.maxStageVideoChannelUsers ??= null;
         }
-        if ("approximate_member_count" in data10) {
-          this.approximateMemberCount = data10.approximate_member_count;
+        if ("approximate_member_count" in data11) {
+          this.approximateMemberCount = data11.approximate_member_count;
         } else {
           this.approximateMemberCount ??= null;
         }
-        if ("approximate_presence_count" in data10) {
-          this.approximatePresenceCount = data10.approximate_presence_count;
+        if ("approximate_presence_count" in data11) {
+          this.approximatePresenceCount = data11.approximate_presence_count;
         } else {
           this.approximatePresenceCount ??= null;
         }
         this.vanityURLUses ??= null;
-        if ("rules_channel_id" in data10) {
-          this.rulesChannelId = data10.rules_channel_id;
+        if ("rules_channel_id" in data11) {
+          this.rulesChannelId = data11.rules_channel_id;
         }
-        if ("public_updates_channel_id" in data10) {
-          this.publicUpdatesChannelId = data10.public_updates_channel_id;
+        if ("public_updates_channel_id" in data11) {
+          this.publicUpdatesChannelId = data11.public_updates_channel_id;
         }
-        if ("preferred_locale" in data10) {
-          this.preferredLocale = data10.preferred_locale;
+        if ("preferred_locale" in data11) {
+          this.preferredLocale = data11.preferred_locale;
         }
-        if ("safety_alerts_channel_id" in data10) {
-          this.safetyAlertsChannelId = data10.safety_alerts_channel_id;
+        if ("safety_alerts_channel_id" in data11) {
+          this.safetyAlertsChannelId = data11.safety_alerts_channel_id;
         } else {
           this.safetyAlertsChannelId ??= null;
         }
-        if (data10.channels) {
+        if (data11.channels) {
           this.channels.cache.clear();
-          for (const rawChannel of data10.channels) {
+          for (const rawChannel of data11.channels) {
             this.client.channels._add(rawChannel, this);
           }
         }
-        if (data10.threads) {
-          for (const rawThread of data10.threads) {
+        if (data11.threads) {
+          for (const rawThread of data11.threads) {
             this.client.channels._add(rawThread, this);
           }
         }
-        if (data10.roles) {
+        if (data11.roles) {
           this.roles.cache.clear();
-          for (const role of data10.roles) this.roles._add(role);
+          for (const role of data11.roles) this.roles._add(role);
         }
-        if (data10.members) {
+        if (data11.members) {
           this.members.cache.clear();
-          for (const guildUser of data10.members) this.members._add(guildUser);
+          for (const guildUser of data11.members) this.members._add(guildUser);
         }
-        if ("owner_id" in data10) {
-          this.ownerId = data10.owner_id;
+        if ("owner_id" in data11) {
+          this.ownerId = data11.owner_id;
         }
-        if (data10.presences) {
-          for (const presence of data10.presences) {
+        if (data11.presences) {
+          for (const presence of data11.presences) {
             this.presences._add(Object.assign(presence, { guild: this }));
           }
         }
-        if (data10.stage_instances) {
+        if (data11.stage_instances) {
           this.stageInstances.cache.clear();
-          for (const stageInstance of data10.stage_instances) {
+          for (const stageInstance of data11.stage_instances) {
             this.stageInstances._add(stageInstance);
           }
         }
-        if (data10.guild_scheduled_events) {
+        if (data11.guild_scheduled_events) {
           this.scheduledEvents.cache.clear();
-          for (const scheduledEvent of data10.guild_scheduled_events) {
+          for (const scheduledEvent of data11.guild_scheduled_events) {
             this.scheduledEvents._add(scheduledEvent);
           }
         }
-        if (data10.voice_states) {
+        if (data11.voice_states) {
           this.voiceStates.cache.clear();
-          for (const voiceState of data10.voice_states) {
+          for (const voiceState of data11.voice_states) {
             this.voiceStates._add(voiceState);
           }
         }
         if (!this.emojis) {
           this.emojis = new GuildEmojiManager(this);
-          if (data10.emojis) for (const emoji of data10.emojis) this.emojis._add(emoji);
-        } else if (data10.emojis) {
+          if (data11.emojis) for (const emoji of data11.emojis) this.emojis._add(emoji);
+        } else if (data11.emojis) {
           this.client.actions.GuildEmojisUpdate.handle({
             guild_id: this.id,
-            emojis: data10.emojis
+            emojis: data11.emojis
           });
         }
         if (!this.stickers) {
           this.stickers = new GuildStickerManager(this);
-          if (data10.stickers) for (const sticker of data10.stickers) this.stickers._add(sticker);
-        } else if (data10.stickers) {
+          if (data11.stickers) for (const sticker of data11.stickers) this.stickers._add(sticker);
+        } else if (data11.stickers) {
           this.client.actions.GuildStickersUpdate.handle({
             guild_id: this.id,
-            stickers: data10.stickers
+            stickers: data11.stickers
           });
         }
-        if ("incidents_data" in data10) {
-          this.incidentsData = data10.incidents_data && _transformAPIIncidentsData(data10.incidents_data);
+        if ("incidents_data" in data11) {
+          this.incidentsData = data11.incidents_data && _transformAPIIncidentsData(data11.incidents_data);
         } else {
           this.incidentsData ??= null;
         }
-        if (data10.soundboard_sounds) {
+        if (data11.soundboard_sounds) {
           this.soundboardSounds.cache.clear();
-          for (const soundboardSound of data10.soundboard_sounds) {
+          for (const soundboardSound of data11.soundboard_sounds) {
             this.soundboardSounds._add(soundboardSound);
           }
         }
@@ -165654,8 +165654,8 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchIntegrations() {
-        const data10 = await this.client.rest.get(Routes3.guildIntegrations(this.id));
-        return data10.reduce(
+        const data11 = await this.client.rest.get(Routes3.guildIntegrations(this.id));
+        return data11.reduce(
           (collection, integration) => collection.set(integration.id, new Integration(this.client, integration, this)),
           new Collection3()
         );
@@ -165667,15 +165667,15 @@ var require_Guild = __commonJS({
        */
       async fetchTemplates() {
         const templates = await this.client.rest.get(Routes3.guildTemplates(this.id));
-        return templates.reduce((col, data10) => col.set(data10.code, new GuildTemplate2(this.client, data10)), new Collection3());
+        return templates.reduce((col, data11) => col.set(data11.code, new GuildTemplate2(this.client, data11)), new Collection3());
       }
       /**
        * Fetches the welcome screen for this guild.
        * @returns {Promise<WelcomeScreen>}
        */
       async fetchWelcomeScreen() {
-        const data10 = await this.client.rest.get(Routes3.guildWelcomeScreen(this.id));
-        return new WelcomeScreen(this, data10);
+        const data11 = await this.client.rest.get(Routes3.guildWelcomeScreen(this.id));
+        return new WelcomeScreen(this, data11);
       }
       /**
        * Creates a template for the guild.
@@ -165684,16 +165684,16 @@ var require_Guild = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async createTemplate(name, description) {
-        const data10 = await this.client.rest.post(Routes3.guildTemplates(this.id), { body: { name, description } });
-        return new GuildTemplate2(this.client, data10);
+        const data11 = await this.client.rest.post(Routes3.guildTemplates(this.id), { body: { name, description } });
+        return new GuildTemplate2(this.client, data11);
       }
       /**
        * Obtains a guild preview for this guild from Discord.
        * @returns {Promise<GuildPreview>}
        */
       async fetchPreview() {
-        const data10 = await this.client.rest.get(Routes3.guildPreview(this.id));
-        return new GuildPreview2(this.client, data10);
+        const data11 = await this.client.rest.get(Routes3.guildPreview(this.id));
+        return new GuildPreview2(this.client, data11);
       }
       /**
        * An object containing information about a guild's vanity invite.
@@ -165714,10 +165714,10 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchVanityData() {
-        const data10 = await this.client.rest.get(Routes3.guildVanityUrl(this.id));
-        this.vanityURLCode = data10.code;
-        this.vanityURLUses = data10.uses;
-        return data10;
+        const data11 = await this.client.rest.get(Routes3.guildVanityUrl(this.id));
+        this.vanityURLCode = data11.code;
+        this.vanityURLUses = data11.uses;
+        return data11;
       }
       /**
        * Fetches all webhooks for the guild.
@@ -165770,12 +165770,12 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchWidgetSettings() {
-        const data10 = await this.client.rest.get(Routes3.guildWidgetSettings(this.id));
-        this.widgetEnabled = data10.enabled;
-        this.widgetChannelId = data10.channel_id;
+        const data11 = await this.client.rest.get(Routes3.guildWidgetSettings(this.id));
+        this.widgetEnabled = data11.enabled;
+        this.widgetChannelId = data11.channel_id;
         return {
-          enabled: data10.enabled,
-          channel: data10.channel_id ? this.channels.cache.get(data10.channel_id) : null
+          enabled: data11.enabled,
+          channel: data11.channel_id ? this.channels.cache.get(data11.channel_id) : null
         };
       }
       /**
@@ -165817,16 +165817,16 @@ var require_Guild = __commonJS({
           if (!userId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "user", "UserResolvable");
           query.set("user_id", userId);
         }
-        const data10 = await this.client.rest.get(Routes3.guildAuditLog(this.id), { query });
-        return new GuildAuditLogs(this, data10);
+        const data11 = await this.client.rest.get(Routes3.guildAuditLog(this.id), { query });
+        return new GuildAuditLogs(this, data11);
       }
       /**
        * Fetches the guild onboarding data for this guild.
        * @returns {Promise<GuildOnboarding>}
        */
       async fetchOnboarding() {
-        const data10 = await this.client.rest.get(Routes3.guildOnboarding(this.id));
-        return new GuildOnboarding(this.client, data10);
+        const data11 = await this.client.rest.get(Routes3.guildOnboarding(this.id));
+        return new GuildOnboarding(this.client, data11);
       }
       /**
        * The data for editing a guild.
@@ -165899,7 +165899,7 @@ var require_Guild = __commonJS({
         safetyAlertsChannel,
         ...options
       }) {
-        const data10 = await this.client.rest.patch(Routes3.guild(this.id), {
+        const data11 = await this.client.rest.patch(Routes3.guild(this.id), {
           body: {
             ...options,
             verification_level: verificationLevel,
@@ -165922,7 +165922,7 @@ var require_Guild = __commonJS({
           },
           reason: options.reason
         });
-        return this.client.actions.GuildUpdate.handle(data10).updated;
+        return this.client.actions.GuildUpdate.handle(data11).updated;
       }
       /**
        * Options used to edit the guild onboarding.
@@ -166403,9 +166403,9 @@ var require_Guild = __commonJS({
         return (methods) => {
           this.client.voice.adapters.set(this.id, methods);
           return {
-            sendPayload: (data10) => {
+            sendPayload: (data11) => {
               if (this.shard.status !== Status2.Ready) return false;
-              this.shard.send(data10);
+              this.shard.send(data11);
               return true;
             },
             destroy: () => {
@@ -166449,10 +166449,10 @@ var require_OAuth2Guild = __commonJS({
     var BaseGuild = require_BaseGuild();
     var PermissionsBitField2 = require_PermissionsBitField();
     var OAuth2Guild = class extends BaseGuild {
-      constructor(client, data10) {
-        super(client, data10);
-        this.owner = data10.owner;
-        this.permissions = new PermissionsBitField2(BigInt(data10.permissions)).freeze();
+      constructor(client, data11) {
+        super(client, data11);
+        this.owner = data11.owner;
+        this.permissions = new PermissionsBitField2(BigInt(data11.permissions)).freeze();
       }
     };
     module2.exports = OAuth2Guild;
@@ -166615,7 +166615,7 @@ var require_GuildManager = __commonJS({
         systemChannelId,
         systemChannelFlags
       }) {
-        const data10 = await this.client.rest.post(Routes3.guilds(), {
+        const data11 = await this.client.rest.post(Routes3.guilds(), {
           body: {
             name,
             icon: icon && await resolveImage(icon),
@@ -166656,9 +166656,9 @@ var require_GuildManager = __commonJS({
             system_channel_flags: systemChannelFlags === void 0 ? void 0 : SystemChannelFlagsBitField.resolve(systemChannelFlags)
           }
         });
-        return this.client.guilds.cache.get(data10.id) ?? new Promise((resolve) => {
+        return this.client.guilds.cache.get(data11.id) ?? new Promise((resolve) => {
           const handleGuild = (guild) => {
-            if (guild.id === data10.id) {
+            if (guild.id === data11.id) {
               clearTimeout2(timeout);
               this.client.decrementMaxListeners();
               resolve(guild);
@@ -166669,7 +166669,7 @@ var require_GuildManager = __commonJS({
           const timeout = setTimeout2(() => {
             this.client.removeListener(Events3.GuildCreate, handleGuild);
             this.client.decrementMaxListeners();
-            resolve(this.client.guilds._add(data10));
+            resolve(this.client.guilds._add(data11));
           }, 1e4).unref();
         });
       }
@@ -166698,14 +166698,14 @@ var require_GuildManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const data11 = await this.client.rest.get(Routes3.guild(id), {
+          const data12 = await this.client.rest.get(Routes3.guild(id), {
             query: makeURLSearchParams2({ with_counts: options.withCounts ?? true })
           });
-          data11.shardId = ShardClientUtil2.shardIdForGuildId(id, this.client.options.shardCount);
-          return this._add(data11, options.cache);
+          data12.shardId = ShardClientUtil2.shardIdForGuildId(id, this.client.options.shardCount);
+          return this._add(data12, options.cache);
         }
-        const data10 = await this.client.rest.get(Routes3.userGuilds(), { query: makeURLSearchParams2(options) });
-        return data10.reduce((coll, guild) => coll.set(guild.id, new OAuth2Guild(this.client, guild)), new Collection3());
+        const data11 = await this.client.rest.get(Routes3.userGuilds(), { query: makeURLSearchParams2(options) });
+        return data11.reduce((coll, guild) => coll.set(guild.id, new OAuth2Guild(this.client, guild)), new Collection3());
       }
       /**
        * @typedef {Object} FetchSoundboardSoundsOptions
@@ -166779,13 +166779,13 @@ var require_GuildManager = __commonJS({
        */
       async setIncidentActions(guild, { invitesDisabledUntil, dmsDisabledUntil }) {
         const guildId = this.resolveId(guild);
-        const data10 = await this.client.rest.put(Routes3.guildIncidentActions(guildId), {
+        const data11 = await this.client.rest.put(Routes3.guildIncidentActions(guildId), {
           body: {
             invites_disabled_until: invitesDisabledUntil && new Date(invitesDisabledUntil).toISOString(),
             dms_disabled_until: dmsDisabledUntil && new Date(dmsDisabledUntil).toISOString()
           }
         });
-        const parsedData = _transformAPIIncidentsData(data10);
+        const parsedData = _transformAPIIncidentsData(data11);
         const resolvedGuild = this.resolve(guild);
         if (resolvedGuild) {
           resolvedGuild.incidentsData = parsedData;
@@ -166861,8 +166861,8 @@ var require_UserManager = __commonJS({
           const dmChannel = this.dmChannel(id);
           if (dmChannel && !dmChannel.partial) return dmChannel;
         }
-        const data10 = await this.client.rest.post(Routes3.userChannels(), { body: { recipient_id: id } });
-        return this.client.channels._add(data10, null, { cache });
+        const data11 = await this.client.rest.post(Routes3.userChannels(), { body: { recipient_id: id } });
+        return this.client.channels._add(data11, null, { cache });
       }
       /**
        * Deletes a {@link DMChannel} (if one exists) between the client and a user. Resolves with the channel if successful.
@@ -166889,8 +166889,8 @@ var require_UserManager = __commonJS({
           const existing = this.cache.get(id);
           if (existing && !existing.partial) return existing;
         }
-        const data10 = await this.client.rest.get(Routes3.user(id));
-        return this._add(data10, cache);
+        const data11 = await this.client.rest.get(Routes3.user(id));
+        return this._add(data11, cache);
       }
       /**
        * Fetches a user's flags.
@@ -166947,8 +166947,8 @@ var require_ClientPresence = __commonJS({
     var { Presence } = require_Presence();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors4();
     var ClientPresence2 = class extends Presence {
-      constructor(client, data10 = {}) {
-        super(client, Object.assign(data10, { status: data10.status ?? "online", user: { id: null } }));
+      constructor(client, data11 = {}) {
+        super(client, Object.assign(data11, { status: data11.status ?? "online", user: { id: null } }));
       }
       /**
        * Sets the client's presence
@@ -166976,7 +166976,7 @@ var require_ClientPresence = __commonJS({
        * @private
        */
       _parse({ status, since, afk, activities }) {
-        const data10 = {
+        const data11 = {
           activities: [],
           afk: typeof afk === "boolean" ? afk : false,
           since: typeof since === "number" && !Number.isNaN(since) ? since : null,
@@ -166992,7 +166992,7 @@ var require_ClientPresence = __commonJS({
               activity.state = activity.name;
               activity.name = "Custom Status";
             }
-            data10.activities.push({
+            data11.activities.push({
               type: activity.type,
               name: activity.name,
               state: activity.state,
@@ -167000,7 +167000,7 @@ var require_ClientPresence = __commonJS({
             });
           }
         } else if (!activities && (status || afk || since) && this.activities.length) {
-          data10.activities.push(
+          data11.activities.push(
             ...this.activities.map((activity) => ({
               name: activity.name,
               state: activity.state ?? void 0,
@@ -167009,7 +167009,7 @@ var require_ClientPresence = __commonJS({
             }))
           );
         }
-        return data10;
+        return data11;
       }
     };
     module2.exports = ClientPresence2;
@@ -167078,12 +167078,12 @@ var require_VoiceRegion = __commonJS({
     "use strict";
     var { flatten } = require_Util();
     var VoiceRegion2 = class {
-      constructor(data10) {
-        this.id = data10.id;
-        this.name = data10.name;
-        this.deprecated = data10.deprecated;
-        this.optimal = data10.optimal;
-        this.custom = data10.custom;
+      constructor(data11) {
+        this.id = data11.id;
+        this.name = data11.name;
+        this.deprecated = data11.deprecated;
+        this.optimal = data11.optimal;
+        this.custom = data11.custom;
       }
       toJSON() {
         return flatten(this);
@@ -167104,21 +167104,21 @@ var require_WidgetMember = __commonJS({
        * @typedef {Object} WidgetActivity
        * @property {string} name The name of the activity
        */
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this.id = data10.id;
-        this.username = data10.username;
-        this.discriminator = data10.discriminator;
-        this.avatar = data10.avatar;
-        this.status = data10.status;
-        this.deaf = data10.deaf ?? null;
-        this.mute = data10.mute ?? null;
-        this.selfDeaf = data10.self_deaf ?? null;
-        this.selfMute = data10.self_mute ?? null;
-        this.suppress = data10.suppress ?? null;
-        this.channelId = data10.channel_id ?? null;
-        this.avatarURL = data10.avatar_url;
-        this.activity = data10.activity ?? null;
+        this.id = data11.id;
+        this.username = data11.username;
+        this.discriminator = data11.discriminator;
+        this.avatar = data11.avatar;
+        this.status = data11.status;
+        this.deaf = data11.deaf ?? null;
+        this.mute = data11.mute ?? null;
+        this.selfDeaf = data11.self_deaf ?? null;
+        this.selfMute = data11.self_mute ?? null;
+        this.suppress = data11.suppress ?? null;
+        this.channelId = data11.channel_id ?? null;
+        this.avatarURL = data11.avatar_url;
+        this.activity = data11.activity ?? null;
       }
     };
     module2.exports = WidgetMember;
@@ -167134,9 +167134,9 @@ var require_Widget = __commonJS({
     var Base = require_Base();
     var WidgetMember = require_WidgetMember();
     var Widget2 = class extends Base {
-      constructor(client, data10) {
+      constructor(client, data11) {
         super(client);
-        this._patch(data10);
+        this._patch(data11);
       }
       /**
        * Represents a channel in a Widget
@@ -167145,24 +167145,24 @@ var require_Widget = __commonJS({
        * @property {string} name Name of the channel
        * @property {number} position Position of the channel
        */
-      _patch(data10) {
-        this.id = data10.id;
-        if ("name" in data10) {
-          this.name = data10.name;
+      _patch(data11) {
+        this.id = data11.id;
+        if ("name" in data11) {
+          this.name = data11.name;
         }
-        if ("instant_invite" in data10) {
-          this.instantInvite = data10.instant_invite;
+        if ("instant_invite" in data11) {
+          this.instantInvite = data11.instant_invite;
         }
         this.channels = new Collection3();
-        for (const channel of data10.channels) {
+        for (const channel of data11.channels) {
           this.channels.set(channel.id, channel);
         }
         this.members = new Collection3();
-        for (const member of data10.members) {
+        for (const member of data11.members) {
           this.members.set(member.id, new WidgetMember(this.client, member));
         }
-        if ("presence_count" in data10) {
-          this.presenceCount = data10.presence_count;
+        if ("presence_count" in data11) {
+          this.presenceCount = data11.presence_count;
         }
       }
       /**
@@ -167170,8 +167170,8 @@ var require_Widget = __commonJS({
        * @returns {Promise<Widget>}
        */
       async fetch() {
-        const data10 = await this.client.rest.get(Routes3.guildWidgetJSON(this.id));
-        this._patch(data10);
+        const data11 = await this.client.rest.get(Routes3.guildWidgetJSON(this.id));
+        this._patch(data11);
         return this;
       }
       /**
@@ -167658,16 +167658,16 @@ var require_Client = __commonJS({
        */
       constructor(options) {
         super(options);
-        const data10 = __require("node:worker_threads").workerData ?? process.env;
+        const data11 = __require("node:worker_threads").workerData ?? process.env;
         const defaults = Options.createDefault();
         if (this.options.shards === defaults.shards) {
-          if ("SHARDS" in data10) {
-            this.options.shards = JSON.parse(data10.SHARDS);
+          if ("SHARDS" in data11) {
+            this.options.shards = JSON.parse(data11.SHARDS);
           }
         }
         if (this.options.shardCount === defaults.shardCount) {
-          if ("SHARD_COUNT" in data10) {
-            this.options.shardCount = Number(data10.SHARD_COUNT);
+          if ("SHARD_COUNT" in data11) {
+            this.options.shardCount = Number(data11.SHARD_COUNT);
           } else if (Array.isArray(this.options.shards)) {
             this.options.shardCount = this.options.shards.length;
           }
@@ -167798,8 +167798,8 @@ var require_Client = __commonJS({
           with_counts: true,
           guild_scheduled_event_id: options?.guildScheduledEventId
         });
-        const data10 = await this.rest.get(Routes.invite(code), { query });
-        return new Invite(this, data10);
+        const data11 = await this.rest.get(Routes.invite(code), { query });
+        return new Invite(this, data11);
       }
       /**
        * Obtains a template from Discord.
@@ -167812,8 +167812,8 @@ var require_Client = __commonJS({
        */
       async fetchGuildTemplate(template) {
         const code = resolveGuildTemplateCode(template);
-        const data10 = await this.rest.get(Routes.template(code));
-        return new GuildTemplate(this, data10);
+        const data11 = await this.rest.get(Routes.template(code));
+        return new GuildTemplate(this, data11);
       }
       /**
        * Obtains a webhook from Discord.
@@ -167826,8 +167826,8 @@ var require_Client = __commonJS({
        *   .catch(console.error);
        */
       async fetchWebhook(id, token) {
-        const data10 = await this.rest.get(Routes.webhook(id, token), { auth: token === void 0 });
-        return new Webhook(this, { token, ...data10 });
+        const data11 = await this.rest.get(Routes.webhook(id, token), { auth: token === void 0 });
+        return new Webhook(this, { token, ...data11 });
       }
       /**
        * Obtains the available voice regions from Discord.
@@ -167853,8 +167853,8 @@ var require_Client = __commonJS({
        *   .catch(console.error);
        */
       async fetchSticker(id) {
-        const data10 = await this.rest.get(Routes.sticker(id));
-        return new Sticker(this, data10);
+        const data11 = await this.rest.get(Routes.sticker(id));
+        return new Sticker(this, data11);
       }
       /**
        * Options for fetching sticker packs.
@@ -167877,11 +167877,11 @@ var require_Client = __commonJS({
        */
       async fetchStickerPacks({ packId } = {}) {
         if (packId) {
-          const data11 = await this.rest.get(Routes.stickerPack(packId));
-          return new StickerPack(this, data11);
+          const data12 = await this.rest.get(Routes.stickerPack(packId));
+          return new StickerPack(this, data12);
         }
-        const data10 = await this.rest.get(Routes.stickerPacks());
-        return new Collection(data10.sticker_packs.map((stickerPack) => [stickerPack.id, new StickerPack(this, stickerPack)]));
+        const data11 = await this.rest.get(Routes.stickerPacks());
+        return new Collection(data11.sticker_packs.map((stickerPack) => [stickerPack.id, new StickerPack(this, stickerPack)]));
       }
       /**
        * Obtains the list of available sticker packs.
@@ -167907,8 +167907,8 @@ var require_Client = __commonJS({
        *  .catch(console.error);
        */
       async fetchDefaultSoundboardSounds() {
-        const data10 = await this.rest.get(Routes.soundboardDefaultSounds());
-        return new Collection(data10.map((sound) => [sound.sound_id, new SoundboardSound(this, sound)]));
+        const data11 = await this.rest.get(Routes.soundboardDefaultSounds());
+        return new Collection(data11.map((sound) => [sound.sound_id, new SoundboardSound(this, sound)]));
       }
       /**
        * Obtains a guild preview from Discord, available for all guilds the bot is in and all Discoverable guilds.
@@ -167918,8 +167918,8 @@ var require_Client = __commonJS({
       async fetchGuildPreview(guild) {
         const id = this.guilds.resolveId(guild);
         if (!id) throw new DiscordjsTypeError(ErrorCodes.InvalidType, "guild", "GuildResolvable");
-        const data10 = await this.rest.get(Routes.guildPreview(id));
-        return new GuildPreview(this, data10);
+        const data11 = await this.rest.get(Routes.guildPreview(id));
+        return new GuildPreview(this, data11);
       }
       /**
        * Obtains the widget data of a guild from Discord, available for guilds with the widget enabled.
@@ -167929,8 +167929,8 @@ var require_Client = __commonJS({
       async fetchGuildWidget(guild) {
         const id = this.guilds.resolveId(guild);
         if (!id) throw new DiscordjsTypeError(ErrorCodes.InvalidType, "guild", "GuildResolvable");
-        const data10 = await this.rest.get(Routes.guildWidgetJSON(id));
-        return new Widget(this, data10);
+        const data11 = await this.rest.get(Routes.guildWidgetJSON(id));
+        return new Widget(this, data11);
       }
       /**
        * Options for {@link Client#generateInvite}.
@@ -168906,9 +168906,9 @@ var require_EmbedBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var { resolveColor } = require_Util();
-    var EmbedBuilder11 = class extends BuildersEmbed {
-      constructor(data10) {
-        super(toSnakeCase(data10));
+    var EmbedBuilder12 = class extends BuildersEmbed {
+      constructor(data11) {
+        super(toSnakeCase(data11));
       }
       /**
        * Sets the color of this embed
@@ -168935,7 +168935,7 @@ var require_EmbedBuilder = __commonJS({
         return embedLength(this.data);
       }
     };
-    module2.exports = EmbedBuilder11;
+    module2.exports = EmbedBuilder12;
   }
 });
 
@@ -168949,10 +168949,10 @@ var require_AttachmentBuilder = __commonJS({
        * @param {BufferResolvable|Stream} attachment The file
        * @param {AttachmentData} [data] Extra data
        */
-      constructor(attachment, data10 = {}) {
+      constructor(attachment, data11 = {}) {
         this.attachment = attachment;
-        this.name = data10.name;
-        this.description = data10.description;
+        this.name = data11.name;
+        this.description = data11.description;
       }
       /**
        * Sets the description of this attachment.
@@ -169032,9 +169032,9 @@ var require_ModalBuilder = __commonJS({
     var { isJSONEncodable } = require_dist3();
     var { toSnakeCase } = require_Transformers();
     var ModalBuilder3 = class extends BuildersModal {
-      constructor({ components, ...data10 } = {}) {
+      constructor({ components, ...data11 } = {}) {
         super({
-          ...toSnakeCase(data10),
+          ...toSnakeCase(data11),
           components: components?.map(
             (component) => component instanceof ComponentBuilder ? component : toSnakeCase(component)
           )
@@ -169131,10 +169131,10 @@ var require_StringSelectMenuOptionBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var StringSelectMenuOptionBuilder3 = class extends BuildersSelectMenuOption {
-      constructor({ emoji, ...data10 } = {}) {
+      constructor({ emoji, ...data11 } = {}) {
         super(
           toSnakeCase({
-            ...data10,
+            ...data11,
             emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji
           })
         );
@@ -169468,6 +169468,10 @@ var init_GuildConfig = __esm({
           questions: [{ label: String, placeholder: String, style: String }]
         }],
         default: []
+      },
+      roleTicketConfigs: {
+        type: [{ roleId: String, minMessages: Number, cooldownMs: Number }],
+        default: []
       }
     });
     GuildConfig = import_mongoose2.default.model("GuildConfig", GuildConfigSchema);
@@ -169611,7 +169615,29 @@ async function checkTicketPrerequisites(guildId, userId, config, memberRoleIds =
     return "\u274C Tickets are not configured yet. Ask an admin to run `/setup ticket-category`.";
   }
   const hasBypass = (config.bypassRoles ?? []).some((r) => memberRoleIds.includes(r));
-  if (!hasBypass && config.minMessagesRequired > 0) {
+  const matchingRoleConfigs = (config.roleTicketConfigs ?? []).filter(
+    (r) => memberRoleIds.includes(r.roleId)
+  );
+  const effectiveMinMessages = matchingRoleConfigs.length > 0 ? Math.min(...matchingRoleConfigs.map((r) => r.minMessages)) : config.minMessagesRequired;
+  const effectiveCooldownMs = matchingRoleConfigs.length > 0 ? Math.min(...matchingRoleConfigs.map((r) => r.cooldownMs)) : 0;
+  if (!hasBypass && effectiveCooldownMs > 0) {
+    const lastTicket = await Ticket.findOne({ guildId, userId }).sort({ createdAt: -1 });
+    if (lastTicket) {
+      const elapsed = Date.now() - lastTicket.createdAt.getTime();
+      if (elapsed < effectiveCooldownMs) {
+        const remaining = effectiveCooldownMs - elapsed;
+        const d = Math.floor(remaining / 864e5);
+        const h = Math.floor(remaining % 864e5 / 36e5);
+        const m = Math.ceil(remaining % 36e5 / 6e4);
+        const parts = [];
+        if (d) parts.push(`${d}d`);
+        if (h) parts.push(`${h}h`);
+        if (m || parts.length === 0) parts.push(`${m}m`);
+        return `\u274C You need to wait **${parts.join(" ")}** before opening another ticket.`;
+      }
+    }
+  }
+  if (!hasBypass && effectiveMinMessages > 0) {
     const msgDoc = await UserMessageCount.findOne({ guildId, userId });
     const count = msgDoc?.count ?? 0;
     let gateAlreadyPassedToday = false;
@@ -169621,8 +169647,8 @@ async function checkTicketPrerequisites(guildId, userId, config, memberRoleIds =
       gateAlreadyPassedToday = lp.getUTCFullYear() === now.getUTCFullYear() && lp.getUTCMonth() === now.getUTCMonth() && lp.getUTCDate() === now.getUTCDate();
     }
     if (!gateAlreadyPassedToday) {
-      if (count < config.minMessagesRequired) {
-        return `\u274C You need at least **${config.minMessagesRequired}** messages to open a ticket. You have **${count}**.`;
+      if (count < effectiveMinMessages) {
+        return `\u274C You need at least **${effectiveMinMessages}** messages to open a ticket. You have **${count}**.`;
       }
       if (config.dailyMessageGate) {
         await UserMessageCount.findOneAndUpdate(
@@ -170631,15 +170657,15 @@ var ZodParsedType = util.arrayToEnum([
   "map",
   "set"
 ]);
-var getParsedType = (data10) => {
-  const t = typeof data10;
+var getParsedType = (data11) => {
+  const t = typeof data11;
   switch (t) {
     case "undefined":
       return ZodParsedType.undefined;
     case "string":
       return ZodParsedType.string;
     case "number":
-      return Number.isNaN(data10) ? ZodParsedType.nan : ZodParsedType.number;
+      return Number.isNaN(data11) ? ZodParsedType.nan : ZodParsedType.number;
     case "boolean":
       return ZodParsedType.boolean;
     case "function":
@@ -170649,22 +170675,22 @@ var getParsedType = (data10) => {
     case "symbol":
       return ZodParsedType.symbol;
     case "object":
-      if (Array.isArray(data10)) {
+      if (Array.isArray(data11)) {
         return ZodParsedType.array;
       }
-      if (data10 === null) {
+      if (data11 === null) {
         return ZodParsedType.null;
       }
-      if (data10.then && typeof data10.then === "function" && data10.catch && typeof data10.catch === "function") {
+      if (data11.then && typeof data11.then === "function" && data11.catch && typeof data11.catch === "function") {
         return ZodParsedType.promise;
       }
-      if (typeof Map !== "undefined" && data10 instanceof Map) {
+      if (typeof Map !== "undefined" && data11 instanceof Map) {
         return ZodParsedType.map;
       }
-      if (typeof Set !== "undefined" && data10 instanceof Set) {
+      if (typeof Set !== "undefined" && data11 instanceof Set) {
         return ZodParsedType.set;
       }
-      if (typeof Date !== "undefined" && data10 instanceof Date) {
+      if (typeof Date !== "undefined" && data11 instanceof Date) {
         return ZodParsedType.date;
       }
       return ZodParsedType.object;
@@ -170898,7 +170924,7 @@ function getErrorMap() {
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/helpers/parseUtil.js
 var makeIssue = (params) => {
-  const { data: data10, path: path2, errorMaps, issueData } = params;
+  const { data: data11, path: path2, errorMaps, issueData } = params;
   const fullPath = [...path2, ...issueData.path || []];
   const fullIssue = {
     ...issueData,
@@ -170914,7 +170940,7 @@ var makeIssue = (params) => {
   let errorMessage = "";
   const maps = errorMaps.filter((m) => !!m).slice().reverse();
   for (const map of maps) {
-    errorMessage = map(fullIssue, { data: data10, defaultError: errorMessage }).message;
+    errorMessage = map(fullIssue, { data: data11, defaultError: errorMessage }).message;
   }
   return {
     ...issueData,
@@ -171115,13 +171141,13 @@ var ZodType = class {
     const result = this._parse(input);
     return Promise.resolve(result);
   }
-  parse(data10, params) {
-    const result = this.safeParse(data10, params);
+  parse(data11, params) {
+    const result = this.safeParse(data11, params);
     if (result.success)
       return result.data;
     throw result.error;
   }
-  safeParse(data10, params) {
+  safeParse(data11, params) {
     const ctx = {
       common: {
         issues: [],
@@ -171131,13 +171157,13 @@ var ZodType = class {
       path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
-      data: data10,
-      parsedType: getParsedType(data10)
+      data: data11,
+      parsedType: getParsedType(data11)
     };
-    const result = this._parseSync({ data: data10, path: ctx.path, parent: ctx });
+    const result = this._parseSync({ data: data11, path: ctx.path, parent: ctx });
     return handleResult(ctx, result);
   }
-  "~validate"(data10) {
+  "~validate"(data11) {
     const ctx = {
       common: {
         issues: [],
@@ -171146,12 +171172,12 @@ var ZodType = class {
       path: [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
-      data: data10,
-      parsedType: getParsedType(data10)
+      data: data11,
+      parsedType: getParsedType(data11)
     };
     if (!this["~standard"].async) {
       try {
-        const result = this._parseSync({ data: data10, path: [], parent: ctx });
+        const result = this._parseSync({ data: data11, path: [], parent: ctx });
         return isValid(result) ? {
           value: result.value
         } : {
@@ -171167,19 +171193,19 @@ var ZodType = class {
         };
       }
     }
-    return this._parseAsync({ data: data10, path: [], parent: ctx }).then((result) => isValid(result) ? {
+    return this._parseAsync({ data: data11, path: [], parent: ctx }).then((result) => isValid(result) ? {
       value: result.value
     } : {
       issues: ctx.common.issues
     });
   }
-  async parseAsync(data10, params) {
-    const result = await this.safeParseAsync(data10, params);
+  async parseAsync(data11, params) {
+    const result = await this.safeParseAsync(data11, params);
     if (result.success)
       return result.data;
     throw result.error;
   }
-  async safeParseAsync(data10, params) {
+  async safeParseAsync(data11, params) {
     const ctx = {
       common: {
         issues: [],
@@ -171189,10 +171215,10 @@ var ZodType = class {
       path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
-      data: data10,
-      parsedType: getParsedType(data10)
+      data: data11,
+      parsedType: getParsedType(data11)
     };
-    const maybeAsyncResult = this._parse({ data: data10, path: ctx.path, parent: ctx });
+    const maybeAsyncResult = this._parse({ data: data11, path: ctx.path, parent: ctx });
     const result = await (isAsync(maybeAsyncResult) ? maybeAsyncResult : Promise.resolve(maybeAsyncResult));
     return handleResult(ctx, result);
   }
@@ -171213,8 +171239,8 @@ var ZodType = class {
         ...getIssueProperties(val)
       });
       if (typeof Promise !== "undefined" && result instanceof Promise) {
-        return result.then((data10) => {
-          if (!data10) {
+        return result.then((data11) => {
+          if (!data11) {
             setError();
             return false;
           } else {
@@ -171280,7 +171306,7 @@ var ZodType = class {
     this["~standard"] = {
       version: 1,
       vendor: "zod",
-      validate: (data10) => this["~validate"](data10)
+      validate: (data11) => this["~validate"](data11)
     };
   }
   optional() {
@@ -171740,7 +171766,7 @@ var ZodString = class _ZodString extends ZodType {
     return { status: status.value, value: input.data };
   }
   _regex(regex, validation, message) {
-    return this.refinement((data10) => regex.test(data10), {
+    return this.refinement((data11) => regex.test(data11), {
       validation,
       code: ZodIssueCode.invalid_string,
       ...errorUtil.errToObj(message)
@@ -173956,8 +173982,8 @@ var ZodPromise = class extends ZodType {
       return INVALID;
     }
     const promisified = ctx.parsedType === ZodParsedType.promise ? ctx.data : Promise.resolve(ctx.data);
-    return OK(promisified.then((data10) => {
-      return this._def.type.parseAsync(data10, {
+    return OK(promisified.then((data11) => {
+      return this._def.type.parseAsync(data11, {
         path: ctx.path,
         errorMap: ctx.common.contextualErrorMap
       });
@@ -174151,12 +174177,12 @@ ZodNullable.create = (type, params) => {
 var ZodDefault = class extends ZodType {
   _parse(input) {
     const { ctx } = this._processInputParams(input);
-    let data10 = ctx.data;
+    let data11 = ctx.data;
     if (ctx.parsedType === ZodParsedType.undefined) {
-      data10 = this._def.defaultValue();
+      data11 = this._def.defaultValue();
     }
     return this._def.innerType._parse({
-      data: data10,
+      data: data11,
       path: ctx.path,
       parent: ctx
     });
@@ -174250,9 +174276,9 @@ ZodNaN.create = (params) => {
 var ZodBranded = class extends ZodType {
   _parse(input) {
     const { ctx } = this._processInputParams(input);
-    const data10 = ctx.data;
+    const data11 = ctx.data;
     return this._def.type._parse({
-      data: data10,
+      data: data11,
       path: ctx.path,
       parent: ctx
     });
@@ -174319,13 +174345,13 @@ var ZodPipeline = class _ZodPipeline extends ZodType {
 var ZodReadonly = class extends ZodType {
   _parse(input) {
     const result = this._def.innerType._parse(input);
-    const freeze = (data10) => {
-      if (isValid(data10)) {
-        data10.value = Object.freeze(data10.value);
+    const freeze = (data11) => {
+      if (isValid(data11)) {
+        data11.value = Object.freeze(data11.value);
       }
-      return data10;
+      return data11;
     };
-    return isAsync(result) ? result.then((data10) => freeze(data10)) : freeze(result);
+    return isAsync(result) ? result.then((data11) => freeze(data11)) : freeze(result);
   }
   unwrap() {
     return this._def.innerType;
@@ -174423,8 +174449,8 @@ var HealthCheckResponse = objectType({
 // src/routes/health.ts
 var router = (0, import_express.Router)();
 router.get("/healthz", (_req, res) => {
-  const data10 = HealthCheckResponse.parse({ status: "ok" });
-  res.json(data10);
+  const data11 = HealthCheckResponse.parse({ status: "ok" });
+  res.json(data11);
 });
 var health_default = router;
 
@@ -174496,7 +174522,7 @@ async function connectDB() {
 }
 
 // src/bot/client.ts
-var import_discord12 = __toESM(require_src2(), 1);
+var import_discord13 = __toESM(require_src2(), 1);
 
 // src/bot/commands/setup.ts
 var setup_exports = {};
@@ -175588,12 +175614,136 @@ async function execute9(interaction) {
   }
 }
 
+// src/bot/commands/ticketrole.ts
+var ticketrole_exports = {};
+__export(ticketrole_exports, {
+  data: () => data10,
+  execute: () => execute10
+});
+var import_discord11 = __toESM(require_src2(), 1);
+init_GuildConfig();
+function parseDuration(s) {
+  const m = /^(\d+)(m|h|d)$/.exec(s.trim().toLowerCase());
+  if (!m) return null;
+  const n = parseInt(m[1]);
+  if (m[2] === "m") return n * 6e4;
+  if (m[2] === "h") return n * 36e5;
+  if (m[2] === "d") return n * 864e5;
+  return null;
+}
+function formatDuration(ms) {
+  if (ms === 0) return "None";
+  const d = Math.floor(ms / 864e5);
+  const h = Math.floor(ms % 864e5 / 36e5);
+  const m = Math.floor(ms % 36e5 / 6e4);
+  const parts = [];
+  if (d) parts.push(`${d}d`);
+  if (h) parts.push(`${h}h`);
+  if (m) parts.push(`${m}m`);
+  return parts.join(" ") || "None";
+}
+var data10 = new import_discord11.SlashCommandBuilder().setName("ticketrole").setDescription("Set per-role message requirements and cooldowns for carry tickets").addSubcommand(
+  (sub) => sub.setName("set").setDescription("Set requirements for a specific role").addRoleOption(
+    (opt) => opt.setName("role").setDescription("The role to configure").setRequired(true)
+  ).addIntegerOption(
+    (opt) => opt.setName("min-messages").setDescription("Minimum messages needed to open a ticket (0 = no requirement)").setRequired(false).setMinValue(0).setMaxValue(1e4)
+  ).addStringOption(
+    (opt) => opt.setName("cooldown").setDescription("Cooldown between tickets, e.g. 30m, 2h, 1d (leave blank to remove)").setRequired(false).setMaxLength(10)
+  )
+).addSubcommand(
+  (sub) => sub.setName("remove").setDescription("Remove the custom config for a role (reverts to global setting)").addRoleOption(
+    (opt) => opt.setName("role").setDescription("The role to remove").setRequired(true)
+  )
+).addSubcommand(
+  (sub) => sub.setName("view").setDescription("View all role-specific ticket requirements")
+);
+async function execute10(interaction) {
+  if (!interaction.guildId) {
+    await interaction.reply({ content: "This command can only be used in a server.", ephemeral: true });
+    return;
+  }
+  const isAdmin = interaction.member?.permissions?.has(BigInt(8));
+  if (!isAdmin) {
+    await interaction.reply({ content: "\u274C Only admins can manage role ticket configs.", ephemeral: true });
+    return;
+  }
+  const sub = interaction.options.getSubcommand();
+  const config = await GuildConfig.findOneAndUpdate(
+    { guildId: interaction.guildId },
+    {},
+    { upsert: true, new: true }
+  );
+  if (sub === "set") {
+    const role = interaction.options.getRole("role", true);
+    const minMessages = interaction.options.getInteger("min-messages") ?? 0;
+    const cooldownRaw = interaction.options.getString("cooldown");
+    let cooldownMs = 0;
+    if (cooldownRaw) {
+      const parsed = parseDuration(cooldownRaw);
+      if (parsed === null) {
+        await interaction.reply({
+          content: "\u274C Invalid cooldown format. Use `30m`, `2h`, or `1d`.",
+          ephemeral: true
+        });
+        return;
+      }
+      cooldownMs = parsed;
+    }
+    const idx = config.roleTicketConfigs.findIndex((r) => r.roleId === role.id);
+    if (idx === -1) {
+      config.roleTicketConfigs.push({ roleId: role.id, minMessages, cooldownMs });
+    } else {
+      config.roleTicketConfigs[idx].minMessages = minMessages;
+      config.roleTicketConfigs[idx].cooldownMs = cooldownMs;
+    }
+    await config.save();
+    const lines = [];
+    if (minMessages > 0) lines.push(`\u2022 Min messages: **${minMessages}**`);
+    else lines.push(`\u2022 Min messages: **None**`);
+    lines.push(`\u2022 Cooldown: **${formatDuration(cooldownMs)}**`);
+    await interaction.reply({
+      content: `\u2705 Ticket config for ${role} updated:
+${lines.join("\n")}`,
+      ephemeral: true
+    });
+  } else if (sub === "remove") {
+    const role = interaction.options.getRole("role", true);
+    const idx = config.roleTicketConfigs.findIndex((r) => r.roleId === role.id);
+    if (idx === -1) {
+      await interaction.reply({ content: `\u274C No custom config found for ${role}.`, ephemeral: true });
+      return;
+    }
+    config.roleTicketConfigs.splice(idx, 1);
+    await config.save();
+    await interaction.reply({
+      content: `\u2705 Custom ticket config for ${role} removed \u2014 reverts to global setting.`,
+      ephemeral: true
+    });
+  } else if (sub === "view") {
+    const configs = config.roleTicketConfigs ?? [];
+    const embed = new import_discord11.EmbedBuilder().setTitle("\u{1F3AB} Role Ticket Requirements").setColor(5793266).setTimestamp();
+    if (configs.length === 0) {
+      embed.setDescription("No role-specific configs set. Everyone uses the global setting.");
+    } else {
+      embed.setDescription(`Global min-messages: **${config.minMessagesRequired}** | Users with matching roles use the most lenient config.`);
+      for (const rc of configs) {
+        embed.addFields({
+          name: `<@&${rc.roleId}>`,
+          value: `Min messages: **${rc.minMessages || "None"}** | Cooldown: **${formatDuration(rc.cooldownMs)}**`,
+          inline: false
+        });
+      }
+    }
+    await interaction.reply({ embeds: [embed], ephemeral: true });
+  }
+}
+
 // src/bot/client.ts
 init_interactions();
 init_UserMessageCount();
 
 // src/bot/deploy-commands.ts
-var import_discord11 = __toESM(require_src2(), 1);
+var import_discord12 = __toESM(require_src2(), 1);
 async function deployCommands(guildIds) {
   const token = process.env["DISCORD_TOKEN"];
   const clientId = process.env["DISCORD_CLIENT_ID"];
@@ -175609,13 +175759,14 @@ async function deployCommands(guildIds) {
     data6.toJSON(),
     data7.toJSON(),
     data8.toJSON(),
-    data9.toJSON()
+    data9.toJSON(),
+    data10.toJSON()
   ];
-  const rest = new import_discord11.REST({ version: "10" }).setToken(token);
-  await rest.put(import_discord11.Routes.applicationCommands(clientId), { body: [] });
+  const rest = new import_discord12.REST({ version: "10" }).setToken(token);
+  await rest.put(import_discord12.Routes.applicationCommands(clientId), { body: [] });
   await Promise.all(
     guildIds.map(
-      (guildId) => rest.put(import_discord11.Routes.applicationGuildCommands(clientId, guildId), { body: commands2 })
+      (guildId) => rest.put(import_discord12.Routes.applicationGuildCommands(clientId, guildId), { body: commands2 })
     )
   );
 }
@@ -175630,19 +175781,20 @@ var commands = /* @__PURE__ */ new Map([
   ["applicationpanel", application_panel_exports],
   ["helpercommands", helpercommands_exports],
   ["applicationcommands", applicationcommands_exports],
-  ["appquestions", appquestions_exports]
+  ["appquestions", appquestions_exports],
+  ["ticketrole", ticketrole_exports]
 ]);
 function createBotClient() {
-  const client = new import_discord12.Client({
+  const client = new import_discord13.Client({
     intents: [
-      import_discord12.GatewayIntentBits.Guilds,
-      import_discord12.GatewayIntentBits.GuildMessages,
-      import_discord12.GatewayIntentBits.MessageContent,
-      import_discord12.GatewayIntentBits.GuildMembers
+      import_discord13.GatewayIntentBits.Guilds,
+      import_discord13.GatewayIntentBits.GuildMessages,
+      import_discord13.GatewayIntentBits.MessageContent,
+      import_discord13.GatewayIntentBits.GuildMembers
     ],
-    partials: [import_discord12.Partials.Channel, import_discord12.Partials.Message]
+    partials: [import_discord13.Partials.Channel, import_discord13.Partials.Message]
   });
-  client.once(import_discord12.Events.ClientReady, async (c) => {
+  client.once(import_discord13.Events.ClientReady, async (c) => {
     logger.info(`CarryBot online as ${c.user.tag}`);
     try {
       const guildIds = c.guilds.cache.map((g) => g.id);
@@ -175652,7 +175804,7 @@ function createBotClient() {
       logger.error({ err }, "Failed to register slash commands");
     }
   });
-  client.on(import_discord12.Events.GuildCreate, async (guild) => {
+  client.on(import_discord13.Events.GuildCreate, async (guild) => {
     logger.info({ guildId: guild.id, guildName: guild.name }, "Joined new guild \u2014 registering commands");
     try {
       await deployCommands([guild.id]);
@@ -175660,7 +175812,7 @@ function createBotClient() {
       logger.error({ err, guildId: guild.id }, "Failed to register commands for new guild");
     }
   });
-  client.on(import_discord12.Events.MessageCreate, async (message) => {
+  client.on(import_discord13.Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.guildId) return;
     try {
       await UserMessageCount.findOneAndUpdate(
@@ -175672,7 +175824,7 @@ function createBotClient() {
       logger.error({ err }, "Failed to update message count");
     }
   });
-  client.on(import_discord12.Events.InteractionCreate, async (interaction) => {
+  client.on(import_discord13.Events.InteractionCreate, async (interaction) => {
     if (interaction.isChatInputCommand()) {
       const cmd = commands.get(interaction.commandName);
       if (!cmd) return;

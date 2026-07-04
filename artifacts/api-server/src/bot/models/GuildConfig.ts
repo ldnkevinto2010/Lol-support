@@ -18,6 +18,12 @@ export interface IApplicationRole {
   cooldownMs?: number;
 }
 
+export interface IRoleTicketConfig {
+  roleId: string;
+  minMessages: number;
+  cooldownMs: number;
+}
+
 export interface IApplicationQuestion {
   label: string;
   placeholder: string;
@@ -52,6 +58,7 @@ export interface IGuildConfig extends Document {
   applicationGames: string[];
   ticketImageUrl: string | null;
   applicationQuestions: IGameApplicationQuestions[];
+  roleTicketConfigs: IRoleTicketConfig[];
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -84,6 +91,10 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
       game: String,
       questions: [{ label: String, placeholder: String, style: String }],
     }],
+    default: [],
+  },
+  roleTicketConfigs: {
+    type: [{ roleId: String, minMessages: Number, cooldownMs: Number }],
     default: [],
   },
 });

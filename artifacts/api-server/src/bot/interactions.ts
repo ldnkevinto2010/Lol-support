@@ -145,7 +145,37 @@ async function checkTicketPrerequisites(
     return "❌ Tickets are not configured yet. Ask an admin to run `/setup ticket-category`.";
   }
   const hasBypass = (config.bypassRoles ?? []).some((r) => memberRoleIds.includes(r));
-  if (!hasBypass && config.minMessagesRequired > 0) {
+
+  // Determine effective min-messages and cooldown — role configs override global, most lenient wins
+  const matchingRoleConfigs = (config.roleTicketConfigs ?? []).filter((r) =>
+    memberRoleIds.includes(r.roleId)
+  );
+  const effectiveMinMessages = matchingRoleConfigs.length > 0
+    ? Math.min(...matchingRoleConfigs.map((r) => r.minMessages))
+    : config.minMessagesRequired;
+  const effectiveCooldownMs = matchingRoleConfigs.length > 0
+    ? Math.min(...matchingRoleConfigs.map((r) => r.cooldownMs))
+    : 0;
+
+  if (!hasBypass && effectiveCooldownMs > 0) {
+    const lastTicket = await Ticket.findOne({ guildId, userId }).sort({ createdAt: -1 });
+    if (lastTicket) {
+      const elapsed = Date.now() - lastTicket.createdAt.getTime();
+      if (elapsed < effectiveCooldownMs) {
+        const remaining = effectiveCooldownMs - elapsed;
+        const d = Math.floor(remaining / 86_400_000);
+        const h = Math.floor((remaining % 86_400_000) / 3_600_000);
+        const m = Math.ceil((remaining % 3_600_000) / 60_000);
+        const parts: string[] = [];
+        if (d) parts.push(`${d}d`);
+        if (h) parts.push(`${h}h`);
+        if (m || parts.length === 0) parts.push(`${m}m`);
+        return `❌ You need to wait **${parts.join(" ")}** before opening another ticket.`;
+      }
+    }
+  }
+
+  if (!hasBypass && effectiveMinMessages > 0) {
     const msgDoc = await UserMessageCount.findOne({ guildId, userId });
     const count = msgDoc?.count ?? 0;
 
@@ -160,8 +190,8 @@ async function checkTicketPrerequisites(
     }
 
     if (!gateAlreadyPassedToday) {
-      if (count < config.minMessagesRequired) {
-        return `❌ You need at least **${config.minMessagesRequired}** messages to open a ticket. You have **${count}**.`;
+      if (count < effectiveMinMessages) {
+        return `❌ You need at least **${effectiveMinMessages}** messages to open a ticket. You have **${count}**.`;
       }
       if (config.dailyMessageGate) {
         await UserMessageCount.findOneAndUpdate(
