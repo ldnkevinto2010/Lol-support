@@ -55,9 +55,10 @@ const FIELDS = [
       "`/setup ping-role <role>` — Set the default role pinged on any new ticket\n> **Who:** Admins",
       "`/setup panel-image <url>` — Set the banner image on the ticket panel\n> **Who:** Admins",
       "`/setup ticket-image <url>` — Set the banner image shown inside new ticket channels\n> **Who:** Admins",
+      "`/ticketrole global [cooldown]` — Set a global cooldown between tickets for everyone (e.g. `2h`, `1d`) — omit to remove\n> **Who:** Admins",
       "`/ticketrole set <role> [min-messages] [cooldown]` — Set per-role message requirement and cooldown for tickets\n> **Who:** Admins",
       "`/ticketrole remove <role>` — Remove a role's custom ticket config\n> **Who:** Admins",
-      "`/ticketrole view` — View all role-specific ticket requirements\n> **Who:** Admins",
+      "`/ticketrole view` — View global cooldown and all role-specific ticket requirements\n> **Who:** Admins",
     ].join("\n\n"),
   },
 ];
