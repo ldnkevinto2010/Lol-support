@@ -169472,7 +169472,8 @@ var init_GuildConfig = __esm({
       roleTicketConfigs: {
         type: [{ roleId: String, minMessages: Number, cooldownMs: Number }],
         default: []
-      }
+      },
+      ticketCooldownMs: { type: Number, default: 0 }
     });
     GuildConfig = import_mongoose2.default.model("GuildConfig", GuildConfigSchema);
   }
@@ -169619,7 +169620,7 @@ async function checkTicketPrerequisites(guildId, userId, config, memberRoleIds =
     (r) => memberRoleIds.includes(r.roleId)
   );
   const effectiveMinMessages = matchingRoleConfigs.length > 0 ? Math.min(...matchingRoleConfigs.map((r) => r.minMessages)) : config.minMessagesRequired;
-  const effectiveCooldownMs = matchingRoleConfigs.length > 0 ? Math.min(...matchingRoleConfigs.map((r) => r.cooldownMs)) : 0;
+  const effectiveCooldownMs = matchingRoleConfigs.length > 0 ? Math.min(...matchingRoleConfigs.map((r) => r.cooldownMs)) : config.ticketCooldownMs ?? 0;
   if (!hasBypass && effectiveCooldownMs > 0) {
     const lastTicket = await Ticket.findOne({ guildId, userId }).sort({ createdAt: -1 });
     if (lastTicket) {
@@ -175662,6 +175663,10 @@ var data10 = new import_discord11.SlashCommandBuilder().setName("ticketrole").se
   )
 ).addSubcommand(
   (sub) => sub.setName("view").setDescription("View all role-specific ticket requirements")
+).addSubcommand(
+  (sub) => sub.setName("global").setDescription("Set a global cooldown between tickets for everyone (leave blank to remove)").addStringOption(
+    (opt) => opt.setName("cooldown").setDescription("e.g. 30m, 2h, 1d \u2014 leave blank to remove the cooldown").setRequired(false).setMaxLength(10)
+  )
 );
 async function execute10(interaction) {
   if (!interaction.guildId) {
@@ -175725,13 +175730,33 @@ ${lines.join("\n")}`,
       content: `\u2705 Custom ticket config for ${role} removed \u2014 reverts to global setting.`,
       ephemeral: true
     });
+  } else if (sub === "global") {
+    const cooldownRaw = interaction.options.getString("cooldown");
+    let cooldownMs = 0;
+    if (cooldownRaw) {
+      const parsed = parseDuration(cooldownRaw);
+      if (parsed === null) {
+        await interaction.reply({ content: "\u274C Invalid format. Use `30m`, `2h`, or `1d`.", ephemeral: true });
+        return;
+      }
+      cooldownMs = parsed;
+    }
+    config.ticketCooldownMs = cooldownMs;
+    await config.save();
+    await interaction.reply({
+      content: cooldownMs > 0 ? `\u2705 Global ticket cooldown set to **${formatDuration(cooldownMs)}**. Roles with a custom config are unaffected.` : `\u2705 Global ticket cooldown removed.`,
+      ephemeral: true
+    });
   } else if (sub === "view") {
     const configs = config.roleTicketConfigs ?? [];
     const embed = new import_discord11.EmbedBuilder().setTitle("\u{1F3AB} Role Ticket Requirements").setColor(5793266).setTimestamp();
+    const globalCooldown = config.ticketCooldownMs ?? 0;
     if (configs.length === 0) {
-      embed.setDescription("No role-specific configs set. Everyone uses the global setting.");
+      embed.setDescription(`No role-specific configs set.
+Global cooldown: **${formatDuration(globalCooldown)}** | Min messages: **${config.minMessagesRequired || "None"}**`);
     } else {
-      embed.setDescription(`Global min-messages: **${config.minMessagesRequired}** | Users with matching roles use the most lenient config.`);
+      embed.setDescription(`Global cooldown: **${formatDuration(globalCooldown)}** | Min messages: **${config.minMessagesRequired || "None"}**
+Users with matching roles use the most lenient config.`);
       for (const rc of configs) {
         embed.addFields({
           name: `<@&${rc.roleId}>`,

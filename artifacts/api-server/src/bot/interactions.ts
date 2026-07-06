@@ -155,7 +155,7 @@ async function checkTicketPrerequisites(
     : config.minMessagesRequired;
   const effectiveCooldownMs = matchingRoleConfigs.length > 0
     ? Math.min(...matchingRoleConfigs.map((r) => r.cooldownMs))
-    : 0;
+    : (config.ticketCooldownMs ?? 0);
 
   if (!hasBypass && effectiveCooldownMs > 0) {
     const lastTicket = await Ticket.findOne({ guildId, userId }).sort({ createdAt: -1 });

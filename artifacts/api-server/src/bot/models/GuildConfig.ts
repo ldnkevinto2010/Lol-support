@@ -59,6 +59,7 @@ export interface IGuildConfig extends Document {
   ticketImageUrl: string | null;
   applicationQuestions: IGameApplicationQuestions[];
   roleTicketConfigs: IRoleTicketConfig[];
+  ticketCooldownMs: number;
 }
 
 const GuildConfigSchema = new Schema<IGuildConfig>({
@@ -97,6 +98,7 @@ const GuildConfigSchema = new Schema<IGuildConfig>({
     type: [{ roleId: String, minMessages: Number, cooldownMs: Number }],
     default: [],
   },
+  ticketCooldownMs: { type: Number, default: 0 },
 });
 
 export const GuildConfig = mongoose.model<IGuildConfig>("GuildConfig", GuildConfigSchema);

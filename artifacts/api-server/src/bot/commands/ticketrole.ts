@@ -63,6 +63,18 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((sub) =>
     sub.setName("view").setDescription("View all role-specific ticket requirements")
+  )
+  .addSubcommand((sub) =>
+    sub
+      .setName("global")
+      .setDescription("Set a global cooldown between tickets for everyone (leave blank to remove)")
+      .addStringOption((opt) =>
+        opt
+          .setName("cooldown")
+          .setDescription("e.g. 30m, 2h, 1d — leave blank to remove the cooldown")
+          .setRequired(false)
+          .setMaxLength(10)
+      )
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -135,6 +147,29 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       ephemeral: true,
     });
 
+  } else if (sub === "global") {
+    const cooldownRaw = interaction.options.getString("cooldown");
+    let cooldownMs = 0;
+
+    if (cooldownRaw) {
+      const parsed = parseDuration(cooldownRaw);
+      if (parsed === null) {
+        await interaction.reply({ content: "❌ Invalid format. Use `30m`, `2h`, or `1d`.", ephemeral: true });
+        return;
+      }
+      cooldownMs = parsed;
+    }
+
+    config.ticketCooldownMs = cooldownMs;
+    await config.save();
+
+    await interaction.reply({
+      content: cooldownMs > 0
+        ? `✅ Global ticket cooldown set to **${formatDuration(cooldownMs)}**. Roles with a custom config are unaffected.`
+        : `✅ Global ticket cooldown removed.`,
+      ephemeral: true,
+    });
+
   } else if (sub === "view") {
     const configs = config.roleTicketConfigs ?? [];
     const embed = new EmbedBuilder()
@@ -142,10 +177,11 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       .setColor(0x5865f2)
       .setTimestamp();
 
+    const globalCooldown = config.ticketCooldownMs ?? 0;
     if (configs.length === 0) {
-      embed.setDescription("No role-specific configs set. Everyone uses the global setting.");
+      embed.setDescription(`No role-specific configs set.\nGlobal cooldown: **${formatDuration(globalCooldown)}** | Min messages: **${config.minMessagesRequired || "None"}**`);
     } else {
-      embed.setDescription(`Global min-messages: **${config.minMessagesRequired}** | Users with matching roles use the most lenient config.`);
+      embed.setDescription(`Global cooldown: **${formatDuration(globalCooldown)}** | Min messages: **${config.minMessagesRequired || "None"}**\nUsers with matching roles use the most lenient config.`);
       for (const rc of configs) {
         embed.addFields({
           name: `<@&${rc.roleId}>`,
