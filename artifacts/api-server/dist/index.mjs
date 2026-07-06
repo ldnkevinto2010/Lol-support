@@ -169916,6 +169916,9 @@ async function handleButton(interaction) {
     ticket.status = "open";
     await ticket.save();
     const channel = interaction.channel;
+    const topicGame = channel.topic?.match(/game:(.+)/)?.[1]?.trim() ?? null;
+    const gameRoleEntry = topicGame ? (config?.gameRoles ?? []).find((gr) => gr.game.toLowerCase() === topicGame.toLowerCase()) : null;
+    const helperRoleIds = gameRoleEntry ? [gameRoleEntry.roleId] : config?.helperRoles ?? [];
     const overwrites = [
       {
         id: guild.roles.everyone.id,
@@ -169946,7 +169949,7 @@ async function handleButton(interaction) {
         type: import_discord2.OverwriteType.Role
       });
     }
-    for (const helperRoleId of config?.helperRoles ?? []) {
+    for (const helperRoleId of helperRoleIds) {
       overwrites.push({
         id: helperRoleId,
         allow: [

@@ -536,8 +536,18 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
     ticket.status = "open";
     await ticket.save();
 
-    // Restore original open-ticket permissions — creator + staff + helpers
+    // Restore original open-ticket permissions — creator + staff + game-specific helpers only
     const channel = interaction.channel as TextChannel;
+
+    // Extract game from channel topic (set at ticket creation)
+    const topicGame = channel.topic?.match(/game:(.+)/)?.[1]?.trim() ?? null;
+    const gameRoleEntry = topicGame
+      ? (config?.gameRoles ?? []).find((gr) => gr.game.toLowerCase() === topicGame.toLowerCase())
+      : null;
+    const helperRoleIds = gameRoleEntry
+      ? [gameRoleEntry.roleId]
+      : (config?.helperRoles ?? []);
+
     const overwrites: OverwriteResolvable[] = [
       {
         id: guild.roles.everyone.id,
@@ -568,7 +578,7 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
         type: OverwriteType.Role,
       });
     }
-    for (const helperRoleId of config?.helperRoles ?? []) {
+    for (const helperRoleId of helperRoleIds) {
       overwrites.push({
         id: helperRoleId,
         allow: [
