@@ -169624,7 +169624,8 @@ async function checkTicketPrerequisites(guildId, userId, config, memberRoleIds =
   if (!hasBypass && effectiveCooldownMs > 0) {
     const lastTicket = await Ticket.findOne({ guildId, userId }).sort({ createdAt: -1 });
     if (lastTicket) {
-      const elapsed = Date.now() - lastTicket.createdAt.getTime();
+      const referenceTime = lastTicket.closedAt ?? lastTicket.createdAt;
+      const elapsed = Date.now() - referenceTime.getTime();
       if (elapsed < effectiveCooldownMs) {
         const remaining = effectiveCooldownMs - elapsed;
         const d = Math.floor(remaining / 864e5);
