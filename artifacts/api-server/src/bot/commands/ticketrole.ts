@@ -183,8 +183,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     } else {
       embed.setDescription(`Global cooldown: **${formatDuration(globalCooldown)}** | Min messages: **${config.minMessagesRequired || "None"}**\nUsers with matching roles use the most lenient config.`);
       for (const rc of configs) {
+        const role = interaction.guild?.roles.cache.get(rc.roleId);
+        const roleName = role ? `@${role.name}` : `<unknown role: ${rc.roleId}>`;
         embed.addFields({
-          name: `<@&${rc.roleId}>`,
+          name: roleName,
           value: `Min messages: **${rc.minMessages || "None"}** | Cooldown: **${formatDuration(rc.cooldownMs)}**`,
           inline: false,
         });
