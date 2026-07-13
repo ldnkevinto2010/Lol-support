@@ -150,21 +150,24 @@ async function checkTicketPrerequisites(
   const matchingRoleConfigs = (config.roleTicketConfigs ?? []).filter((r) =>
     memberRoleIds.includes(r.roleId)
   );
-  const effectiveMinMessages = matchingRoleConfigs.length > 0
-    ? Math.min(...matchingRoleConfigs.map((r) => r.minMessages))
-    : config.minMessagesRequired;
-  const effectiveCooldownMs = matchingRoleConfigs.length > 0
-    ? Math.min(...matchingRoleConfigs.map((r) => r.cooldownMs))
+  // Only count role-specific values that were explicitly set (non-zero).
+  // A role config with cooldownMs/minMessages of 0 means "no override" — fall back to global.
+  const explicitCooldowns = matchingRoleConfigs.map((r) => r.cooldownMs).filter((ms) => ms > 0);
+  const explicitMinMessages = matchingRoleConfigs.map((r) => r.minMessages).filter((n) => n > 0);
+
+  const effectiveCooldownMs = explicitCooldowns.length > 0
+    ? Math.min(...explicitCooldowns)
     : (config.ticketCooldownMs ?? 0);
+  const effectiveMinMessages = explicitMinMessages.length > 0
+    ? Math.min(...explicitMinMessages)
+    : config.minMessagesRequired;
 
   if (!hasBypass && effectiveCooldownMs > 0) {
-    const lastTicket = await Ticket.findOne({ guildId, userId }).sort({ createdAt: -1 });
-    if (lastTicket) {
-      // Measure from closedAt if the ticket was closed, otherwise from createdAt.
-      // This prevents the bypass where a ticket that's open for hours lets the user
-      // immediately re-open after close (since createdAt elapsed already exceeds the cd).
-      const referenceTime = lastTicket.closedAt ?? lastTicket.createdAt;
-      const elapsed = Date.now() - referenceTime.getTime();
+    // Find the most recently closed ticket — sort by closedAt desc so we always
+    // measure from the latest closure, not the latest open time.
+    const lastClosed = await Ticket.findOne({ guildId, userId, status: "closed" }).sort({ closedAt: -1 });
+    if (lastClosed?.closedAt) {
+      const elapsed = Date.now() - lastClosed.closedAt.getTime();
       if (elapsed < effectiveCooldownMs) {
         const remaining = effectiveCooldownMs - elapsed;
         const d = Math.floor(remaining / 86_400_000);
@@ -217,9 +220,10 @@ async function checkTicketPrerequisites(
       existing.status = "closed";
       existing.closedAt = new Date();
       await existing.save();
-      return null;
+      // Don't return — fall through so the cooldown check still runs
+    } else {
+      return `❌ You already have an open ticket: <#${existing.channelId}>`;
     }
-    return `❌ You already have an open ticket: <#${existing.channelId}>`;
   }
   return null;
 }

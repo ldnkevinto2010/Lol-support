@@ -169619,13 +169619,14 @@ async function checkTicketPrerequisites(guildId, userId, config, memberRoleIds =
   const matchingRoleConfigs = (config.roleTicketConfigs ?? []).filter(
     (r) => memberRoleIds.includes(r.roleId)
   );
-  const effectiveMinMessages = matchingRoleConfigs.length > 0 ? Math.min(...matchingRoleConfigs.map((r) => r.minMessages)) : config.minMessagesRequired;
-  const effectiveCooldownMs = matchingRoleConfigs.length > 0 ? Math.min(...matchingRoleConfigs.map((r) => r.cooldownMs)) : config.ticketCooldownMs ?? 0;
+  const explicitCooldowns = matchingRoleConfigs.map((r) => r.cooldownMs).filter((ms) => ms > 0);
+  const explicitMinMessages = matchingRoleConfigs.map((r) => r.minMessages).filter((n) => n > 0);
+  const effectiveCooldownMs = explicitCooldowns.length > 0 ? Math.min(...explicitCooldowns) : config.ticketCooldownMs ?? 0;
+  const effectiveMinMessages = explicitMinMessages.length > 0 ? Math.min(...explicitMinMessages) : config.minMessagesRequired;
   if (!hasBypass && effectiveCooldownMs > 0) {
-    const lastTicket = await Ticket.findOne({ guildId, userId }).sort({ createdAt: -1 });
-    if (lastTicket) {
-      const referenceTime = lastTicket.closedAt ?? lastTicket.createdAt;
-      const elapsed = Date.now() - referenceTime.getTime();
+    const lastClosed = await Ticket.findOne({ guildId, userId, status: "closed" }).sort({ closedAt: -1 });
+    if (lastClosed?.closedAt) {
+      const elapsed = Date.now() - lastClosed.closedAt.getTime();
       if (elapsed < effectiveCooldownMs) {
         const remaining = effectiveCooldownMs - elapsed;
         const d = Math.floor(remaining / 864e5);
@@ -169671,9 +169672,9 @@ async function checkTicketPrerequisites(guildId, userId, config, memberRoleIds =
       existing.status = "closed";
       existing.closedAt = /* @__PURE__ */ new Date();
       await existing.save();
-      return null;
+    } else {
+      return `\u274C You already have an open ticket: <#${existing.channelId}>`;
     }
-    return `\u274C You already have an open ticket: <#${existing.channelId}>`;
   }
   return null;
 }
