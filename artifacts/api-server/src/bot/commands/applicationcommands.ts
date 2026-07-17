@@ -18,7 +18,7 @@ const FIELDS = [
   {
     name: "📝 Applying",
     value: [
-      "**Apply to be a Helper** *(button on panel)* — Opens a game selector then a 5-question application modal\n> **Who:** Everyone",
+      "**Apply to be a Helper** *(button on panel)* — Opens a game selector then an application modal\n> **Who:** Everyone",
       "**How to send images in your application** *(button on panel)* — Shows instructions for attaching images via URL\n> **Who:** Everyone",
     ].join("\n\n"),
   },
@@ -30,14 +30,19 @@ const FIELDS = [
     ].join("\n\n"),
   },
   {
-    name: "⚙️ Setup (Admin Only)",
+    name: "⚙️ Setup — Channels, Games & Roles",
     value: [
       "`/setup application-channel <channel>` — Set the channel where applications are sent for review\n> **Who:** Admins",
-      "`/setup application-image <url>` — Set the banner image shown on the application panel\n> **Who:** Admins",
       "`/setup application-game <name>` — Add or remove a game from the application panel\n> **Who:** Admins",
-      "`/setup application-game-role <game> <game-role> <base-role> [notify-role]` — Map a game to the roles given to accepted helpers (also sets the ping role via the optional notify-role)\n> **Who:** Admins",
-      "`/setup application-cooldown <game> [duration]` — Set how long users must wait before re-applying for a game (e.g. `3h`, `7d`) — omit duration to remove the cooldown\n> **Who:** Admins",
-      "`/setup application-image-guide [text]` — Set the message shown when users click 'How to send an image' (supports markdown and gif/image URLs) — omit to reset to default\n> **Who:** Admins",
+      "`/setup application-game-role <game> <game-role> <base-role> [notify-role]` — Map a game to the roles given on acceptance\n> **Who:** Admins",
+      "`/setup application-image <url>` — Set the banner image on the application panel\n> **Who:** Admins",
+      "`/setup application-image-guide [text]` — Set the 'How to send an image' message (markdown + URLs supported) — omit to reset\n> **Who:** Admins",
+    ].join("\n\n"),
+  },
+  {
+    name: "⚙️ Setup — Questions & Cooldowns",
+    value: [
+      "`/setup application-cooldown <game> [duration]` — Set re-apply cooldown for a game (e.g. `7d`) — omit to remove\n> **Who:** Admins",
       "`/appquestions set <game> <slot> <label> [placeholder]` — Set a custom question for a game's application modal\n> **Who:** Admins",
       "`/appquestions view <game>` — View current questions for a game\n> **Who:** Admins",
       "`/appquestions clear <game>` — Reset a game's questions back to defaults\n> **Who:** Admins",

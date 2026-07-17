@@ -175419,16 +175419,15 @@ var FIELDS = [
   {
     name: "\u{1F3AB} Ticket Commands",
     value: [
-      "`/setup daily-message-gate` \u2014 Toggle whether the message requirement is checked once per day or every ticket\n> **Who:** Admins",
       "`/ticket close [reason]` \u2014 Close the ticket and log it\n> **Who:** Ticket creator, Helpers, Staff, Admins",
-      "`/ticket transcript` \u2014 Generate a full chat transcript\n> **Who:** Staff, Admins only"
+      "`/ticket transcript` \u2014 Generate a full chat transcript\n> **Who:** Staff, Admins"
     ].join("\n\n")
   },
   {
     name: "\u270B Claim / Unclaim Buttons",
     value: [
       "**Claim Ticket** \u2014 Locks the ticket to claimer + creator + staff only\n> **Who:** Helpers, Staff, Admins",
-      "**Unclaim Ticket** \u2014 Restores open-ticket permissions\n> **Who:** The claimer, Helpers, Staff, Admins"
+      "**Unclaim Ticket** \u2014 Restores permissions for the game's helper role only\n> **Who:** The claimer, Helpers, Staff, Admins"
     ].join("\n\n")
   },
   {
@@ -175448,24 +175447,30 @@ var FIELDS = [
     ].join("\n\n")
   },
   {
-    name: "\u2699\uFE0F Setup (Admin Only)",
+    name: "\u2699\uFE0F Setup \u2014 Channels & Roles",
     value: [
       "`/setup helper-role <role>` \u2014 Add or remove a helper role\n> **Who:** Admins",
       "`/setup staff-role <role>` \u2014 Add or remove a staff role\n> **Who:** Admins",
+      "`/setup bypass-role <role>` \u2014 Add/remove a role that bypasses the message requirement\n> **Who:** Admins",
       "`/setup ticket-category <category>` \u2014 Set where ticket channels are created\n> **Who:** Admins",
       "`/setup log-channel <channel>` \u2014 Set the ticket log channel\n> **Who:** Admins",
-      "`/setup min-messages <count>` \u2014 Set minimum messages required to open a ticket\n> **Who:** Admins",
-      "`/setup bypass-role <role>` \u2014 Add/remove a role that bypasses the message requirement\n> **Who:** Admins",
-      "`/setup games <list>` \u2014 Set the games shown in the ticket panel\n> **Who:** Admins",
-      "`/setup game-category <game> <category>` \u2014 Route a game's tickets to a specific category\n> **Who:** Admins",
-      "`/setup game-role <game> <role>` \u2014 Set the ping role for a specific game's tickets\n> **Who:** Admins",
       "`/setup ping-role <role>` \u2014 Set the default role pinged on any new ticket\n> **Who:** Admins",
+      "`/setup game-role <game> <role>` \u2014 Set the ping role for a specific game's tickets\n> **Who:** Admins",
+      "`/setup game-category <game> <category>` \u2014 Route a game's tickets to a specific category\n> **Who:** Admins"
+    ].join("\n\n")
+  },
+  {
+    name: "\u2699\uFE0F Setup \u2014 Messages, Images & Cooldowns",
+    value: [
+      "`/setup games <list>` \u2014 Set the games shown in the ticket panel\n> **Who:** Admins",
+      "`/setup min-messages <count>` \u2014 Set global minimum messages required to open a ticket\n> **Who:** Admins",
+      "`/setup daily-message-gate` \u2014 Toggle whether the message requirement resets daily\n> **Who:** Admins",
       "`/setup panel-image <url>` \u2014 Set the banner image on the ticket panel\n> **Who:** Admins",
       "`/setup ticket-image <url>` \u2014 Set the banner image shown inside new ticket channels\n> **Who:** Admins",
-      "`/ticketrole global [cooldown]` \u2014 Set a global cooldown between tickets for everyone (e.g. `2h`, `1d`) \u2014 omit to remove\n> **Who:** Admins",
-      "`/ticketrole set <role> [min-messages] [cooldown]` \u2014 Set per-role message requirement and cooldown for tickets\n> **Who:** Admins",
-      "`/ticketrole remove <role>` \u2014 Remove a role's custom ticket config\n> **Who:** Admins",
-      "`/ticketrole view` \u2014 View global cooldown and all role-specific ticket requirements\n> **Who:** Admins"
+      "`/ticketrole global [cooldown]` \u2014 Set a global cooldown for everyone (e.g. `2h`) \u2014 omit to remove\n> **Who:** Admins",
+      "`/ticketrole set <role> [min-messages] [cooldown]` \u2014 Per-role message requirement and cooldown\n> **Who:** Admins",
+      "`/ticketrole remove <role>` \u2014 Remove a role's custom config\n> **Who:** Admins",
+      "`/ticketrole view` \u2014 View global cooldown and all role configs\n> **Who:** Admins"
     ].join("\n\n")
   }
 ];
@@ -175495,7 +175500,7 @@ var FIELDS2 = [
   {
     name: "\u{1F4DD} Applying",
     value: [
-      "**Apply to be a Helper** *(button on panel)* \u2014 Opens a game selector then a 5-question application modal\n> **Who:** Everyone",
+      "**Apply to be a Helper** *(button on panel)* \u2014 Opens a game selector then an application modal\n> **Who:** Everyone",
       "**How to send images in your application** *(button on panel)* \u2014 Shows instructions for attaching images via URL\n> **Who:** Everyone"
     ].join("\n\n")
   },
@@ -175507,14 +175512,19 @@ var FIELDS2 = [
     ].join("\n\n")
   },
   {
-    name: "\u2699\uFE0F Setup (Admin Only)",
+    name: "\u2699\uFE0F Setup \u2014 Channels, Games & Roles",
     value: [
       "`/setup application-channel <channel>` \u2014 Set the channel where applications are sent for review\n> **Who:** Admins",
-      "`/setup application-image <url>` \u2014 Set the banner image shown on the application panel\n> **Who:** Admins",
       "`/setup application-game <name>` \u2014 Add or remove a game from the application panel\n> **Who:** Admins",
-      "`/setup application-game-role <game> <game-role> <base-role> [notify-role]` \u2014 Map a game to the roles given to accepted helpers (also sets the ping role via the optional notify-role)\n> **Who:** Admins",
-      "`/setup application-cooldown <game> [duration]` \u2014 Set how long users must wait before re-applying for a game (e.g. `3h`, `7d`) \u2014 omit duration to remove the cooldown\n> **Who:** Admins",
-      "`/setup application-image-guide [text]` \u2014 Set the message shown when users click 'How to send an image' (supports markdown and gif/image URLs) \u2014 omit to reset to default\n> **Who:** Admins",
+      "`/setup application-game-role <game> <game-role> <base-role> [notify-role]` \u2014 Map a game to the roles given on acceptance\n> **Who:** Admins",
+      "`/setup application-image <url>` \u2014 Set the banner image on the application panel\n> **Who:** Admins",
+      "`/setup application-image-guide [text]` \u2014 Set the 'How to send an image' message (markdown + URLs supported) \u2014 omit to reset\n> **Who:** Admins"
+    ].join("\n\n")
+  },
+  {
+    name: "\u2699\uFE0F Setup \u2014 Questions & Cooldowns",
+    value: [
+      "`/setup application-cooldown <game> [duration]` \u2014 Set re-apply cooldown for a game (e.g. `7d`) \u2014 omit to remove\n> **Who:** Admins",
       "`/appquestions set <game> <slot> <label> [placeholder]` \u2014 Set a custom question for a game's application modal\n> **Who:** Admins",
       "`/appquestions view <game>` \u2014 View current questions for a game\n> **Who:** Admins",
       "`/appquestions clear <game>` \u2014 Reset a game's questions back to defaults\n> **Who:** Admins"

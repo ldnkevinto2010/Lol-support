@@ -12,16 +12,15 @@ const FIELDS = [
   {
     name: "🎫 Ticket Commands",
     value: [
-      "`/setup daily-message-gate` — Toggle whether the message requirement is checked once per day or every ticket\n> **Who:** Admins",
       "`/ticket close [reason]` — Close the ticket and log it\n> **Who:** Ticket creator, Helpers, Staff, Admins",
-      "`/ticket transcript` — Generate a full chat transcript\n> **Who:** Staff, Admins only",
+      "`/ticket transcript` — Generate a full chat transcript\n> **Who:** Staff, Admins",
     ].join("\n\n"),
   },
   {
     name: "✋ Claim / Unclaim Buttons",
     value: [
       "**Claim Ticket** — Locks the ticket to claimer + creator + staff only\n> **Who:** Helpers, Staff, Admins",
-      "**Unclaim Ticket** — Restores open-ticket permissions\n> **Who:** The claimer, Helpers, Staff, Admins",
+      "**Unclaim Ticket** — Restores permissions for the game's helper role only\n> **Who:** The claimer, Helpers, Staff, Admins",
     ].join("\n\n"),
   },
   {
@@ -41,24 +40,30 @@ const FIELDS = [
     ].join("\n\n"),
   },
   {
-    name: "⚙️ Setup (Admin Only)",
+    name: "⚙️ Setup — Channels & Roles",
     value: [
       "`/setup helper-role <role>` — Add or remove a helper role\n> **Who:** Admins",
       "`/setup staff-role <role>` — Add or remove a staff role\n> **Who:** Admins",
+      "`/setup bypass-role <role>` — Add/remove a role that bypasses the message requirement\n> **Who:** Admins",
       "`/setup ticket-category <category>` — Set where ticket channels are created\n> **Who:** Admins",
       "`/setup log-channel <channel>` — Set the ticket log channel\n> **Who:** Admins",
-      "`/setup min-messages <count>` — Set minimum messages required to open a ticket\n> **Who:** Admins",
-      "`/setup bypass-role <role>` — Add/remove a role that bypasses the message requirement\n> **Who:** Admins",
-      "`/setup games <list>` — Set the games shown in the ticket panel\n> **Who:** Admins",
-      "`/setup game-category <game> <category>` — Route a game's tickets to a specific category\n> **Who:** Admins",
-      "`/setup game-role <game> <role>` — Set the ping role for a specific game's tickets\n> **Who:** Admins",
       "`/setup ping-role <role>` — Set the default role pinged on any new ticket\n> **Who:** Admins",
+      "`/setup game-role <game> <role>` — Set the ping role for a specific game's tickets\n> **Who:** Admins",
+      "`/setup game-category <game> <category>` — Route a game's tickets to a specific category\n> **Who:** Admins",
+    ].join("\n\n"),
+  },
+  {
+    name: "⚙️ Setup — Messages, Images & Cooldowns",
+    value: [
+      "`/setup games <list>` — Set the games shown in the ticket panel\n> **Who:** Admins",
+      "`/setup min-messages <count>` — Set global minimum messages required to open a ticket\n> **Who:** Admins",
+      "`/setup daily-message-gate` — Toggle whether the message requirement resets daily\n> **Who:** Admins",
       "`/setup panel-image <url>` — Set the banner image on the ticket panel\n> **Who:** Admins",
       "`/setup ticket-image <url>` — Set the banner image shown inside new ticket channels\n> **Who:** Admins",
-      "`/ticketrole global [cooldown]` — Set a global cooldown between tickets for everyone (e.g. `2h`, `1d`) — omit to remove\n> **Who:** Admins",
-      "`/ticketrole set <role> [min-messages] [cooldown]` — Set per-role message requirement and cooldown for tickets\n> **Who:** Admins",
-      "`/ticketrole remove <role>` — Remove a role's custom ticket config\n> **Who:** Admins",
-      "`/ticketrole view` — View global cooldown and all role-specific ticket requirements\n> **Who:** Admins",
+      "`/ticketrole global [cooldown]` — Set a global cooldown for everyone (e.g. `2h`) — omit to remove\n> **Who:** Admins",
+      "`/ticketrole set <role> [min-messages] [cooldown]` — Per-role message requirement and cooldown\n> **Who:** Admins",
+      "`/ticketrole remove <role>` — Remove a role's custom config\n> **Who:** Admins",
+      "`/ticketrole view` — View global cooldown and all role configs\n> **Who:** Admins",
     ].join("\n\n"),
   },
 ];
