@@ -156,6 +156,13 @@ export async function startBot(): Promise<void> {
   const token = process.env["DISCORD_TOKEN"];
   if (!token) throw new Error("DISCORD_TOKEN is required");
 
+  logger.info("Attempting Discord login...");
   const client = createBotClient();
-  await client.login(token);
+
+  await Promise.race([
+    client.login(token),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Discord login timed out after 30s — check token and network")), 30_000)
+    ),
+  ]);
 }
