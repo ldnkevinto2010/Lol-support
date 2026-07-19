@@ -403,7 +403,10 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
   const { customId, guildId, guild } = interaction;
   if (!guildId || !guild) return;
 
-  const config = await GuildConfig.findOne({ guildId });
+  const config = await Promise.race([
+    GuildConfig.findOne({ guildId }),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500)),
+  ]);
 
   // Panel "Create Ticket" button → show game select dropdown
   if (customId === "ticket_open_panel") {
@@ -852,7 +855,10 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
       .setCustomId(`helper_app:${game}`)
       .setTitle(title);
 
-    const appConfig = await GuildConfig.findOne({ guildId });
+    const appConfig = await Promise.race([
+      GuildConfig.findOne({ guildId }),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500)),
+    ]);
     const customEntry = (appConfig?.applicationQuestions ?? []).find(
       (aq) => aq.game.toLowerCase() === game.toLowerCase()
     );

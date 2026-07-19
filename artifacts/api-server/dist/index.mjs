@@ -169800,7 +169800,10 @@ async function handleTicketClose(interaction, config, reason = "No reason provid
 async function handleButton(interaction) {
   const { customId, guildId, guild } = interaction;
   if (!guildId || !guild) return;
-  const config = await GuildConfig.findOne({ guildId });
+  const config = await Promise.race([
+    GuildConfig.findOne({ guildId }),
+    new Promise((resolve) => setTimeout(() => resolve(null), 2500))
+  ]);
   if (customId === "ticket_open_panel") {
     const memberRoles = interaction.member?.roles?.cache?.map((r) => r.id) ?? [];
     const error = await checkTicketPrerequisites(guildId, interaction.user.id, config, memberRoles, guild);
@@ -170152,7 +170155,10 @@ async function handleSelectMenu(interaction) {
     const rawTitle = `${game} Application`;
     const title = rawTitle.length > 45 ? rawTitle.slice(0, 42) + "..." : rawTitle;
     const modal = new import_discord2.ModalBuilder().setCustomId(`helper_app:${game}`).setTitle(title);
-    const appConfig = await GuildConfig.findOne({ guildId });
+    const appConfig = await Promise.race([
+      GuildConfig.findOne({ guildId }),
+      new Promise((resolve) => setTimeout(() => resolve(null), 2500))
+    ]);
     const customEntry = (appConfig?.applicationQuestions ?? []).find(
       (aq) => aq.game.toLowerCase() === game.toLowerCase()
     );
