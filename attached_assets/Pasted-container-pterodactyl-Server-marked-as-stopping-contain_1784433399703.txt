@@ -1,0 +1,55 @@
+container@pterodactyl~ Server marked as stopping...
+container@pterodactyl~ Server marked as offline...
+[Bot-Hosting Daemon]: Checking server disk space usage, this could take a few seconds...
+[Bot-Hosting Daemon]: Updating process configuration files...
+[Bot-Hosting Daemon]: Ensuring file permissions are set correctly, this could take a few seconds...
+container@pterodactyl~ Server marked as starting...
+[Bot-Hosting Daemon]: Pulling Docker container image, this could take a few minutes to complete...
+[Bot-Hosting Daemon]: Finished pulling Docker container image
+v20.20.2
+:/home/container$ if [[ -d .git ]] && [[ ${AUTO_UPDATE} == "1" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z "${START_BASH_FILE}" ]]; then bash ${START_BASH_FILE}; else /usr/local/bin/node /home/container/${BOT_JS_FILE}; fi;
+remote: Enumerating objects: 71, done.
+remote: Counting objects: 100% (71/71), done.
+remote: Compressing objects: 100% (20/20), done.
+remote: Total 59 (delta 39), reused 59 (delta 39), pack-reused 0 (from 0)
+Unpacking objects: 100% (59/59), 268.98 KiB | 53.00 KiB/s, done.
+From https://github.com/ldnkevinto2010/Lol-support
+   7f41a13..6bba9dd  main       -> origin/main
+Updating 7f41a13..6bba9dd
+Fast-forward
+ artifacts/api-server/dist/index.mjs                |  18 ++++++++++++---
+ artifacts/api-server/dist/index.mjs.map            |   4 ++--
+ artifacts/api-server/package.json                  |   2 +-
+ artifacts/api-server/src/bot/client.ts             |   9 +++++++-
+ artifacts/api-server/src/bot/interactions.ts       |  10 +++++++--
+ ...er-marked-as-stopping-contain_1784352265057.txt |  25 +++++++++++++++++++++
+ ...er-marked-as-stopping-contain_1784352359924.txt |  25 +++++++++++++++++++++
+ ...er-marked-as-stopping-contain_1784353098303.txt |  25 +++++++++++++++++++++
+ ...-6BFA-41C6-BD41-556DEA89DCD8}_1784432817631.png | Bin 0 -> 106513 bytes
+ ...-FBB9-4FD1-9F87-0EC99171524D}_1784352609590.png | Bin 0 -> 62084 bytes
+ ...-1DFE-4E77-A809-4E8865A2A18E}_1784432996553.png | Bin 0 -> 14882 bytes
+ ...-7185-49B8-AC30-EDD5951CD105}_1784352673278.png | Bin 0 -> 69388 bytes
+ ...-066D-4A54-8AB3-E1924212EB10}_1784354667837.png | Bin 0 -> 46891 bytes
+ 13 files changed, 109 insertions(+), 9 deletions(-)
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1784352265057.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1784352359924.txt
+ create mode 100644 attached_assets/Pasted-container-pterodactyl-Server-marked-as-stopping-contain_1784353098303.txt
+ create mode 100644 attached_assets/{5088879F-6BFA-41C6-BD41-556DEA89DCD8}_1784432817631.png
+ create mode 100644 attached_assets/{9D678320-FBB9-4FD1-9F87-0EC99171524D}_1784352609590.png
+ create mode 100644 attached_assets/{B407D3BC-1DFE-4E77-A809-4E8865A2A18E}_1784432996553.png
+ create mode 100644 attached_assets/{D0365F10-7185-49B8-AC30-EDD5951CD105}_1784352673278.png
+ create mode 100644 attached_assets/{E24F6A62-066D-4A54-8AB3-E1924212EB10}_1784354667837.png
+npm warn Unknown user config "auto-install-peers". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown user config "strict-peer-dependencies". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> workspace@0.0.0 preinstall
+> sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+Use pnpm instead
+npm error code 1
+npm error path /home/container
+npm error command failed
+npm error command sh -c sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+npm error A complete log of this run can be found in: /home/container/.npm/_logs/2026-07-19T03_56_06_186Z-debug-0.log
+{"level":30,"time":1784433371494,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","port":3000,"msg":"Server listening"}
+{"level":30,"time":1784433372820,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"Connected to MongoDB"}
+{"level":30,"time":1784433372821,"pid":41,"hostname":"333bc62d-adf5-4063-978b-78e6ece4c804","msg":"Attempting Discord login..."}
