@@ -1,0 +1,43 @@
+Error:
+ Problem: package npm-1:8.19.4-1.16.20.2.8.0.1.el9_4.x86_64 from ol9_appstream requires nodejs = 1:16.20.2-8.0.1.el9_4, but none of the providers can be installed
+  - package nsolid-20.10.0-ns5.0.1.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.10.0-ns5.0.2.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.11.0-ns5.0.3.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.11.0-ns5.0.4.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.11.1-ns5.0.5.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.12.0-ns5.1.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.12.1-ns5.1.1.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.12.2-ns5.1.2.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.12.2-ns5.2.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.13.1-ns5.2.1.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.13.1-ns5.2.2.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.14.0-ns5.2.3.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.15.0-ns5.3.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.15.1-ns5.3.1.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.16.0-ns5.3.2.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.17.0-ns5.3.3.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.18.0-ns5.3.4.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.18.0-ns5.4.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.18.1-ns5.5.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.18.1-ns5.6.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.18.2-ns5.6.1.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.18.2-ns5.7.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.1-ns5.7.1.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.2-ns5.7.2.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.2-ns5.7.3.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.2-ns5.7.4.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.4-ns5.7.5.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.4-ns6.0.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.4-ns6.0.1.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.5-ns6.0.2.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.6-ns6.1.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.19.6-ns6.1.1.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.20.0-ns6.2.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.20.2-ns6.2.2.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.20.2-ns6.2.3.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.20.2-ns6.2.4.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - package nsolid-20.9.0-ns5.0.0.x86_64 from nodesource-nsolid conflicts with nodejs provided by nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - cannot install both nodejs-1:16.20.2-8.0.1.el9_4.x86_64 from ol9_appstream and nodejs-2:20.20.2-1nodesource.x86_64 from @System
+  - cannot install the best candidate for the job
+(try to add '--allowerasing' to command line to replace conflicting packages or '--skip-broken' to skip uninstallable packages or '--nobest' to use not only best candidate packages)
+[opc@instance-20260720-0052 ~]$
