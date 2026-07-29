@@ -174649,6 +174649,18 @@ async function execute(interaction) {
     return;
   }
   const sub = interaction.options.getSubcommand();
+  if (sub === "application-image-guide") {
+    let config2 = await GuildConfig.findOne({ guildId: interaction.guildId });
+    if (!config2) config2 = new GuildConfig({ guildId: interaction.guildId });
+    const current = config2.applicationImageGuideText ?? "";
+    const modal = new import_discord.ModalBuilder().setCustomId("setup_img_guide_modal").setTitle("Image Guide Text");
+    const textInput = new import_discord.TextInputBuilder().setCustomId("guide_text").setLabel("Guide content (markdown + image/gif URLs ok)").setStyle(import_discord.TextInputStyle.Paragraph).setPlaceholder("Write your guide here. Paste a GIF URL on its own line to embed it.").setRequired(false).setMaxLength(2e3);
+    if (current) textInput.setValue(current);
+    modal.addComponents(new import_discord.ActionRowBuilder().addComponents(textInput));
+    await interaction.showModal(modal);
+    return;
+  }
+  await interaction.deferReply({ ephemeral: true });
   let config = await GuildConfig.findOne({ guildId: interaction.guildId });
   if (!config) {
     config = new GuildConfig({ guildId: interaction.guildId });
@@ -174657,40 +174669,39 @@ async function execute(interaction) {
     const category = interaction.options.getChannel("category", true);
     config.ticketCategoryId = category.id;
     await config.save();
-    await interaction.reply({ content: `\u2705 Ticket category set to **${category.name}**.`, ephemeral: true });
+    await interaction.editReply({ content: `\u2705 Ticket category set to **${category.name}**.` });
   } else if (sub === "log-channel") {
     const channel = interaction.options.getChannel("channel", true);
     config.ticketLogChannelId = channel.id;
     await config.save();
-    await interaction.reply({ content: `\u2705 Log channel set to ${channel}.`, ephemeral: true });
+    await interaction.editReply({ content: `\u2705 Log channel set to ${channel}.` });
   } else if (sub === "vouch-channel") {
     const channel = interaction.options.getChannel("channel", true);
     config.vouchChannelId = channel.id;
     await config.save();
-    await interaction.reply({ content: `\u2705 Vouch channel set to ${channel}.`, ephemeral: true });
+    await interaction.editReply({ content: `\u2705 Vouch channel set to ${channel}.` });
   } else if (sub === "min-messages") {
     const count = interaction.options.getInteger("count", true);
     config.minMessagesRequired = count;
     await config.save();
     const msg = count === 0 ? "\u2705 Message requirement disabled. Anyone can open tickets." : `\u2705 Users now need **${count}** messages before opening a ticket.`;
-    await interaction.reply({ content: msg, ephemeral: true });
+    await interaction.editReply({ content: msg });
   } else if (sub === "games") {
     const list = interaction.options.getString("list", true);
     const games = list.split(",").map((g) => g.trim()).filter(Boolean);
     if (games.length === 0) {
-      await interaction.reply({ content: "\u274C Please provide at least one game.", ephemeral: true });
+      await interaction.editReply({ content: "\u274C Please provide at least one game." });
       return;
     }
     if (games.length > 25) {
-      await interaction.reply({ content: "\u274C Maximum 25 games allowed.", ephemeral: true });
+      await interaction.editReply({ content: "\u274C Maximum 25 games allowed." });
       return;
     }
     config.supportedGames = games;
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: `\u2705 Supported games updated:
-${games.map((g) => `\u2022 ${g}`).join("\n")}`,
-      ephemeral: true
+${games.map((g) => `\u2022 ${g}`).join("\n")}`
     });
   } else if (sub === "helper-role") {
     const role = interaction.options.getRole("role", true);
@@ -174699,16 +174710,16 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
     if (idx >= 0) {
       config.helperRoles.splice(idx, 1);
       await config.save();
-      await interaction.reply({ content: `\u2705 **${role.name}** removed from helper roles.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 **${role.name}** removed from helper roles.` });
     } else {
       config.helperRoles.push(role.id);
       await config.save();
-      await interaction.reply({ content: `\u2705 **${role.name}** added as a helper role \u2014 members can see open tickets and use \`/helperprofile\` and \`/leaderboard\`.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 **${role.name}** added as a helper role \u2014 members can see open tickets and use \`/helperprofile\` and \`/leaderboard\`.` });
     }
   } else if (sub === "helper-roles") {
     const roles = config.helperRoles ?? [];
     if (roles.length === 0) {
-      await interaction.reply({ content: "No helper roles set. Use `/setup helper-role` to add one.", ephemeral: true });
+      await interaction.editReply({ content: "No helper roles set. Use `/setup helper-role` to add one." });
       return;
     }
     const lines = roles.map((id) => `\u2022 <@&${id}>`);
@@ -174720,7 +174731,7 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       })
     );
     const row = new import_discord.ActionRowBuilder().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
   } else if (sub === "staff-role") {
     const role = interaction.options.getRole("role", true);
     const staffRoles = config.staffRoles ?? [];
@@ -174728,16 +174739,16 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
     if (idx >= 0) {
       config.staffRoles.splice(idx, 1);
       await config.save();
-      await interaction.reply({ content: `\u2705 **${role.name}** removed from staff roles.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 **${role.name}** removed from staff roles.` });
     } else {
       config.staffRoles.push(role.id);
       await config.save();
-      await interaction.reply({ content: `\u2705 **${role.name}** added as a staff role \u2014 members can now claim, close, and transcript tickets.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 **${role.name}** added as a staff role \u2014 members can now claim, close, and transcript tickets.` });
     }
   } else if (sub === "staff-roles") {
     const roles = config.staffRoles ?? [];
     if (roles.length === 0) {
-      await interaction.reply({ content: "No staff roles set. Use `/setup staff-role` to add one.", ephemeral: true });
+      await interaction.editReply({ content: "No staff roles set. Use `/setup staff-role` to add one." });
       return;
     }
     const lines = roles.map((id) => `\u2022 <@&${id}>`);
@@ -174749,7 +174760,7 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       })
     );
     const row = new import_discord.ActionRowBuilder().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
   } else if (sub === "bypass-role") {
     const role = interaction.options.getRole("role", true);
     const bypassRoles = config.bypassRoles ?? [];
@@ -174757,16 +174768,16 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
     if (idx >= 0) {
       config.bypassRoles.splice(idx, 1);
       await config.save();
-      await interaction.reply({ content: `\u2705 **${role.name}** removed from bypass roles.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 **${role.name}** removed from bypass roles.` });
     } else {
       config.bypassRoles.push(role.id);
       await config.save();
-      await interaction.reply({ content: `\u2705 **${role.name}** added \u2014 members with this role bypass the message requirement.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 **${role.name}** added \u2014 members with this role bypass the message requirement.` });
     }
   } else if (sub === "bypass-roles") {
     const roles = config.bypassRoles ?? [];
     if (roles.length === 0) {
-      await interaction.reply({ content: "No bypass roles set. Use `/setup bypass-role` to add one.", ephemeral: true });
+      await interaction.editReply({ content: "No bypass roles set. Use `/setup bypass-role` to add one." });
       return;
     }
     const lines = roles.map((id) => `\u2022 <@&${id}>`);
@@ -174778,14 +174789,13 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       })
     );
     const row = new import_discord.ActionRowBuilder().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
   } else if (sub === "ping-role") {
     const role = interaction.options.getRole("role", true);
     config.supportRoleId = role.id;
     await config.save();
-    await interaction.reply({
-      content: `\u2705 Default ping role set to **${role.name}**. All tickets will ping this role unless a game-specific role is set.`,
-      ephemeral: true
+    await interaction.editReply({
+      content: `\u2705 Default ping role set to **${role.name}**. All tickets will ping this role unless a game-specific role is set.`
     });
   } else if (sub === "game-role") {
     const gameName = interaction.options.getString("game", true).trim();
@@ -174799,16 +174809,14 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       config.gameRoles.push({ game: gameName, roleId: role.id });
     }
     await config.save();
-    await interaction.reply({
-      content: `\u2705 Tickets for **${gameName}** will now ping **${role.name}**.`,
-      ephemeral: true
+    await interaction.editReply({
+      content: `\u2705 Tickets for **${gameName}** will now ping **${role.name}**.`
     });
   } else if (sub === "game-roles") {
     const mappings = config.gameRoles ?? [];
     if (mappings.length === 0) {
-      await interaction.reply({
-        content: "No game \u2192 role mappings set yet. Use `/setup game-role` to add one.",
-        ephemeral: true
+      await interaction.editReply({
+        content: "No game \u2192 role mappings set yet. Use `/setup game-role` to add one."
       });
       return;
     }
@@ -174820,13 +174828,12 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       )
     );
     const row = new import_discord.ActionRowBuilder().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
   } else if (sub === "game-mappings") {
     const mappings = config.gameCategories ?? [];
     if (mappings.length === 0) {
-      await interaction.reply({
-        content: "No game \u2192 category mappings set yet. Use `/setup game-category` to add one.",
-        ephemeral: true
+      await interaction.editReply({
+        content: "No game \u2192 category mappings set yet. Use `/setup game-category` to add one."
       });
       return;
     }
@@ -174841,7 +174848,7 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       )
     );
     const row = new import_discord.ActionRowBuilder().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
   } else if (sub === "game-category") {
     const gameName = interaction.options.getString("game", true).trim();
     const category = interaction.options.getChannel("category", true);
@@ -174854,35 +174861,33 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       config.gameCategories.push({ game: gameName, categoryId: category.id });
     }
     await config.save();
-    await interaction.reply({
-      content: `\u2705 Tickets for **${gameName}** will now go into the **${category.name}** category.`,
-      ephemeral: true
+    await interaction.editReply({
+      content: `\u2705 Tickets for **${gameName}** will now go into the **${category.name}** category.`
     });
   } else if (sub === "ticket-image") {
     const url = interaction.options.getString("url");
     config.ticketImageUrl = url ?? null;
     await config.save();
-    await interaction.reply({
-      content: url ? `\u2705 Ticket image set \u2014 new tickets will show the banner.` : `\u2705 Ticket image cleared.`,
-      ephemeral: true
+    await interaction.editReply({
+      content: url ? `\u2705 Ticket image set \u2014 new tickets will show the banner.` : `\u2705 Ticket image cleared.`
     });
   } else if (sub === "panel-image") {
     const url = interaction.options.getString("url");
     config.panelImageUrl = url ?? null;
     await config.save();
     const msg = url ? `\u2705 Panel image set. Run \`/ticket panel\` to post an updated panel.` : `\u2705 Panel image cleared. Run \`/ticket panel\` to post an updated panel.`;
-    await interaction.reply({ content: msg, ephemeral: true });
+    await interaction.editReply({ content: msg });
   } else if (sub === "application-channel") {
     const channel = interaction.options.getChannel("channel", true);
     config.applicationChannelId = channel.id;
     await config.save();
-    await interaction.reply({ content: `\u2705 Application review channel set to ${channel}.`, ephemeral: true });
+    await interaction.editReply({ content: `\u2705 Application review channel set to ${channel}.` });
   } else if (sub === "application-image") {
     const url = interaction.options.getString("url");
     config.applicationPanelImageUrl = url ?? null;
     await config.save();
     const msg = url ? `\u2705 Application panel image set. Run \`/applicationpanel\` to post an updated panel.` : `\u2705 Application panel image cleared.`;
-    await interaction.reply({ content: msg, ephemeral: true });
+    await interaction.editReply({ content: msg });
   } else if (sub === "application-game-role") {
     const gameName = interaction.options.getString("game", true).trim();
     const gameRole = interaction.options.getRole("game-role", true);
@@ -174904,24 +174909,15 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       config.applicationRoles.push(entry);
     }
     await config.save();
-    await interaction.reply({
-      content: `\u2705 **${gameName}** applications: accepted helpers get <@&${gameRole.id}> + <@&${baseRole.id}>${notifyRole ? `, ping <@&${notifyRole.id}>` : ""}.`,
-      ephemeral: true
+    await interaction.editReply({
+      content: `\u2705 **${gameName}** applications: accepted helpers get <@&${gameRole.id}> + <@&${baseRole.id}>${notifyRole ? `, ping <@&${notifyRole.id}>` : ""}.`
     });
   } else if (sub === "daily-message-gate") {
     config.dailyMessageGate = !config.dailyMessageGate;
     await config.save();
-    await interaction.reply({
-      content: config.dailyMessageGate ? "\u2705 Daily message gate **enabled** \u2014 users only need to pass the message requirement once per day." : "\u2705 Daily message gate **disabled** \u2014 message requirement is checked every time.",
-      ephemeral: true
+    await interaction.editReply({
+      content: config.dailyMessageGate ? "\u2705 Daily message gate **enabled** \u2014 users only need to pass the message requirement once per day." : "\u2705 Daily message gate **disabled** \u2014 message requirement is checked every time."
     });
-  } else if (sub === "application-image-guide") {
-    const current = config.applicationImageGuideText ?? "";
-    const modal = new import_discord.ModalBuilder().setCustomId("setup_img_guide_modal").setTitle("Image Guide Text");
-    const textInput = new import_discord.TextInputBuilder().setCustomId("guide_text").setLabel("Guide content (markdown + image/gif URLs ok)").setStyle(import_discord.TextInputStyle.Paragraph).setPlaceholder("Write your guide here. Paste a GIF URL on its own line to embed it.").setRequired(false).setMaxLength(2e3);
-    if (current) textInput.setValue(current);
-    modal.addComponents(new import_discord.ActionRowBuilder().addComponents(textInput));
-    await interaction.showModal(modal);
   } else if (sub === "application-cooldown") {
     const gameName = interaction.options.getString("game", true).trim();
     const durationStr = interaction.options.getString("duration");
@@ -174934,12 +174930,12 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
         config.applicationRoles[idx].cooldownMs = void 0;
         await config.save();
       }
-      await interaction.reply({ content: `\u2705 Cooldown removed for **${gameName}** applications.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 Cooldown removed for **${gameName}** applications.` });
       return;
     }
     const match = durationStr.trim().match(/^(\d+(?:\.\d+)?)\s*(m|h|d)$/i);
     if (!match) {
-      await interaction.reply({ content: "\u274C Invalid duration format. Use `30m`, `3h`, or `7d`.", ephemeral: true });
+      await interaction.editReply({ content: "\u274C Invalid duration format. Use `30m`, `3h`, or `7d`." });
       return;
     }
     const val = parseFloat(match[1]);
@@ -174952,9 +174948,8 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       idx = config.applicationRoles.length - 1;
     }
     await config.save();
-    await interaction.reply({
-      content: `\u2705 Users must now wait **${durationStr}** before re-applying for **${gameName}**.`,
-      ephemeral: true
+    await interaction.editReply({
+      content: `\u2705 Users must now wait **${durationStr}** before re-applying for **${gameName}**.`
     });
   } else if (sub === "application-game") {
     const name = interaction.options.getString("name", true).trim();
@@ -174963,15 +174958,15 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
     if (idx >= 0) {
       config.applicationGames.splice(idx, 1);
       await config.save();
-      await interaction.reply({ content: `\u2705 **${name}** removed from the application panel games.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 **${name}** removed from the application panel games.` });
     } else {
       if (config.applicationGames.length >= 25) {
-        await interaction.reply({ content: "\u274C Maximum 25 games allowed.", ephemeral: true });
+        await interaction.editReply({ content: "\u274C Maximum 25 games allowed." });
         return;
       }
       config.applicationGames.push(name);
       await config.save();
-      await interaction.reply({ content: `\u2705 **${name}** added to the application panel games.`, ephemeral: true });
+      await interaction.editReply({ content: `\u2705 **${name}** added to the application panel games.` });
     }
   } else if (sub === "view") {
     const guild = interaction.guild;
@@ -174994,7 +174989,7 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`,
       { name: "Supported Games", value: games, inline: false },
       { name: "Game \u2192 Category Mappings", value: gameCategoryList, inline: false }
     ).setTimestamp();
-    await interaction.reply({ embeds: [embed], ephemeral: true });
+    await interaction.editReply({ embeds: [embed] });
   }
 }
 

@@ -297,6 +297,32 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
 
   const sub = interaction.options.getSubcommand();
+
+  // Modals must be shown before any deferral — handle this subcommand early
+  if (sub === "application-image-guide") {
+    let config = await GuildConfig.findOne({ guildId: interaction.guildId });
+    if (!config) config = new GuildConfig({ guildId: interaction.guildId });
+    const current = config.applicationImageGuideText ?? "";
+    const modal = new ModalBuilder()
+      .setCustomId("setup_img_guide_modal")
+      .setTitle("Image Guide Text");
+    const textInput = new TextInputBuilder()
+      .setCustomId("guide_text")
+      .setLabel("Guide content (markdown + image/gif URLs ok)")
+      .setStyle(TextInputStyle.Paragraph)
+      .setPlaceholder("Write your guide here. Paste a GIF URL on its own line to embed it.")
+      .setRequired(false)
+      .setMaxLength(2000);
+    if (current) textInput.setValue(current);
+    modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(textInput));
+    await interaction.showModal(modal);
+    return;
+  }
+
+  // Defer all other subcommands immediately so the 3-second window doesn't expire
+  // while waiting on MongoDB
+  await interaction.deferReply({ ephemeral: true });
+
   let config = await GuildConfig.findOne({ guildId: interaction.guildId });
   if (!config) {
     config = new GuildConfig({ guildId: interaction.guildId });
@@ -306,19 +332,19 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const category = interaction.options.getChannel("category", true);
     config.ticketCategoryId = category.id;
     await config.save();
-    await interaction.reply({ content: `✅ Ticket category set to **${category.name}**.`, ephemeral: true });
+    await interaction.editReply({ content: `✅ Ticket category set to **${category.name}**.` });
 
   } else if (sub === "log-channel") {
     const channel = interaction.options.getChannel("channel", true) as TextChannel;
     config.ticketLogChannelId = channel.id;
     await config.save();
-    await interaction.reply({ content: `✅ Log channel set to ${channel}.`, ephemeral: true });
+    await interaction.editReply({ content: `✅ Log channel set to ${channel}.` });
 
   } else if (sub === "vouch-channel") {
     const channel = interaction.options.getChannel("channel", true) as TextChannel;
     config.vouchChannelId = channel.id;
     await config.save();
-    await interaction.reply({ content: `✅ Vouch channel set to ${channel}.`, ephemeral: true });
+    await interaction.editReply({ content: `✅ Vouch channel set to ${channel}.` });
 
   } else if (sub === "min-messages") {
     const count = interaction.options.getInteger("count", true);
@@ -327,24 +353,23 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const msg = count === 0
       ? "✅ Message requirement disabled. Anyone can open tickets."
       : `✅ Users now need **${count}** messages before opening a ticket.`;
-    await interaction.reply({ content: msg, ephemeral: true });
+    await interaction.editReply({ content: msg });
 
   } else if (sub === "games") {
     const list = interaction.options.getString("list", true);
     const games = list.split(",").map((g) => g.trim()).filter(Boolean);
     if (games.length === 0) {
-      await interaction.reply({ content: "❌ Please provide at least one game.", ephemeral: true });
+      await interaction.editReply({ content: "❌ Please provide at least one game." });
       return;
     }
     if (games.length > 25) {
-      await interaction.reply({ content: "❌ Maximum 25 games allowed.", ephemeral: true });
+      await interaction.editReply({ content: "❌ Maximum 25 games allowed." });
       return;
     }
     config.supportedGames = games;
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: `✅ Supported games updated:\n${games.map((g) => `• ${g}`).join("\n")}`,
-      ephemeral: true,
     });
 
   } else if (sub === "helper-role") {
@@ -354,17 +379,17 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     if (idx >= 0) {
       config.helperRoles.splice(idx, 1);
       await config.save();
-      await interaction.reply({ content: `✅ **${role.name}** removed from helper roles.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ **${role.name}** removed from helper roles.` });
     } else {
       config.helperRoles.push(role.id);
       await config.save();
-      await interaction.reply({ content: `✅ **${role.name}** added as a helper role — members can see open tickets and use \`/helperprofile\` and \`/leaderboard\`.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ **${role.name}** added as a helper role — members can see open tickets and use \`/helperprofile\` and \`/leaderboard\`.` });
     }
 
   } else if (sub === "helper-roles") {
     const roles = config.helperRoles ?? [];
     if (roles.length === 0) {
-      await interaction.reply({ content: "No helper roles set. Use `/setup helper-role` to add one.", ephemeral: true });
+      await interaction.editReply({ content: "No helper roles set. Use `/setup helper-role` to add one." });
       return;
     }
     const lines = roles.map((id) => `• <@&${id}>`);
@@ -388,7 +413,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       );
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
 
   } else if (sub === "staff-role") {
     const role = interaction.options.getRole("role", true);
@@ -397,17 +422,17 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     if (idx >= 0) {
       config.staffRoles.splice(idx, 1);
       await config.save();
-      await interaction.reply({ content: `✅ **${role.name}** removed from staff roles.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ **${role.name}** removed from staff roles.` });
     } else {
       config.staffRoles.push(role.id);
       await config.save();
-      await interaction.reply({ content: `✅ **${role.name}** added as a staff role — members can now claim, close, and transcript tickets.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ **${role.name}** added as a staff role — members can now claim, close, and transcript tickets.` });
     }
 
   } else if (sub === "staff-roles") {
     const roles = config.staffRoles ?? [];
     if (roles.length === 0) {
-      await interaction.reply({ content: "No staff roles set. Use `/setup staff-role` to add one.", ephemeral: true });
+      await interaction.editReply({ content: "No staff roles set. Use `/setup staff-role` to add one." });
       return;
     }
     const lines = roles.map((id) => `• <@&${id}>`);
@@ -431,7 +456,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       );
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
 
   } else if (sub === "bypass-role") {
     const role = interaction.options.getRole("role", true);
@@ -440,17 +465,17 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     if (idx >= 0) {
       config.bypassRoles.splice(idx, 1);
       await config.save();
-      await interaction.reply({ content: `✅ **${role.name}** removed from bypass roles.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ **${role.name}** removed from bypass roles.` });
     } else {
       config.bypassRoles.push(role.id);
       await config.save();
-      await interaction.reply({ content: `✅ **${role.name}** added — members with this role bypass the message requirement.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ **${role.name}** added — members with this role bypass the message requirement.` });
     }
 
   } else if (sub === "bypass-roles") {
     const roles = config.bypassRoles ?? [];
     if (roles.length === 0) {
-      await interaction.reply({ content: "No bypass roles set. Use `/setup bypass-role` to add one.", ephemeral: true });
+      await interaction.editReply({ content: "No bypass roles set. Use `/setup bypass-role` to add one." });
       return;
     }
     const lines = roles.map((id) => `• <@&${id}>`);
@@ -474,15 +499,14 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       );
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
 
   } else if (sub === "ping-role") {
     const role = interaction.options.getRole("role", true);
     config.supportRoleId = role.id;
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: `✅ Default ping role set to **${role.name}**. All tickets will ping this role unless a game-specific role is set.`,
-      ephemeral: true,
     });
 
   } else if (sub === "game-role") {
@@ -497,18 +521,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       config.gameRoles.push({ game: gameName, roleId: role.id });
     }
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: `✅ Tickets for **${gameName}** will now ping **${role.name}**.`,
-      ephemeral: true,
     });
 
   } else if (sub === "game-roles") {
     const mappings = config.gameRoles ?? [];
 
     if (mappings.length === 0) {
-      await interaction.reply({
+      await interaction.editReply({
         content: "No game → role mappings set yet. Use `/setup game-role` to add one.",
-        ephemeral: true,
       });
       return;
     }
@@ -534,15 +556,14 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       );
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
 
   } else if (sub === "game-mappings") {
     const mappings = config.gameCategories ?? [];
 
     if (mappings.length === 0) {
-      await interaction.reply({
+      await interaction.editReply({
         content: "No game → category mappings set yet. Use `/setup game-category` to add one.",
-        ephemeral: true,
       });
       return;
     }
@@ -572,7 +593,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
 
-    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+    await interaction.editReply({ embeds: [embed], components: [row] });
 
   } else if (sub === "game-category") {
     const gameName = interaction.options.getString("game", true).trim();
@@ -586,18 +607,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       config.gameCategories.push({ game: gameName, categoryId: category.id });
     }
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: `✅ Tickets for **${gameName}** will now go into the **${category.name}** category.`,
-      ephemeral: true,
     });
 
   } else if (sub === "ticket-image") {
     const url = interaction.options.getString("url");
     config.ticketImageUrl = url ?? null;
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: url ? `✅ Ticket image set — new tickets will show the banner.` : `✅ Ticket image cleared.`,
-      ephemeral: true,
     });
 
   } else if (sub === "panel-image") {
@@ -607,13 +626,13 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const msg = url
       ? `✅ Panel image set. Run \`/ticket panel\` to post an updated panel.`
       : `✅ Panel image cleared. Run \`/ticket panel\` to post an updated panel.`;
-    await interaction.reply({ content: msg, ephemeral: true });
+    await interaction.editReply({ content: msg });
 
   } else if (sub === "application-channel") {
     const channel = interaction.options.getChannel("channel", true) as TextChannel;
     config.applicationChannelId = channel.id;
     await config.save();
-    await interaction.reply({ content: `✅ Application review channel set to ${channel}.`, ephemeral: true });
+    await interaction.editReply({ content: `✅ Application review channel set to ${channel}.` });
 
   } else if (sub === "application-image") {
     const url = interaction.options.getString("url");
@@ -622,7 +641,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const msg = url
       ? `✅ Application panel image set. Run \`/applicationpanel\` to post an updated panel.`
       : `✅ Application panel image cleared.`;
-    await interaction.reply({ content: msg, ephemeral: true });
+    await interaction.editReply({ content: msg });
 
   } else if (sub === "application-game-role") {
     const gameName = interaction.options.getString("game", true).trim();
@@ -646,39 +665,18 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       config.applicationRoles.push(entry);
     }
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: `✅ **${gameName}** applications: accepted helpers get <@&${gameRole.id}> + <@&${baseRole.id}>${notifyRole ? `, ping <@&${notifyRole.id}>` : ""}.`,
-      ephemeral: true,
     });
 
   } else if (sub === "daily-message-gate") {
     config.dailyMessageGate = !config.dailyMessageGate;
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: config.dailyMessageGate
         ? "✅ Daily message gate **enabled** — users only need to pass the message requirement once per day."
         : "✅ Daily message gate **disabled** — message requirement is checked every time.",
-      ephemeral: true,
     });
-
-  } else if (sub === "application-image-guide") {
-    const current = config.applicationImageGuideText ?? "";
-    const modal = new ModalBuilder()
-      .setCustomId("setup_img_guide_modal")
-      .setTitle("Image Guide Text");
-
-    const textInput = new TextInputBuilder()
-      .setCustomId("guide_text")
-      .setLabel("Guide content (markdown + image/gif URLs ok)")
-      .setStyle(TextInputStyle.Paragraph)
-      .setPlaceholder("Write your guide here. Paste a GIF URL on its own line to embed it.")
-      .setRequired(false)
-      .setMaxLength(2000);
-
-    if (current) textInput.setValue(current);
-
-    modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(textInput));
-    await interaction.showModal(modal);
 
   } else if (sub === "application-cooldown") {
     const gameName = interaction.options.getString("game", true).trim();
@@ -694,13 +692,13 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         config.applicationRoles[idx]!.cooldownMs = undefined;
         await config.save();
       }
-      await interaction.reply({ content: `✅ Cooldown removed for **${gameName}** applications.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ Cooldown removed for **${gameName}** applications.` });
       return;
     }
 
     const match = durationStr.trim().match(/^(\d+(?:\.\d+)?)\s*(m|h|d)$/i);
     if (!match) {
-      await interaction.reply({ content: "❌ Invalid duration format. Use `30m`, `3h`, or `7d`.", ephemeral: true });
+      await interaction.editReply({ content: "❌ Invalid duration format. Use `30m`, `3h`, or `7d`." });
       return;
     }
     const val = parseFloat(match[1]!);
@@ -714,9 +712,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       idx = config.applicationRoles.length - 1;
     }
     await config.save();
-    await interaction.reply({
+    await interaction.editReply({
       content: `✅ Users must now wait **${durationStr}** before re-applying for **${gameName}**.`,
-      ephemeral: true,
     });
 
   } else if (sub === "application-game") {
@@ -726,15 +723,15 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     if (idx >= 0) {
       config.applicationGames.splice(idx, 1);
       await config.save();
-      await interaction.reply({ content: `✅ **${name}** removed from the application panel games.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ **${name}** removed from the application panel games.` });
     } else {
       if (config.applicationGames.length >= 25) {
-        await interaction.reply({ content: "❌ Maximum 25 games allowed.", ephemeral: true });
+        await interaction.editReply({ content: "❌ Maximum 25 games allowed." });
         return;
       }
       config.applicationGames.push(name);
       await config.save();
-      await interaction.reply({ content: `✅ **${name}** added to the application panel games.`, ephemeral: true });
+      await interaction.editReply({ content: `✅ **${name}** added to the application panel games.` });
     }
 
   } else if (sub === "view") {
@@ -767,6 +764,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       )
       .setTimestamp();
 
-    await interaction.reply({ embeds: [embed], ephemeral: true });
+    await interaction.editReply({ embeds: [embed] });
   }
 }
