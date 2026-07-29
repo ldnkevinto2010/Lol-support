@@ -1021,6 +1021,15 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       return;
     }
 
+    // Re-check prerequisites at creation time so users can't bypass by keeping
+    // an old dropdown/modal open from before the message requirement was set
+    const memberRoleIds = (interaction.member as any)?.roles?.cache?.map((r: any) => r.id) ?? [];
+    const prereqError = await checkTicketPrerequisites(guildId, interaction.user.id, config, memberRoleIds, guild);
+    if (prereqError) {
+      await interaction.editReply({ content: prereqError });
+      return;
+    }
+
     // Increment ticket counter
     const updatedConfig = await GuildConfig.findOneAndUpdate(
       { guildId },

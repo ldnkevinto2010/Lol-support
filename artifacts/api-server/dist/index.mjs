@@ -170298,6 +170298,12 @@ async function handleModalSubmit(interaction) {
       await interaction.editReply({ content: "\u274C Ticket category is not configured." });
       return;
     }
+    const memberRoleIds = interaction.member?.roles?.cache?.map((r) => r.id) ?? [];
+    const prereqError = await checkTicketPrerequisites(guildId, interaction.user.id, config, memberRoleIds, guild);
+    if (prereqError) {
+      await interaction.editReply({ content: prereqError });
+      return;
+    }
     const updatedConfig = await GuildConfig.findOneAndUpdate(
       { guildId },
       { $inc: { ticketCounter: 1 } },
