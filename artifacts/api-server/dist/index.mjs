@@ -169807,31 +169807,32 @@ async function handleTicketClose(interaction, config, reason = "No reason provid
 async function handleButton(interaction) {
   const { customId, guildId, guild } = interaction;
   if (!guildId || !guild) return;
-  const config = await Promise.race([
-    GuildConfig.findOne({ guildId }),
-    new Promise((resolve) => setTimeout(() => resolve(null), 2500))
-  ]);
   if (customId === "ticket_open_panel") {
+    await interaction.deferReply({ ephemeral: true });
+    const config2 = await GuildConfig.findOne({ guildId });
     const memberRoles = interaction.member?.roles?.cache?.map((r) => r.id) ?? [];
-    const error = await checkTicketPrerequisites(guildId, interaction.user.id, config, memberRoles, guild);
+    const error = await checkTicketPrerequisites(guildId, interaction.user.id, config2, memberRoles, guild);
     if (error) {
-      await interaction.reply({ content: error, ephemeral: true });
+      await interaction.editReply({ content: error });
       return;
     }
-    const games = config?.applicationGames?.length ? config.applicationGames : DEFAULT_GAMES;
+    const games = config2?.supportedGames?.length ? config2.supportedGames : DEFAULT_GAMES;
     const select = new import_discord2.StringSelectMenuBuilder().setCustomId("ticket_game_select").setPlaceholder("Select the game your ticket is for...").addOptions(
       games.slice(0, 25).map(
         (g) => new import_discord2.StringSelectMenuOptionBuilder().setLabel(g).setValue(g)
       )
     );
     const row = new import_discord2.ActionRowBuilder().addComponents(select);
-    await interaction.reply({
+    await interaction.editReply({
       content: "**Select the game your ticket is for:**",
-      components: [row],
-      ephemeral: true
+      components: [row]
     });
     return;
   }
+  const config = await Promise.race([
+    GuildConfig.findOne({ guildId }),
+    new Promise((resolve) => setTimeout(() => resolve(null), 2500))
+  ]);
   if (customId === "ticket_claim") {
     const ticket = await Ticket.findOne({ channelId: interaction.channelId });
     if (!ticket || ticket.status === "closed") {

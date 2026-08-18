@@ -394,25 +394,22 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
   const { customId, guildId, guild } = interaction;
   if (!guildId || !guild) return;
 
-  const config = await Promise.race([
-    GuildConfig.findOne({ guildId }),
-    new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500)),
-  ]);
-
-  // Panel "Create Ticket" button → show game select dropdown
+  // ── ticket_open_panel: defer immediately so the message-count DB queries
+  //    don't race against Discord's 3-second window ──
   if (customId === "ticket_open_panel") {
+    await interaction.deferReply({ ephemeral: true });
+    const config = await GuildConfig.findOne({ guildId });
     const memberRoles = (interaction.member as any)?.roles?.cache?.map((r: any) => r.id) ?? [];
     const error = await checkTicketPrerequisites(guildId, interaction.user.id, config, memberRoles, guild);
     if (error) {
-      await interaction.reply({ content: error, ephemeral: true });
+      await interaction.editReply({ content: error });
       return;
     }
 
-    const games = config?.applicationGames?.length
-      ? config.applicationGames
+    const games = config?.supportedGames?.length
+      ? config.supportedGames
       : DEFAULT_GAMES;
 
-    // Show game select dropdown
     const select = new StringSelectMenuBuilder()
       .setCustomId("ticket_game_select")
       .setPlaceholder("Select the game your ticket is for...")
@@ -423,14 +420,17 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
       );
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
-
-    await interaction.reply({
+    await interaction.editReply({
       content: "**Select the game your ticket is for:**",
       components: [row],
-      ephemeral: true,
     });
     return;
   }
+
+  const config = await Promise.race([
+    GuildConfig.findOne({ guildId }),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500)),
+  ]);
 
   if (customId === "ticket_claim") {
     const ticket = await Ticket.findOne({ channelId: interaction.channelId });
