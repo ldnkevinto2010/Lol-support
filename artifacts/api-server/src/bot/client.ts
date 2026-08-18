@@ -67,15 +67,35 @@ export function createBotClient(): Client {
     }
   });
 
-  // Track message counts
+  // Track message counts (all-time + daily)
   client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.guildId) return;
     try {
-      await UserMessageCount.findOneAndUpdate(
-        { guildId: message.guildId, userId: message.author.id },
-        { $inc: { count: 1 } },
-        { upsert: true }
-      );
+      const todayUTC = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+      const existing = await UserMessageCount.findOne({
+        guildId: message.guildId,
+        userId: message.author.id,
+      });
+      if (!existing) {
+        await UserMessageCount.create({
+          guildId: message.guildId,
+          userId: message.author.id,
+          count: 1,
+          dailyCount: 1,
+          dailyCountDate: todayUTC,
+        });
+      } else if (existing.dailyCountDate === todayUTC) {
+        // Same day — increment both
+        existing.count += 1;
+        existing.dailyCount += 1;
+        await existing.save();
+      } else {
+        // New day — reset daily count
+        existing.count += 1;
+        existing.dailyCount = 1;
+        existing.dailyCountDate = todayUTC;
+        await existing.save();
+      }
     } catch (err) {
       logger.error({ err }, "Failed to update message count");
     }

@@ -184,28 +184,19 @@ async function checkTicketPrerequisites(
 
   if (!hasBypass && effectiveMinMessages > 0) {
     const msgDoc = await UserMessageCount.findOne({ guildId, userId });
-    const count = msgDoc?.count ?? 0;
 
-    let gateAlreadyPassedToday = false;
-    if (config.dailyMessageGate && msgDoc?.lastGatePassed) {
-      const lp = msgDoc.lastGatePassed;
-      const now = new Date();
-      gateAlreadyPassedToday =
-        lp.getUTCFullYear() === now.getUTCFullYear() &&
-        lp.getUTCMonth() === now.getUTCMonth() &&
-        lp.getUTCDate() === now.getUTCDate();
-    }
-
-    if (!gateAlreadyPassedToday) {
+    if (config.dailyMessageGate) {
+      // Daily gate: user must send the required messages TODAY specifically
+      const todayUTC = new Date().toISOString().slice(0, 10);
+      const dailyCount = (msgDoc?.dailyCountDate === todayUTC) ? (msgDoc?.dailyCount ?? 0) : 0;
+      if (dailyCount < effectiveMinMessages) {
+        return `❌ You need at least **${effectiveMinMessages}** messages sent **today** to open a ticket. You've sent **${dailyCount}** today.`;
+      }
+    } else {
+      // Standard gate: check all-time count
+      const count = msgDoc?.count ?? 0;
       if (count < effectiveMinMessages) {
         return `❌ You need at least **${effectiveMinMessages}** messages to open a ticket. You have **${count}**.`;
-      }
-      if (config.dailyMessageGate) {
-        await UserMessageCount.findOneAndUpdate(
-          { guildId, userId },
-          { $set: { lastGatePassed: new Date() } },
-          { upsert: true }
-        );
       }
     }
   }

@@ -169528,7 +169528,9 @@ var init_UserMessageCount = __esm({
       guildId: { type: String, required: true },
       userId: { type: String, required: true },
       count: { type: Number, default: 0 },
-      lastGatePassed: { type: Date, default: null }
+      lastGatePassed: { type: Date, default: null },
+      dailyCount: { type: Number, default: 0 },
+      dailyCountDate: { type: String, default: null }
     });
     UserMessageCountSchema.index({ guildId: 1, userId: 1 }, { unique: true });
     UserMessageCount = import_mongoose5.default.model(
@@ -169642,23 +169644,16 @@ async function checkTicketPrerequisites(guildId, userId, config, memberRoleIds =
   }
   if (!hasBypass && effectiveMinMessages > 0) {
     const msgDoc = await UserMessageCount.findOne({ guildId, userId });
-    const count = msgDoc?.count ?? 0;
-    let gateAlreadyPassedToday = false;
-    if (config.dailyMessageGate && msgDoc?.lastGatePassed) {
-      const lp = msgDoc.lastGatePassed;
-      const now = /* @__PURE__ */ new Date();
-      gateAlreadyPassedToday = lp.getUTCFullYear() === now.getUTCFullYear() && lp.getUTCMonth() === now.getUTCMonth() && lp.getUTCDate() === now.getUTCDate();
-    }
-    if (!gateAlreadyPassedToday) {
+    if (config.dailyMessageGate) {
+      const todayUTC = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+      const dailyCount = msgDoc?.dailyCountDate === todayUTC ? msgDoc?.dailyCount ?? 0 : 0;
+      if (dailyCount < effectiveMinMessages) {
+        return `\u274C You need at least **${effectiveMinMessages}** messages sent **today** to open a ticket. You've sent **${dailyCount}** today.`;
+      }
+    } else {
+      const count = msgDoc?.count ?? 0;
       if (count < effectiveMinMessages) {
         return `\u274C You need at least **${effectiveMinMessages}** messages to open a ticket. You have **${count}**.`;
-      }
-      if (config.dailyMessageGate) {
-        await UserMessageCount.findOneAndUpdate(
-          { guildId, userId },
-          { $set: { lastGatePassed: /* @__PURE__ */ new Date() } },
-          { upsert: true }
-        );
       }
     }
   }
@@ -175871,11 +175866,29 @@ function createBotClient() {
   client.on(import_discord13.Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.guildId) return;
     try {
-      await UserMessageCount.findOneAndUpdate(
-        { guildId: message.guildId, userId: message.author.id },
-        { $inc: { count: 1 } },
-        { upsert: true }
-      );
+      const todayUTC = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+      const existing = await UserMessageCount.findOne({
+        guildId: message.guildId,
+        userId: message.author.id
+      });
+      if (!existing) {
+        await UserMessageCount.create({
+          guildId: message.guildId,
+          userId: message.author.id,
+          count: 1,
+          dailyCount: 1,
+          dailyCountDate: todayUTC
+        });
+      } else if (existing.dailyCountDate === todayUTC) {
+        existing.count += 1;
+        existing.dailyCount += 1;
+        await existing.save();
+      } else {
+        existing.count += 1;
+        existing.dailyCount = 1;
+        existing.dailyCountDate = todayUTC;
+        await existing.save();
+      }
     } catch (err) {
       logger.error({ err }, "Failed to update message count");
     }
