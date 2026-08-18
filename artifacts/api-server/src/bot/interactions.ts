@@ -24,7 +24,8 @@ import {
 import { GuildConfig, IGuildConfig } from "./models/GuildConfig";
 import { Ticket } from "./models/Ticket";
 import { Vouch } from "./models/Vouch";
-import { UserMessageCount } from "./models/UserMessageCount";
+import { UserMessageCount, getUTCWeekKey } from "./models/UserMessageCount";
+import { normGame } from "./utils";
 import { Application } from "./models/Application";
 
 function getAccountAgeDays(userId: string): number {
@@ -544,7 +545,7 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
     // Extract game from channel topic (set at ticket creation)
     const topicGame = channel.topic?.match(/game:(.+)/)?.[1]?.trim() ?? null;
     const gameRoleEntry = topicGame
-      ? (config?.gameRoles ?? []).find((gr) => gr.game.toLowerCase() === topicGame.toLowerCase())
+      ? (config?.gameRoles ?? []).find((gr) => normGame(gr.game) === normGame(topicGame))
       : null;
     const helperRoleIds = gameRoleEntry
       ? [gameRoleEntry.roleId]
@@ -730,7 +731,7 @@ export async function handleButton(interaction: ButtonInteraction): Promise<void
 
     // Give the applicant their roles and DM them
     const appRoleEntry = (config?.applicationRoles ?? []).find(
-      (ar) => ar.game.toLowerCase() === app.game.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(app.game)
     );
     const assignedRoleNames: string[] = [];
     if (appRoleEntry) {
@@ -851,7 +852,7 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
       new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500)),
     ]);
     const customEntry = (appConfig?.applicationQuestions ?? []).find(
-      (aq) => aq.game.toLowerCase() === game.toLowerCase()
+      (aq) => normGame(aq.game) === normGame(game)
     );
     const questions = customEntry?.questions?.length ? customEntry.questions : DEFAULT_APP_QUESTIONS;
 
@@ -937,7 +938,7 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     }
     const before = config.gameRoles.length;
     config.gameRoles = config.gameRoles.filter(
-      (gr) => gr.game.toLowerCase() !== gameName.toLowerCase()
+      (gr) => normGame(gr.game) !== normGame(gameName)
     );
     if (config.gameRoles.length === before) {
       await interaction.reply({ content: `❌ No role mapping found for **${gameName}**.`, ephemeral: true });
@@ -960,7 +961,7 @@ export async function handleSelectMenu(interaction: StringSelectMenuInteraction)
     }
     const before = config.gameCategories.length;
     config.gameCategories = config.gameCategories.filter(
-      (gc) => gc.game.toLowerCase() !== gameName.toLowerCase()
+      (gc) => normGame(gc.game) !== normGame(gameName)
     );
     if (config.gameCategories.length === before) {
       await interaction.reply({ content: `❌ No mapping found for **${gameName}**.`, ephemeral: true });
@@ -1064,7 +1065,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
 
     // Only the game-specific role can see the ticket (falls back to all helper roles if no mapping)
     const gameRoleEntry = (config.gameRoles ?? []).find(
-      (gr) => gr.game.toLowerCase() === game.toLowerCase()
+      (gr) => normGame(gr.game) === normGame(game)
     );
     const helperRoleIds = gameRoleEntry
       ? [gameRoleEntry.roleId]
@@ -1084,7 +1085,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
 
     // Resolve category: per-game mapping takes priority over the default
     const gameCategory = config.gameCategories?.find(
-      (gc) => gc.game.toLowerCase() === game.toLowerCase()
+      (gc) => normGame(gc.game) === normGame(game)
     );
     const categoryId = gameCategory?.categoryId ?? config.ticketCategoryId;
 
@@ -1125,7 +1126,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
 
     // Game-specific role takes priority over the default ping role
     const gameRole = config.gameRoles?.find(
-      (gr) => gr.game.toLowerCase() === game.toLowerCase()
+      (gr) => normGame(gr.game) === normGame(game)
     );
     const pingRoleId = gameRole?.roleId ?? config.supportRoleId;
     const mentionContent = pingRoleId
@@ -1233,7 +1234,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
 
     // Cooldown check
     const cooldownEntry = (config.applicationRoles ?? []).find(
-      (ar) => ar.game.toLowerCase() === game.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(game)
     );
     if (cooldownEntry?.cooldownMs) {
       const lastApp = await Application.findOne({
@@ -1281,7 +1282,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
     });
 
     const customQEntry = (config.applicationQuestions ?? []).find(
-      (aq) => aq.game.toLowerCase() === game.toLowerCase()
+      (aq) => normGame(aq.game) === normGame(game)
     );
     const questionLabels = customQEntry?.questions?.length
       ? customQEntry.questions.map((q) => q.label)
@@ -1298,7 +1299,7 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
     );
 
     const appRoleEntry = (config.applicationRoles ?? []).find(
-      (ar) => ar.game.toLowerCase() === game.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(game)
     );
     const notifyContent = appRoleEntry?.notifyRoleId
       ? `<@&${appRoleEntry.notifyRoleId}> — new **${game}** helper application!`

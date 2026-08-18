@@ -13,6 +13,7 @@ import {
   TextInputStyle,
 } from "discord.js";
 import { GuildConfig } from "../models/GuildConfig";
+import { normGame } from "../utils";
 
 export const data = new SlashCommandBuilder()
   .setName("setup")
@@ -513,7 +514,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const gameName = interaction.options.getString("game", true).trim();
     const role = interaction.options.getRole("role", true);
     const existing = config.gameRoles?.findIndex(
-      (gr) => gr.game.toLowerCase() === gameName.toLowerCase()
+      (gr) => normGame(gr.game) === normGame(gameName)
     ) ?? -1;
     if (existing >= 0) {
       config.gameRoles[existing]!.roleId = role.id;
@@ -599,7 +600,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const gameName = interaction.options.getString("game", true).trim();
     const category = interaction.options.getChannel("category", true);
     const existing = config.gameCategories?.findIndex(
-      (gc) => gc.game.toLowerCase() === gameName.toLowerCase()
+      (gc) => normGame(gc.game) === normGame(gameName)
     ) ?? -1;
     if (existing >= 0) {
       config.gameCategories[existing]!.categoryId = category.id;
@@ -651,7 +652,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
     if (!config.applicationRoles) config.applicationRoles = [];
     const idx = config.applicationRoles.findIndex(
-      (ar) => ar.game.toLowerCase() === gameName.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(gameName)
     );
     const entry = {
       game: gameName,
@@ -684,7 +685,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
     if (!config.applicationRoles) config.applicationRoles = [];
     let idx = config.applicationRoles.findIndex(
-      (ar) => ar.game.toLowerCase() === gameName.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(gameName)
     );
 
     if (!durationStr) {

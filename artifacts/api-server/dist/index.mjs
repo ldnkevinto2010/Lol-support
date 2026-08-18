@@ -169479,6 +169479,15 @@ var init_GuildConfig = __esm({
   }
 });
 
+// src/bot/utils.ts
+var normGame;
+var init_utils = __esm({
+  "src/bot/utils.ts"() {
+    "use strict";
+    normGame = (s) => s.toLowerCase().replace(/[\s\-_()\[\].,!?]/g, "");
+  }
+});
+
 // src/bot/models/Ticket.ts
 var import_mongoose3, TicketSchema, Ticket;
 var init_Ticket = __esm({
@@ -169930,7 +169939,7 @@ async function handleButton(interaction) {
     await ticket.save();
     const channel = interaction.channel;
     const topicGame = channel.topic?.match(/game:(.+)/)?.[1]?.trim() ?? null;
-    const gameRoleEntry = topicGame ? (config?.gameRoles ?? []).find((gr) => gr.game.toLowerCase() === topicGame.toLowerCase()) : null;
+    const gameRoleEntry = topicGame ? (config?.gameRoles ?? []).find((gr) => normGame(gr.game) === normGame(topicGame)) : null;
     const helperRoleIds = gameRoleEntry ? [gameRoleEntry.roleId] : config?.helperRoles ?? [];
     const overwrites = [
       {
@@ -170066,7 +170075,7 @@ async function handleButton(interaction) {
     app2.reviewedAt = /* @__PURE__ */ new Date();
     await app2.save();
     const appRoleEntry = (config?.applicationRoles ?? []).find(
-      (ar) => ar.game.toLowerCase() === app2.game.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(app2.game)
     );
     const assignedRoleNames = [];
     if (appRoleEntry) {
@@ -170168,7 +170177,7 @@ async function handleSelectMenu(interaction) {
       new Promise((resolve) => setTimeout(() => resolve(null), 2500))
     ]);
     const customEntry = (appConfig?.applicationQuestions ?? []).find(
-      (aq) => aq.game.toLowerCase() === game.toLowerCase()
+      (aq) => normGame(aq.game) === normGame(game)
     );
     const questions = customEntry?.questions?.length ? customEntry.questions : DEFAULT_APP_QUESTIONS;
     const maxLengths = [500, 300, 100, 300, 100];
@@ -170242,7 +170251,7 @@ async function handleSelectMenu(interaction) {
     }
     const before = config.gameRoles.length;
     config.gameRoles = config.gameRoles.filter(
-      (gr) => gr.game.toLowerCase() !== gameName.toLowerCase()
+      (gr) => normGame(gr.game) !== normGame(gameName)
     );
     if (config.gameRoles.length === before) {
       await interaction.reply({ content: `\u274C No role mapping found for **${gameName}**.`, ephemeral: true });
@@ -170264,7 +170273,7 @@ async function handleSelectMenu(interaction) {
     }
     const before = config.gameCategories.length;
     config.gameCategories = config.gameCategories.filter(
-      (gc) => gc.game.toLowerCase() !== gameName.toLowerCase()
+      (gc) => normGame(gc.game) !== normGame(gameName)
     );
     if (config.gameCategories.length === before) {
       await interaction.reply({ content: `\u274C No mapping found for **${gameName}**.`, ephemeral: true });
@@ -170349,7 +170358,7 @@ async function handleModalSubmit(interaction) {
       });
     }
     const gameRoleEntry = (config.gameRoles ?? []).find(
-      (gr) => gr.game.toLowerCase() === game.toLowerCase()
+      (gr) => normGame(gr.game) === normGame(game)
     );
     const helperRoleIds = gameRoleEntry ? [gameRoleEntry.roleId] : config.helperRoles ?? [];
     for (const helperRoleId of helperRoleIds) {
@@ -170365,7 +170374,7 @@ async function handleModalSubmit(interaction) {
       });
     }
     const gameCategory = config.gameCategories?.find(
-      (gc) => gc.game.toLowerCase() === game.toLowerCase()
+      (gc) => normGame(gc.game) === normGame(game)
     );
     const categoryId = gameCategory?.categoryId ?? config.ticketCategoryId;
     const safeName = interaction.user.username.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 20);
@@ -170395,7 +170404,7 @@ async function handleModalSubmit(interaction) {
     ).setTimestamp();
     if (config.ticketImageUrl) embed.setImage(config.ticketImageUrl);
     const gameRole = config.gameRoles?.find(
-      (gr) => gr.game.toLowerCase() === game.toLowerCase()
+      (gr) => normGame(gr.game) === normGame(game)
     );
     const pingRoleId = gameRole?.roleId ?? config.supportRoleId;
     const mentionContent = pingRoleId ? `<@&${pingRoleId}> ${interaction.user}` : `${interaction.user}`;
@@ -170473,7 +170482,7 @@ async function handleModalSubmit(interaction) {
       return;
     }
     const cooldownEntry = (config.applicationRoles ?? []).find(
-      (ar) => ar.game.toLowerCase() === game.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(game)
     );
     if (cooldownEntry?.cooldownMs) {
       const lastApp = await Application.findOne({
@@ -170516,7 +170525,7 @@ async function handleModalSubmit(interaction) {
       status: "pending"
     });
     const customQEntry = (config.applicationQuestions ?? []).find(
-      (aq) => aq.game.toLowerCase() === game.toLowerCase()
+      (aq) => normGame(aq.game) === normGame(game)
     );
     const questionLabels = customQEntry?.questions?.length ? customQEntry.questions.map((q) => q.label) : void 0;
     const embed = buildApplicationEmbed(
@@ -170529,7 +170538,7 @@ async function handleModalSubmit(interaction) {
       questionLabels
     );
     const appRoleEntry = (config.applicationRoles ?? []).find(
-      (ar) => ar.game.toLowerCase() === game.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(game)
     );
     const notifyContent = appRoleEntry?.notifyRoleId ? `<@&${appRoleEntry.notifyRoleId}> \u2014 new **${game}** helper application!` : `New **${game}** helper application!`;
     const acceptBtn = new import_discord2.ButtonBuilder().setCustomId(`app_accept:${app2._id}`).setLabel("Accept").setStyle(import_discord2.ButtonStyle.Success).setEmoji("\u2705");
@@ -170552,6 +170561,7 @@ var init_interactions = __esm({
     init_Ticket();
     init_Vouch();
     init_UserMessageCount();
+    init_utils();
     init_Application();
     DEFAULT_APP_QUESTIONS = [
       { label: "Can you solo most content in the game?", placeholder: "Yes / No and details", style: "paragraph" },
@@ -174561,6 +174571,7 @@ __export(setup_exports, {
 });
 var import_discord = __toESM(require_src2(), 1);
 init_GuildConfig();
+init_utils();
 var data = new import_discord.SlashCommandBuilder().setName("setup").setDescription("Configure CarryBot for this server").setDefaultMemberPermissions(import_discord.PermissionFlagsBits.Administrator).addSubcommand(
   (sub) => sub.setName("ticket-category").setDescription("Set the category where ticket channels are created").addChannelOption(
     (opt) => opt.setName("category").setDescription("The category channel").addChannelTypes(import_discord.ChannelType.GuildCategory).setRequired(true)
@@ -174818,7 +174829,7 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`
     const gameName = interaction.options.getString("game", true).trim();
     const role = interaction.options.getRole("role", true);
     const existing = config.gameRoles?.findIndex(
-      (gr) => gr.game.toLowerCase() === gameName.toLowerCase()
+      (gr) => normGame(gr.game) === normGame(gameName)
     ) ?? -1;
     if (existing >= 0) {
       config.gameRoles[existing].roleId = role.id;
@@ -174870,7 +174881,7 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`
     const gameName = interaction.options.getString("game", true).trim();
     const category = interaction.options.getChannel("category", true);
     const existing = config.gameCategories?.findIndex(
-      (gc) => gc.game.toLowerCase() === gameName.toLowerCase()
+      (gc) => normGame(gc.game) === normGame(gameName)
     ) ?? -1;
     if (existing >= 0) {
       config.gameCategories[existing].categoryId = category.id;
@@ -174912,7 +174923,7 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`
     const notifyRole = interaction.options.getRole("notify-role");
     if (!config.applicationRoles) config.applicationRoles = [];
     const idx = config.applicationRoles.findIndex(
-      (ar) => ar.game.toLowerCase() === gameName.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(gameName)
     );
     const entry = {
       game: gameName,
@@ -174940,7 +174951,7 @@ ${games.map((g) => `\u2022 ${g}`).join("\n")}`
     const durationStr = interaction.options.getString("duration");
     if (!config.applicationRoles) config.applicationRoles = [];
     let idx = config.applicationRoles.findIndex(
-      (ar) => ar.game.toLowerCase() === gameName.toLowerCase()
+      (ar) => normGame(ar.game) === normGame(gameName)
     );
     if (!durationStr) {
       if (idx >= 0) {
@@ -175578,6 +175589,7 @@ __export(appquestions_exports, {
 });
 var import_discord10 = __toESM(require_src2(), 1);
 init_GuildConfig();
+init_utils();
 var DEFAULT_QUESTIONS = [
   { label: "Can you solo most content in the game?", placeholder: "Yes / No and details", style: "paragraph" },
   { label: "What can't you solo?", placeholder: "List any content you struggle with", style: "short" },
@@ -175622,7 +175634,7 @@ async function execute9(interaction) {
     { upsert: true, new: true }
   );
   const entryIdx = (config.applicationQuestions ?? []).findIndex(
-    (aq) => aq.game.toLowerCase() === game.toLowerCase()
+    (aq) => normGame(aq.game) === normGame(game)
   );
   if (sub === "set") {
     const slot = interaction.options.getInteger("slot", true) - 1;

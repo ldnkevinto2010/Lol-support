@@ -4,6 +4,7 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import { GuildConfig } from "../models/GuildConfig";
+import { normGame } from "../utils";
 
 const DEFAULT_QUESTIONS = [
   { label: "Can you solo most content in the game?", placeholder: "Yes / No and details", style: "paragraph" },
@@ -72,7 +73,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   );
 
   const entryIdx = (config.applicationQuestions ?? []).findIndex(
-    (aq) => aq.game.toLowerCase() === game.toLowerCase()
+    (aq) => normGame(aq.game) === normGame(game)
   );
 
   if (sub === "set") {
