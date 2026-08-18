@@ -170391,6 +170391,9 @@ async function handleModalSubmit(interaction) {
       embeds: [embed],
       components: [ticketButtons()]
     });
+    await channel.send({
+      content: `-# \u26A0\uFE0F Helpers will never ask for your personal information, passwords, or any form of payment.`
+    });
     if (config.ticketLogChannelId) {
       const logChannel = guild.channels.cache.get(config.ticketLogChannelId);
       if (logChannel) {

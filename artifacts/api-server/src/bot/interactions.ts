@@ -1138,6 +1138,10 @@ export async function handleModalSubmit(interaction: ModalSubmitInteraction): Pr
       components: [ticketButtons()],
     });
 
+    await channel.send({
+      content: `-# ⚠️ Helpers will never ask for your personal information, passwords, or any form of payment.`,
+    });
+
     if (config.ticketLogChannelId) {
       const logChannel = guild.channels.cache.get(config.ticketLogChannelId) as TextChannel | undefined;
       if (logChannel) {
