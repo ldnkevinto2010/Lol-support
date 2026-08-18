@@ -20,7 +20,7 @@ import * as applicationCommandsCmd from "./commands/applicationcommands";
 import * as appQuestionsCmd from "./commands/appquestions";
 import * as ticketRoleCmd from "./commands/ticketrole";
 import { handleButton, handleModalSubmit, handleSelectMenu } from "./interactions";
-import { UserMessageCount } from "./models/UserMessageCount";
+import { UserMessageCount, getUTCWeekKey } from "./models/UserMessageCount";
 import { deployCommands } from "./deploy-commands";
 
 const commands = new Map<string, { data: unknown; execute: (i: ChatInputCommandInteraction) => Promise<void> }>([
@@ -67,15 +67,20 @@ export function createBotClient(): Client {
     }
   });
 
-  // Track message counts (all-time + daily)
+  // Track message counts (all-time + daily + weekly + monthly)
   client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.guildId) return;
     try {
-      const todayUTC = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+      const now = new Date();
+      const todayUTC = now.toISOString().slice(0, 10);       // "YYYY-MM-DD"
+      const weekUTC = getUTCWeekKey(now);                    // "YYYY-WW"
+      const monthUTC = now.toISOString().slice(0, 7);        // "YYYY-MM"
+
       const existing = await UserMessageCount.findOne({
         guildId: message.guildId,
         userId: message.author.id,
       });
+
       if (!existing) {
         await UserMessageCount.create({
           guildId: message.guildId,
@@ -83,17 +88,34 @@ export function createBotClient(): Client {
           count: 1,
           dailyCount: 1,
           dailyCountDate: todayUTC,
+          weeklyCount: 1,
+          weeklyCountDate: weekUTC,
+          monthlyCount: 1,
+          monthlyCountDate: monthUTC,
         });
-      } else if (existing.dailyCountDate === todayUTC) {
-        // Same day — increment both
-        existing.count += 1;
-        existing.dailyCount += 1;
-        await existing.save();
       } else {
-        // New day — reset daily count
         existing.count += 1;
-        existing.dailyCount = 1;
-        existing.dailyCountDate = todayUTC;
+        // Daily
+        if (existing.dailyCountDate === todayUTC) {
+          existing.dailyCount += 1;
+        } else {
+          existing.dailyCount = 1;
+          existing.dailyCountDate = todayUTC;
+        }
+        // Weekly
+        if (existing.weeklyCountDate === weekUTC) {
+          existing.weeklyCount += 1;
+        } else {
+          existing.weeklyCount = 1;
+          existing.weeklyCountDate = weekUTC;
+        }
+        // Monthly
+        if (existing.monthlyCountDate === monthUTC) {
+          existing.monthlyCount += 1;
+        } else {
+          existing.monthlyCount = 1;
+          existing.monthlyCountDate = monthUTC;
+        }
         await existing.save();
       }
     } catch (err) {

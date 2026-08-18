@@ -169519,6 +169519,14 @@ var init_Vouch = __esm({
 });
 
 // src/bot/models/UserMessageCount.ts
+function getUTCWeekKey(date = /* @__PURE__ */ new Date()) {
+  const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 864e5 + 1) / 7);
+  return `${d.getUTCFullYear()}-${String(week).padStart(2, "0")}`;
+}
 var import_mongoose5, UserMessageCountSchema, UserMessageCount;
 var init_UserMessageCount = __esm({
   "src/bot/models/UserMessageCount.ts"() {
@@ -169530,7 +169538,11 @@ var init_UserMessageCount = __esm({
       count: { type: Number, default: 0 },
       lastGatePassed: { type: Date, default: null },
       dailyCount: { type: Number, default: 0 },
-      dailyCountDate: { type: String, default: null }
+      dailyCountDate: { type: String, default: null },
+      weeklyCount: { type: Number, default: 0 },
+      weeklyCountDate: { type: String, default: null },
+      monthlyCount: { type: Number, default: 0 },
+      monthlyCountDate: { type: String, default: null }
     });
     UserMessageCountSchema.index({ guildId: 1, userId: 1 }, { unique: true });
     UserMessageCount = import_mongoose5.default.model(
@@ -175261,6 +175273,7 @@ __export(helperprofile_exports, {
 });
 var import_discord5 = __toESM(require_src2(), 1);
 init_Vouch();
+init_UserMessageCount();
 var data4 = new import_discord5.SlashCommandBuilder().setName("helperprofile").setDescription("View a helper's vouch profile.").addUserOption(
   (opt) => opt.setName("member").setDescription("The member to look up (leave blank for yourself)").setRequired(false)
 );
@@ -175272,10 +175285,16 @@ async function execute4(interaction) {
   const target = interaction.options.getUser("member") ?? interaction.user;
   const isSelf = target.id === interaction.user.id;
   await interaction.deferReply();
-  const total = await Vouch.countDocuments({ guildId: interaction.guildId, toUserId: target.id });
-  const now = Date.now();
-  const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1e3);
-  const monthAgo = new Date(now - 30 * 24 * 60 * 60 * 1e3);
+  const now = /* @__PURE__ */ new Date();
+  const todayUTC = now.toISOString().slice(0, 10);
+  const weekUTC = getUTCWeekKey(now);
+  const monthUTC = now.toISOString().slice(0, 7);
+  const [msgDoc, total] = await Promise.all([
+    UserMessageCount.findOne({ guildId: interaction.guildId, userId: target.id }),
+    Vouch.countDocuments({ guildId: interaction.guildId, toUserId: target.id })
+  ]);
+  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1e3);
+  const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1e3);
   const weeklyCount = await Vouch.countDocuments({
     guildId: interaction.guildId,
     toUserId: target.id,
@@ -175292,10 +175311,16 @@ async function execute4(interaction) {
     member = await interaction.guild.members.fetch(target.id);
   } catch (_) {
   }
-  const embed = new import_discord5.EmbedBuilder().setTitle(isSelf ? "Your Vouch Profile" : `${target.displayName ?? target.username}'s Vouch Profile`).setColor(5793266).setThumbnail(target.displayAvatarURL({ size: 256 })).addFields(
+  const msgDaily = msgDoc?.dailyCountDate === todayUTC ? msgDoc?.dailyCount ?? 0 : 0;
+  const msgWeekly = msgDoc?.weeklyCountDate === weekUTC ? msgDoc?.weeklyCount ?? 0 : 0;
+  const msgMonthly = msgDoc?.monthlyCountDate === monthUTC ? msgDoc?.monthlyCount ?? 0 : 0;
+  const embed = new import_discord5.EmbedBuilder().setTitle(isSelf ? "Your Helper Profile" : `${target.displayName ?? target.username}'s Helper Profile`).setColor(5793266).setThumbnail(target.displayAvatarURL({ size: 256 })).addFields(
     { name: "Total Vouches", value: `${total}`, inline: true },
-    { name: "This Week", value: `${weeklyCount}`, inline: true },
-    { name: "This Month", value: `${monthlyCount}`, inline: true }
+    { name: "Vouches This Week", value: `${weeklyCount}`, inline: true },
+    { name: "Vouches This Month", value: `${monthlyCount}`, inline: true },
+    { name: "Messages Today", value: `${msgDaily}`, inline: true },
+    { name: "Messages This Week", value: `${msgWeekly}`, inline: true },
+    { name: "Messages This Month", value: `${msgMonthly}`, inline: true }
   ).setFooter({ text: `User ID: ${target.id}` }).setTimestamp();
   if (recent.length > 0) {
     const lines = [];
@@ -175869,7 +175894,10 @@ function createBotClient() {
   client.on(import_discord13.Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.guildId) return;
     try {
-      const todayUTC = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+      const now = /* @__PURE__ */ new Date();
+      const todayUTC = now.toISOString().slice(0, 10);
+      const weekUTC = getUTCWeekKey(now);
+      const monthUTC = now.toISOString().slice(0, 7);
       const existing = await UserMessageCount.findOne({
         guildId: message.guildId,
         userId: message.author.id
@@ -175880,16 +175908,32 @@ function createBotClient() {
           userId: message.author.id,
           count: 1,
           dailyCount: 1,
-          dailyCountDate: todayUTC
+          dailyCountDate: todayUTC,
+          weeklyCount: 1,
+          weeklyCountDate: weekUTC,
+          monthlyCount: 1,
+          monthlyCountDate: monthUTC
         });
-      } else if (existing.dailyCountDate === todayUTC) {
-        existing.count += 1;
-        existing.dailyCount += 1;
-        await existing.save();
       } else {
         existing.count += 1;
-        existing.dailyCount = 1;
-        existing.dailyCountDate = todayUTC;
+        if (existing.dailyCountDate === todayUTC) {
+          existing.dailyCount += 1;
+        } else {
+          existing.dailyCount = 1;
+          existing.dailyCountDate = todayUTC;
+        }
+        if (existing.weeklyCountDate === weekUTC) {
+          existing.weeklyCount += 1;
+        } else {
+          existing.weeklyCount = 1;
+          existing.weeklyCountDate = weekUTC;
+        }
+        if (existing.monthlyCountDate === monthUTC) {
+          existing.monthlyCount += 1;
+        } else {
+          existing.monthlyCount = 1;
+          existing.monthlyCountDate = monthUTC;
+        }
         await existing.save();
       }
     } catch (err) {

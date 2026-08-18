@@ -4,6 +4,7 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import { Vouch } from "../models/Vouch";
+import { UserMessageCount, getUTCWeekKey } from "../models/UserMessageCount";
 
 export const data = new SlashCommandBuilder()
   .setName("helperprofile")
@@ -26,11 +27,18 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   await interaction.deferReply();
 
-  const total = await Vouch.countDocuments({ guildId: interaction.guildId, toUserId: target.id });
+  const now = new Date();
+  const todayUTC = now.toISOString().slice(0, 10);
+  const weekUTC = getUTCWeekKey(now);
+  const monthUTC = now.toISOString().slice(0, 7);
 
-  const now = Date.now();
-  const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
-  const monthAgo = new Date(now - 30 * 24 * 60 * 60 * 1000);
+  const [msgDoc, total] = await Promise.all([
+    UserMessageCount.findOne({ guildId: interaction.guildId, userId: target.id }),
+    Vouch.countDocuments({ guildId: interaction.guildId, toUserId: target.id }),
+  ]);
+
+  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
   const weeklyCount = await Vouch.countDocuments({
     guildId: interaction.guildId,
@@ -53,14 +61,21 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     member = await interaction.guild.members.fetch(target.id);
   } catch (_) {}
 
+  const msgDaily   = (msgDoc?.dailyCountDate   === todayUTC) ? (msgDoc?.dailyCount   ?? 0) : 0;
+  const msgWeekly  = (msgDoc?.weeklyCountDate  === weekUTC)  ? (msgDoc?.weeklyCount  ?? 0) : 0;
+  const msgMonthly = (msgDoc?.monthlyCountDate === monthUTC) ? (msgDoc?.monthlyCount ?? 0) : 0;
+
   const embed = new EmbedBuilder()
-    .setTitle(isSelf ? "Your Vouch Profile" : `${target.displayName ?? target.username}'s Vouch Profile`)
+    .setTitle(isSelf ? "Your Helper Profile" : `${target.displayName ?? target.username}'s Helper Profile`)
     .setColor(0x5865f2)
     .setThumbnail(target.displayAvatarURL({ size: 256 }))
     .addFields(
       { name: "Total Vouches", value: `${total}`, inline: true },
-      { name: "This Week", value: `${weeklyCount}`, inline: true },
-      { name: "This Month", value: `${monthlyCount}`, inline: true },
+      { name: "Vouches This Week", value: `${weeklyCount}`, inline: true },
+      { name: "Vouches This Month", value: `${monthlyCount}`, inline: true },
+      { name: "Messages Today", value: `${msgDaily}`, inline: true },
+      { name: "Messages This Week", value: `${msgWeekly}`, inline: true },
+      { name: "Messages This Month", value: `${msgMonthly}`, inline: true },
     )
     .setFooter({ text: `User ID: ${target.id}` })
     .setTimestamp();
